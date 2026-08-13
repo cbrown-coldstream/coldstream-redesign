@@ -2,9 +2,10 @@
   "$comment": [
     "SITE UI TOKENS — additive to the brand palette, never a replacement for it.",
     "",
-    "design-systems/exteriors/tokens.json is the BRAND palette. It exists so a rendered social",
-    "post looks like Coldstream, and render-post reads it directly. It is authoritative and this",
-    "file must never contradict it.",
+    "brand/tokens.json is the BRAND palette, and this repo owns it (reversed 2026-08-13 — it used",
+    "to live in coldstream-os at design-systems/exteriors/, which is now the vendored end). It",
+    "exists so a rendered social post looks like Coldstream, and render-post reads it via the",
+    "seeded database. It is authoritative and this file must never contradict it.",
     "",
     "A website needs things a rendered post never does: a success state, an error state, a focus",
     "ring, a disabled control, a form-field border. Those are interface states, not brand colour,",
