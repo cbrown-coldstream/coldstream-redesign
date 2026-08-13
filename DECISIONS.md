@@ -612,7 +612,56 @@ Six pages beyond the inventory became nine. All named in `page-inventory.mjs` wi
 
 ---
 
-## 15. Checks
+## 15. Round 13 — the repo split finished, and staging rewired to follow it
+
+**No page, component, style or data file changed this round.** This is deployment plumbing only,
+recorded because the previous wiring was silently pointing at the wrong repo and the next person to
+push would have found out the hard way.
+
+The repo was split out of coldstream-os (commit `cd72391`) but the Netlify staging site was never
+told. It still built from `cbrown-coldstream/coldstream-os` with `base = site` and
+`dir = site/dist` — the paths this project had *inside* that repo. `netlify.toml` documents that
+`base` is set in the site's build settings rather than in the file, and that is exactly the setting
+that went stale.
+
+Source now lives at **`cbrown-coldstream/coldstream-redesign`**. Staging builds from it:
+`base` empty, `dir = dist`, `cmd = npm run build`.
+
+**The dangerous intermediate state, written down because it is the reason to check the whole chain
+rather than the settings page.** Clearing `base` while `repo_url` still read coldstream-os would
+have made the next push to *that* repo build its root — the ColdstreamOS app — and publish it over
+this staging site. Under the old `base = site` the build would merely have failed; half-fixing it
+turned a loud failure into a silent wrong-site deploy. The repo pointer and the base directory had
+to move together.
+
+**Continuous deployment needed three things, not one.** The Netlify UI does them in one OAuth step;
+done over the API they are separate and each was independently broken:
+
+1. `build_settings.repo_url` → the new repo.
+2. The **GitHub webhook** — Netlify fires builds through a per-repo webhook pointing at this site's
+   build hook (`6a7ca941…`). It was still on coldstream-os, so it was both useless to the new repo
+   and the trigger for the wrong-site deploy above. Recreated on coldstream-redesign, deleted from
+   coldstream-os. This did not affect the coldstream-os *site*, which deploys through the Netlify
+   GitHub App and owns no repo webhook.
+3. A **deploy key**. Netlify clones over SSH even for a public repo — without one the build dies at
+   `preparing repo` with `Host key verification failed`. A read-only key was created on the Netlify
+   side and registered on the repo.
+
+Verified end to end with an empty commit rather than by reading the settings back: push → webhook →
+build → publish, `x-robots-tag: noindex, nofollow` intact, a 301 and a 410 from `_redirects` both
+answering, five pages 200.
+
+**Production is still not Netlify.** Nothing here changes §on the handoff — Rambow serves the built
+HTML from the WordPress host, and staging remains a noindexed review URL. CD only shortens the loop
+between a commit and something clickable.
+
+**The repo is public.** It was created that way. Scanned for credentials before the first push and
+found none, but `src/data/live-copy/` and `/handoff/` — the cutover runbook — are now world
+readable. Flagged, not decided; making it private is a one-click reversal if that was not intended.
+
+---
+
+## 16. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
