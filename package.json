@@ -15,11 +15,12 @@
     "handoff": "node scripts/handoff.mjs",
     "inventory": "node scripts/page-inventory.mjs",
     "pagemap": "node scripts/build-pagemap.mjs",
+    "review": "node scripts/build-review-wall.mjs",
     "live:pull": "node scripts/pull-live-copy.mjs",
     "handoff:site": "node scripts/build-handoff.mjs",
     "brand:publish": "node scripts/brand-publish.mjs",
     "pages": "node scripts/build-pages-md.mjs",
-    "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs"
+    "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs && node scripts/build-review-wall.mjs"
   },
   "devDependencies": {
     "astro": "^4.16.18"

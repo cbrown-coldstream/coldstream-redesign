@@ -27,11 +27,11 @@ const walk = (d) => readdirSync(d).flatMap((f) => {
   const p = join(d, f);
   return statSync(p).isDirectory() ? walk(p) : p.endsWith(".html") ? [p] : [];
 });
-// The page map and the handoff site are internal documentation that ships inside the build for
-// convenience. They are not pages of the website: they carry no canonical, nothing links to them,
-// and they are noindex by construction. Checking them would fail the canonical, h1 and orphan
-// gates for the right reason and the wrong subject.
-const DOCS = (f) => f.endsWith("pagemap.html") || f.includes(`${sep}handoff${sep}`);
+// The page map, the review wall and the handoff site are internal documentation that ships inside
+// the build for convenience. They are not pages of the website: they carry no canonical, nothing
+// links to them, and they are noindex by construction. Checking them would fail the canonical, h1
+// and orphan gates for the right reason and the wrong subject.
+const DOCS = (f) => f.endsWith("pagemap.html") || f.endsWith("review.html") || f.includes(`${sep}handoff${sep}`);
 const files = walk(dist).filter((f) => !DOCS(f));
 const pages = files.map((f) => ({
   file: f,

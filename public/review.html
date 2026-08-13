@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Review wall — 67 pages</title>
+<style>
+@font-face{font-family:Montserrat;src:url(/fonts/montserrat-var-latin.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:Inter;src:url(/fonts/inter-var-latin.woff2) format("woff2");font-weight:100 900;font-display:swap}
+:root{
+  --primary:#3A89C7; --deep:#2A6699; --accent:#E8843B;
+  --ink:#101B26; --muted:#5B6B78; --line:#E4EAEF;
+  --paper:#FFFFFF; --cloud:#F2F6F9; --dark:#0E1B2A;
+  --display:"Montserrat", system-ui, -apple-system, sans-serif; --body:"Inter", system-ui, -apple-system, sans-serif;
+  --vw:1280px;      /* the width each iframe RENDERS at — the toggle rewrites this */
+  --vh:820px;       /* how much of the page each card shows */
+  --cardw:340px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cloud);color:var(--ink);font-family:var(--body),system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:10;background:var(--dark);color:var(--paper);padding:14px clamp(14px,3vw,30px);
+  display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;box-shadow:0 2px 14px rgba(14,27,42,.28)}
+h1{font-family:var(--display),system-ui,sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.01em;margin:0}
+h1 small{display:block;font-family:var(--body),system-ui,sans-serif;font-weight:400;font-size:.78rem;opacity:.72;letter-spacing:0}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+button{font-family:var(--display),system-ui,sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;
+  background:rgba(255,255,255,.1);color:var(--paper);border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:7px 13px}
+button:hover{background:rgba(255,255,255,.2)}
+button[aria-pressed=true]{background:var(--paper);color:var(--deep);border-color:var(--paper)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+main{padding:clamp(14px,3vw,30px)}
+section{margin:0 0 38px}
+h2{font-family:var(--display),system-ui,sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.015em;margin:0 0 3px}
+.count{color:var(--muted);font-size:.85rem;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cardw),1fr));gap:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(16,27,38,.07);transition:box-shadow .15s,transform .15s}
+.card:hover{box-shadow:0 8px 26px rgba(16,27,38,.14);transform:translateY(-2px)}
+.card.is-noindex{border-color:var(--accent);border-width:2px}
+/* The frame is a fixed-size window; the iframe inside renders at full --vw and is scaled down to
+   fit it. Scaling rather than shrinking the viewport is the point — a 390px-wide render is what
+   a phone actually gets, so layout bugs at that width show up here instead of hiding. */
+.frame{position:relative;height:calc(var(--vh) * (var(--cardw) / var(--vw)));background:var(--cloud);
+  border-bottom:1px solid var(--line);overflow:hidden}
+.frame iframe{position:absolute;top:0;left:0;width:var(--vw);height:var(--vh);border:0;
+  transform:scale(calc(var(--cardw) / var(--vw)));transform-origin:0 0;pointer-events:none}
+.meta{padding:11px 13px 13px}
+.u{font-family:var(--display),system-ui,sans-serif;font-weight:700;font-size:.9rem;color:var(--deep);
+  text-decoration:none;word-break:break-word}
+.u:hover{text-decoration:underline}
+.h{margin:4px 0 8px;font-size:.82rem;line-height:1.4;color:var(--muted)}
+.badges{margin:0;display:flex;flex-wrap:wrap;gap:5px}
+.b{font-size:.68rem;font-weight:600;padding:3px 7px;border-radius:5px;white-space:nowrap}
+.b-ix{background:#e8f3ea;color:#12823B}
+.b-no{background:#fdf0e6;color:#a8571c}
+.b-w{background:var(--cloud);color:var(--muted)}
+[hidden]{display:none !important}
+@media print{header{position:static}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Review wall<small>67 pages · 55 indexable · 12 noindex · generated from this build</small></h1>
+  <div class="controls">
+    <button id="vp-d" aria-pressed="true">Desktop 1280</button>
+    <button id="vp-t" aria-pressed="false">Tablet 768</button>
+    <button id="vp-m" aria-pressed="false">Mobile 390</button>
+    <button id="f-all" aria-pressed="true">All</button>
+    <button id="f-ix" aria-pressed="false">Indexable</button>
+    <button id="f-no" aria-pressed="false">Noindex</button>
+    <button id="sz">Bigger</button>
+  </div>
+</header>
+<main>
+<section>
+  <h2>National &amp; global</h2>
+  <p class="count">14 pages</p>
+  <div class="grid">
+<article class="card" data-url="/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/" src="/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/" target="_blank" rel="noopener">/</a>
+    <p class="h">Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">2,342 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/about-us/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/about-us/" src="/about-us/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/about-us/" target="_blank" rel="noopener">/about-us/</a>
+    <p class="h">Three metros. Our own crew in each.</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">1,240 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/blog/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/blog/" src="/blog/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/blog/" target="_blank" rel="noopener">/blog/</a>
+    <p class="h">Straight Answers About Your Home&amp;#39;s Exterior</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">652 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/commercial-roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/commercial-roofing/" src="/commercial-roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/commercial-roofing/" target="_blank" rel="noopener">/commercial-roofing/</a>
+    <p class="h">Commercial and multi-family roofing</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,439 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/financing/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/financing/" src="/financing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/financing/" target="_blank" rel="noopener">/financing/</a>
+    <p class="h">Paying for the work over time</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">1,051 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/free-estimate/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/free-estimate/" src="/free-estimate/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/free-estimate/" target="_blank" rel="noopener">/free-estimate/</a>
+    <p class="h">Tell us what you need. We'll take a look.</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">494 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/gutters/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/gutters/" src="/gutters/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/gutters/" target="_blank" rel="noopener">/gutters/</a>
+    <p class="h">Gutters across Cincinnati, Columbus and St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,371 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/privacy-policy/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/privacy-policy/" src="/privacy-policy/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/privacy-policy/" target="_blank" rel="noopener">/privacy-policy/</a>
+    <p class="h">Privacy policy</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">410 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/roofing/" src="/roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/roofing/" target="_blank" rel="noopener">/roofing/</a>
+    <p class="h">Roofing across Cincinnati, Columbus and St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,494 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/service-areas/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/service-areas/" src="/service-areas/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/service-areas/" target="_blank" rel="noopener">/service-areas/</a>
+    <p class="h">Cities we service</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">918 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/siding/" src="/siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/siding/" target="_blank" rel="noopener">/siding/</a>
+    <p class="h">Siding across Cincinnati, Columbus and St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,371 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/terms/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/terms/" src="/terms/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/terms/" target="_blank" rel="noopener">/terms/</a>
+    <p class="h">Terms of use</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">366 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/thank-you/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/thank-you/" src="/thank-you/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/thank-you/" target="_blank" rel="noopener">/thank-you/</a>
+    <p class="h">Thanks — that&amp;#39;s all we need for now.</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">881 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/windows/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/windows/" src="/windows/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/windows/" target="_blank" rel="noopener">/windows/</a>
+    <p class="h">Replacement windows across Cincinnati, Columbus and St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,371 words</span>
+    </p>
+  </div>
+</article></div>
+</section>
+<section>
+  <h2>Cincinnati</h2>
+  <p class="count">18 pages</p>
+  <div class="grid">
+<article class="card" data-url="/cincinnati/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/" src="/cincinnati/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/" target="_blank" rel="noopener">/cincinnati/</a>
+    <p class="h">Roofing, Siding, Window &amp;amp; Gutter Services in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,180 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/about/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/about/" src="/cincinnati/about/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/about/" target="_blank" rel="noopener">/cincinnati/about/</a>
+    <p class="h">The Coldstream Crew in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,199 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/commercial-roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/commercial-roofing/" src="/cincinnati/commercial-roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/commercial-roofing/" target="_blank" rel="noopener">/cincinnati/commercial-roofing/</a>
+    <p class="h">Commercial Roofing in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,486 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/free-estimate/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/free-estimate/" src="/cincinnati/free-estimate/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/free-estimate/" target="_blank" rel="noopener">/cincinnati/free-estimate/</a>
+    <p class="h">Book a Free Inspection in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,035 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/cincinnati/gallery/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/gallery/" src="/cincinnati/gallery/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/gallery/" target="_blank" rel="noopener">/cincinnati/gallery/</a>
+    <p class="h">Roofs, Siding and Gutters We&amp;#39;ve Finished in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">649 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/gutters/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/gutters/" src="/cincinnati/gutters/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/gutters/" target="_blank" rel="noopener">/cincinnati/gutters/</a>
+    <p class="h">Gutters in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,477 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/locations/east/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/locations/east/" src="/cincinnati/locations/east/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/locations/east/" target="_blank" rel="noopener">/cincinnati/locations/east/</a>
+    <p class="h">Roofing and Exteriors in Cincinnati East</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">749 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/locations/west/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/locations/west/" src="/cincinnati/locations/west/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/locations/west/" target="_blank" rel="noopener">/cincinnati/locations/west/</a>
+    <p class="h">Roofing and Exteriors in Cincinnati West</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">730 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/cincinnati/reviews/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/reviews/" src="/cincinnati/reviews/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/reviews/" target="_blank" rel="noopener">/cincinnati/reviews/</a>
+    <p class="h">What Cincinnati Homeowners Say</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">730 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/roofing/" src="/cincinnati/roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/roofing/" target="_blank" rel="noopener">/cincinnati/roofing/</a>
+    <p class="h">Roofing in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,739 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/roofing/insurance-storm-damage/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/roofing/insurance-storm-damage/" src="/cincinnati/roofing/insurance-storm-damage/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/roofing/insurance-storm-damage/" target="_blank" rel="noopener">/cincinnati/roofing/insurance-storm-damage/</a>
+    <p class="h">Storm Damage and Insurance Claims in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,174 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/roofing/roof-repair/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/roofing/roof-repair/" src="/cincinnati/roofing/roof-repair/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/roofing/roof-repair/" target="_blank" rel="noopener">/cincinnati/roofing/roof-repair/</a>
+    <p class="h">Roof Repair in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,226 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/roofing/roof-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/roofing/roof-replacement/" src="/cincinnati/roofing/roof-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/roofing/roof-replacement/" target="_blank" rel="noopener">/cincinnati/roofing/roof-replacement/</a>
+    <p class="h">Roof Replacement in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,248 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/siding/" src="/cincinnati/siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/siding/" target="_blank" rel="noopener">/cincinnati/siding/</a>
+    <p class="h">Siding in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,605 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/siding/james-hardie-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/siding/james-hardie-siding/" src="/cincinnati/siding/james-hardie-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/siding/james-hardie-siding/" target="_blank" rel="noopener">/cincinnati/siding/james-hardie-siding/</a>
+    <p class="h">James Hardie Fiber Cement Siding in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,239 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/siding/siding-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/siding/siding-replacement/" src="/cincinnati/siding/siding-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/siding/siding-replacement/" target="_blank" rel="noopener">/cincinnati/siding/siding-replacement/</a>
+    <p class="h">Siding Replacement in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,194 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/siding/vinyl-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/siding/vinyl-siding/" src="/cincinnati/siding/vinyl-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/siding/vinyl-siding/" target="_blank" rel="noopener">/cincinnati/siding/vinyl-siding/</a>
+    <p class="h">Vinyl Siding in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,169 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/cincinnati/windows/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/cincinnati/windows/" src="/cincinnati/windows/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/cincinnati/windows/" target="_blank" rel="noopener">/cincinnati/windows/</a>
+    <p class="h">Replacement Windows in Cincinnati</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,467 words</span>
+    </p>
+  </div>
+</article></div>
+</section>
+<section>
+  <h2>Columbus</h2>
+  <p class="count">17 pages</p>
+  <div class="grid">
+<article class="card" data-url="/columbus/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/" src="/columbus/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/" target="_blank" rel="noopener">/columbus/</a>
+    <p class="h">Roofing and Exteriors Built for Central Ohio Weather</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,282 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/about/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/about/" src="/columbus/about/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/about/" target="_blank" rel="noopener">/columbus/about/</a>
+    <p class="h">The Coldstream Crew in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,200 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/commercial-roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/commercial-roofing/" src="/columbus/commercial-roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/commercial-roofing/" target="_blank" rel="noopener">/columbus/commercial-roofing/</a>
+    <p class="h">Commercial Roofing in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,490 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/free-estimate/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/free-estimate/" src="/columbus/free-estimate/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/free-estimate/" target="_blank" rel="noopener">/columbus/free-estimate/</a>
+    <p class="h">Book a Free Inspection in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,035 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/columbus/gallery/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/columbus/gallery/" src="/columbus/gallery/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/gallery/" target="_blank" rel="noopener">/columbus/gallery/</a>
+    <p class="h">Roofs, Siding and Gutters We&amp;#39;ve Finished in Columbus</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">654 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/gutters/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/gutters/" src="/columbus/gutters/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/gutters/" target="_blank" rel="noopener">/columbus/gutters/</a>
+    <p class="h">Gutters in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,484 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/locations/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/locations/" src="/columbus/locations/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/locations/" target="_blank" rel="noopener">/columbus/locations/</a>
+    <p class="h">Where We Work Across Central Ohio</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">956 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/columbus/reviews/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/columbus/reviews/" src="/columbus/reviews/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/reviews/" target="_blank" rel="noopener">/columbus/reviews/</a>
+    <p class="h">What Columbus Homeowners Say</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">729 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/roofing/" src="/columbus/roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/roofing/" target="_blank" rel="noopener">/columbus/roofing/</a>
+    <p class="h">Roofing in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,733 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/roofing/insurance-storm-damage/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/roofing/insurance-storm-damage/" src="/columbus/roofing/insurance-storm-damage/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/roofing/insurance-storm-damage/" target="_blank" rel="noopener">/columbus/roofing/insurance-storm-damage/</a>
+    <p class="h">Storm Damage and Insurance Claims in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,167 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/roofing/roof-repair/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/roofing/roof-repair/" src="/columbus/roofing/roof-repair/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/roofing/roof-repair/" target="_blank" rel="noopener">/columbus/roofing/roof-repair/</a>
+    <p class="h">Roof Repair in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,221 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/roofing/roof-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/roofing/roof-replacement/" src="/columbus/roofing/roof-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/roofing/roof-replacement/" target="_blank" rel="noopener">/columbus/roofing/roof-replacement/</a>
+    <p class="h">Roof Replacement in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,247 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/siding/" src="/columbus/siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/siding/" target="_blank" rel="noopener">/columbus/siding/</a>
+    <p class="h">Siding in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,604 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/siding/james-hardie-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/siding/james-hardie-siding/" src="/columbus/siding/james-hardie-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/siding/james-hardie-siding/" target="_blank" rel="noopener">/columbus/siding/james-hardie-siding/</a>
+    <p class="h">James Hardie Fiber Cement Siding in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,248 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/siding/siding-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/siding/siding-replacement/" src="/columbus/siding/siding-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/siding/siding-replacement/" target="_blank" rel="noopener">/columbus/siding/siding-replacement/</a>
+    <p class="h">Siding Replacement in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,193 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/siding/vinyl-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/siding/vinyl-siding/" src="/columbus/siding/vinyl-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/siding/vinyl-siding/" target="_blank" rel="noopener">/columbus/siding/vinyl-siding/</a>
+    <p class="h">Vinyl Siding in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,168 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/columbus/windows/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/columbus/windows/" src="/columbus/windows/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/columbus/windows/" target="_blank" rel="noopener">/columbus/windows/</a>
+    <p class="h">Replacement Windows in Columbus</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,476 words</span>
+    </p>
+  </div>
+</article></div>
+</section>
+<section>
+  <h2>St. Louis</h2>
+  <p class="count">18 pages</p>
+  <div class="grid">
+<article class="card" data-url="/st-louis/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/" src="/st-louis/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/" target="_blank" rel="noopener">/st-louis/</a>
+    <p class="h">Roofing, Siding and Exteriors Across Greater St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,331 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/about/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/about/" src="/st-louis/about/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/about/" target="_blank" rel="noopener">/st-louis/about/</a>
+    <p class="h">The Coldstream Crew in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,227 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/commercial-roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/commercial-roofing/" src="/st-louis/commercial-roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/commercial-roofing/" target="_blank" rel="noopener">/st-louis/commercial-roofing/</a>
+    <p class="h">Commercial Roofing in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,513 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/free-estimate/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/free-estimate/" src="/st-louis/free-estimate/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/free-estimate/" target="_blank" rel="noopener">/st-louis/free-estimate/</a>
+    <p class="h">Book a Free Inspection in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,059 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/st-louis/gallery/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/gallery/" src="/st-louis/gallery/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/gallery/" target="_blank" rel="noopener">/st-louis/gallery/</a>
+    <p class="h">Roofs, Siding and Gutters We&amp;#39;ve Finished in St. Louis</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">674 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/gutters/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/gutters/" src="/st-louis/gutters/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/gutters/" target="_blank" rel="noopener">/st-louis/gutters/</a>
+    <p class="h">Gutters in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,503 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/locations/north/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/locations/north/" src="/st-louis/locations/north/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/locations/north/" target="_blank" rel="noopener">/st-louis/locations/north/</a>
+    <p class="h">Roofing and Exteriors in West County and North County</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">797 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/locations/south/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/locations/south/" src="/st-louis/locations/south/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/locations/south/" target="_blank" rel="noopener">/st-louis/locations/south/</a>
+    <p class="h">Roofing and Exteriors in South County and South City</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">802 words</span>
+    </p>
+  </div>
+</article>
+<article class="card is-noindex" data-url="/st-louis/reviews/" data-noindex="true">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/reviews/" src="/st-louis/reviews/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/reviews/" target="_blank" rel="noopener">/st-louis/reviews/</a>
+    <p class="h">What St. Louis Homeowners Say</p>
+    <p class="badges">
+      <span class="b b-no">noindex — awaiting data</span>
+      <span class="b b-w">742 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/roofing/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/roofing/" src="/st-louis/roofing/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/roofing/" target="_blank" rel="noopener">/st-louis/roofing/</a>
+    <p class="h">Roofing in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,758 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/roofing/insurance-storm-damage/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/roofing/insurance-storm-damage/" src="/st-louis/roofing/insurance-storm-damage/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/roofing/insurance-storm-damage/" target="_blank" rel="noopener">/st-louis/roofing/insurance-storm-damage/</a>
+    <p class="h">Storm Damage and Insurance Claims in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,207 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/roofing/roof-repair/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/roofing/roof-repair/" src="/st-louis/roofing/roof-repair/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/roofing/roof-repair/" target="_blank" rel="noopener">/st-louis/roofing/roof-repair/</a>
+    <p class="h">Roof Repair in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,249 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/roofing/roof-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/roofing/roof-replacement/" src="/st-louis/roofing/roof-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/roofing/roof-replacement/" target="_blank" rel="noopener">/st-louis/roofing/roof-replacement/</a>
+    <p class="h">Roof Replacement in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,278 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/siding/" src="/st-louis/siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/siding/" target="_blank" rel="noopener">/st-louis/siding/</a>
+    <p class="h">Siding in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,628 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/siding/james-hardie-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/siding/james-hardie-siding/" src="/st-louis/siding/james-hardie-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/siding/james-hardie-siding/" target="_blank" rel="noopener">/st-louis/siding/james-hardie-siding/</a>
+    <p class="h">James Hardie Fiber Cement Siding in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,280 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/siding/siding-replacement/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/siding/siding-replacement/" src="/st-louis/siding/siding-replacement/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/siding/siding-replacement/" target="_blank" rel="noopener">/st-louis/siding/siding-replacement/</a>
+    <p class="h">Siding Replacement in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,224 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/siding/vinyl-siding/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/siding/vinyl-siding/" src="/st-louis/siding/vinyl-siding/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/siding/vinyl-siding/" target="_blank" rel="noopener">/st-louis/siding/vinyl-siding/</a>
+    <p class="h">Vinyl Siding in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,194 words</span>
+    </p>
+  </div>
+</article>
+<article class="card" data-url="/st-louis/windows/" data-noindex="false">
+  <div class="frame"><iframe loading="lazy" title="/st-louis/windows/" src="/st-louis/windows/" tabindex="-1" scrolling="no"></iframe></div>
+  <div class="meta">
+    <a class="u" href="/st-louis/windows/" target="_blank" rel="noopener">/st-louis/windows/</a>
+    <p class="h">Replacement Windows in St. Louis</p>
+    <p class="badges">
+      <span class="b b-ix">indexable</span>
+      <span class="b b-w">1,501 words</span>
+    </p>
+  </div>
+</article></div>
+</section>
+</main>
+<script>
+const r = document.documentElement.style;
+const vp = { "vp-d": ["1280px","820px"], "vp-t": ["768px","900px"], "vp-m": ["390px","760px"] };
+const press = (ids, on) => ids.forEach(i => document.getElementById(i).setAttribute("aria-pressed", String(i === on)));
+Object.keys(vp).forEach(id => document.getElementById(id).onclick = () => {
+  const [w,h] = vp[id]; r.setProperty("--vw", w); r.setProperty("--vh", h); press(Object.keys(vp), id);
+});
+const filters = { "f-all": () => true, "f-ix": c => c.dataset.noindex === "false", "f-no": c => c.dataset.noindex === "true" };
+Object.keys(filters).forEach(id => document.getElementById(id).onclick = () => {
+  document.querySelectorAll(".card").forEach(c => { c.hidden = !filters[id](c); });
+  document.querySelectorAll("section").forEach(s => {
+    const vis = [...s.querySelectorAll(".card")].filter(c => !c.hidden).length;
+    s.hidden = vis === 0;
+    s.querySelector(".count").textContent = vis + " pages";
+  });
+  press(Object.keys(filters), id);
+});
+// Card width steps rather than a slider: three sizes cover "scan the wall" through "read the copy".
+const steps = ["340px","520px","760px"]; let si = 0;
+document.getElementById("sz").onclick = (e) => {
+  si = (si + 1) % steps.length; r.setProperty("--cardw", steps[si]);
+  e.target.textContent = si === 2 ? "Smaller" : "Bigger";
+};
+</script>
+</body>
+</html>
