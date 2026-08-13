@@ -1,0 +1,74 @@
+---
+// Every page's shell. Metadata, fonts, tokens, schema, landmarks.
+//
+// The headline face is preloaded because it paints the H1 — the largest text on screen and part
+// of the LCP candidate set. Body faces are not preloaded: swapping them costs a reflow of text
+// that is already below the fold.
+//
+// That face is MONTSERRAT, the web display face. Saira Condensed is still self-hosted for
+// render-post, but nothing in a browser paints with it, so preloading it would have been
+// 12 KB spent on a file no page uses.
+import "../styles/tokens.css";
+import "../styles/ui-tokens.css";
+import "../styles/fonts.css";
+import "../styles/base.css";
+
+const {
+  title, description, canonical,
+  market, breadcrumbs = [], schema = [], ogImage = "/og-default.jpg",
+  // noindex is for pages that exist structurally but have not yet cleared site-plan's
+  // uniqueness bar. Better to build the page and keep it out of the index than to ship a thin
+  // duplicate and let Google decide it is one.
+  noindex = false,
+} = Astro.props;
+
+const site = "https://coldstreamexteriors.com";
+const canonicalUrl = new URL(canonical, site).href;
+
+const crumbSchema = breadcrumbs.length > 1 ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: breadcrumbs.map((c, i) => ({
+    "@type": "ListItem", position: i + 1, name: c.name, item: new URL(c.href, site).href,
+  })),
+} : null;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+
+  <link rel="preload" href="/fonts/montserrat-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={new URL(ogImage, site).href} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+
+  {crumbSchema && <script type="application/ld+json" set:html={JSON.stringify(crumbSchema)} />}
+  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+</head>
+<body>
+  <a href="#main" class="visually-hidden">Skip to content</a>
+  <slot name="chrome-top" />
+  <main id="main">
+    {breadcrumbs.length > 1 && (
+      <nav aria-label="Breadcrumb" class="wrap" style="padding-top:14px;font-size:.86rem;color:var(--cs-text-muted)">
+        {breadcrumbs.map((c, i) => (
+          <span>{i > 0 && " › "}{i === breadcrumbs.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={c.href} style="color:var(--cs-primary-deep)">{c.name}</a>}</span>
+        ))}
+      </nav>
+    )}
+    <slot />
+  </main>
+  <slot name="chrome-bottom" />
+</body>
+</html>

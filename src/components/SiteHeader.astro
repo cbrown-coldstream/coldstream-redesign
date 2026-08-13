@@ -1,0 +1,28 @@
+---
+// Logo + primary nav + estimate button. No phone — see UtilityBar.
+// Homeowner nav. Commercial roofing is deliberately absent — different buyer, different search,
+// and it is linked from the footer and from the roofing hub instead. See homeownerServicesFor.
+import { homeownerServicesFor, serviceHref, estimateHref, aboutHref, areasHref } from "../data/markets.js";
+const { market } = Astro.props;
+const services = homeownerServicesFor(market);
+---
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Coldstream Exteriors home">
+      <img src="/logo-coldstream-exteriors.jpg" alt="Coldstream Exteriors" width="240" height="70" />
+    </a>
+    <nav class="main" aria-label="Primary">
+      {services.map((s) => <a href={serviceHref(market, s)}>{s.label}</a>)}
+      {/* Service Areas answers "do you cover my town", which is the question the nav had no answer
+          to at all. One national page with a map and the towns per market; a market context
+          deep-links to its own section of it. */}
+      <a href={areasHref(market)}>Service Areas</a>
+      {/* About and Reviews follow the market: on a Cincinnati page these go to the Cincinnati
+          pages, and on the national pages they go to the company ones. */}
+      <a href={aboutHref(market)}>About</a>
+      {market.slug && <a href={`/${market.slug}/reviews/`}>Reviews</a>}
+    </nav>
+    <div class="spacer"></div>
+    <a class="btn" href={estimateHref(market)}>Get Free Estimate</a>
+  </div>
+</header>

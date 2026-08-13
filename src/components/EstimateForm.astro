@@ -1,0 +1,39 @@
+---
+// The lead form. Not wired to a backend yet — action is a placeholder for CallRail + the CRM.
+// Both form AND phone leads must post into the CRM; today the calls die.
+const { offer } = Astro.props;
+const id = "f" + Math.random().toString(36).slice(2, 7);
+---
+<div class="lead">
+  {offer && <div class="ohead">{offer}</div>}
+  <div class="top">
+    <h2>Get Your Free Estimate</h2>
+    <p>60 seconds · no obligation · same-day callback</p>
+  </div>
+  <form method="post" action="/thank-you/">
+    <div>
+      <label for={`nm-${id}`}>Name</label>
+      <input id={`nm-${id}`} name="name" type="text" autocomplete="name" placeholder="Your name" required />
+    </div>
+    <div class="row2">
+      <div>
+        <label for={`ph-${id}`}>Phone</label>
+        <input id={`ph-${id}`} name="phone" type="tel" autocomplete="tel" placeholder="(___) ___-____" required />
+      </div>
+      <div>
+        <label for={`zp-${id}`}>ZIP</label>
+        <input id={`zp-${id}`} name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="ZIP" required />
+      </div>
+    </div>
+    <div>
+      <label for={`sv-${id}`}>What do you need?</label>
+      <select id={`sv-${id}`} name="service">
+        <option>Roof replacement</option><option>Roof repair</option>
+        <option>Siding</option><option>Windows</option><option>Gutters</option>
+        <option>Storm / insurance claim</option>
+      </select>
+    </div>
+    <button class="btn" type="submit">Get My Free Estimate →</button>
+    <div class="fine"><b aria-hidden="true">✓</b> Your info is safe. We never sell your data.</div>
+  </form>
+</div>

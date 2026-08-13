@@ -1,0 +1,27 @@
+{
+  "name": "coldstream-exteriors-site",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "tokens": "node scripts/build-tokens.mjs",
+    "redirects": "node scripts/build-redirects.mjs",
+    "dev": "npm run tokens && astro dev",
+    "build": "npm run tokens && npm run redirects && astro build",
+    "preview": "astro preview",
+    "verify": "node scripts/verify-build.mjs",
+    "contracts": "node scripts/check-contracts.mjs",
+    "test:gates": "node scripts/test-gates.mjs",
+    "briefs": "node scripts/build-briefs.mjs",
+    "handoff": "node scripts/handoff.mjs",
+    "inventory": "node scripts/page-inventory.mjs",
+    "pagemap": "node scripts/build-pagemap.mjs",
+    "live:pull": "node scripts/pull-live-copy.mjs",
+    "handoff:site": "node scripts/build-handoff.mjs",
+    "brand:sync": "node scripts/brand-sync.mjs",
+    "pages": "node scripts/build-pages-md.mjs",
+    "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs"
+  },
+  "devDependencies": {
+    "astro": "^4.16.18"
+  }
+}

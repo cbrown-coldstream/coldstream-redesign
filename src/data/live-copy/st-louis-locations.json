@@ -1,0 +1,148 @@
+{
+  "target": "/st-louis/locations/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 91,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/st-louis/service-area/",
+      "title": "We Serve St. Louis & the surrounding areas | Coldstream Exteriors",
+      "description": "Coldstream Exteriors proudly serves St. Louis & surrounding areas. Quality roofing, siding, windows & gutters for your home or business. Get a free estimate today!",
+      "h1": "OUR SERVICE AREAS",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "OUR SERVICE AREAS"
+        },
+        {
+          "tag": "h2",
+          "text": "Serving Columbus , and the surrounding areas"
+        },
+        {
+          "tag": "p",
+          "text": "We proudly offer expert roofing, siding, window, gutter, and garage door services in Columbus, as well as the surrounding areas. If your location isn’t listed, please contact us to confirm whether we can provide services in your area."
+        },
+        {
+          "tag": "h3",
+          "text": "Missouri"
+        },
+        {
+          "tag": "li",
+          "text": "Affton"
+        },
+        {
+          "tag": "li",
+          "text": "Arnold"
+        },
+        {
+          "tag": "li",
+          "text": "Chesterfield"
+        },
+        {
+          "tag": "li",
+          "text": "Clayton"
+        },
+        {
+          "tag": "li",
+          "text": "Crestwood"
+        },
+        {
+          "tag": "li",
+          "text": "Creve Coeur"
+        },
+        {
+          "tag": "li",
+          "text": "Des Peres"
+        },
+        {
+          "tag": "li",
+          "text": "Fenton"
+        },
+        {
+          "tag": "li",
+          "text": "Florissant"
+        },
+        {
+          "tag": "li",
+          "text": "Ellisville"
+        },
+        {
+          "tag": "li",
+          "text": "Eureka"
+        },
+        {
+          "tag": "li",
+          "text": "House Springs"
+        },
+        {
+          "tag": "li",
+          "text": "Kirkwood"
+        },
+        {
+          "tag": "li",
+          "text": "Lemay"
+        },
+        {
+          "tag": "li",
+          "text": "Maplewood"
+        },
+        {
+          "tag": "li",
+          "text": "Maryland Heights"
+        },
+        {
+          "tag": "li",
+          "text": "Murphy"
+        },
+        {
+          "tag": "li",
+          "text": "Oakville"
+        },
+        {
+          "tag": "li",
+          "text": "Richmond Heights"
+        },
+        {
+          "tag": "li",
+          "text": "St. Charles"
+        },
+        {
+          "tag": "li",
+          "text": "Sunset Hills"
+        },
+        {
+          "tag": "li",
+          "text": "Sappington"
+        },
+        {
+          "tag": "li",
+          "text": "The Hill"
+        },
+        {
+          "tag": "li",
+          "text": "Tower Grove"
+        },
+        {
+          "tag": "li",
+          "text": "Town and Country"
+        },
+        {
+          "tag": "li",
+          "text": "Valley Park"
+        },
+        {
+          "tag": "li",
+          "text": "Webster Groves"
+        },
+        {
+          "tag": "li",
+          "text": "Wentzville"
+        },
+        {
+          "tag": "li",
+          "text": "Wildwood"
+        }
+      ]
+    }
+  ]
+}

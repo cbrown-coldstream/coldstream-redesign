@@ -1,0 +1,19 @@
+---
+// THE PROMOTION IS GATED. "$1,000 off your roof replacement" came from the design comp, along
+// with the fake phone numbers and the fake 4.8 rating, and nobody has confirmed the promotion is
+// running or when it ends. An expired or invented discount on 20 pages is a consumer-protection
+// problem, not a copy nit — so this band renders only from a sourced offer in data/claims.js.
+//
+// Fill CLAIMS.offer in and the band appears on every page that includes it, with no page edits.
+import { CLAIMS } from "../data/claims.js";
+const { cta = "Claim This Offer →", href = "/free-estimate/" } = Astro.props;
+const offer = CLAIMS.offer;
+---
+{offer && (
+<div class="band">
+  <div class="wrap">
+    <div><h2>{offer.heading}</h2><p>{offer.body}</p></div>
+    <a class="btn" href={href}>{cta}</a>
+  </div>
+</div>
+)}

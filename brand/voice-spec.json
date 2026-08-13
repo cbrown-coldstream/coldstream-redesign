@@ -1,0 +1,73 @@
+{
+  "brand": "coldstream-exteriors",
+  "voice_instructions": "Write as Coldstream Exteriors: warm, humble, and customer-oriented — a crew that treats a house like it's part of the family's life, not a job number. Our unofficial slogan is \"we're part of your home.\" Focus on craftsmanship and people: the care taken, the details, the homeowner's outcome. Sound like a seasoned crew lead talking to a neighbour — plainspoken, reassuring, respectful of their time and money. NEVER cocky, boastful, gimmicky or slogan-y; no superlatives, no hype, no urgency tricks, no \"we're the best\". Lead with the concrete work and what it means for the home (protection, durability, curb appeal, an honest quote), and back it only with pre-approved claims: licensed & insured, free no-obligation inspections. Keep sentences short and active; vary rhythm with an occasional one-line punch. Address the reader as 'you' and 'your home'. Read at roughly an 8th-grade level. Do not use emoji (a single accent glyph like a checkmark is the only rare exception). At most one exclamation point per post, and prefer none. Avoid jargon unless you explain it. Every post earns one clear call to action, usually a free inspection or estimate.",
+  "formality": "warm professional-casual — a trusted neighbour who does this for a living, not corporate, not slangy",
+  "sentence_rhythm": "mostly short declarative sentences; one longer sentence per post at most; occasional 3-5 word fragment for emphasis",
+  "emoji_policy": "none (single accent checkmark glyph allowed rarely, never faces or decorative emoji)",
+  "standard_cta": "Book your free inspection today.",
+  "cta_variants": [
+    "Get a free quote.",
+    "Book your free inspection today.",
+    "Message us for a no-obligation estimate.",
+    "Call for your free estimate."
+  ],
+  "hashtag_set": [
+    "#ColdstreamExteriors",
+    "#Roofing",
+    "#Siding",
+    "#Gutters",
+    "#ReplacementWindows",
+    "#ExteriorRemodel",
+    "#StormRestoration",
+    "#LicensedAndInsured",
+    "#CurbAppeal"
+  ],
+  "hashtag_strategy": "Use 4-7 per post: always #ColdstreamExteriors, then the 1-2 tags matching the service shown, plus 1-2 broad reach tags. Place them in a block at the very end, never mid-sentence. Skip hashtags entirely on LinkedIn hiring/testimonial posts or use at most 3.",
+  "never_use_words": [
+    "cheap",
+    "cheapest",
+    "guarantee (as an absolute promise)",
+    "best in the world",
+    "#1",
+    "revolutionary",
+    "game-changer",
+    "unbeatable",
+    "amazing",
+    "act now",
+    "hurry",
+    "world-class",
+    "synergy",
+    "solutions provider",
+    "leverage",
+    "utilize (say 'use')"
+  ],
+  "always_true_claims": [
+    "Licensed & insured",
+    "Free, no-obligation inspections/quotes",
+    "25-year workmanship warranty (verify before publishing if changed)"
+  ],
+  "tone_guardrails": {
+    "is": "warm, humble, customer-oriented, craftsmanship- and people-focused",
+    "is_not": "cocky, gimmicky, slogan-y, hypey, boastful, urgent-sounding",
+    "unofficial_slogan": "we're part of your home"
+  },
+  "post_boilerplate_locked": {
+    "$desc": "Caption template v2 blocks the model never writes. Enforced by brands.post_boilerplate; this copy is documentation. Only {town} {work} {materials} {service} are generated.",
+    "service_lines": [
+      "🔨 Roofing: Shingle, Metal and Low slope",
+      "🏠 Siding: Fiber cement and Vinyl",
+      "🌟 Energy Efficient Windows",
+      "💧 Gutters and Gutter Guards"
+    ],
+    "cta": "Ready to upgrade your home's exterior? Contact us today at {lane phone}",
+    "cta_gbp": "Ready to upgrade your home's exterior? Tap Call to reach the team."
+  },
+  "claims_pending_verification": {
+    "$desc": "Awaiting Craig's sign-off. brands.post_boilerplate.badges_approved is false, so assembleCaption OMITS these from every caption until he confirms. Do not move them into always_true_claims — that list is fed to the drafter as permitted claims.",
+    "claims": [
+      "A+ Rated by BBB",
+      "Fully Insured",
+      "Financing Available"
+    ]
+  }
+}

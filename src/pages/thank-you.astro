@@ -1,0 +1,100 @@
+---
+// /thank-you/ — the estimate form's post target.
+//
+// It existed as four separate pages on the live site and as a dead link in this build: the form
+// has always posted to /thank-you/ and the page was never made. One canonical page now; the
+// other three 301 here.
+//
+// NOINDEX IS CORRECT HERE, not a placeholder. A thank-you page ranking in search means people
+// land on it without submitting anything, which breaks conversion tracking and reads as a dead
+// end to the visitor.
+import PageShell from "../layouts/PageShell.astro";
+import { MARKET_LIST, NATIONAL } from "../data/markets.js";
+---
+<PageShell
+  badges={false}
+  title="Thanks — we'll be in touch | Coldstream Exteriors"
+  description="Your request is in. We'll call you back to arrange a free, no-obligation inspection."
+  canonical="/thank-you/"
+  noindex={true}
+  cta={false}
+  eyebrow="Request received"
+  heading="Thanks — that's all we need for now."
+  intro="We'll call you back to arrange a time that suits you. Nothing else is needed from you today."
+>
+  <section>
+    <div class="wrap prose">
+      <h2>What happens next</h2>
+      <ol>
+        <li>
+          <strong>We call you back.</strong> Someone from the office nearest you, usually the same
+          working day. If you sent this in the evening or over a weekend, it will be the next
+          working morning.
+        </li>
+        <li>
+          <strong>We agree a time.</strong> Most of our areas can be seen within a day or two.
+          You do not need to take a day off — for an exterior inspection you usually do not need
+          to be home at all, though it is easier if you are.
+        </li>
+        <li>
+          <strong>Someone walks it properly.</strong> On the roof, or along the elevation. Not a
+          look from the driveway and not a satellite image. They will photograph what they find.
+        </li>
+        <li>
+          <strong>You get a written quote.</strong> Scope, materials and the number, in writing.
+          Free, no obligation, and yours to keep whatever you decide.
+        </li>
+      </ol>
+
+      <h2>Nothing is owed and nothing is booked</h2>
+      <p>
+        There is no deposit for an inspection and no charge for the quote. If the answer turns out
+        to be that a repair will do, or that the job can safely wait a season, we will tell you
+        that — it is a shorter conversation than the one after a replacement you did not need.
+      </p>
+
+      <h2>Two things worth having ready</h2>
+      <ul>
+        <li>
+          <strong>Roughly how old the roof or siding is,</strong> if you know. You often will not,
+          especially if you did not buy the house new — that is fine, we can usually tell.
+        </li>
+        <li>
+          <strong>Any photos you already took,</strong> particularly of an interior stain or
+          something that only shows in heavy rain. They do not replace the inspection, but they
+          tell us what to look for.
+        </li>
+      </ul>
+
+      <h2>If it is a storm or insurance claim</h2>
+      <p>
+        Say so when we call. We inspect and document the damage the way an adjuster needs it
+        documented, and we deal with them directly rather than leaving you to relay messages
+        between two parties who both do this for a living. If the roof is open to the weather, we
+        cover it first and sort the paperwork second.
+      </p>
+
+      <h2>Need us sooner?</h2>
+      <p>
+        If it is urgent — an active leak, storm damage, something open to the weather — call the
+        office for your area directly rather than waiting for the callback.
+      </p>
+      <ul>
+        {MARKET_LIST.map((m) => (
+          <li>
+            <a href={`/${m.slug}/`}>{m.name}</a> — <a href={m.telHref}>{m.phone}</a>
+            <span style="color:var(--cs-steel)"> · {m.office.city}, {m.office.state}</span>
+          </li>
+        ))}
+        <li>Anywhere else — <a href={NATIONAL.telHref}>{NATIONAL.phone}</a></li>
+      </ul>
+
+      <h2>While you wait</h2>
+      <ul>
+        <li><a href="/cincinnati/roofing/roof-repair/">What actually causes most roof leaks</a> — it is rarely the middle of the roof.</li>
+        <li><a href="/cincinnati/roofing/insurance-storm-damage/">How a storm claim works</a> — and when filing one is not worth it.</li>
+        <li><a href="/cincinnati/siding/james-hardie-siding/">Fiber cement or vinyl</a> — the honest comparison.</li>
+      </ul>
+    </div>
+  </section>
+</PageShell>

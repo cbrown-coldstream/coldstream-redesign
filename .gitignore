@@ -1,0 +1,10 @@
+node_modules
+dist
+.astro
+
+# Generated into public/ by the postbuild step so the NEXT build carries them.
+# They are build output, not source — regenerate with `npm run build`.
+public/handoff
+
+# The handoff zip is a build artefact of dist/, rebuilt on demand.
+handoff/*.zip

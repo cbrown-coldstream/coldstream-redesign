@@ -1,0 +1,40 @@
+# STAGING ONLY. This file configures a Netlify site used to review the marketing build.
+#
+# PRODUCTION IS NOT NETLIFY. site-plan has Rambo serving finished HTML from the existing host, and
+# nothing in this build depends on an edge runtime for exactly that reason. The deliverable is
+# site/handoff/ — a zip of dist/ plus the Apache fragment. Netlify's only job here is to give a
+# clickable URL for review before cutover.
+#
+# THIS SITE IS SEPARATE FROM THE ColdstreamOS APP. That app is a different Netlify site publishing
+# the repo root's dist/, and it serves at /. The marketing home also needs /, so the two cannot
+# share a site; and a subpath deploy is not an option either, because every path in the built HTML
+# is root-relative — /cincinnati/, /badges/gaf.webp, and the canonicals.
+
+# THIS FILE LIVES INSIDE THE BASE DIRECTORY, so every path in it is relative to site/, not to the
+# repo root. `base` is therefore NOT set here — it is set once in the Netlify site's build
+# settings, and re-declaring it here would resolve to site/site and fail the build. `publish` is
+# "dist" for the same reason, not "site/dist".
+#
+# The repo root has its own netlify.toml for the ColdstreamOS app. The two do not interact: the
+# base directory determines which one Netlify reads.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# ── noindex, and why it is a header rather than a change to the HTML ─────────────────────────
+#
+# The built HTML is the DELIVERABLE. Every page self-canonicals to https://coldstreamexteriors.com
+# and the sitemap is absolute, which is correct for Rambo and wrong for a staging host — a crawler
+# reaching staging would find pages claiming to be production.
+#
+# The fix is not to change the HTML for staging, because then the artifact under review would not
+# be the artifact handed over. The fix is to noindex at the HTTP layer, which leaves every byte of
+# the deliverable untouched. Netlify already sends this on Deploy Previews; this makes it
+# unconditional, so a named branch deploy cannot be shared without it.
+#
+# ⚠ IF THIS SITE IS EVER PROMOTED TO PRODUCTION, DELETE THIS BLOCK FIRST. Left in place it would
+#    silently noindex the entire site, and nothing in the HTML would show it.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

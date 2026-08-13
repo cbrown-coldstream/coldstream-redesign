@@ -1,0 +1,98 @@
+---
+// TEMPLATE 2 — MARKET LANDING. ONE file, three pages.
+//
+// This is the proof that the extraction worked. Cincinnati, Columbus and St. Louis are the same
+// ordered list of section blocks; the only thing that differs is which market object and which
+// content object get passed in. Adding a fourth market is a data file and a line in markets.js —
+// no new layout, no copy-pasted section.
+//
+// Section order follows site-plan's market-landing definition and the built reference page:
+// offer hero + lead form · trust badges · services in this market · why us · served areas ·
+// local reviews · offer band · FAQ written local · final CTA · footer NAP.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import MarketNotice from "../../components/MarketNotice.astro";
+import Hero from "../../components/Hero.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import ServiceDetail from "../../components/ServiceDetail.astro";
+import ServedAreas from "../../components/ServedAreas.astro";
+import Reviews from "../../components/Reviews.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import FAQ from "../../components/FAQ.astro";
+import CTABand from "../../components/CTABand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, businessId } from "../../data/markets.js";
+import { TESTIMONIALS } from "../../data/claims.js";
+import { cincinnati } from "../../data/pages/cincinnati.js";
+import { columbus } from "../../data/pages/columbus.js";
+import { stLouis } from "../../data/pages/st-louis.js";
+
+const CONTENT = { cincinnati, columbus, "st-louis": stLouis };
+
+export async function getStaticPaths() {
+  const { MARKETS } = await import("../../data/markets.js");
+  return Object.keys(MARKETS).map((market) => ({ params: { market } }));
+}
+
+const { market: slug } = Astro.params;
+const market = MARKETS[slug];
+const page = CONTENT[slug];
+const o = market.office;
+
+// THE ONLY LocalBusiness NODE FOR THIS MARKET. One per market, on the market landing page, with
+// the one real office address. Service hubs and location pages reference it by @id rather than
+// restating the NAP, so there is exactly one place on the site where each address is written and
+// no page can drift from the GBP listing. No aggregateRating — see Reviews.astro.
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": "RoofingContractor",
+  "@id": businessId(market),
+  name: `Coldstream Exteriors — ${market.name}`,
+  url: `https://coldstreamexteriors.com/${market.slug}/`,
+  telephone: market.telHref,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: o.street, addressLocality: o.city,
+    addressRegion: o.state, postalCode: o.zip, addressCountry: "US",
+  },
+  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+};
+
+// No hero media and no modal on a market landing: the ground is the navy gradient, exactly as
+// the prototype has it. When a market has its own crew footage or a real photograph, pass it as
+// `media` here — that is the only change needed, and it is per-market by design.
+---
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  canonical={`/${market.slug}/`}
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: market.name, href: `/${market.slug}/` }]}
+  schema={[localBusiness]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero market={market} {...page.hero} />
+  <MarketNotice market={market} />
+  <BadgeRow aboveTheFold={true} />
+
+  <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
+  <WhyTrust heading={page.why.heading} cards={page.why.cards} />
+  <ServiceDetail id="roofing" market={market} {...page.roofing} />
+  <ServedAreas market={market} heading={page.areas.heading} intro={page.areas.intro} />
+  <Reviews heading={page.reviews.heading} intro={page.reviews.intro} reviews={TESTIMONIALS[slug]} />
+  <OfferBand />
+  <FAQ items={page.faq} />
+  <CTABand market={market} heading={page.cta.heading} body={page.cta.body} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

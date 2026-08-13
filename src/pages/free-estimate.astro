@@ -1,0 +1,104 @@
+---
+// /free-estimate/ — THE one canonical conversion page.
+//
+// The live site has four of these, four instant-quote pages and four thank-you pages: sixteen
+// duplicate utility pages, and the audit reads them as the tell that the build was rushed. This
+// is the single surviving free-estimate page; the other three 301 here.
+//
+// site-plan's rule for a conversion page is "one canonical each, form above the fold", so the
+// form is the first thing on the page — not a paragraph explaining that there is a form below.
+//
+// It is indexed. It is unique, it is the destination of every CTA on the site, and it makes no
+// claim that needs sourcing.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import EstimateForm from "../components/EstimateForm.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import FAQ from "../components/FAQ.astro";
+import WhyTrust from "../components/WhyTrust.astro";
+import Reviews from "../components/Reviews.astro";
+import OfferBand from "../components/OfferBand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { NATIONAL, MARKET_LIST } from "../data/markets.js";
+import { TESTIMONIALS } from "../data/claims.js";
+
+const market = NATIONAL;
+---
+<BaseLayout
+  title="Get a Free Roofing & Exterior Estimate | Coldstream Exteriors"
+  description="Free, no-obligation estimates for roofing, siding, windows and gutters in Cincinnati, Columbus and St. Louis. Tell us what you need and we'll take a look."
+  canonical="/free-estimate/"
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Free estimate", href: "/free-estimate/" }]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  {/* Form above the fold, beside the copy — not below it. */}
+  <section>
+    <div class="wrap est">
+      <div>
+        <span class="eyebrow">Free estimate</span>
+        <h1>Tell us what you need. We'll take a look.</h1>
+        <p>
+          Fill this in and we'll call you back to arrange a time. Someone comes out, inspects
+          what is actually there, and gives you a number with no obligation attached.
+        </p>
+        <ul>
+          <li>Free, no-obligation inspection</li>
+          <li>25-year workmanship warranty</li>
+          <li>Licensed and insured</li>
+        </ul>
+        <p>
+          Prefer to talk to someone now? Call <a href={market.telHref}>{market.phone}</a>, or use
+          the number for your metro:
+        </p>
+        <ul>
+          {MARKET_LIST.map((m) => (
+            <li><a href={`/${m.slug}/`}>{m.name}</a> — <a href={m.telHref}>{m.phone}</a></li>
+          ))}
+        </ul>
+      </div>
+      <EstimateForm />
+    </div>
+  </section>
+
+  <BadgeRow />
+
+  <FAQ items={[
+    { q: "What does the estimate cost?", a: "Nothing. The inspection and the quote are free and carry no obligation." },
+    { q: "How soon will I hear back?", a: "We aim to call you back the same day. If you send this in the evening it will be the next morning." },
+    { q: "What happens at the inspection?", a: "Someone comes out, gets up on the roof or walks the elevation, photographs what they find, and explains it in plain terms. Then you get the quote in writing." },
+    { q: "Do I have to decide on the spot?", a: "No. Take the quote away and think about it. Nobody will sit in your kitchen waiting for an answer." },
+  ]} />
+
+
+  <WhyTrust
+    heading="What we hold ourselves to"
+    cards={[
+      { title: "Licensed and insured", body: "Fully licensed for the work we do in Ohio, Kentucky and Missouri, with liability and workers\u2019 compensation cover." },
+      { title: "Our own crews", body: "No subcontractors. The people who quote the job are the people who do it." },
+      { title: "A 25-year workmanship warranty", body: "Materials carry their manufacturer warranty. Our workmanship carries ours." },
+    ]}
+  />
+
+
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners across all three markets." reviews={TESTIMONIALS.national} />
+
+
+  <OfferBand />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .est{display:grid;gap:36px;grid-template-columns:1fr;align-items:start}
+  .est h1{font-size:clamp(1.9rem,4vw,2.7rem);margin:10px 0 14px}
+  .est p{color:var(--cs-text-muted);line-height:1.7;margin:0 0 14px}
+  .est ul{color:var(--cs-text-muted);line-height:1.8;margin:0 0 16px;padding-left:20px}
+  @media (min-width:940px){.est{grid-template-columns:1fr 420px;gap:56px}}
+</style>

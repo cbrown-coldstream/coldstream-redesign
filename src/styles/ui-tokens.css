@@ -1,0 +1,48 @@
+/* Site UI tokens — GENERATED from site/ui-tokens.json. Do not hand-edit.
+
+   ADDITIVE TO THE BRAND PALETTE, NOT A REPLACEMENT. tokens.css above is generated from
+   design-systems/exteriors/tokens.json, which render-post also reads and which is
+   authoritative. This file adds only what an interface needs and a composite never does:
+   success, error, focus, disabled, field borders.
+
+   The dependency is one-directional. If a colour belongs on a social post it goes in
+   tokens.json; if it only ever appears in a browser it goes here. Merging the two would put
+   form-validation red into the file that paints every branded asset.
+
+   --cs-web-* IS THE WEBSITE'S OWN DESIGN LANGUAGE, measured off the approved prototype at
+   public/preview/cincinnati-market-landing.html. Montserrat in sentence case on a mid navy
+   ground with a light-blue emphasis is what a browser shows; Saira Condensed caps in accent
+   orange is what a rendered post shows. Neither is a mistake in the other's file. */
+
+:root{
+  /* interface states */
+  --cs-ui-success: #16A34A;
+  --cs-ui-success-deep: #12823B;
+  --cs-ui-error: #C0392B;
+  --cs-ui-error-surface: #FCEDEB;
+  --cs-ui-warning: #B7791F;
+  --cs-ui-focus: #E8843B;
+  --cs-ui-disabled: #8A99A6;
+  --cs-ui-field-border: #CBD6E0;
+  --cs-ui-field-border-focus: #3A89C7;
+
+  /* web design language — measured from the prototype hero, never eyeballed */
+  --cs-web-display: "Montserrat", system-ui, -apple-system, sans-serif;
+  --cs-web-body: "Inter", system-ui, -apple-system, sans-serif;
+  --cs-web-display-weight: 700;
+  --cs-web-display-weight-strong: 800;
+  --cs-web-display-weight-hero: 900;
+  --cs-web-display-lh: 1.08;
+  --cs-web-display-ls: -0.01em;
+  --cs-web-body-lh: 1.55;
+  --cs-web-eyebrow-size: 0.82rem;
+  --cs-web-eyebrow-ls: 0.14em;
+  --cs-web-hero-base: #101922;
+  --cs-web-hero-ground: linear-gradient(135deg, #2f80c4 0%, #256199 55%, #1c4c78 100%);
+  --cs-web-hero-scrim: linear-gradient(105deg, rgba(11,20,30,.9) 0%, rgba(15,32,52,.82) 46%, rgba(20,45,73,.62) 100%);
+  --cs-web-hero-accent: #8fc0ea;
+  --cs-web-hero-eyebrow: #d6e6f5;
+  --cs-web-hero-sub: #c8d8e7;
+  --cs-web-hero-bullet: #e7eff7;
+  --cs-web-hero-call-sub: #a9c0d6;
+}

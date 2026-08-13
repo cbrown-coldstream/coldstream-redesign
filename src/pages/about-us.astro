@@ -1,0 +1,142 @@
+---
+// /about-us/ — noindex until the company story is sourced.
+//
+// An about page is mostly company-history claims, and Coldstream's are not on file anywhere in
+// this repo: founding year, ownership, crew size, how long each market has been open. The
+// prototype's "25+ years" came from the same design comp as the fake phone numbers, so it is
+// gated in data/claims.js with everything else.
+//
+// What is below is only what is verifiable today: three real offices, the services each market
+// runs, and the three pre-approved claims. That is a real page, but it is not yet a page that
+// earns the About search — so it carries a noindex and the build names what it needs.
+import PageShell from "../layouts/PageShell.astro";
+import { MARKET_LIST, NATIONAL, servicesFor } from "../data/markets.js";
+import { CLAIMS } from "../data/claims.js";
+
+const org = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Coldstream Exteriors",
+  url: "https://coldstreamexteriors.com/",
+  telephone: NATIONAL.telHref,
+  location: MARKET_LIST.map((m) => ({
+    "@type": "RoofingContractor",
+    "@id": `https://coldstreamexteriors.com/${m.slug}/#business`,
+    name: `Coldstream Exteriors — ${m.name}`,
+    url: `https://coldstreamexteriors.com/${m.slug}/`,
+  })),
+};
+---
+<PageShell
+  reviews={true}
+  offer={true}
+  title="About Coldstream Exteriors | Roofing, Siding, Windows & Gutters"
+  description="Coldstream Exteriors runs three offices — Milford and Galloway in Ohio, and Geyer Road in St. Louis — with our own crews in each. Licensed and insured."
+  canonical="/about-us/"
+  noindex={true}
+  schema={[org]}
+  eyebrow="About us"
+  heading="Three metros. Our own crew in each."
+  intro="We do roofs, siding, windows and gutters. We do them with our own people, out of a real office in each market — not a call centre with a map on the wall."
+>
+  <section>
+    <div class="wrap prose">
+      <h2>What we do</h2>
+      <p>
+        Roofing, siding, windows and gutters — the whole outside of a house. Roofing is the core of
+        the business and the rest grew around it, for a straightforward reason: water that gets
+        past the roof shows up in the siding, and a gutter that cannot carry a downpour ends up in
+        the basement. Treating the outside of a building as one system rather than four trades is
+        the difference between fixing a symptom and fixing a cause.
+      </p>
+      <p>
+        We also do commercial and multi-family work — flat and low-slope systems, coatings and
+        restoration, and the scheduling that makes a roof replaceable while the building stays
+        occupied.
+      </p>
+
+      <h2>Three companies, run locally</h2>
+      <p>
+        Coldstream runs as three local businesses rather than one brand with a map on the wall.
+        Cincinnati, Columbus and St. Louis each have their own office, their own crew and their own
+        phone number. The person who answers knows what the weather does to houses in that market,
+        because they work there.
+      </p>
+      <div class="mkt-about">
+        {MARKET_LIST.map((m) => (
+          <div class="mkt-about-card">
+            <h3><a href={`/${m.slug}/`}>{m.name}</a></h3>
+            <p class="ma-meta">{m.office.street}, {m.office.city}, {m.office.state} {m.office.zip}</p>
+            <p class="ma-meta"><a href={m.telHref}>{m.phone}</a> · {m.servedAreas.length} communities across {m.region}</p>
+            <p class="ma-svc">{servicesFor(m).map((sv) => sv.label).join(" · ")}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>How a job actually runs</h2>
+      <p>
+        Every job starts with a free inspection. Someone climbs up, looks at what is actually
+        happening, photographs it, and tells you what they found — including when a repair is the
+        honest answer and a replacement is not. Then you get a written quote with a number on it,
+        the scope spelled out and the materials named.
+      </p>
+      <p>
+        The crew that quotes the job is the crew that does it. We do not subcontract, which is less
+        a philosophy than a practical matter: when the person who wrote the scope is the person on
+        the roof, nothing is lost between the two, and there is nobody to point at afterwards.
+      </p>
+      <p>
+        At the end we walk it with you, run a magnet over the drive and take the debris with us.
+        Our workmanship carries a 25-year warranty and a claim on it goes to the same office that
+        did the work.
+      </p>
+
+      <h2>What we will tell you that you may not want to hear</h2>
+      <ul>
+        <li><strong>When a repair beats a replacement.</strong> A roof at the end of its life is a different conversation from a roof with a failed flashing detail, and the second one is far more common than the first.</li>
+        <li><strong>When a claim will not go anywhere.</strong> Sudden storm damage is usually covered; age and wear usually are not. Filing regardless puts a claim on your record for nothing.</li>
+        <li><strong>When gutter guards are not worth it.</strong> Under heavy tree cover they turn an annual clean into an occasional one. On an open lot they rarely pay for themselves.</li>
+        <li><strong>When it can wait.</strong> Some things genuinely can, and saying so costs us a job and keeps a customer.</li>
+      </ul>
+
+      <h2>Licensing, insurance and the warranty</h2>
+      <p>
+        We are licensed for the work we carry out in Ohio, Kentucky and Missouri, and we carry
+        liability cover and workers' compensation — so both your property and the people on it are
+        covered. We will send the certificates before you commit to anything; you should ask any
+        contractor for them and be suspicious of one who hesitates.
+      </p>
+      <p>
+        Materials carry their manufacturer's warranty, which is the manufacturer's promise about
+        the product. Our workmanship carries ours, for 25 years, which is our promise about the
+        installation. They are separate things and a contractor who blurs them is worth a second
+        look.
+      </p>
+
+      {!CLAIMS.experience && (
+        <div class="unsourced">
+          <strong>Not yet on this page</strong>
+          <p>
+            The company history — when Coldstream started, who owns each market, how many people
+            are on the crews and how many homes we have worked on — is not published here yet
+            because none of it is on file in a form we can stand behind. It goes in when it is
+            sourced, not before. That is also why this page is not currently in the search index.
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+</PageShell>
+<style>
+  .mkt-about{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:22px 0 30px}
+  .mkt-about-card{background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-primary);
+    border-radius:11px;padding:18px 20px;transition:transform .18s ease-out,border-color .18s ease-out,box-shadow .18s ease-out}
+  .mkt-about-card:hover{transform:translateY(-3px);border-color:var(--cs-steel);
+    box-shadow:0 12px 26px color-mix(in srgb, var(--cs-text) 10%, transparent)}
+  .mkt-about-card h3{font-size:1.16rem;margin:0 0 7px}
+  .mkt-about-card h3 a{color:var(--cs-text);text-decoration:none}
+  .mkt-about-card h3 a:hover{color:var(--cs-primary-deep)}
+  .ma-meta{margin:0 0 5px!important;font-size:.88rem!important;line-height:1.5!important}
+  .ma-svc{margin:9px 0 0!important;font-size:.82rem!important;color:var(--cs-steel)!important}
+  @media (prefers-reduced-motion:reduce){.mkt-about-card{transition:none}.mkt-about-card:hover{transform:none}}
+</style>

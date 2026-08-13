@@ -1,0 +1,41 @@
+---
+// The served-areas block. site-plan calls this "the piece doing the job those 250 neighbourhood
+// pages were built to do" — one list naming every town, linking to the location pages that
+// survive. Google finds pages by following links, so this is what keeps local coverage visible
+// after the consolidation; without it the location pages are orphans.
+//
+// A TOWN LINKS ONLY WHERE A LOCATION PAGE ACTUALLY EXISTS. Everything else is plain text.
+// Several Columbus and St. Louis entries on the live site currently link to "#", which is worse
+// than no link for both a crawler and a person — it is the precise failure this avoids.
+//
+// Routing comes from data/locations.js, not from a second hand-maintained map. `areaForTown`
+// returns a slug only when that area has a page that actually built — which now requires real
+// job proof behind it — so this component cannot emit a link to a page that does not exist.
+import { areaForTown } from "../data/locations.js";
+const { market, eyebrow = "Where we work", heading, intro } = Astro.props;
+const areas = market.servedAreas ?? [];
+---
+<section class="mist" id="areas">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2>{intro && <p>{intro}</p>}</div>
+    {areas.length > 0 ? (
+      <nav class="areas" aria-label={`Areas served in ${market.name}`}>
+        {areas.map((a) => {
+          // areaForTown returns a slug, "" for a market with ONE metro locations page, or null
+          // for a town with nowhere to point. "" is falsy, so it has to be tested against null —
+          // getting that wrong silently unlinked all 26 Columbus towns.
+          const area = areaForTown(market.slug, a);
+          if (area === null) return <span class="area-text">{a}</span>;
+          return <a href={`/${market.slug}/locations/${area}${area ? "/" : ""}`}>{a}</a>;
+        })}
+      </nav>
+    ) : (
+      <p style="text-align:center;color:var(--cs-text-muted)">Service-area list pending for this market.</p>
+    )}
+  </div>
+</section>
+<style>
+  /* Unlinked towns match the chips visually but are not interactive — no pointer, no hover,
+     nothing that implies a destination that does not exist. */
+  .area-text{background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:999px;padding:7px 15px;font-size:.9rem;font-weight:600;color:var(--cs-text-muted)}
+</style>

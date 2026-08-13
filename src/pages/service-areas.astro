@@ -1,0 +1,237 @@
+---
+// /service-areas/ — the national "where do you work" page, and the destination of the new
+// Service Areas tab in the header.
+//
+// WHY IT EXISTS. The header used to send every service link on a national page to `/#services`,
+// and there was no answer at all to "do you cover my town" outside a market page. Someone who
+// arrives from a search for their own suburb should be one click from seeing it listed and one
+// more from a form — not routed through a market landing they have to recognise themselves as
+// belonging to.
+//
+// MODELLED ON swordroof.com/service-area/, which is the reference the build order named: a map,
+// then the towns as a plain list. That page covers one metro; this one covers three, so the towns
+// are grouped by market and the map follows the market rather than the other way round.
+//
+// THE TABS ARE PROGRESSIVE ENHANCEMENT. Every market panel is a real section with a real heading
+// and is in the HTML whether or not the script runs — the buttons hide and show what is already
+// there. With JS off the page is three stacked sections, which is a worse experience and a
+// complete one, and a crawler sees all 77 towns either way.
+//
+// NO NEW ADDRESSES. The three offices come from markets.js and nothing here invents a fourth —
+// same rule the location pages are held to.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import ServiceAreaMap from "../components/ServiceAreaMap.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import FAQ from "../components/FAQ.astro";
+import CTABand from "../components/CTABand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { NATIONAL, MARKET_LIST, homeownerServicesFor, estimateHref } from "../data/markets.js";
+import { metroLocations, publishedLocations } from "../data/locations.js";
+
+const market = NATIONAL;
+const totalTowns = MARKET_LIST.reduce((n, m) => n + m.servedAreas.length, 0);
+
+// A market's towns link to a location page only where one actually exists. Location pages are
+// gated on real job proof, so most markets have none yet and a link would 404.
+const metros = new Set(metroLocations().map((l) => l.market));
+const areaPages = publishedLocations();
+const areaFor = (slug) => areaPages.filter((a) => a.market === slug);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Coldstream Exteriors",
+  url: "https://coldstreamexteriors.com/",
+  areaServed: MARKET_LIST.flatMap((m) => m.servedAreas.map((a) => ({ "@type": "City", name: a }))),
+};
+---
+<BaseLayout
+  title="Service Areas | Roofing, Siding, Windows & Gutters | Coldstream Exteriors"
+  description={`The ${totalTowns} communities we work in across greater Cincinnati, Columbus and St. Louis — with the office, the crew and the phone number for each.`}
+  canonical="/service-areas/"
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Service areas", href: "/service-areas/" }]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <section class="sa-head">
+    <div class="wrap">
+      <span class="eyebrow">Where we work</span>
+      <h1>Cities we service</h1>
+      <p class="lede">
+        Three offices, three local crews, {totalTowns} communities. Each market is run from its own
+        address with its own number — the people who quote your job are based in your metro, not
+        routed to it.
+      </p>
+      <ul class="sa-jump">
+        {MARKET_LIST.map((m) => (
+          <li><a href={`#${m.slug}`}>{m.name}<span>{m.servedAreas.length} communities</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <BadgeRow />
+
+  <div class="sa-tabs-wrap">
+    <div class="wrap">
+      <div class="sa-tabs" role="tablist" aria-label="Choose a market" hidden>
+        {MARKET_LIST.map((m, i) => (
+          <button type="button" role="tab" class="sa-tab" data-panel={m.slug}
+                  aria-selected={i === 0 ? "true" : "false"}>{m.name}</button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {MARKET_LIST.map((m) => (
+    <section class="sa-market reveal" id={m.slug} data-market={m.slug}>
+      <div class="wrap">
+        <div class="sa-grid">
+          <div class="sa-copy">
+            <span class="eyebrow">{m.region}</span>
+            <h2>{m.name}</h2>
+            <p>{m.servedAreas.length} communities, served from our {m.office.city} office.</p>
+            <p class="sa-tel">
+              <a href={m.telHref}>{m.phone}</a>
+            </p>
+            <div class="sa-actions">
+              <a class="btn btn-orange" href={estimateHref(m)}>Get a free estimate</a>
+              <a class="sa-link" href={`/${m.slug}/`}>Everything we do in {m.name} <span aria-hidden="true">→</span></a>
+            </div>
+            <ul class="sa-svcs">
+              {homeownerServicesFor(m).map((s) => (
+                <li><a href={`/${m.slug}/${s.href}`}>{s.label}</a></li>
+              ))}
+            </ul>
+          </div>
+          <ServiceAreaMap market={m} />
+        </div>
+
+        <h3 class="sa-townhead">Communities we serve in {m.name}</h3>
+        <ul class="sa-towns">
+          {m.servedAreas.map((t) => <li>{t}</li>)}
+        </ul>
+
+        {(metros.has(m.slug) || areaFor(m.slug).length > 0) && (
+          <p class="sa-more">
+            {metros.has(m.slug) && <a href={`/${m.slug}/locations/`}>See the {m.name} service area in detail →</a>}
+            {areaFor(m.slug).map((a) => (
+              <a href={`/${m.slug}/locations/${a.key}/`}>{a.area.name} <span aria-hidden="true">→</span></a>
+            ))}
+          </p>
+        )}
+      </div>
+    </section>
+  ))}
+
+  <HowItWorks
+    eyebrow="What happens next"
+    heading="Booking one is four steps, and the first two are free"
+    steps={[
+      { title: "Tell us where you are", body: "The ZIP on the form routes you to the crew that covers it. No call centre in between." },
+      { title: "We come and look", body: "A real inspection of what is actually there — roof walked, not measured off a satellite image." },
+      { title: "A number in writing", body: "Scope, materials and price before anything is ordered, with no obligation attached to it." },
+      { title: "Our own crew does the work", body: "The people who quoted it. Site cleared at the end of the job, and nothing due until you are satisfied." },
+    ]}
+  />
+
+  <FAQ items={[
+    { q: "My town is not on the list — do you still come out?", a: "Usually yes. The lists above are where we work most, not a boundary. Call the number for your metro and we will tell you honestly whether we can get to you." },
+    { q: "Do you charge for the inspection or the estimate?", a: "No. Both are free and there is no obligation attached to either." },
+    { q: "Which office would handle my job?", a: "The one for your metro — Cincinnati work runs from Milford, Columbus from Galloway, and St. Louis from the Geyer Road office. Your job is quoted and done by that crew." },
+    { q: "Do you cover all four services everywhere?", a: "Roofing, siding, windows and gutters in all three markets. Commercial roofing runs from Cincinnati and Columbus, and garage doors are a St. Louis service line." },
+  ]} />
+
+  <CTABand market={market} heading="Not sure which market you are in?" body="Put your ZIP on the form and it will route itself." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .sa-head{padding:52px 0 34px}
+  .sa-head .wrap{max-width:820px;text-align:center}
+  .sa-head h1{margin:9px 0 14px}
+  .sa-head .lede{color:var(--cs-text-muted);font-size:1.08rem;margin:0 auto 26px;max-width:62ch}
+
+  .sa-jump{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:0;padding:0}
+  .sa-jump a{display:flex;flex-direction:column;gap:2px;background:var(--cs-paper);border:1px solid var(--cs-line);
+    border-radius:11px;padding:11px 20px;text-decoration:none;font-family:var(--cs-web-display);
+    font-weight:var(--cs-web-display-weight);color:var(--cs-text);transition:border-color .18s ease-out,transform .18s ease-out}
+  .sa-jump a span{font-family:var(--cs-web-body);font-weight:400;font-size:.82rem;color:var(--cs-text-muted)}
+  .sa-jump a:hover{border-color:var(--cs-primary);transform:translateY(-2px)}
+
+  .sa-tabs-wrap{position:sticky;top:78px;z-index:20;background:var(--cs-paper);border-bottom:1px solid var(--cs-line)}
+  .sa-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:11px 0}
+  .sa-tab{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;
+    background:none;border:1px solid var(--cs-line);border-radius:999px;padding:8px 18px;cursor:pointer;
+    color:var(--cs-text-muted);transition:background-color .18s ease-out,color .18s ease-out,border-color .18s ease-out}
+  .sa-tab:hover{border-color:var(--cs-primary);color:var(--cs-primary-deep)}
+  .sa-tab[aria-selected="true"]{background:var(--cs-text);color:var(--cs-paper);border-color:var(--cs-text)}
+
+  .sa-market{padding:52px 0}
+  .sa-market:nth-of-type(even){background:var(--cs-surface)}
+  .sa-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:40px;align-items:center}
+  @media(max-width:900px){.sa-grid{grid-template-columns:1fr;gap:26px}}
+  .sa-copy h2{margin:8px 0 10px}
+  .sa-copy p{color:var(--cs-text-muted);margin:0 0 8px}
+  .sa-tel a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+    font-size:1.5rem;color:var(--cs-primary-deep);text-decoration:none}
+  .sa-tel a:hover{color:var(--cs-accent)}
+  .sa-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:16px 0 18px}
+  .sa-link{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    color:var(--cs-primary);text-decoration:none}
+  .sa-link:hover{color:var(--cs-accent)}
+  .sa-svcs{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
+  .sa-svcs a{display:block;background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:999px;
+    padding:6px 14px;font-size:.88rem;font-weight:600;color:var(--cs-primary-deep);text-decoration:none}
+  .sa-svcs a:hover{border-color:var(--cs-primary);color:var(--cs-primary)}
+
+  .sa-townhead{margin:34px 0 14px;font-size:1.06rem;color:var(--cs-text)}
+  .sa-towns{list-style:none;margin:0;padding:0;display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:8px 18px}
+  .sa-towns li{position:relative;padding-left:16px;font-size:.95rem;color:var(--cs-text)}
+  .sa-towns li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;
+    background:var(--cs-accent)}
+  .sa-more{margin:22px 0 0;display:flex;gap:20px;flex-wrap:wrap}
+  .sa-more a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    color:var(--cs-primary);text-decoration:none}
+  .sa-more a:hover{color:var(--cs-accent)}
+</style>
+
+<script is:inline>
+  // Tabs are added by script and only by script: with JS off the buttons never appear and the
+  // three sections stay stacked and readable. Hiding a panel is therefore never something a
+  // visitor can get stuck behind.
+  (function () {
+    var tabs = document.querySelector(".sa-tabs");
+    var panels = Array.prototype.slice.call(document.querySelectorAll(".sa-market"));
+    if (!tabs || panels.length < 2) return;
+    tabs.hidden = false;
+
+    var buttons = Array.prototype.slice.call(tabs.querySelectorAll(".sa-tab"));
+    function show(slug) {
+      panels.forEach(function (p) { p.hidden = p.dataset.market !== slug; });
+      buttons.forEach(function (b) { b.setAttribute("aria-selected", String(b.dataset.panel === slug)); });
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () { show(b.dataset.panel); });
+    });
+
+    // A deep link to #columbus should open Columbus, not scroll past two hidden panels.
+    var hash = (location.hash || "").replace("#", "");
+    show(panels.some(function (p) { return p.dataset.market === hash; }) ? hash : panels[0].dataset.market);
+    document.querySelectorAll(".sa-jump a").forEach(function (a) {
+      a.addEventListener("click", function () { show(a.getAttribute("href").replace("#", "")); });
+    });
+  })();
+</script>

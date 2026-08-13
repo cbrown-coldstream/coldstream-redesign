@@ -1,0 +1,75 @@
+---
+// /terms/ — noindex until counsel has read it.
+//
+// Same rule as the privacy policy: what is here is only what is verifiable, and the parts that
+// need a legal answer are marked as unanswered rather than filled with boilerplate. Terms that
+// contradict the actual contract a homeowner signs are worse than no terms page at all.
+import PageShell from "../layouts/PageShell.astro";
+import { NATIONAL } from "../data/markets.js";
+---
+<PageShell
+  hero={false}
+  badges={false}
+  title="Terms of Use | Coldstream Exteriors"
+  description="The terms that apply to this website and to the estimates we provide through it."
+  canonical="/terms/"
+  noindex={true}
+  cta={false}
+  eyebrow="Legal"
+  heading="Terms of use"
+  intro="What this website is, and what it isn't."
+>
+  <section>
+    <div class="wrap prose">
+      <div class="unsourced">
+        <strong>Draft — not yet in force</strong>
+        <p>
+          These terms have not been reviewed by counsel and the sections marked below are
+          unanswered. The page is kept out of the search index until both are resolved.
+        </p>
+      </div>
+
+      <h2>Estimates and quotes</h2>
+      <p>
+        Anything on this website is a description of the work we do, not an offer of a contract.
+        Prices, timelines and scope come from a written quote after an inspection of your
+        property, and nothing on this site changes what that quote says.
+      </p>
+      <p>
+        A quote is not a contract either. The work is governed by the agreement you sign before
+        it starts.
+      </p>
+
+      <h2>Our workmanship warranty</h2>
+      <p>
+        We warrant our workmanship for 25 years. The warranty document issued with your project
+        sets out what it covers and what it does not; where this page and that document differ,
+        that document is the one that counts. Manufacturer warranties on materials are separate
+        and come from the manufacturer.
+      </p>
+
+      <h2>This website</h2>
+      <p>
+        The text, photographs and design on this site belong to Coldstream Exteriors. Job
+        photographs are of work our crews carried out.
+      </p>
+      <p>
+        We keep the site as accurate as we can, but it is a description of services, not a
+        specification. If something here matters to your decision, ask us and we will put the
+        answer in writing.
+      </p>
+
+      <div class="unsourced">
+        <strong>Unanswered</strong>
+        <p>
+          The registered legal entity and state, the governing law and venue for disputes, and
+          any limitation-of-liability terms. These have to come from counsel, not from a website
+          build.
+        </p>
+      </div>
+
+      <h2>Questions</h2>
+      <p>Call us on <a href={NATIONAL.telHref}>{NATIONAL.phone}</a>.</p>
+    </div>
+  </section>
+</PageShell>

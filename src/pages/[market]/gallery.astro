@@ -1,0 +1,149 @@
+---
+// TEMPLATE 5 — MARKET GALLERY. One file, one page per market that has work to show.
+//
+// site-plan lists gallery/ under every market. Ruling 1 (round 3) decides what it is allowed to
+// contain: "Location pages don't survive on addresses. They survive on job photos" — and the same
+// sentence is the whole justification for this page. It is the market-wide view of the proof the
+// location pages show sub-area by sub-area.
+//
+// EVERY MARKET GETS THIS PAGE (build order, round 6). A market with no photos yet renders an
+// honest empty state and carries a noindex until real work is on it — it does not 404 on a URL the
+// Page System lists, and it does not fill the space with stock photography and a city name. The
+// noindex comes off the moment the Contractors Cloud pull lands, with no code change.
+//
+// It draws on marketJobs(), which is the area-filed jobs PLUS the market-level pool, so it does
+// not require an area split to exist first. That matters for Columbus, which deliberately has no
+// areas until the job clusters define them.
+//
+// No LocalBusiness and no address here either — same rule as the location template. The schema is
+// an ImageGallery whose provider is an @id reference to the market's single business node.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import ServedAreas from "../../components/ServedAreas.astro";
+import CTABand from "../../components/CTABand.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import Reviews from "../../components/Reviews.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef } from "../../data/markets.js";
+import { marketJobs } from "../../data/locations.js";
+
+export async function getStaticPaths() {
+  const { marketsWithGallery } = await import("../../data/locations.js");
+  return marketsWithGallery().map((market) => ({ params: { market } }));
+}
+
+const { market: mSlug } = Astro.params;
+const market = MARKETS[mSlug];
+const jobs = marketJobs(mSlug);
+const empty = jobs.length === 0;
+const office = market.office;
+
+// Jobs grouped by service, so the page reads as "here is our roofing work / here is our siding
+// work" rather than as an undifferentiated wall of photographs.
+const byService = jobs.reduce((acc, j) => {
+  (acc[j.service] ??= []).push(j);
+  return acc;
+}, {});
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  name: `Completed work in ${market.name}`,
+  url: `https://coldstreamexteriors.com/${mSlug}/gallery/`,
+  provider: providerRef(market),
+  image: jobs.map((j) => ({
+    "@type": "ImageObject",
+    contentUrl: `https://coldstreamexteriors.com${j.photos[0].src}`,
+    caption: `${j.service} — ${j.town}. ${j.detail}`,
+  })),
+};
+
+const servedFrom = `Served from our ${office.city} office.`;
+---
+<BaseLayout
+  title={`Our Work in ${market.name} | Coldstream Exteriors`}
+  description={`Completed roofing, siding, window and gutter projects across ${market.region}, photographed on the job. ${servedFrom}`}
+  canonical={`/${mSlug}/gallery/`}
+  market={market}
+  noindex={empty}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: "Our Work", href: `/${mSlug}/gallery/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · Our work`}
+    headline={`Roofs, Siding and Gutters We've Finished in ${market.name}`}
+    sub={`Real projects from ${market.region}, photographed on site. ${servedFrom}`}
+    bullets={["Free, no-obligation inspection", "Our own crews on every job", "25-year workmanship warranty"]}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  {empty && (
+    <section>
+      <div class="wrap" style="max-width:720px">
+        <div class="shead"><span class="eyebrow">Recent work</span><h2>Photographs are on their way</h2></div>
+        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+          Our crews finish work across {market.region} every week, and we are pulling the
+          photographs and job details together from our records rather than filling this page with
+          stock images of somebody else's roof. If you want to see what we have done near you,
+          call {market.phone} and ask — we will talk you through recent projects in your area.
+        </p>
+      </div>
+    </section>
+  )}
+
+  {Object.entries(byService).map(([service, items], i) => (
+    <section class={i % 2 ? "mist" : undefined}>
+      <div class="wrap">
+        <div class="shead">
+          <span class="eyebrow">{service}</span>
+          <h2>{service} in {market.name}</h2>
+        </div>
+        <div class="jobs">
+          {items.map((j) => (
+            <figure class="job">
+              <img src={j.photos[0].src} alt={j.photos[0].alt} width={j.photos[0].w} height={j.photos[0].h}
+                   loading="lazy" decoding="async" />
+              <figcaption>
+                <strong>{j.town}{j.completedOn ? ` · ${j.completedOn.slice(0, 4)}` : ""}</strong>
+                <span>{j.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <ServicesGrid market={market} heading="What we do here" intro="The same crews and the same warranty across every service." />
+  <ServedAreas market={market} heading={`Working across ${market.region}`} intro={servedFrom} />
+  <CTABand market={market} heading="Want your project on this page?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .jobs{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .job{margin:0}
+  .job img{width:100%;height:auto;border-radius:12px;display:block}
+  .job figcaption{display:flex;flex-direction:column;gap:4px;padding-top:10px}
+  .job figcaption strong{font-size:.92rem}
+  .job figcaption span{color:var(--cs-text-muted);font-size:.95rem;line-height:1.5}
+</style>

@@ -1,0 +1,232 @@
+{
+  "target": "/cincinnati/locations/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 118,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/cincinnati/service-area/",
+      "title": "We Serve Cincinnati & the surrounding areas | Coldstream Exteriors",
+      "description": "Coldstream Exteriors proudly serves Cincinnati & surrounding areas. Quality roofing, siding, windows & gutters for your home or business. Get a free estimate today!",
+      "h1": "CHECK OUR SERVICE AREAS",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "CHECK OUR SERVICE AREAS"
+        },
+        {
+          "tag": "h2",
+          "text": "Serving Ohio, Kentucky, and the surrounding areas"
+        },
+        {
+          "tag": "p",
+          "text": "We proudly offer expert roofing, siding, window, gutter, and garage door services in Ohio, and Kentucky, as well as the surrounding areas. If your location isn’t listed, please contact us to confirm whether we can provide services in your area."
+        },
+        {
+          "tag": "h3",
+          "text": "Ohio"
+        },
+        {
+          "tag": "li",
+          "text": "Amberley Village"
+        },
+        {
+          "tag": "li",
+          "text": "Amelia"
+        },
+        {
+          "tag": "li",
+          "text": "Batavia"
+        },
+        {
+          "tag": "li",
+          "text": "Bethel"
+        },
+        {
+          "tag": "li",
+          "text": "Blue Ash"
+        },
+        {
+          "tag": "li",
+          "text": "Cleves"
+        },
+        {
+          "tag": "li",
+          "text": "Cold Spring"
+        },
+        {
+          "tag": "li",
+          "text": "Colerain"
+        },
+        {
+          "tag": "li",
+          "text": "Fairfield"
+        },
+        {
+          "tag": "li",
+          "text": "Goshen"
+        },
+        {
+          "tag": "li",
+          "text": "Hamilton"
+        },
+        {
+          "tag": "li",
+          "text": "Indian Hill"
+        },
+        {
+          "tag": "li",
+          "text": "Kenwood"
+        },
+        {
+          "tag": "li",
+          "text": "Landen"
+        },
+        {
+          "tag": "li",
+          "text": "Loveland"
+        },
+        {
+          "tag": "li",
+          "text": "Madeira"
+        },
+        {
+          "tag": "li",
+          "text": "Maineville"
+        },
+        {
+          "tag": "li",
+          "text": "Mason"
+        },
+        {
+          "tag": "li",
+          "text": "Milford"
+        },
+        {
+          "tag": "li",
+          "text": "Montgomery"
+        },
+        {
+          "tag": "li",
+          "text": "Pleasant Ridge"
+        },
+        {
+          "tag": "li",
+          "text": "Ross"
+        },
+        {
+          "tag": "li",
+          "text": "Silverton"
+        },
+        {
+          "tag": "li",
+          "text": "West Chester"
+        },
+        {
+          "tag": "h3",
+          "text": "Kentucky"
+        },
+        {
+          "tag": "li",
+          "text": "Fort Thomas"
+        },
+        {
+          "tag": "li",
+          "text": "Fort Wright"
+        },
+        {
+          "tag": "li",
+          "text": "Hebron"
+        },
+        {
+          "tag": "li",
+          "text": "Highland Heights"
+        },
+        {
+          "tag": "li",
+          "text": "Independence"
+        },
+        {
+          "tag": "li",
+          "text": "Latonia"
+        },
+        {
+          "tag": "li",
+          "text": "Melbourne"
+        },
+        {
+          "tag": "li",
+          "text": "Park Hills"
+        },
+        {
+          "tag": "li",
+          "text": "Peaselburg"
+        },
+        {
+          "tag": "li",
+          "text": "Silver Grove"
+        },
+        {
+          "tag": "li",
+          "text": "Southgate"
+        },
+        {
+          "tag": "li",
+          "text": "Taylor Mill"
+        },
+        {
+          "tag": "li",
+          "text": "Villa Hills"
+        },
+        {
+          "tag": "li",
+          "text": "Alexandria"
+        },
+        {
+          "tag": "li",
+          "text": "Bellevue"
+        },
+        {
+          "tag": "li",
+          "text": "Camp Springs"
+        },
+        {
+          "tag": "li",
+          "text": "Carthage"
+        },
+        {
+          "tag": "li",
+          "text": "Covington"
+        },
+        {
+          "tag": "li",
+          "text": "Crescent Springs"
+        },
+        {
+          "tag": "li",
+          "text": "Crestview"
+        },
+        {
+          "tag": "li",
+          "text": "Dayton"
+        },
+        {
+          "tag": "li",
+          "text": "Erlanger"
+        },
+        {
+          "tag": "li",
+          "text": "Florence"
+        },
+        {
+          "tag": "li",
+          "text": "Fort Mitchell"
+        },
+        {
+          "tag": "li",
+          "text": "Walton"
+        }
+      ]
+    }
+  ]
+}

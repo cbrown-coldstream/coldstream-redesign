@@ -1,0 +1,151 @@
+---
+// TEMPLATE 8 — METRO LOCATIONS. One page covering a whole market, where an area split would lie.
+//
+// Columbus is the only market with one of these, and it is not a shortcut. It is a ring city
+// around I-270 with served towns at every compass point: any two-way cut puts Westerville and
+// Grove City in the same bucket, which no local would recognise. The Page System asks for a single
+// /columbus/locations/ here rather than a split, and the geography agrees with it.
+//
+// Same rules as the area template: no address of its own, no LocalBusiness, a Service schema whose
+// provider is an @id reference to the market's single business node. The one physical address for
+// this market lives on the market landing page and nowhere else.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import UtilityBar from "../../../components/UtilityBar.astro";
+import SiteHeader from "../../../components/SiteHeader.astro";
+import Hero from "../../../components/Hero.astro";
+import ServicesGrid from "../../../components/ServicesGrid.astro";
+import FAQ from "../../../components/FAQ.astro";
+import CTABand from "../../../components/CTABand.astro";
+import BadgeRow from "../../../components/BadgeRow.astro";
+import Reviews from "../../../components/Reviews.astro";
+import OfferBand from "../../../components/OfferBand.astro";
+import WhyTrust from "../../../components/WhyTrust.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef } from "../../../data/markets.js";
+import { TESTIMONIALS } from "../../../data/claims.js";
+import { LOCATIONS, marketJobs } from "../../../data/locations.js";
+import { MARKET_CONTEXT } from "../../../data/subservices.js";
+
+export async function getStaticPaths() {
+  const { metroLocations } = await import("../../../data/locations.js");
+  return metroLocations().map(({ market }) => ({ params: { market } }));
+}
+
+const { market: mSlug } = Astro.params;
+const market = MARKETS[mSlug];
+const metro = LOCATIONS[mSlug].metro;
+const ctx = MARKET_CONTEXT[mSlug];
+const office = market.office;
+const jobs = marketJobs(mSlug);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: `Roofing and exteriors across ${metro.name}`,
+  serviceType: "Roofing, siding, windows and gutters",
+  url: `https://coldstreamexteriors.com/${mSlug}/locations/`,
+  provider: providerRef(market),
+  areaServed: market.servedAreas.map((t) => ({ "@type": "City", name: t })),
+};
+
+const servedFrom = `Served from our ${office.city} office.`;
+---
+<BaseLayout
+  title={`Areas We Serve in ${market.name} | Coldstream Exteriors`}
+  description={`The towns and neighbourhoods Coldstream Exteriors covers across ${market.region}, from our ${office.city} office. Free, no-obligation inspections.`}
+  canonical={`/${mSlug}/locations/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: "Areas We Serve", href: `/${mSlug}/locations/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · Areas we serve`}
+    headline={`Where We Work Across ${metro.name}`}
+    sub={metro.blurb}
+    bullets={["Free, no-obligation inspection", servedFrom, "Licensed and insured"]}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <div class="shead"><span class="eyebrow">One metro, not four quadrants</span><h2>How we cover {market.name}</h2></div>
+      <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+        {market.name} is a ring city, and we work the whole ring rather than carving it into halves
+        that nobody who lives here would recognise. {ctx.stock}
+      </p>
+      <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+        {ctx.permits} {ctx.trees}
+      </p>
+    </div>
+  </section>
+
+  <section class="mist">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Towns we cover</span>
+        <h2>{market.servedAreas.length} communities across {market.region}</h2>
+        <p>{servedFrom} If your street is not on this list, call {market.phone} and ask — the list is where we work most, not a boundary.</p>
+      </div>
+      <nav class="areas" aria-label={`Towns served across ${market.name}`}>
+        {market.servedAreas.map((t) => <span class="area-text">{t}</span>)}
+      </nav>
+    </div>
+  </section>
+
+  {jobs.length > 0 && (
+    <section>
+      <div class="wrap">
+        <div class="shead"><span class="eyebrow">Recent work</span><h2>Projects across {metro.name}</h2></div>
+        <div class="jobs">
+          {jobs.map((j) => (
+            <figure class="job">
+              <img src={j.photos[0].src} alt={j.photos[0].alt} width={j.photos[0].w} height={j.photos[0].h}
+                   loading="lazy" decoding="async" />
+              <figcaption>
+                <strong>{j.town} · {j.service}</strong>
+                <span>{j.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <ServicesGrid market={market} heading="What we do here" intro="The same crews and the same warranty across every service." />
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={[
+    { q: `Do you cover my part of ${market.name}?`, a: `We work right across ${market.region} from our ${office.city} office. The list above is where we work most often rather than a hard boundary — call ${market.phone} and ask about your street.` },
+    { q: "Is there a call-out charge for an estimate?", a: "No. Inspections and written quotes are free and carry no obligation." },
+    { q: "Why isn't there a page for my neighbourhood?", a: `Because a page per neighbourhood, saying the same thing with the town name swapped, helps nobody. One page covering ${metro.name} properly is more use than thirty thin ones.` },
+  ]} />
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body={`Tell us what you need and we will take a look. Call ${market.phone} or send the form.`} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .area-text{background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:999px;padding:7px 15px;font-size:.9rem;font-weight:600;color:var(--cs-text-muted)}
+  .jobs{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .job{margin:0}
+  .job img{width:100%;height:auto;border-radius:12px;display:block}
+  .job figcaption{display:flex;flex-direction:column;gap:4px;padding-top:10px}
+  .job figcaption strong{font-size:.92rem}
+  .job figcaption span{color:var(--cs-text-muted);font-size:.95rem;line-height:1.5}
+</style>

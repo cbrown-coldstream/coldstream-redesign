@@ -1,0 +1,63 @@
+---
+// BY THE NUMBERS — a dark full-bleed band of large figures.
+//
+// The brief asked for years in business, homes served, markets and crew size. TWO OF THOSE FOUR
+// ARE GATED CLAIMS and one is unknown:
+//
+//   years in business   gated — nobody has sourced the founding year (claims.experience)
+//   homes served        gated — the live site's "3,000+" has no source (claims.customersServed)
+//   crew size           not recorded anywhere in this repo
+//   markets             real, and derived from markets.js
+//
+// A numbers band whose numbers are made up is the worst version of this section, so it is built
+// from figures this repo can actually prove — every one below is COMPUTED from the data, not
+// typed. The two gated figures have slots waiting: fill in claims.js and they appear here in
+// order, ahead of the derived ones, with no code change.
+//
+// "25-year workmanship warranty" is one of the three pre-approved always-true claims, so it can
+// carry a numeral honestly. That is the figure doing the credibility work until the real
+// company-history numbers land.
+import { MARKET_LIST, SERVICES } from "../data/markets.js";
+import { CLAIMS } from "../data/claims.js";
+
+const communities = MARKET_LIST.reduce((n, m) => n + m.servedAreas.length, 0);
+
+const figures = [
+  // Gated — absent until sourced, first in line when they arrive.
+  CLAIMS.experience && { value: `${CLAIMS.experience}`, suffix: "+", label: "Years in business" },
+  CLAIMS.customersServed && { value: `${CLAIMS.customersServed.toLocaleString()}`, suffix: "+", label: "Homes served" },
+  // Derived, and true today.
+  { value: `${MARKET_LIST.length}`, label: "Metros, each locally owned" },
+  { value: `${communities}`, label: "Communities we work in" },
+  { value: `${SERVICES.length}`, label: "Exterior services, one crew" },
+  { value: "25", suffix: "yr", label: "Workmanship warranty" },
+].filter(Boolean).slice(0, 4);
+---
+<section class="numbers reveal" aria-label="Coldstream Exteriors by the numbers">
+  <div class="wrap">
+    <ul>
+      {figures.map((f) => (
+        <li>
+          <span class="fig">{f.value}{f.suffix && <span class="sfx">{f.suffix}</span>}</span>
+          <span class="lbl">{f.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .numbers{background:var(--cs-deep-dark);color:var(--cs-paper)}
+  .numbers .wrap{padding:46px 22px}
+  .numbers ul{list-style:none;margin:0;padding:0;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+  @media(max-width:820px){.numbers ul{grid-template-columns:repeat(2,1fr);gap:30px 22px}}
+
+  .numbers li{display:flex;flex-direction:column;gap:9px;align-items:flex-start;
+    border-left:3px solid var(--cs-accent);padding-left:18px}
+  .fig{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    font-size:clamp(2.9rem,5.4vw,4.2rem);line-height:.88;letter-spacing:.005em;
+    font-variant-numeric:tabular-nums;display:inline-flex;align-items:baseline}
+  .sfx{font-size:.42em;margin-left:.12em;color:var(--cs-accent);text-transform:uppercase}
+  .lbl{font-size:.9rem;font-weight:600;color:color-mix(in srgb, var(--cs-paper) 76%, transparent);
+    line-height:1.4;max-width:22ch}
+</style>

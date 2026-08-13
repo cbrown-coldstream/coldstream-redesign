@@ -1,0 +1,14 @@
+---
+import { estimateHref } from "../data/markets.js";
+const { market, heading, body } = Astro.props;
+---
+<section class="mist">
+  <div class="wrap" style="text-align:center;max-width:660px">
+    <h2 style="font-size:clamp(1.7rem,3vw,2.3rem)">{heading}</h2>
+    <p style="color:var(--cs-text-muted);font-size:1.06rem;margin:12px 0 24px">{body}</p>
+    <a class="btn btn-orange" href={estimateHref(market)} style="font-size:1.12rem;padding:16px 32px">Get My Free Estimate →</a>
+    <div style="margin-top:14px">
+      <a href={market.telHref} style="font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);color:var(--cs-text);text-decoration:none">or call {market.phone}</a>
+    </div>
+  </div>
+</section>

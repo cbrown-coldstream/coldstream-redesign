@@ -1,0 +1,165 @@
+---
+// Hero — split: copy and phone left, estimate form right, both above the fold.
+//
+// THE GROUND IS THE MID-NAVY GRADIENT, and by default that is all it is — see base.css. The
+// placeholder plate that used to sit behind this (a faint Coldstream logo on near-black, still
+// at public/video/hero-poster.jpg) was a watermark, not photography, and the prototype has no
+// such layer. A placeholder that looks deliberate is worse than an empty ground: nobody chases
+// the real asset for it.
+//
+// MEDIA IS OPT-IN AND IT MEANS REAL. Pass `media` when there is genuine footage or a genuine
+// photograph for a page — {poster, mp4, webm} or {img} — and it paints under the gradient wash,
+// which then reads as a scrim. Nothing passes it today. When the crew photography lands, that
+// is the one prop to set, and no CSS changes.
+//
+// VIDEO, when media carries it, is progressive enhancement and never the LCP resource. The
+// <video> ships with preload="none" and no autoplay attribute; a tiny inline script attaches
+// the source only when the viewport is >=768px AND prefers-reduced-motion is not set AND the
+// connection isn't metered or slow. Everyone else — mobile, reduced-motion, JS off, video
+// blocked — gets the poster.
+//
+// `video` is a SEPARATE PROP from `media` and feeds only the opt-in modal below. They were one
+// prop while the background video and the modal video were the same placeholder file; splitting
+// them is what lets the modal stay while the watermark goes.
+//
+// The headline's LAST WORD takes light blue (--cs-web-hero-accent). Accent orange is the social
+// system's emphasis and does not appear on a web hero; there is no hairline rule either.
+//
+// BULLETS AND THE OFFER CHIP DEFAULT TO THE CLAIMS GATE. A page that does not pass them gets
+// whatever is currently sourced — which today is the three pre-approved claims and no chip.
+// Nothing about financing, a promotion or payment terms can reach a hero by being typed into a
+// page, because no page types them any more.
+import EstimateForm from "./EstimateForm.astro";
+import { heroBullets, offerChip, CLAIMS } from "../data/claims.js";
+import { estimateHref } from "../data/markets.js";
+const {
+  market, eyebrow, headline, sub, video,
+  // The hero ground's own media. Opt-in, real assets only — see the note above.
+  media = null,
+  bullets = heroBullets(), offer = offerChip(),
+  // VIDEO MODAL. Opt-in, currently the home page only. The hero's background video is silent,
+  // decorative and often not loaded at all (mobile, reduced motion, slow connection); this is the
+  // deliberate one — a viewer chooses to watch it, with sound and controls.
+  videoModal = false,
+} = Astro.props;
+const reviews = market.reviews ?? null;
+const bbb = CLAIMS.bbb;
+const words = headline.trim().split(/\s+/);
+const head = words.slice(0, -1).join(" ");
+const last = words[words.length - 1];
+---
+<section class="hero" id="quote">
+  {media && (
+    <div class="hero-media" aria-hidden="true">
+      {media.mp4 || media.webm
+        ? <video id="heroVideo" poster={media.poster} muted loop playsinline preload="none"
+                 data-mp4={media.mp4} data-webm={media.webm}></video>
+        : <img src={media.img ?? media.poster} alt="" width="1600" height="900" fetchpriority="high" />}
+    </div>
+  )}
+  <div class="wrap">
+    <div class="hcopy">
+      {/* The rating chip renders ONLY from sourced per-market figures. A star rating and a
+          review count are factual claims about a real review profile, and three artifacts
+          currently disagree about ours — so nothing is printed until markets.js carries real
+          numbers. See the REVIEWS note there. */}
+      {reviews && (
+        <div class="badge-rev">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          {/* BBB is a separate claim with a separate source — it does not ride along on the
+              review figures. Gated, so it cannot reappear the moment the rating lands. */}
+          <span>{reviews.rating} · {reviews.count}+ reviews{bbb && ` · BBB ${bbb.rating} rating`}</span>
+        </div>
+      )}
+      <span class="eyebrow">{eyebrow}</span>
+      <h1>{head} <span class="last">{last}</span></h1>
+      <p class="sub">{sub}</p>
+      <ul class="hbul">
+        {bullets.map((b) => (
+          <li><span class="ck" aria-hidden="true">✓</span>{b}</li>
+        ))}
+      </ul>
+      <div class="cta-row">
+        {/* The site's primary CTA pointed at /instant-roof-quote/ on every page. That page
+            does not exist here and is not being built — there is no instant-quote vendor, and a
+            button promising an instant quote that cannot give one is a broken promise. */}
+        <a class="btn btn-orange" href={estimateHref(market)}>Get My Free Estimate →</a>
+        {videoModal && video && (
+          <button type="button" class="playbtn" id="heroPlay" aria-haspopup="dialog">
+            <span class="playbtn-ic" aria-hidden="true">▶</span>
+            <span class="playbtn-txt">Watch the 60-second tour<small>See how a job runs</small></span>
+          </button>
+        )}
+        <a class="callnow" href={market.telHref}>
+          Or call {market.phone}
+          <small>We answer live — no phone trees</small>
+        </a>
+      </div>
+    </div>
+    <EstimateForm offer={offer} />
+  </div>
+</section>
+
+{videoModal && video && (
+  <dialog class="vmodal" id="heroModal" aria-label="Coldstream Exteriors video">
+    <button type="button" class="vmodal-x" id="heroModalX" aria-label="Close video">×</button>
+    <div class="vmodal-frame">
+      {/* preload="none" — the file is not fetched until somebody asks for it, so opting into the
+          modal costs nothing to a visitor who never opens it. */}
+      <video id="heroModalVideo" controls playsinline preload="none" poster={video.poster}>
+        <source src={video.webm} type="video/webm" />
+        <source src={video.mp4} type="video/mp4" />
+        Your browser cannot play this video.
+        <a href={video.mp4}>Download it instead</a>.
+      </video>
+    </div>
+    <p class="vmodal-note">Placeholder footage — the real walkthrough replaces this file, not this page.</p>
+  </dialog>
+)}
+<script is:inline>
+  (function () {
+    var btn = document.getElementById("heroPlay");
+    var dlg = document.getElementById("heroModal");
+    if (!btn || !dlg) return;
+    var vid = document.getElementById("heroModalVideo");
+    var x = document.getElementById("heroModalX");
+
+    function open() {
+      if (typeof dlg.showModal === "function") dlg.showModal();
+      else dlg.setAttribute("open", "");        // very old browsers: still usable, just inline
+      if (vid) { try { vid.currentTime = 0; vid.play(); } catch (e) {} }
+      x.focus();                                 // focus lands inside the dialog, not behind it
+    }
+    function close() {
+      if (vid) { vid.pause(); }                  // never leave audio playing behind a closed dialog
+      if (typeof dlg.close === "function") dlg.close();
+      else dlg.removeAttribute("open");
+      btn.focus();                               // and back where it came from
+    }
+    btn.addEventListener("click", open);
+    x.addEventListener("click", close);
+    dlg.addEventListener("close", function () { if (vid) vid.pause(); });
+    // Click the backdrop — the dialog element itself is the backdrop area outside .vmodal-frame.
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) close(); });
+  })();
+</script>
+<script is:inline>
+  (function () {
+    var v = document.getElementById("heroVideo");
+    if (!v) return;
+    var okSize = window.matchMedia("(min-width: 768px)").matches;
+    var okMotion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+    var c = navigator.connection || {};
+    var okNet = !c.saveData && !/(^|-)(2g|slow-2g)$/.test(c.effectiveType || "");
+    if (!(okSize && okMotion && okNet)) return;
+    ["webm", "mp4"].forEach(function (t) {
+      var src = v.getAttribute("data-" + t);
+      if (!src) return;
+      var s = document.createElement("source");
+      s.src = src; s.type = t === "webm" ? "video/webm" : "video/mp4";
+      v.appendChild(s);
+    });
+    v.autoplay = true; v.load();
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  })();
+</script>

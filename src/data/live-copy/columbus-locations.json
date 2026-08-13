@@ -1,0 +1,140 @@
+{
+  "target": "/columbus/locations/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 86,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/columbus/service-area/",
+      "title": "We Serve Columbus & the surrounding areas | Coldstream Exteriors",
+      "description": "Coldstream Exteriors proudly serves Columbus & surrounding areas. Quality roofing, siding, windows & gutters for your home or business. Get a free estimate today!",
+      "h1": "AREAS WE SERVE",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "AREAS WE SERVE"
+        },
+        {
+          "tag": "h2",
+          "text": "Serving Columbus , and the surrounding areas"
+        },
+        {
+          "tag": "p",
+          "text": "We proudly offer expert roofing, siding, window, gutter, and garage door services in Columbus, as well as the surrounding areas. If your location isn’t listed, please contact us to confirm whether we can provide services in your area."
+        },
+        {
+          "tag": "li",
+          "text": "Bexley"
+        },
+        {
+          "tag": "li",
+          "text": "Blacklick Estates"
+        },
+        {
+          "tag": "li",
+          "text": "Clintonville"
+        },
+        {
+          "tag": "li",
+          "text": "Dublin"
+        },
+        {
+          "tag": "li",
+          "text": "Eastmoor"
+        },
+        {
+          "tag": "li",
+          "text": "Easton"
+        },
+        {
+          "tag": "li",
+          "text": "Gahanna"
+        },
+        {
+          "tag": "li",
+          "text": "German Village"
+        },
+        {
+          "tag": "li",
+          "text": "Grandview Heights"
+        },
+        {
+          "tag": "li",
+          "text": "Grove City"
+        },
+        {
+          "tag": "li",
+          "text": "Groveport"
+        },
+        {
+          "tag": "li",
+          "text": "Hilliard"
+        },
+        {
+          "tag": "li",
+          "text": "Lancaster"
+        },
+        {
+          "tag": "li",
+          "text": "Lewis Center"
+        },
+        {
+          "tag": "li",
+          "text": "Lockbourne"
+        },
+        {
+          "tag": "li",
+          "text": "Marysville"
+        },
+        {
+          "tag": "li",
+          "text": "New Albany"
+        },
+        {
+          "tag": "li",
+          "text": "Obetz"
+        },
+        {
+          "tag": "li",
+          "text": "Pickerington"
+        },
+        {
+          "tag": "li",
+          "text": "Powell"
+        },
+        {
+          "tag": "li",
+          "text": "Polaris"
+        },
+        {
+          "tag": "li",
+          "text": "Reynoldsburg"
+        },
+        {
+          "tag": "li",
+          "text": "Short North Arts District"
+        },
+        {
+          "tag": "li",
+          "text": "Upper Arlington"
+        },
+        {
+          "tag": "li",
+          "text": "Valleyview"
+        },
+        {
+          "tag": "li",
+          "text": "Westerville"
+        },
+        {
+          "tag": "li",
+          "text": "Whitehall"
+        },
+        {
+          "tag": "li",
+          "text": "Worthington"
+        }
+      ]
+    }
+  ]
+}

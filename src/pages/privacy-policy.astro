@@ -1,0 +1,87 @@
+---
+// /privacy-policy/ — noindex until the real data practices are documented and counsel has read it.
+//
+// THIS IS NOT A TEMPLATE POLICY WITH THE COMPANY NAME SWAPPED IN, and it must not become one. A
+// privacy policy is a set of factual claims about what an organisation actually does with
+// personal data; a generic one is simply inaccurate, and the accurate version is the one that
+// holds up when someone asks. So the sections below state only what is verifiable from this
+// codebase — the estimate form's four fields — and every question that needs an answer from the
+// business is marked in the page as unanswered rather than filled with boilerplate.
+//
+// What is still needed: analytics and ad pixels, call tracking (CallRail is planned), which CRM
+// receives leads, retention periods, SMS/TCPA consent language for the phone field, and whether
+// any of this is shared with lead-buying partners. Then counsel review.
+import PageShell from "../layouts/PageShell.astro";
+import { MARKET_LIST, NATIONAL } from "../data/markets.js";
+---
+<PageShell
+  hero={false}
+  badges={false}
+  title="Privacy Policy | Coldstream Exteriors"
+  description="How Coldstream Exteriors handles the information you give us through this website."
+  canonical="/privacy-policy/"
+  noindex={true}
+  cta={false}
+  eyebrow="Legal"
+  heading="Privacy policy"
+  intro="What we collect through this website, and what we do with it."
+>
+  <section>
+    <div class="wrap prose">
+      <div class="unsourced">
+        <strong>Draft — not yet in force</strong>
+        <p>
+          This policy is incomplete and has not been reviewed by counsel. The sections marked
+          below need answers from the business before it can be published, and the page is kept
+          out of the search index until then.
+        </p>
+      </div>
+
+      <h2>What we collect</h2>
+      <p>
+        The estimate form on this site asks for four things: your name, your phone number, your
+        ZIP code, and which service you are enquiring about. Those four fields are the only
+        personal information this website asks you to provide.
+      </p>
+      <p>
+        If you call one of the numbers on this site, you are giving us your phone number and
+        whatever you tell us on the call.
+      </p>
+
+      <div class="unsourced">
+        <strong>Unanswered</strong>
+        <p>
+          Whether this site runs analytics, advertising pixels or call-tracking software — and if
+          so, which — is not yet documented. Each of those collects information automatically and
+          has to be disclosed here by name.
+        </p>
+      </div>
+
+      <h2>What we use it with</h2>
+      <p>
+        We use what you give us to contact you about the work you asked about — to call you back,
+        arrange an inspection, and send you a quote.
+      </p>
+
+      <div class="unsourced">
+        <strong>Unanswered</strong>
+        <p>
+          Which systems your details are stored in, how long they are kept, who else receives
+          them, and what consent your phone number carries for calls and texts. None of these can
+          be answered from the website alone, and none of them will be guessed at here.
+        </p>
+      </div>
+
+      <h2>Contacting us about your information</h2>
+      <p>
+        To ask what we hold about you, or to ask us to delete it, call the office for your area:
+      </p>
+      <ul>
+        {MARKET_LIST.map((m) => (
+          <li>{m.name} — {m.office.street}, {m.office.city}, {m.office.state} {m.office.zip}. <a href={m.telHref}>{m.phone}</a></li>
+        ))}
+        <li>Anywhere else — <a href={NATIONAL.telHref}>{NATIONAL.phone}</a></li>
+      </ul>
+    </div>
+  </section>
+</PageShell>

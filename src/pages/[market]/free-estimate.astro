@@ -1,0 +1,139 @@
+---
+// TEMPLATE 10 — MARKET FREE ESTIMATE. One per market, plus the national one at /free-estimate/.
+//
+// An earlier ruling kept one national conversion page and folded the per-market ones, on the
+// grounds that four near-identical forms are the pattern the consolidation removes. The Page
+// System has all four, and the Page System is authoritative — so all four are built, and the
+// objection is answered the only way it can be: BY MAKING THEM ACTUALLY DIFFERENT. This page
+// carries the market's own phone number, its own office, its own served-area list and answers
+// about this market's weather and permits. The national page routes to a market instead.
+//
+// Form above the fold, per site-plan. The form itself is the shared EstimateForm component, so
+// there is one form on this site rather than four that drift apart.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import ServedAreas from "../../components/ServedAreas.astro";
+import FAQ from "../../components/FAQ.astro";
+import Reviews from "../../components/Reviews.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef, servicesFor } from "../../data/markets.js";
+import { TESTIMONIALS } from "../../data/claims.js";
+import { MARKET_CONTEXT } from "../../data/subservices.js";
+
+export async function getStaticPaths() {
+  const { MARKETS } = await import("../../data/markets.js");
+  return Object.keys(MARKETS).map((market) => ({ params: { market } }));
+}
+
+const { market: mSlug } = Astro.params;
+const market = MARKETS[mSlug];
+const ctx = MARKET_CONTEXT[mSlug];
+const o = market.office;
+const services = servicesFor(market);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: `Free Estimate in ${market.name}`,
+  url: `https://coldstreamexteriors.com/${mSlug}/free-estimate/`,
+  mainEntity: providerRef(market),
+};
+---
+<BaseLayout
+  title={`Free Roofing & Exterior Estimate in ${market.name} | Coldstream Exteriors`}
+  description={`Book a free, no-obligation inspection and written quote across ${market.region}. Call ${market.phone} or send the form — our ${o.city} office answers it.`}
+  canonical={`/${mSlug}/free-estimate/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: "Free Estimate", href: `/${mSlug}/free-estimate/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  {/* Hero renders the form in its right-hand column — form above the fold, per site-plan. */}
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · Free estimate`}
+    headline={`Book a Free Inspection in ${market.name}`}
+    sub={`Tell us what you need and we will take a look. No obligation, no deposit to book, and no pressure afterwards. Our ${o.city} office handles it.`}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <div class="shead"><span class="eyebrow">What happens next</span><h2>From this form to a number</h2></div>
+      <ol class="steps">
+        <li><strong>We call you back.</strong> Usually the same working day, from {o.city} — a local number, not a call centre.</li>
+        <li><strong>We book an inspection that suits you.</strong> Most of {market.region} within a day or two.</li>
+        <li><strong>Someone walks it properly.</strong> On the roof or along the elevation, not a look from the kerb.</li>
+        <li><strong>You get a written quote.</strong> Scope, materials and price. Free, and yours to keep whatever you decide.</li>
+      </ol>
+      <p style="color:var(--cs-text-muted);font-size:1.02rem;line-height:1.7;margin-top:18px">
+        {ctx.permits} If the job turns out to be a repair rather than a replacement, we will say so
+        — it is a shorter conversation than the one after a replacement you did not need.
+      </p>
+    </div>
+  </section>
+
+  <section class="mist">
+    <div class="wrap">
+      <div class="shead"><span class="eyebrow">What we can quote</span><h2>Every exterior service, from one crew</h2></div>
+      <div class="quote-grid">
+        {services.map((s) => (
+          <a class="quote-card" href={`/${mSlug}/${s.key}/`}>
+            <span class="ic" aria-hidden="true">{s.icon}</span>
+            <strong>{s.label}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <WhyTrust
+    heading="Why the estimate is genuinely free"
+    cards={[
+      { title: "No call-out charge", body: "The inspection and the written quote cost nothing, whether or not you go ahead." },
+      { title: "No deposit to book", body: "Booking an inspection costs nothing and commits you to nothing." },
+      { title: "No pressure afterwards", body: "We will follow up once. If the answer is no, that is the end of it." },
+    ]}
+  />
+
+  <ServedAreas market={market} heading={`We quote across ${market.region}`} intro={`Based at our ${o.city} office — ${market.servedAreas.length} communities and the streets around them.`} />
+
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={[
+    { q: "How quickly can someone come out?", a: `Most of ${market.region} within a day or two of your call. Active leaks and storm damage go to the front of the queue — call ${market.phone} if it is urgent.` },
+    { q: "Is the estimate really free?", a: "Yes. Free, written, no obligation and no call-out charge. You keep the quote whatever you decide." },
+    { q: "Do I need to be home?", a: "For an exterior inspection, usually not — though it is easier if you are, because we can walk you through what we found while we are still standing next to it." },
+    { q: `What if my street is not on your area list?`, a: `Call and ask. The list is where we work most often across ${market.region}, not a boundary.` },
+    { q: "What do you need from me to quote?", a: "Your address and a sentence about what is wrong. Photos help if you have them, but they are not necessary — we would rather look ourselves." },
+  ]} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:13px;color:var(--cs-text-muted);font-size:1.02rem;line-height:1.65}
+  .steps strong{color:var(--cs-text)}
+  .quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .quote-card{display:flex;align-items:center;gap:13px;background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:11px;padding:17px 19px;text-decoration:none;color:var(--cs-text);transition:border-color .12s,transform .12s}
+  .quote-card:hover{border-color:var(--cs-accent);transform:translateY(-2px)}
+  .quote-card .ic{width:38px;height:38px;flex:none;border-radius:9px;background:var(--cs-primary);color:var(--cs-paper);display:grid;place-items:center;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight)}
+</style>

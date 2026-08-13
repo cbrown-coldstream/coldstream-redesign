@@ -1,0 +1,20 @@
+{
+  "target": "/cincinnati/gallery/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 5,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/cincinnati/gallery/",
+      "title": "Project Gallery | Coldstream Exteriors Cincinnati, OH",
+      "description": "Explore Coldstream Exteriors' project gallery in Cincinnati, OH. See our expert roofing, siding, and exterior work. Quality craftsmanship you can trust!",
+      "h1": "Gallery of Projects in Cincinnati",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "Gallery of Projects in Cincinnati"
+        }
+      ]
+    }
+  ]
+}

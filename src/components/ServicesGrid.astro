@@ -1,0 +1,28 @@
+---
+// Each card links to ONE hub URL per market. These hubs are the internal-linking backbone:
+// market -> hub -> service, consistently, so crawlers can map the site.
+// Homeowner grid — its heading and intro address a homeowner ("Roofing is the core. Siding,
+// windows and gutters complete the home"), so the commercial hub is not one of these cards.
+import { homeownerServicesFor, serviceHref, copyFor } from "../data/markets.js";
+const { market, eyebrow = "What we do", heading, intro } = Astro.props;
+const services = homeownerServicesFor(market);
+---
+<section id="services">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{heading}</h2>
+      {intro && <p>{intro}</p>}
+    </div>
+    <div class="svc-grid">
+      {services.map((s) => (
+        <div class="svc">
+          <div class="ic" aria-hidden="true">{s.icon}</div>
+          <h3>{s.label}</h3>
+          <p>{copyFor(s.blurb, market)}</p>
+          <a href={serviceHref(market, s)}>Explore {s.label.toLowerCase()} →</a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

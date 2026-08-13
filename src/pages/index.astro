@@ -1,0 +1,136 @@
+---
+// TEMPLATE 1 — NATIONAL HOME. The only instance.
+//
+// Built to site-plan's SEVEN sections. It is not the market landing template with the city
+// swapped: the plan gives the two different jobs and different section sets, and the ruling
+// confirmed the plan wins over the earlier brief on this point.
+//
+// THE BADGE ROW AND THE HERO VIDEO ARE NOW ON THIS PAGE (round 5). Both were held back in an
+// earlier round — requested in a brief, absent from the plan's seven sections for this template —
+// and flagged as pending a decision rather than quietly included. Round 5 is that decision.
+//
+// Both are the same components the market landings use, so there is one badge row and one hero on
+// this site, not a national variant of each. The video is progressive enhancement and never the
+// LCP resource; see Hero.astro. The BBB slot in the badge row stays gated — see BadgeRow.astro.
+//
+// SEO. This page is static, national, and self-canonical. No redirect to a market, no
+// client-side content swap, no cloaking — a crawler and a visitor from Phoenix get exactly the
+// same HTML. Personalisation is the visible router below plus an optional client-side geo
+// nudge, neither of which changes what is indexed.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import PartnerStrip from "../components/PartnerStrip.astro";
+import GeoRedirect from "../components/GeoRedirect.astro";
+import ServiceDetail from "../components/ServiceDetail.astro";
+import MarketNotice from "../components/MarketNotice.astro";
+import FAQ from "../components/FAQ.astro";
+import CTABand from "../components/CTABand.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import WhyTrust from "../components/WhyTrust.astro";
+import Reviews from "../components/Reviews.astro";
+import OfferBand from "../components/OfferBand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
+import { TESTIMONIALS } from "../data/claims.js";
+import { national as page } from "../data/pages/national.js";
+
+const market = NATIONAL;
+
+// THE MODAL'S FILE, and only the modal's. The hero ground is the navy gradient — no media prop
+// is passed, so the placeholder logo plate no longer paints behind the headline on any page.
+// This is still placeholder footage; it plays because a visitor chose to open it, which is a
+// different bargain from a placeholder painted behind the H1 whether or not anyone asked.
+const video = {
+  poster: "/video/hero-poster.jpg",
+  mp4: "/video/hero-placeholder.mp4",
+  webm: "/video/hero-placeholder.webm",
+};
+
+// One Organization node with all three offices, rather than a LocalBusiness — the national page
+// is not a location and should not claim to be one. LocalBusiness lives on the market pages.
+const org = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Coldstream Exteriors",
+  url: "https://coldstreamexteriors.com/",
+  telephone: NATIONAL.telHref,
+  location: MARKET_LIST.map((m) => ({
+    "@type": "RoofingContractor",
+    name: `Coldstream Exteriors — ${m.name}`,
+    url: `https://coldstreamexteriors.com/${m.slug}/`,
+    telephone: m.telHref,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: m.office.street, addressLocality: m.office.city,
+      addressRegion: m.office.state, postalCode: m.office.zip, addressCountry: "US",
+    },
+  })),
+};
+---
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  canonical="/"
+  market={market}
+  schema={[org]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  {/* SAME SECTION ORDER AS THE MARKET LANDING TEMPLATE, rendered national.
+      The structure is the one the Cincinnati page uses; the content is not Cincinnati's. Copying
+      that page's HTML literally would put a Milford address and a Cincinnati LocalBusiness node on
+      the national URL, and leave / and /cincinnati/ as two pages with the same content competing
+      for the same searches. Same shape, honest data. */}
+  <Hero market={market} video={video} videoModal={true} {...page.hero} />
+  <MarketNotice market={market} />
+  <BadgeRow aboveTheFold={true} />
+
+  <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
+  <WhyTrust heading={page.why.heading} cards={page.why.cards} />
+  <ServiceDetail id="roofing" market={market} {...page.roofing} />
+
+  {/* The market landing's served-areas block. Nationally the towns belong to three markets, so the
+      equivalent is the three offices — which is also the routing for anyone the geo redirect
+      did not catch. */}
+  <section class="mist" id="locations">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Where we work</span>
+        <h2>{page.areas.heading}</h2>
+        <p>{page.areas.intro}</p>
+      </div>
+      <div class="loc-grid">
+        {MARKET_LIST.map((m) => (
+          <div class="loc-card">
+            <h3><a href={`/${m.slug}/`}>{m.name}</a></h3>
+            <address>{m.office.street}<br />{m.office.city}, {m.office.state} {m.office.zip}</address>
+            <a class="loc-tel" href={m.telHref}>{m.phone}</a>
+            <p class="loc-region">{m.region} — {m.servedAreas.length} communities</p>
+            <a class="loc-cta" href={`/${m.slug}/free-estimate/`}>Book a free inspection<span aria-hidden="true">→</span></a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Kept from the previous pass, as asked: the manufacturer strip. */}
+  <PartnerStrip {...page.partners} />
+
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners across all three markets." reviews={TESTIMONIALS.national} />
+  <OfferBand />
+  <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
+  <CTABand market={market} heading={page.cta.heading} body={page.cta.body} />
+
+  <GeoRedirect markets={GEO} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

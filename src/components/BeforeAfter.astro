@@ -1,0 +1,111 @@
+---
+// BEFORE AND AFTER — the most persuasive thing on any exterior contractor's site, which is exactly
+// why it is the one place a placeholder has to be honest rather than convincing.
+//
+// It renders real pairs the moment they exist and an explicit, plainly-labelled empty state until
+// then. It does NOT put up a stock photo of somebody else's roof: a fabricated before-and-after is
+// a claim about work we did, and it is the single worst thing on this list to fake.
+//
+// The pairs come from the same job records as the galleries and location pages, through the same
+// consent gate in contracts.js — a job with no `publishable: true` and no consent record reaches
+// this section no more than it reaches anything else. A pair additionally needs two photos, one
+// tagged `stage: "before"` and one `stage: "after"`.
+import { MARKET_LIST } from "../data/markets.js";
+import { marketJobs } from "../data/locations.js";
+const { eyebrow, heading, intro } = Astro.props;
+
+/** Jobs carrying both a before and an after frame, across every market. */
+const pairs = MARKET_LIST.flatMap((m) =>
+  marketJobs(m.slug)
+    .map((j) => ({
+      job: j, market: m,
+      before: (j.photos ?? []).find((p) => p.stage === "before"),
+      after: (j.photos ?? []).find((p) => p.stage === "after"),
+    }))
+    .filter((p) => p.before && p.after)
+).slice(0, 3);
+---
+<section class="ba reveal">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{heading}</h2>
+      {intro && <p>{intro}</p>}
+    </div>
+
+    {pairs.length > 0 ? (
+      <div class="ba-grid">
+        {pairs.map((p) => (
+          <figure class="ba-card">
+            <div class="ba-pair">
+              <div class="ba-half">
+                <img src={p.before.src} alt={p.before.alt} width={p.before.w} height={p.before.h}
+                     loading="lazy" decoding="async" />
+                <span class="ba-tag">Before</span>
+              </div>
+              <div class="ba-half">
+                <img src={p.after.src} alt={p.after.alt} width={p.after.w} height={p.after.h}
+                     loading="lazy" decoding="async" />
+                <span class="ba-tag ba-tag--after">After</span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>{p.job.town}, {p.market.name} · {p.job.service}</strong>
+              <span>{p.job.detail}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    ) : (
+      <div class="ba-empty">
+        <div class="ba-empty-frames" aria-hidden="true">
+          <div class="ba-frame"><span>Before</span></div>
+          <div class="ba-frame ba-frame--after"><span>After</span></div>
+        </div>
+        <div class="ba-empty-copy">
+          <h3>These will be our jobs, not stock photographs</h3>
+          <p>
+            Our crews finish work across all three markets every week, and the before-and-after
+            frames are being pulled together from our own job records — with the homeowner's
+            permission on each one. We would rather show this space empty than fill it with a roof
+            we did not put on.
+          </p>
+          <p class="ba-empty-note">
+            Want to see work near you in the meantime? Call the office for your area and ask — the
+            numbers are further down this page.
+          </p>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+<style>
+  .ba{background:var(--cs-paper)}
+  .ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .ba-card{margin:0;background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:13px;overflow:hidden}
+  .ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--cs-line)}
+  .ba-half{position:relative;background:var(--cs-cloud)}
+  .ba-half img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/3}
+  .ba-tag{position:absolute;left:9px;bottom:9px;background:var(--cs-deep-dark);color:var(--cs-paper);
+    font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.7rem;
+    text-transform:uppercase;letter-spacing:.13em;padding:4px 9px;border-radius:5px}
+  .ba-tag--after{background:var(--cs-accent)}
+  .ba-card figcaption{display:flex;flex-direction:column;gap:5px;padding:15px 17px}
+  .ba-card figcaption strong{font-size:.92rem}
+  .ba-card figcaption span{color:var(--cs-text-muted);font-size:.93rem;line-height:1.55}
+
+  /* Empty state. Deliberately reads as a marked-out space, not as a broken image. */
+  .ba-empty{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;
+    background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:14px;padding:26px}
+  @media(max-width:820px){.ba-empty{grid-template-columns:1fr;gap:22px}}
+  .ba-empty-frames{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ba-frame{aspect-ratio:4/3;border:2px dashed var(--cs-mist);border-radius:10px;
+    display:grid;place-items:center;background:var(--cs-cloud)}
+  .ba-frame span{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;color:var(--cs-steel)}
+  .ba-frame--after{border-color:color-mix(in srgb, var(--cs-accent) 45%, transparent)}
+  .ba-frame--after span{color:var(--cs-accent)}
+  .ba-empty-copy h3{font-size:1.24rem;margin:0 0 10px}
+  .ba-empty-copy p{margin:0 0 11px;color:var(--cs-text-muted);font-size:.98rem;line-height:1.65}
+  .ba-empty-note{font-size:.9rem!important;color:var(--cs-steel)!important;margin-bottom:0!important}
+</style>

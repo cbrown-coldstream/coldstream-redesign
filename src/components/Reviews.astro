@@ -1,0 +1,42 @@
+---
+// RATING SCHEMA IS DELIBERATELY ABSENT.
+//
+// Marking up a ratingValue we are not reading from a real source is a structured-data
+// violation and Google issues manual actions for it. The prototype hardcoded 4.8 / 400
+// reviews, which also disagreed with the 4.8 / 500+ used elsewhere. Review/aggregateRating
+// goes in only once live GBP reviews are pulled per market, with the real count.
+//
+// THE SECTION DOES NOT RENDER WITHOUT REAL REVIEWS. The prototype shipped three invented
+// testimonials — named people, quoted words, under the heading "Real feedback from Cincinnati
+// homeowners" — and the same three appeared on the national page with different towns attached.
+// Fabricated endorsements are a bigger problem than an unsourced star rating, so the same gate
+// applies: real, attributable reviews in data/claims.js, or no section at all.
+// A REVIEW'S STAR COUNT IS PART OF THE REVIEW. This rendered a hardcoded five stars on every
+// card, which would misstate a real four-star review the moment one is pulled from GBP — the
+// same class of unsourced rating claim the rest of this file exists to prevent. It now shows the
+// review's own rating, and falls back to no stars rather than to five.
+const { eyebrow = "Reviews", heading, intro, reviews = [] } = Astro.props;
+const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math.round(n)) : null);
+---
+{reviews.length > 0 && (
+<section id="reviews">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="accent">{heading}</h2>
+      {intro && <p>{intro}</p>}
+    </div>
+    <div class="rev-grid">
+      {reviews.map((r) => (
+        <figure class="rev" style="margin:0">
+          {stars(r.rating) && (
+            <div class="stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</div>
+          )}
+          <blockquote style="margin:0"><p>{r.quote}</p></blockquote>
+          <figcaption class="who">{r.name}<span>{r.detail}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+)}

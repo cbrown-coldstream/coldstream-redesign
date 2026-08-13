@@ -1,0 +1,124 @@
+---
+// TEMPLATE 7 — SUB-SERVICE. The six pages the Page System nests under the roofing and siding hubs.
+//
+// These are the pages the fold table always meant to keep — "Collapse to roofing/roof-replacement/
+// and roofing/roof-repair/", "Keep the hub, James Hardie and vinyl" — and that an earlier read of
+// the ASCII tree turned into sections. Build order round 6 settled it: they are pages.
+//
+// THEY ARE INDEXABLE. Every one carries copy written for its market, ported from the live pages
+// that fold into it, so there is nothing provisional about them and no reason to hold a noindex on
+// them. That matters beyond this template: these URLs are 301 targets, and a redirect into a
+// noindex page hands Google the old URL's ranking value and then tells it not to index the page
+// holding it.
+//
+// The breadcrumb runs Home › Market › Hub › This page, so the hub above stays the stronger URL and
+// the sub-page sits under it rather than competing with it.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import UtilityBar from "../../../components/UtilityBar.astro";
+import SiteHeader from "../../../components/SiteHeader.astro";
+import Hero from "../../../components/Hero.astro";
+import ServiceDetail from "../../../components/ServiceDetail.astro";
+import WhyTrust from "../../../components/WhyTrust.astro";
+import ServedAreas from "../../../components/ServedAreas.astro";
+import FAQ from "../../../components/FAQ.astro";
+import CTABand from "../../../components/CTABand.astro";
+import BadgeRow from "../../../components/BadgeRow.astro";
+import Reviews from "../../../components/Reviews.astro";
+import OfferBand from "../../../components/OfferBand.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef, serviceFor } from "../../../data/markets.js";
+import { TESTIMONIALS } from "../../../data/claims.js";
+import { SUBSERVICES, MARKET_CONTEXT } from "../../../data/subservices.js";
+
+export async function getStaticPaths() {
+  const { MARKETS } = await import("../../../data/markets.js");
+  const { subservicePaths } = await import("../../../data/subservices.js");
+  return subservicePaths(MARKETS).map(({ market, hub, sub }) => ({ params: { market, hub, sub } }));
+}
+
+const { market: mSlug, hub, sub } = Astro.params;
+const market = MARKETS[mSlug];
+const svc = SUBSERVICES[hub][sub];
+const ctx = MARKET_CONTEXT[mSlug];
+const parent = serviceFor(hub);
+const h1 = svc.h1(market);
+const lead = svc.lead(market);
+const intro = svc.intro(market, ctx);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: svc.label,
+  name: h1,
+  description: lead,
+  url: `https://coldstreamexteriors.com/${mSlug}/${hub}/${sub}/`,
+  // The market's single business node by @id — no address is restated here, same as every other
+  // non-landing page on the site.
+  provider: providerRef(market),
+  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+  isPartOf: { "@type": "WebPage", "@id": `https://coldstreamexteriors.com/${mSlug}/${hub}/` },
+};
+---
+<BaseLayout
+  title={`${h1} | Coldstream Exteriors`}
+  description={lead}
+  canonical={`/${mSlug}/${hub}/${sub}/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: parent.label, href: `/${mSlug}/${hub}/` },
+    { name: svc.label, href: `/${mSlug}/${hub}/${sub}/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${parent.label} in ${market.name} · ${svc.label}`}
+    headline={h1}
+    sub={lead}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <p style="font-size:1.06rem;line-height:1.7;color:var(--cs-text-muted)">{intro}</p>
+    </div>
+  </section>
+
+  <ServiceDetail
+    id={sub}
+    market={market}
+    eyebrow="What the work involves"
+    heading={`${svc.label} in ${market.name}`}
+    cards={svc.sections}
+  />
+
+  <WhyTrust
+    heading="Straightforward from quote to cleanup"
+    cards={[
+      { title: "Honest, upfront pricing", body: "A clear written quote after a free inspection — no surprises and no pressure afterwards." },
+      { title: "Our own crews, start to finish", body: "The people who quote the job are the people who do it. No subcontractor gets handed the keys to your house." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully licensed and insured, and factory-certified installers." },
+    ]}
+  />
+
+  <ServedAreas market={market} heading={`${svc.label} across ${market.region}`} intro={`Based at our ${market.office.city} office. ${ctx.permits}`} />
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={svc.faq(market, ctx)} />
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body={`Tell us what you need and we will take a look. Call ${market.phone} or send the form.`} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

@@ -1,0 +1,206 @@
+---
+// TEMPLATE 3N — THE NATIONAL SERVICE PAGES. /roofing/, /siding/, /windows/, /gutters/.
+//
+// WHY THESE NOW EXIST. The header renders a link per service on every page. On a market page each
+// one went to that market's hub; on the national pages `serviceHref` had no market to work with
+// and returned `/#services` — so Roofing, Siding, Windows and Gutters were four links to the same
+// anchor on the page you were already on. Four nav items, one destination, no page. The pages were
+// never built, which is why they were never linked.
+//
+// THEY ARE NOT A FOURTH COPY OF THE HUB. A market hub answers "roofing in Cincinnati" and carries
+// that market's proof, phone and areas. This answers "does Coldstream do roofing", and its job is
+// to say what the service is and then route to the market that will actually do it. The market
+// chooser is the substance of the page, not a footer on it.
+//
+// SEO. Self-canonical and indexable. The shared service copy lives here and on the hubs — the
+// hubs' uniqueness comes from their local copy, which this page deliberately does not have and
+// does not fake. What it must never do is compete with them on a city term, so nothing here is
+// written against a city.
+//
+// FIVE PAGES, NOT SIX. The set is every service the footer links nationally: the four homeowner
+// services plus commercial roofing, which is a different buyer and stays out of the header but is
+// linked from every footer — that link was pointing at a page that did not exist. Garage doors is
+// excluded because it is one market's service line and nothing national links to it; a national
+// page for a St. Louis-only service would be a page about one office pretending to be four.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import ServiceDetail from "../components/ServiceDetail.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import WhyTrust from "../components/WhyTrust.astro";
+import PartnerStrip from "../components/PartnerStrip.astro";
+import FAQ from "../components/FAQ.astro";
+import CTABand from "../components/CTABand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/markets.js";
+import { SERVICE_CONTENT } from "../data/services.js";
+
+// A service gets a national page when more than one market runs it. That is exactly the set the
+// header and footer link nationally, and it is the test that keeps a single-market service line
+// from getting a page that speaks for three metros.
+export function getStaticPaths() {
+  return servicesFor(NATIONAL)
+    .filter((s) => MARKET_LIST.filter((m) => offers(m, s.key)).length > 1)
+    .map((s) => ({ params: { service: s.key } }));
+}
+
+const { service } = Astro.params;
+const svc = SERVICE_CONTENT[service];
+const market = NATIONAL;
+
+const LEAD = {
+  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by our own crews.",
+  roofing: "Replacement, repair and storm work — asphalt, metal and flat systems, quoted after a free inspection.",
+  siding: "James Hardie fiber cement and vinyl siding, installed and repaired by our own crews.",
+  windows: "Energy-efficient replacement windows, measured and installed by our own crews.",
+  gutters: "Seamless gutters, guards and downspouts, sized to the roof they are draining.",
+};
+
+const INTRO = {
+  "commercial-roofing": "A commercial roof is a different job from a residential one in every way that matters: the deck, the drainage, the phasing and who has to sign it off. We survey it, write the scope so a board or an owner can read it, and schedule around the building staying occupied rather than around our own convenience.",
+  roofing: "Roofing is the core of the business and the reason most people call us first. The same crews work all three metros, the same 25-year workmanship warranty covers the work in each, and every job starts with someone walking the roof rather than pricing it off a satellite image.",
+  siding: "Siding is where most of the complaints in this trade come from, and almost none of them are about the material — they are about how it was fitted. We install Hardie and vinyl with our own crews in all three metros, and we take the old course off so the sheathing underneath gets looked at.",
+  windows: "A window job is measured opening by opening, because the openings in a house that predates 1970 are not the same size as each other. We fit insert and full-frame replacements across all three metros, and we will tell you when a repair is the honest answer instead.",
+  gutters: "Gutters are the smallest line on an exterior quote and the one that does the most damage when it fails, because everything it fails onto costs more than they did. We roll seamless lengths on site in all three metros and size them to the roof that is draining into them.",
+};
+
+const title = {
+  roofing: "Roofing Contractors | Cincinnati, Columbus & St. Louis | Coldstream Exteriors",
+  siding: "Siding Installation & Replacement | Coldstream Exteriors",
+  windows: "Replacement Windows | Cincinnati, Columbus & St. Louis | Coldstream Exteriors",
+  gutters: "Seamless Gutters, Guards & Downspouts | Coldstream Exteriors",
+  "commercial-roofing": "Commercial & Multi-Family Roofing | Coldstream Exteriors",
+}[service];
+
+const description = {
+  roofing: "Roof replacement, repair and storm damage work across Cincinnati, Columbus and St. Louis. Free inspections, our own crews, and a 25-year workmanship warranty.",
+  siding: "James Hardie fiber cement and vinyl siding across Cincinnati, Columbus and St. Louis — installed by our own crews, with a free inspection first.",
+  windows: "Energy-efficient replacement windows across Cincinnati, Columbus and St. Louis. Insert and full-frame replacement, measured opening by opening.",
+  gutters: "Seamless gutters, gutter guards and downspouts across Cincinnati, Columbus and St. Louis, sized to the roof draining into them.",
+  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties in Cincinnati and Columbus. TPO, EPDM, coatings and scheduled maintenance.",
+}[service];
+
+const h1 = {
+  roofing: "Roofing across Cincinnati, Columbus and St. Louis",
+  siding: "Siding across Cincinnati, Columbus and St. Louis",
+  windows: "Replacement windows across Cincinnati, Columbus and St. Louis",
+  gutters: "Gutters across Cincinnati, Columbus and St. Louis",
+  "commercial-roofing": "Commercial and multi-family roofing",
+}[service];
+
+// The market chooser only offers markets that actually run this service.
+const markets = MARKET_LIST.filter((m) => offers(m, service));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: svc.label,
+  provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`/${service}/`}
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: svc.label, href: `/${service}/` }]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${svc.label} — all three metros`}
+    headline={h1}
+    sub={LEAD[service]}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <ServiceDetail
+    id={service}
+    market={market}
+    eyebrow="What we do"
+    heading={`What a ${svc.label.toLowerCase()} job covers`}
+    intro={INTRO[service]}
+    cards={svc.sections}
+  />
+
+  {/* The point of the page: pick the crew that will actually turn up. */}
+  <section class="mist ns-pick reveal">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Pick your market</span>
+        <h2>Who does this where you are</h2>
+        <p>Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover.</p>
+      </div>
+      <div class="ns-grid">
+        {markets.map((m) => (
+          <a class="ns-card" href={`/${m.slug}/${service}/`}>
+            <h3>{svc.label} in {m.name}</h3>
+            <span class="ns-region">{m.region}</span>
+            <span class="ns-tel">{m.phone}</span>
+            <span class="ns-go">See {m.name} <span aria-hidden="true">→</span></span>
+          </a>
+        ))}
+      </div>
+      {markets.length < MARKET_LIST.length && (
+        <p class="ns-note">Not offered in every market — the ones listed are the ones that run this service line.</p>
+      )}
+    </div>
+  </section>
+
+  {svc.process && (
+    <HowItWorks
+      eyebrow="What happens next"
+      heading={`How a ${svc.label.toLowerCase()} job runs`}
+      steps={svc.process}
+    />
+  )}
+
+  <WhyTrust
+    heading="Straightforward from quote to cleanup"
+    cards={[
+      { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
+      { title: "Our own crews, start to finish", body: "The people who quote the job are the people who do it. No subcontractor gets handed the keys to your house." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and factory-certified installers." },
+    ]}
+  />
+
+  <PartnerStrip
+    eyebrow="What we install"
+    heading="Materials from manufacturers who stand behind them"
+    intro="We install products with real manufacturer warranties and training behind the installation, because a warranty is only as good as the crew that fits the material."
+  />
+
+  <FAQ items={svc.faq} />
+
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .ns-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:18px}
+  .ns-card{display:flex;flex-direction:column;gap:5px;background:var(--cs-paper);border:1px solid var(--cs-line);
+    border-radius:12px;padding:24px 22px;text-decoration:none;color:inherit;
+    transition:transform .2s ease-out,box-shadow .2s ease-out,border-color .2s ease-out}
+  .ns-card:hover,.ns-card:focus-visible{transform:translateY(-3px);border-color:var(--cs-primary);
+    box-shadow:0 14px 30px color-mix(in srgb, var(--cs-primary) 16%, transparent)}
+  .ns-card h3{font-size:1.18rem;margin:0}
+  .ns-region{font-size:.86rem;color:var(--cs-text-muted)}
+  .ns-tel{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+    font-size:1.16rem;color:var(--cs-primary-deep);margin-top:6px}
+  .ns-go{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.9rem;
+    color:var(--cs-primary);margin-top:10px}
+  .ns-card:hover .ns-go{color:var(--cs-accent)}
+  .ns-note{margin:18px 0 0;color:var(--cs-text-muted);font-size:.92rem}
+</style>

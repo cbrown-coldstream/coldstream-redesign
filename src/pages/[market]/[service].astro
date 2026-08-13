@@ -1,0 +1,167 @@
+---
+// TEMPLATE 3 — SERVICE HUB. One file, every service in every market.
+//
+// The service set is per-market: garage doors exists only where the market's `services` array
+// lists it, so St. Louis generates five service pages and the other two generate four. Adding it
+// elsewhere is a one-line data change.
+//
+// Pages missing market-specific copy still BUILD, but they are reported by the build and carry
+// a noindex until they clear site-plan's uniqueness bar. Shipping a service page that differs
+// from its sibling only by city name would rebuild the exact problem this consolidation exists
+// to remove — the audit found 100+ pages doing precisely that.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import ServiceDetail from "../../components/ServiceDetail.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import ServedAreas from "../../components/ServedAreas.astro";
+import FAQ from "../../components/FAQ.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import CTABand from "../../components/CTABand.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import Reviews from "../../components/Reviews.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.js";
+import { TESTIMONIALS } from "../../data/claims.js";
+import { SERVICE_CONTENT, localFor } from "../../data/services.js";
+import { MARKET_CONTEXT } from "../../data/subservices.js";
+import { SUBSERVICES } from "../../data/subservices.js";
+
+export async function getStaticPaths() {
+  const { MARKETS, servicesFor } = await import("../../data/markets.js");
+  const out = [];
+  for (const [market, m] of Object.entries(MARKETS)) {
+    for (const s of servicesFor(m)) {
+      out.push({ params: { market, service: s.key } });
+    }
+  }
+  return out;
+}
+
+const { market: mSlug, service: sKey } = Astro.params;
+const market = MARKETS[mSlug];
+const svc = SERVICE_CONTENT[sKey];
+const local = localFor(sKey, mSlug, market);
+const ctx = MARKET_CONTEXT[mSlug];
+const subs = Object.entries(SUBSERVICES[sKey] ?? {});
+const h1 = svc.h1(market);
+const lead = copyFor(svc.lead, market);
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: svc.label,
+  name: h1,
+  url: `https://coldstreamexteriors.com/${market.slug}/${sKey}/`,
+  // Reference to the market's single LocalBusiness node, not a restatement of it. The NAP is
+  // written once, on the market landing page, and pointed at from everywhere else.
+  provider: providerRef(market),
+  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+};
+---
+<BaseLayout
+  title={`${h1} | Coldstream Exteriors`}
+  description={local?.description ?? `${lead} Serving ${market.name} from our ${market.office.city} office.`}
+  canonical={`/${market.slug}/${sKey}/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${market.slug}/` },
+    { name: svc.label, href: `/${market.slug}/${sKey}/` },
+  ]}
+  schema={[serviceSchema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${svc.label} in ${market.name}`}
+    headline={h1}
+    sub={local?.lead ?? lead}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <ServiceDetail
+    id={sKey}
+    market={market}
+    eyebrow={`What we do`}
+    heading={`${svc.label} services in ${market.name}`}
+    intro={local?.intro}
+    cards={svc.sections}
+  />
+
+  {subs.length > 0 && (
+    <section class="mist">
+      <div class="wrap">
+        <div class="shead">
+          <span class="eyebrow">Go deeper</span>
+          <h2>{svc.label} pages for {market.name}</h2>
+          <p>The parts of this that people ask about most, each on its own page.</p>
+        </div>
+        <div class="sub-grid">
+          {subs.map(([key, sub]) => (
+            <a class="sub-card" href={`/${market.slug}/${sKey}/${key}/`}>
+              <strong>{sub.label}</strong>
+              <span>{sub.lead(market)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {local?.proof && (
+    <section class="mist">
+      <div class="wrap" style="max-width:760px">
+        <div class="shead"><span class="eyebrow">Local work</span><h2>{local.proof.heading}</h2></div>
+        <p style="color:var(--cs-text-muted);font-size:1.02rem">{local.proof.body}</p>
+      </div>
+    </section>
+  )}
+
+  {/* The live site runs a process section on every one of its service pages, and it was the one
+      part of those pages worth keeping: a homeowner deciding whether to call is deciding whether
+      this is going to be a hassle. Same component as the home page, per-service steps. */}
+  {svc.process && (
+    <HowItWorks
+      eyebrow="What happens next"
+      heading={`How a ${svc.label.toLowerCase()} job runs`}
+      steps={svc.process}
+    />
+  )}
+
+  <WhyTrust
+    heading="Straightforward from quote to cleanup"
+    cards={[
+      { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
+      { title: "Our own crews, start to finish", body: "The people who quote the job are the people who do it. No subcontractor gets handed the keys to your house." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and factory-certified installers." },
+    ]}
+  />
+
+  <ServedAreas market={market} heading={`${svc.label} across ${market.region}`} intro={`Based at our ${market.office.city} office.`} />
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={[...(local?.faq ?? []), ...svc.faq]} />
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .sub-card{display:flex;flex-direction:column;gap:7px;background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-accent);border-radius:11px;padding:20px 22px;text-decoration:none;transition:transform .12s,border-color .12s}
+  .sub-card:hover{transform:translateY(-2px);border-color:var(--cs-steel)}
+  .sub-card strong{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:1.08rem;color:var(--cs-text)}
+  .sub-card span{color:var(--cs-text-muted);font-size:.95rem;line-height:1.55}
+</style>

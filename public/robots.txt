@@ -1,0 +1,16 @@
+# Coldstream Exteriors — production robots.txt.
+#
+# Deliberately permissive: page-level control is done with meta robots on the pages themselves,
+# which is the only mechanism that works. Disallowing a URL here does NOT remove it from the
+# index — it stops Google reading the page, including the noindex tag on it, so a blocked URL
+# can stay indexed indefinitely. Nineteen pages currently carry noindex; none of them are
+# disallowed below, on purpose, so Google can read the tag and act on it.
+#
+# NOTE FOR PREVIEW DEPLOYS: this file ships as-is to every deploy. Netlify sends
+# X-Robots-Tag: noindex on Deploy Preview URLs automatically, but not on named branch deploys —
+# so if a branch deploy is ever shared publicly, check that header before sharing it.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://coldstreamexteriors.com/sitemap.xml

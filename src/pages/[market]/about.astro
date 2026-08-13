@@ -1,0 +1,141 @@
+---
+// TEMPLATE 9 — MARKET ABOUT. One per market.
+//
+// An earlier ruling folded these into one company About on the grounds that three near-identical
+// pages are the pattern the consolidation removes. The Page System has them, and the Page System
+// is authoritative — but the objection was a real one, so these pages are not the company story
+// with a city name swapped in. THE COMPANY STORY LIVES ON /about-us/ AND IS NOT REPEATED HERE.
+// What is on this page is the thing that is genuinely per-market: this office, this phone number,
+// the towns this crew covers, the building stock they work on and the weather they work in.
+//
+// The unsourced company facts — founding year, ownership history, crew size — stay gated in
+// claims.js and are absent here exactly as they are absent from /about-us/.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import ServedAreas from "../../components/ServedAreas.astro";
+import FAQ from "../../components/FAQ.astro";
+import CTABand from "../../components/CTABand.astro";
+import Reviews from "../../components/Reviews.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef } from "../../data/markets.js";
+import { TESTIMONIALS } from "../../data/claims.js";
+import { MARKET_CONTEXT } from "../../data/subservices.js";
+
+export async function getStaticPaths() {
+  const { MARKETS } = await import("../../data/markets.js");
+  return Object.keys(MARKETS).map((market) => ({ params: { market } }));
+}
+
+const { market: mSlug } = Astro.params;
+const market = MARKETS[mSlug];
+const ctx = MARKET_CONTEXT[mSlug];
+const o = market.office;
+
+// AboutPage, referencing the market's business node by @id. No PostalAddress is restated here —
+// the one address for this market is written on the market landing page and nowhere else.
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: `About Coldstream Exteriors in ${market.name}`,
+  url: `https://coldstreamexteriors.com/${mSlug}/about/`,
+  mainEntity: providerRef(market),
+};
+---
+<BaseLayout
+  title={`About Our ${market.name} Team | Coldstream Exteriors`}
+  description={`The Coldstream Exteriors team serving ${market.region} from our ${o.city} office — who we are, where we work, and how we run a job.`}
+  canonical={`/${mSlug}/about/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: "About", href: `/${mSlug}/about/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · About us`}
+    headline={`The Coldstream Crew in ${market.name}`}
+    sub={`Run out of our ${o.city} office, working across ${market.region}. Our own crews, our own phone, and a free inspection before anyone talks about price.`}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <div class="shead"><span class="eyebrow">This office</span><h2>Local, and local in the way that matters</h2></div>
+      <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+        Plenty of contractors say local. What it means here is that the {market.name} work is run
+        from {o.city}, the number you call is answered by people who work in this market, and the
+        person who quotes your job is on the crew that does it. Nobody hands your address to a
+        subcontractor and takes a margin off the top.
+      </p>
+      <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+        {ctx.stock}
+      </p>
+      <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+        {ctx.weather} {ctx.permits}
+      </p>
+    </div>
+  </section>
+
+  <section class="mist">
+    <div class="wrap" style="max-width:780px">
+      <div class="shead"><span class="eyebrow">How a job runs</span><h2>What working with us looks like</h2></div>
+      <ol class="steps">
+        <li><strong>You call or send the form.</strong> We aim to have an inspection booked within a day.</li>
+        <li><strong>Someone walks the roof or the elevation.</strong> Not a satellite image, not a guess from the driveway.</li>
+        <li><strong>You get a written quote.</strong> Scope, materials and number, in writing, with no obligation and nobody chasing you afterwards.</li>
+        <li><strong>Our crew does the work.</strong> The same crew, start to finish, with the timeline agreed before we begin.</li>
+        <li><strong>We walk it with you and clean up.</strong> Magnet over the drive, debris away, and a final look together before we call it done.</li>
+      </ol>
+    </div>
+  </section>
+
+  <WhyTrust
+    heading="What we hold ourselves to"
+    cards={[
+      { title: "Licensed and insured", body: "Fully licensed for the work we do here and carrying liability and workers' compensation cover. Ask and we will send the certificates." },
+      { title: "A 25-year workmanship warranty", body: "Materials carry their manufacturer warranty. Our workmanship carries ours, for 25 years." },
+      { title: "Free, no-obligation inspections", body: "The inspection and the written quote cost nothing, and saying no costs nothing either." },
+    ]}
+  />
+
+  <ServedAreas market={market} heading={`Where the ${market.name} crew works`} intro={`Based at our ${o.city} office. ${ctx.trees}`} />
+
+  <ServicesGrid market={market} heading="What this crew does" intro="Roofing is the core. Siding, windows and gutters complete the home." />
+
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={[
+    { q: "Are you actually local, or a national brand with a local number?", a: `The ${market.name} work is run from our ${o.city} office by people who live and work in ${market.region}. The phone number on this page reaches that office.` },
+    { q: "Do you use subcontractors?", a: "No. Our own crews do the work, and the person who quotes the job is on it." },
+    { q: "Are you licensed and insured?", a: "Yes, for all the work we carry out here, with liability and workers' compensation cover. We are happy to send the certificates before you commit to anything." },
+    { q: "What happens if something goes wrong afterwards?", a: "You call the same office. Our workmanship is covered for 25 years and we would rather come back and put a thing right than argue about it." },
+  ]} />
+
+  <CTABand market={market} heading="Want us to take a look?" body={`Call ${market.phone} or send the form and we will book a free inspection.`} />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:13px;color:var(--cs-text-muted);font-size:1.02rem;line-height:1.65}
+  .steps strong{color:var(--cs-text)}
+</style>

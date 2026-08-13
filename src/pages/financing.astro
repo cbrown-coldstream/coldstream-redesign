@@ -1,0 +1,106 @@
+---
+// /financing/ — built because the footer links to it, noindex because the terms are not sourced.
+//
+// The prototype advertised "financing as low as $99/mo", "$0 down" and "low- and 0%-interest
+// options" across roughly twenty pages. All of it came from the design comp, none of it from a
+// lender. In the US, advertising a specific monthly payment is a "triggering term" under
+// Regulation Z: it obliges you to disclose the actual terms alongside it. Publishing a payment
+// figure nobody can trace to a credit agreement is the kind of mistake that costs more than the
+// leads it wins, so every one of those figures is gated in data/claims.js.
+//
+// This page therefore says the true, useful thing — financing exists, ask about it at the
+// estimate — and says nothing about rates until the lender's own terms are on file.
+import PageShell from "../layouts/PageShell.astro";
+import { CLAIMS } from "../data/claims.js";
+const f = CLAIMS.financing;
+---
+<PageShell
+  reviews={true}
+  offer={true}
+  title="Financing Your Roof or Exterior Project | Coldstream Exteriors"
+  description="Financing options for roofing, siding, window and gutter projects with Coldstream Exteriors. Ask at your free estimate and we'll walk you through what's available."
+  canonical="/financing/"
+  noindex={!f}
+  eyebrow="Financing"
+  heading="Paying for the work over time"
+  intro="A roof is rarely a planned purchase. Financing is available, and the person doing your estimate can walk you through it."
+>
+  <section>
+    <div class="wrap prose">
+      <h2>The honest position, first</h2>
+      <p>
+        We are not going to print a monthly payment on this page until we can stand behind it.
+        Advertising a specific monthly figure is regulated in the United States — quote
+        a specific payment and you have to disclose the lender, the rate, the term and who actually
+        qualifies. A number without those attached is not an offer, it is a hook.
+      </p>
+      <p>
+        So this page tells you what is true today: what a job costs depends on the job, the
+        inspection and the written quote are free, and there are three sensible ways people pay for
+        this kind of work.
+      </p>
+
+      <h2>Three ways this usually gets paid for</h2>
+      <h3>1. Insurance, when it is storm damage</h3>
+      <p>
+        This is the one most people underuse. Sudden damage from hail or wind is generally covered;
+        age, wear and deferred maintenance generally are not. The distinction matters more than
+        most homeowners expect, and it is not always visible from the ground — hail takes the
+        granules off a shingle without breaking it, so a roof can look fine from the driveway with
+        years taken off its life.
+      </p>
+      <p>
+        We inspect and document damage the way an adjuster needs it documented, meet them on site
+        where we can, and deal with them directly afterwards. We will also tell you when we think a
+        claim will not go anywhere, because filing one that fails still puts it on your record.
+        <a href="/cincinnati/roofing/insurance-storm-damage/">How a storm claim works →</a>
+      </p>
+
+      <h3>2. Doing the urgent part now and the rest later</h3>
+      <p>
+        Not every job has to happen at once. A failing north slope can be replaced this season and
+        the rest of the roof next; siding can be done one elevation at a time. It is not always the
+        least expensive route in total, but it is often the right one, and we would rather scope it that
+        way than watch someone defer the whole thing and pay for decking later.
+      </p>
+
+      <h3>3. Financing</h3>
+      <p>
+        Arrangements are being finalised. When they are, the lender, the terms, the rate and the
+        qualifying criteria will be published here in full — not a headline figure with the details
+        somewhere else.
+      </p>
+
+      <h2>Why waiting usually costs more</h2>
+      <p>
+        This is the part worth understanding whichever route you take. Water that gets past a roof
+        does not stay in one place: it runs along decking and rafters, soaks insulation, and shows
+        up on a ceiling some distance from where it got in. A repair that would have been a
+        flashing detail becomes decking, insulation and drywall after a winter.
+      </p>
+      <p>
+        That is an argument for looking at it now, not for signing something today. If the honest
+        answer is that it can safely wait a season, we will say so.
+      </p>
+
+      <h2>What the inspection costs</h2>
+      <ul>
+        <li><strong>Nothing to book.</strong> No deposit and no call-out charge.</li>
+        <li><strong>Nothing for the quote.</strong> It is written, itemised, and yours to keep — including if you take it to somebody else.</li>
+        <li><strong>Nothing to say no.</strong> We will follow up once. If the answer is no, that is the end of it.</li>
+      </ul>
+
+      <h2>Questions worth asking any contractor</h2>
+      <ul>
+        <li>Is the payment schedule in the written quote, or agreed later?</li>
+        <li>Who is the lender, and is the rate fixed?</li>
+        <li>What happens to the financing if the scope changes mid-job?</li>
+        <li>Is the workmanship warranty from the contractor or the manufacturer? They are different promises.</li>
+      </ul>
+      <p>
+        Ask us the same four. If any answer is vague, that is useful information about whoever is
+        giving it.
+      </p>
+    </div>
+  </section>
+</PageShell>

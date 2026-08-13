@@ -1,0 +1,86 @@
+---
+// "Showing Cincinnati — not your area? Change." The escape hatch for anyone the geo redirect got
+// wrong, and the thing that makes removing the market selector from the home page safe.
+//
+// TWO STATES, and the difference matters:
+//
+//   · ARRIVED BY GEO (?geo=1 on the URL). The bar is prominent, because the visitor did not
+//     choose to be here — something decided for them and they need to know that and be able to
+//     undo it in one action.
+//   · CAME HERE THEMSELVES. The bar is quiet: they picked this market, so it is a confirmation
+//     rather than an interruption.
+//
+// DISMISSIBLE, AND IT STAYS DISMISSED — the dismissal writes cs_market for this market, which is
+// also the cookie that stops the geo redirect ever firing again. Dismissing is therefore the same
+// action as "yes, this is my area", which is what a person means when they close it.
+//
+// "Change" focuses the utility bar's market <select>, which is on every page. That select is the
+// host-agnostic router: it works with JS off, and it is why the home page no longer needs a
+// selector block of its own.
+const { market } = Astro.props;
+---
+{market.slug && (
+  <div class="mkt-notice" id="mktNotice" hidden>
+    <div class="wrap">
+      <p>
+        <span class="dot" aria-hidden="true"></span>
+        Showing <strong>{market.name}</strong> — prices, crew and phone number for this area.
+      </p>
+      <span class="mkt-actions">
+        <a href="#mkt" id="mktChange">Not your area? Change</a>
+        <button type="button" id="mktDismiss" aria-label="Dismiss — this is my area">Dismiss</button>
+      </span>
+    </div>
+  </div>
+)}
+<script is:inline define:vars={{ SLUG: market.slug }}>
+  (function () {
+    if (!SLUG) return;
+    var bar = document.getElementById("mktNotice");
+    if (!bar) return;
+
+    function cookie(n) {
+      return document.cookie.split("; ").reduce(function (a, c) {
+        var i = c.indexOf("="); return c.slice(0, i) === n ? decodeURIComponent(c.slice(i + 1)) : a;
+      }, "");
+    }
+    function setCookie(n, v, days) {
+      document.cookie = n + "=" + encodeURIComponent(v) + ";path=/;max-age=" + 60 * 60 * 24 * days + ";samesite=lax";
+    }
+
+    // Already confirmed this market by hand? Then this bar has nothing to tell them.
+    if (cookie("cs_market") === SLUG) return;
+
+    var byGeo = /[?&]geo=1\b/.test(location.search);
+    if (byGeo) bar.classList.add("mkt-notice--geo");
+    bar.hidden = false;
+
+    // Tidy the ?geo=1 out of the URL so a copied link, a refresh or a bookmark is clean — and so
+    // the canonical the crawler sees and the URL the person has never disagree.
+    if (byGeo && history.replaceState) {
+      history.replaceState({}, "", location.pathname + location.hash);
+    }
+
+    document.getElementById("mktDismiss").addEventListener("click", function () {
+      // Dismissing IS confirming. It writes the same cookie the select writes, which also stops
+      // the geo redirect from ever firing again.
+      setCookie("cs_market", SLUG, 30);
+      bar.hidden = true;
+    });
+
+    document.getElementById("mktChange").addEventListener("click", function (e) {
+      var sel = document.getElementById("mkt");
+      if (!sel) return;              // no select on the page — let the anchor do its normal thing
+      e.preventDefault();
+      sel.focus();
+      sel.classList.add("mkt-flash");
+      setTimeout(function () { sel.classList.remove("mkt-flash"); }, 1400);
+    });
+
+    var sel = document.getElementById("mkt");
+    if (sel) sel.addEventListener("change", function () {
+      setCookie("cs_market", sel.value, 30);
+      location.href = sel.value ? "/" + sel.value + "/" : "/?national=1";
+    });
+  })();
+</script>

@@ -1,0 +1,58 @@
+---
+// THE MAP. One per market, centred on that market's office.
+//
+// NO API KEY IS REQUIRED FOR WHAT THIS DOES, and that is deliberate. Google's Maps Embed API and
+// the Maps JavaScript API both want a key, a billing account and a referrer allowlist; a keyless
+// `maps.google.com/...&output=embed` iframe renders the same map, needs none of that, and cannot
+// leak a key into static HTML that is served from a host we do not control. It is what the
+// reference page (swordroof.com/service-area/) uses too — their embed is the same keyless share
+// URL with Google's own `pb` blob in it.
+//
+// IF A KEY ARRIVES, THE PAGE UPGRADES WITHOUT AN EDIT. Set PUBLIC_GMAPS_KEY at build time and
+// every map switches to the official Embed API, which is the version that keeps working if Google
+// tightens the keyless path. Nothing else changes — same component, same markup, same layout.
+//
+// IT IS LAZY AND IT IS TITLED. An iframe per market is three third-party frames on one page, so
+// none of them load until they are near the viewport, and each carries a title because a frame
+// with no accessible name is announced as "frame" and nothing else.
+const { market, height = 380 } = Astro.props;
+
+const key = import.meta.env.PUBLIC_GMAPS_KEY;
+const q = `${market.office.street}, ${market.office.city}, ${market.office.state} ${market.office.zip}`;
+const zoom = 10;
+
+const src = key
+  ? `https://www.google.com/maps/embed/v1/place?key=${key}&q=${encodeURIComponent(q)}&zoom=${zoom}`
+  : `https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=${zoom}&output=embed`;
+
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`;
+---
+<figure class="samap">
+  <iframe
+    src={src}
+    title={`Map of the ${market.name} service area, centred on our ${market.office.city} office`}
+    height={height}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen
+  ></iframe>
+  <figcaption>
+    <span>
+      <b>{market.office.city} office</b>
+      {market.office.street}, {market.office.city}, {market.office.state} {market.office.zip}
+    </span>
+    <a href={directions} target="_blank" rel="noopener">Get directions <span aria-hidden="true">→</span></a>
+  </figcaption>
+</figure>
+<style>
+  .samap{margin:0;border:1px solid var(--cs-line);border-radius:13px;overflow:hidden;background:var(--cs-surface)}
+  .samap iframe{display:block;width:100%;border:0;filter:saturate(.92)}
+  .samap figcaption{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:13px 17px;background:var(--cs-paper);border-top:1px solid var(--cs-line);font-size:.92rem;
+    color:var(--cs-text-muted)}
+  .samap figcaption b{display:block;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    color:var(--cs-text);font-size:.98rem}
+  .samap figcaption a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+    color:var(--cs-primary);text-decoration:none;white-space:nowrap}
+  .samap figcaption a:hover{color:var(--cs-accent)}
+</style>

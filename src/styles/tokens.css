@@ -1,0 +1,49 @@
+/* Design tokens — GENERATED from design-systems/exteriors/tokens.json.
+   Do not hand-edit and do not write a hex literal in a component.
+
+   That file is the brand system locked 2026-07-29, and it already drives every social
+   and print render in this repo. Generating from it is what keeps the website and the
+   rendered posts the same brand rather than two that merely look similar. If a colour
+   needs to change, change it there and regenerate: npm run tokens */
+
+:root{
+  /* colour */
+  --cs-primary: #3A89C7;
+  --cs-primary-deep: #2A6699;
+  --cs-accent: #E8843B;
+  --cs-surface: #F2F6F9;
+  --cs-surface-paper: #FFFFFF;
+  --cs-deep-dark: #0E1B2A;
+  --cs-text: #101B26;
+  --cs-text-muted: #5B6B78;
+  --cs-text-on-photo: #FFFFFF;
+  --cs-scrim: rgba(14,27,42,0.72);
+  --cs-ink: #101B26;
+  --cs-slate: #5B6B78;
+  --cs-steel: #8A99A6;
+  --cs-mist: #DDE5EB;
+  --cs-cloud: #F2F6F9;
+  --cs-paper: #FFFFFF;
+  --cs-line: #E4EAEF;
+
+  /* type */
+  --cs-display: "Saira Condensed", "Public Sans", system-ui, sans-serif;
+  --cs-body: "Public Sans", system-ui, -apple-system, sans-serif;
+  --cs-display-weight: 800;
+  --cs-display-lh: 0.92;
+  --cs-display-ls: 0.005em;
+  --cs-body-weight: 400;
+  --cs-body-lh: 1.55;
+  --cs-eyebrow-weight: 700;
+  --cs-eyebrow-ls: 0.25em;
+
+  /* scrim — the brand's locked overlay geometry: bottom gradient only, never a panel */
+  --cs-scrim: rgba(14,27,42,0.72);
+  --cs-scrim-strong: rgba(14,27,42,0.85);
+
+  /* spacing + measure, from the reference page's rhythm */
+  --cs-wrap: 1180px;
+  --cs-gap: 22px;
+  --cs-radius: 14px;
+  --cs-section-y: clamp(48px, 6vw, 84px);
+}

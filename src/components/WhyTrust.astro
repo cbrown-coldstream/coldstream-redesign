@@ -1,0 +1,13 @@
+---
+const { eyebrow = "Why homeowners choose us", heading, cards = [] } = Astro.props;
+---
+<section class="mist">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2></div>
+    <div class="why">
+      {cards.map((c) => (
+        <div class="wcard"><h3>{c.title}</h3><p>{c.body}</p></div>
+      ))}
+    </div>
+  </div>
+</section>

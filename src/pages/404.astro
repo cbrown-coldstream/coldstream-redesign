@@ -1,0 +1,51 @@
+---
+// 404.
+//
+// This one earns its keep during the migration specifically. Around 300 URLs are folding, and
+// every one of them should land on a 301 rather than here — but if a redirect is missed, this
+// page has to give the visitor the three market pages and a phone number rather than a dead end.
+// A 404 that offers nothing turns a mapping mistake into a lost lead.
+import PageShell from "../layouts/PageShell.astro";
+import { MARKET_LIST, NATIONAL, servicesFor, serviceHref } from "../data/markets.js";
+---
+<PageShell
+  title="Page not found | Coldstream Exteriors"
+  description="That page doesn't exist. Here's where to find what you're looking for."
+  canonical="/404.html"
+  noindex={true}
+  cta={false}
+  eyebrow="404"
+  heading="That page isn't here."
+  intro="It may have moved. Here's everything, in one short list."
+>
+  <section>
+    <div class="wrap prose">
+      <h2>Your area</h2>
+      <ul>
+        {MARKET_LIST.map((m) => (
+          <li>
+            <a href={`/${m.slug}/`}>{m.name}</a> — {servicesFor(m).map((s) => s.label).join(", ")}.
+            {" "}<a href={m.telHref}>{m.phone}</a>
+          </li>
+        ))}
+      </ul>
+
+      <h2>What we do</h2>
+      <ul>
+        {MARKET_LIST.map((m) => (
+          <li>
+            {m.name}: {servicesFor(m).map((s, i) => (
+              <>{i > 0 && " · "}<a href={serviceHref(m, s)}>{s.label}</a></>
+            ))}
+          </li>
+        ))}
+      </ul>
+
+      <h2>Or just ask us</h2>
+      <p>
+        <a href="/free-estimate/">Get a free estimate</a>, or call
+        {" "}<a href={NATIONAL.telHref}>{NATIONAL.phone}</a> and we'll point you at the right office.
+      </p>
+    </div>
+  </section>
+</PageShell>

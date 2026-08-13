@@ -1,0 +1,36 @@
+{
+  "target": "/thank-you/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 49,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/thank-you/",
+      "title": "Thank you - Coldstream Exteriors",
+      "description": "",
+      "h1": "Submission Successful",
+      "blocks": [
+        {
+          "tag": "h2",
+          "text": "A team member will reach out shortly to schedule your inspection!"
+        },
+        {
+          "tag": "h1",
+          "text": "Submission Successful"
+        },
+        {
+          "tag": "h2",
+          "text": "Thank You For Reaching Out"
+        },
+        {
+          "tag": "p",
+          "text": "This is just a quick note to let you know we’ve received your form submission and one of our representatives will reach out to you as soon as possible."
+        },
+        {
+          "tag": "h2",
+          "text": "Contact Info"
+        }
+      ]
+    }
+  ]
+}

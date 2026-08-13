@@ -1,0 +1,20 @@
+{
+  "target": "/st-louis/reviews/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 3,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/st-louis/reviews/",
+      "title": "Coldstream Exteriors St. Louis Reviews | Trusted Local Ratings",
+      "description": "Read verified Coldstream Exteriors St. Louis reviews. See high star ratings and homeowner feedback on roofing, siding, gutters & exterior services from real local clients.",
+      "h1": "Check Our Reviews",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "Check Our Reviews"
+        }
+      ]
+    }
+  ]
+}

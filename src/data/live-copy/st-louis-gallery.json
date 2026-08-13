@@ -1,0 +1,20 @@
+{
+  "target": "/st-louis/gallery/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 6,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/st-louis/gallery/",
+      "title": "Project Gallery | Coldstream Exteriors St. Louis, MO",
+      "description": "Explore Coldstream Exteriors' project gallery in St. Louis, MO. See our expert roofing, siding, and exterior work. Quality craftsmanship you can trust!",
+      "h1": "Gallery of Projects in St. Louis",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "Gallery of Projects in St. Louis"
+        }
+      ]
+    }
+  ]
+}

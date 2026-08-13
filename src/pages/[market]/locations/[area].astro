@@ -1,0 +1,154 @@
+---
+// TEMPLATE 4 — LOCATION. One file, every location in every market.
+//
+// TWO RULINGS SHAPE THIS FILE, AND BOTH ARE LOAD-BEARING.
+//
+// 1. NO ADDRESS, NO LocalBusiness. Coldstream has three physical addresses, one per market, and
+//    they live on the market landing pages. This page shows the market office it is served FROM
+//    — "Served from our Milford office" — and its schema is a Service whose provider is an @id
+//    reference to that market's single LocalBusiness node. No PostalAddress is emitted here at
+//    all, so this template is structurally incapable of inventing NAP.
+//
+// 2. THE JOB GATE IS LIFTED (build order, round 6). Every defined area is a page, whether or not
+//    job photos exist for it yet. Where there are none, the recent-work section renders an honest
+//    empty state — it does not fabricate work, and it does not silently omit the section either,
+//    because the section is the reason the page exists and its absence should be visible. The
+//    build names every area still waiting on photos, on every run.
+//
+//    What has NOT changed is the consent rule: `showableJobs` still requires an explicit
+//    publishable flag and a consent record, so lifting the page gate cannot publish a job whose
+//    box was never ticked.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import UtilityBar from "../../../components/UtilityBar.astro";
+import SiteHeader from "../../../components/SiteHeader.astro";
+import Hero from "../../../components/Hero.astro";
+import ServicesGrid from "../../../components/ServicesGrid.astro";
+import FAQ from "../../../components/FAQ.astro";
+import CTABand from "../../../components/CTABand.astro";
+import BadgeRow from "../../../components/BadgeRow.astro";
+import Reviews from "../../../components/Reviews.astro";
+import OfferBand from "../../../components/OfferBand.astro";
+import WhyTrust from "../../../components/WhyTrust.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { MARKETS, providerRef } from "../../../data/markets.js";
+import { TESTIMONIALS } from "../../../data/claims.js";
+import { LOCATIONS, showableJobs } from "../../../data/locations.js";
+
+export async function getStaticPaths() {
+  const { publishedLocations } = await import("../../../data/locations.js");
+  return publishedLocations().map(({ market, key }) => ({ params: { market, area: key } }));
+}
+
+const { market: mSlug, area } = Astro.params;
+const market = MARKETS[mSlug];
+const loc = LOCATIONS[mSlug].areas[area];
+const office = market.office;
+const jobs = showableJobs(loc.jobs);
+
+// Service, not LocalBusiness. areaServed carries the towns; the provider is a reference to the
+// market's business node by @id. Nothing on this page asserts a place of business.
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: `Roofing and exteriors in ${loc.name}`,
+  serviceType: "Roofing, siding, windows and gutters",
+  url: `https://coldstreamexteriors.com/${mSlug}/locations/${area}/`,
+  provider: providerRef(market),
+  areaServed: loc.towns.map((t) => ({ "@type": "City", name: t })),
+};
+
+const servedFrom = `Served from our ${office.city} office.`;
+---
+<BaseLayout
+  title={`${loc.name} Roofing & Exteriors | Coldstream Exteriors`}
+  description={loc.blurb}
+  canonical={`/${mSlug}/locations/${area}/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: loc.name, href: `/${mSlug}/locations/${area}/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · ${loc.name}`}
+    headline={`Roofing and Exteriors in ${loc.name}`}
+    sub={loc.blurb}
+    bullets={["Free, no-obligation inspection", servedFrom, "Licensed and insured"]}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  {/* THE REASON THIS PAGE EXISTS. Real completed work in this sub-area, with the detail that
+      makes it ours — not a stock photo with a town name written under it. */}
+  <section>
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Recent work</span>
+        <h2>Work we've finished in {loc.name}</h2>
+        <p>{servedFrom}</p>
+      </div>
+      {!jobs.length && (
+        <p class="empty-state">
+          We have finished plenty of work across {loc.name} — the photographs for this page are
+          still being pulled together from our job records. In the meantime, call {market.phone}
+          and we will talk you through what we have done nearby.
+        </p>
+      )}
+      <div class="jobs">
+        {jobs.map((j) => (
+          <figure class="job">
+            <img src={j.photos[0].src} alt={j.photos[0].alt} width={j.photos[0].w} height={j.photos[0].h}
+                 loading="lazy" decoding="async" />
+            <figcaption>
+              <strong>{j.town} · {j.service}</strong>
+              <span>{j.detail}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mist">
+    <div class="wrap">
+      <div class="shead"><span class="eyebrow">Where we work</span><h2>Towns we cover from here</h2></div>
+      <nav class="areas" aria-label={`Towns served in ${loc.name}`}>
+        {loc.towns.map((t) => <span class="area-text">{t}</span>)}
+      </nav>
+    </div>
+  </section>
+
+  <ServicesGrid market={market} heading="What we do here" intro="The same crews and the same warranty across every service." />
+
+  {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
+  <OfferBand />
+  <FAQ items={[
+    { q: `Do you cover my street in ${loc.name}?`, a: `Almost certainly — the towns above are the ones we work in most. ${servedFrom} If you are not sure, call and ask; it takes a minute.` },
+    { q: "Is there a call-out charge for an estimate?", a: "No. Inspections and quotes are free and carry no obligation." },
+  ]} />
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .area-text{background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:999px;padding:7px 15px;font-size:.9rem;font-weight:600;color:var(--cs-text-muted)}
+  .jobs{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .job{margin:0}
+  .job img{width:100%;height:auto;border-radius:12px;display:block}
+  .job figcaption{display:flex;flex-direction:column;gap:4px;padding-top:10px}
+  .job figcaption strong{font-size:.92rem}
+  .job figcaption span{color:var(--cs-text-muted);font-size:.95rem;line-height:1.5}
+  .empty-state{max-width:640px;color:var(--cs-text-muted);font-size:1rem;line-height:1.7;border-left:3px solid var(--cs-line);padding-left:18px}
+</style>

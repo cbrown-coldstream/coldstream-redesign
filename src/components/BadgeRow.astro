@@ -1,0 +1,33 @@
+---
+// Review and accreditation badges. Self-hosted, height-normalised, explicit dimensions.
+//
+// aboveTheFold controls loading: the hero row must not be lazy (it would delay a visible
+// element), everything else is. fetchpriority is deliberately left alone — the LCP element is
+// the hero poster, and competing with it would make the page slower, not faster.
+import { BADGES } from "../data/badges.js";
+import { CLAIMS } from "../data/claims.js";
+const { aboveTheFold = false } = Astro.props;
+// A badge with no asset renders a text placeholder, which is fine for a logo we own and are
+// waiting on — but BBB is an ACCREDITATION CLAIM, and "BBB A+" printed as a placeholder asserts
+// it just as loudly as the seal would. It is gated with the other unsourced claims.
+const badges = BADGES.filter((b) => b.key !== "bbb" || CLAIMS.bbb);
+---
+<div class="logos" aria-label="Ratings and certifications">
+  <div class="wrap">
+    {badges.map((b) => {
+      if (!b.file) return (
+        <div class="badge-pending" role="img" aria-label={b.alt}>{b.pendingLabel}</div>
+      );
+      const img = (
+        <picture>
+          <source srcset={b.file} type="image/webp" />
+          <img src={b.fallback} alt={b.alt} width={b.w} height={b.h}
+               loading={aboveTheFold ? "eager" : "lazy"} decoding="async" />
+        </picture>
+      );
+      return b.href
+        ? <a class="badge" href={b.href} target="_blank" rel="noopener">{img}</a>
+        : <div class="badge">{img}</div>;
+    })}
+  </div>
+</div>

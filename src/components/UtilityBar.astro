@@ -1,0 +1,39 @@
+---
+// Utility bar — the ONLY place the phone appears above the header.
+// The prototype's note: this fixes the doubled/stacked number the live site shows by having the
+// header carry the logo, nav and estimate button, and nothing else.
+//
+// The market <select> is the plan's "market router" in its simplest, host-agnostic form: it
+// works with JS off (it is a real form control inside a <noscript>-safe <form>), it is visible
+// to every visitor, and it never redirects a crawler.
+import { MARKET_LIST } from "../data/markets.js";
+const { market, resolvedFrom = "default" } = Astro.props;
+---
+<div class="util" data-resolved-from={resolvedFrom}>
+  <div class="wrap">
+    <div class="left">
+      <label for="mkt" style="font-weight:600">Your area:</label>
+      <form method="get" action="/" id="mktForm">
+        <select id="mkt" name="market" aria-label="Choose your market">
+          {MARKET_LIST.map((m) => (
+            <option value={m.slug} selected={market.slug === m.slug}>{m.cityState}</option>
+          ))}
+          <option value="" selected={!market.slug}>Other / not sure</option>
+        </select>
+        <noscript><button type="submit" class="util-go">Go</button></noscript>
+      </form>
+    </div>
+    {/* Was: a Blog link and a "Free Instant Roof Quote" link. Neither page exists — there is
+        no blog and no instant-quote widget behind that promise — so both were dead links on
+        every page of the site. The quote link now goes to the estimate page, which does the
+        same job honestly; the blog link comes back when there is a blog. */}
+    <div class="right">
+      <a class="ph" href={market.telHref}>{market.phone}</a>
+      <a class="iq" href="/free-estimate/">Get a Free Estimate</a>
+    </div>
+  </div>
+</div>
+<style>
+  #mktForm{display:inline-flex;gap:8px;align-items:center;margin:0}
+  .util-go{font-family:var(--cs-web-body);font-weight:700;font-size:.82rem;padding:5px 10px;border-radius:7px;border:1px solid color-mix(in srgb, var(--cs-paper) 35%, transparent);background:color-mix(in srgb, var(--cs-paper) 16%, transparent);color:var(--cs-paper);cursor:pointer}
+</style>

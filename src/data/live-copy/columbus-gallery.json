@@ -1,0 +1,20 @@
+{
+  "target": "/columbus/gallery/",
+  "pulled": 1,
+  "kept": 1,
+  "words": 5,
+  "sources": [
+    {
+      "url": "https://coldstreamexteriors.com/columbus/gallery/",
+      "title": "Project Gallery | Coldstream Exteriors Columbus, OH",
+      "description": "Explore Coldstream Exteriors' project gallery in Columbus, MO. See our expert roofing, siding, and exterior work. Quality craftsmanship you can trust!",
+      "h1": "Gallery of Projects in Columbus",
+      "blocks": [
+        {
+          "tag": "h1",
+          "text": "Gallery of Projects in Columbus"
+        }
+      ]
+    }
+  ]
+}

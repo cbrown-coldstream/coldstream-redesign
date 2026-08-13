@@ -1,0 +1,110 @@
+---
+// MANUFACTURER STRIP — the products we install. Distinct from the badge row in the hero, which is
+// review profiles and accreditations: that row is evidence about us, this is evidence about what
+// goes on the house.
+//
+// IT ROTATES NOW, AND THAT REVERSES ROUND 7 v2. That round removed a marquee from this row and
+// said a manufacturer strip is a statement of fact, not an interactive element. The strip was
+// eight typographic wordmarks then. It is real logos now, there are eight of them, and they were
+// asked for on a rotation — so the row moves. The reasoning that killed the old marquee still
+// holds for the parts it was actually about, and they are kept: no hover colour change, no
+// greyscale at rest, no scale-on-hover. The marks are shown as their owners drew them.
+//
+// HOW THE ROTATION WORKS. Two identical tracks side by side, the pair translated by exactly one
+// track width and then reset — so the seam never lands mid-logo and there is no jump. It is CSS
+// only: no JS, nothing to fail, nothing to hydrate. The second track is aria-hidden, so a screen
+// reader is read the eight partners once, not sixteen.
+//
+// IT STOPS WHEN ASKED. Hover or keyboard focus pauses it, because a moving row is hostile to
+// anyone trying to actually look at one logo. Under prefers-reduced-motion the animation is off
+// entirely and the row becomes a normal horizontally scrollable strip — motion is never the only
+// way to reach a logo.
+//
+// HEIGHT AND WIDTH ARE BOTH CAPPED. A 5:1 wordmark next to a square mark cannot be normalised on
+// height alone — 104px tall makes James Hardie 543px wide. Each mark is fitted to a box instead,
+// so wide wordmarks cap on width, square marks cap on height, and the row reads as one set.
+import { PARTNERS } from "../data/partners.js";
+const { eyebrow, heading, intro } = Astro.props;
+
+// Two copies of the same track. The loop is here rather than the markup written twice, so the
+// two can never drift apart — a seam only reads as seamless while both halves are identical.
+const TRACKS = [0, 1];
+---
+<section class="partners" id="partners">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{heading}</h2>
+      {intro && <p>{intro}</p>}
+    </div>
+  </div>
+
+  <div class="pmarquee">
+    {/* The second copy is what makes the loop seamless. It says nothing new, so it is hidden
+        from assistive tech. */}
+    {TRACKS.map((copy) => (
+      <ul class="ptrack"
+          aria-label={copy === 0 ? "Manufacturers we install" : undefined}
+          aria-hidden={copy === 1 ? "true" : undefined}>
+        {PARTNERS.map((p) => (
+          <li class="pitem">
+            {p.file
+              ? <img src={p.file} alt={copy === 0 ? p.alt : ""} width={p.w} height={p.h}
+                     loading="lazy" decoding="async" />
+              : (
+                <span class="pmark" style={`--pm:${p.tint}`}>
+                  <span class="pmark-name">{p.name}</span>
+                  {p.tag && <span class="pmark-tag">{p.tag}</span>}
+                </span>
+              )}
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</section>
+<style>
+  .partners{background:var(--cs-paper)}
+  .partners .shead{margin-bottom:30px}
+
+  /* The fades stop logos from appearing and vanishing at a hard edge. */
+  .pmarquee{
+    display:flex;overflow:hidden;gap:0;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+  }
+  .ptrack{
+    list-style:none;margin:0;padding:0;flex:none;min-width:100%;
+    display:flex;align-items:center;justify-content:space-around;gap:clamp(28px,4vw,64px);
+    padding-right:clamp(28px,4vw,64px);
+    animation:pslide 44s linear infinite;
+  }
+  @keyframes pslide{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+  /* A moving row is hostile to anyone trying to look at one logo. Both tracks stop together. */
+  .pmarquee:hover .ptrack,
+  .pmarquee:focus-within .ptrack{animation-play-state:paused}
+
+  .pitem{flex:none;display:flex;align-items:center;justify-content:center;
+    height:clamp(86px,8.4vw,112px);padding:0 4px}
+
+  /* Fitted to a box, not normalised on height — see the note above. */
+  .pitem img{max-height:clamp(58px,6vw,84px);max-width:clamp(170px,17.5vw,250px);
+    width:auto;height:auto;object-fit:contain}
+
+  .pmark{display:inline-flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;
+    padding:0 6px;text-align:center}
+  .pmark-name{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+    font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1;letter-spacing:var(--cs-web-display-ls);
+    color:var(--pm,var(--cs-primary))}
+  .pmark-tag{font-family:var(--cs-web-display);font-size:.7rem;font-weight:var(--cs-web-display-weight);
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cs-text-muted);line-height:1.2}
+
+  /* No motion: a plain scrollable strip, with the duplicate copy out of the way so nothing is
+     listed twice for anyone reading or scrolling it. */
+  @media (prefers-reduced-motion:reduce){
+    .pmarquee{overflow-x:auto;scrollbar-width:thin}
+    .ptrack{animation:none}
+    .ptrack[aria-hidden="true"]{display:none}
+  }
+</style>

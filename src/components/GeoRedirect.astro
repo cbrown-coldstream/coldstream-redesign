@@ -1,0 +1,103 @@
+---
+// GEO REDIRECT — on the national page only.
+//
+// Sends a visitor detected in one of the three metros to that market's landing page. Everyone
+// else, and every bot, stays here and gets the national page.
+//
+// ── THE RULE THAT MATTERS MOST ───────────────────────────────────────────────────────────────
+//
+// NEVER REDIRECT A CRAWLER. Serving a bot something different from what a person gets is cloaking,
+// and it is the one thing in this whole rebuild that could actually cost rankings. Three separate
+// properties keep that true:
+//
+//   1. This runs CLIENT-SIDE, after paint. The HTML a crawler receives is the complete national
+//      page, rendered and canonical, before any of this executes.
+//   2. It runs on requestAnimationFrame after load — not in <head>, not blocking, so the page is
+//      painted and interactive first. A visitor sees the national page for a moment and then moves;
+//      they are never staring at a blank screen waiting on a geo lookup.
+//   3. It bails on any user-agent that looks like a bot, and on any headless browser, before it
+//      does anything at all. That is belt and braces on top of 1 and 2.
+//
+// ── AND THE ONE THAT MAKES IT BEARABLE ───────────────────────────────────────────────────────
+//
+// ONCE PER VISITOR. The cookie is written BEFORE the redirect fires, so:
+//   · someone who comes back to / deliberately is not bounced again
+//   · someone who hits Back from the market page lands on / and stays there — no loop
+//   · a manual choice from the utility bar's market select always wins and persists
+//
+// The lookup is a single fetch to a public geo endpoint with a short timeout. If it fails, is slow,
+// is blocked, or the visitor is anywhere else in the world, nothing happens and they keep the
+// national page. Failure mode is "no redirect", never "wrong redirect" or "blank page".
+const { markets } = Astro.props;
+---
+<script is:inline define:vars={{ MARKETS: markets }}>
+  (function () {
+    var COOKIE = "cs_geo";
+    var CHOICE = "cs_market";
+    var TIMEOUT = 2500;
+
+    function cookie(name) {
+      return document.cookie.split("; ").reduce(function (acc, c) {
+        var i = c.indexOf("=");
+        return c.slice(0, i) === name ? decodeURIComponent(c.slice(i + 1)) : acc;
+      }, "");
+    }
+    function setCookie(name, value, days) {
+      document.cookie = name + "=" + encodeURIComponent(value) + ";path=/;max-age=" +
+        60 * 60 * 24 * days + ";samesite=lax";
+    }
+
+    // 1. Bots never get redirected. This is the cloaking guard.
+    var ua = navigator.userAgent || "";
+    if (/bot|crawl|spider|slurp|bing|duckduck|baidu|yandex|facebookexternalhit|embedly|quora|pinterest|whatsapp|telegram|preview|lighthouse|headless|phantom|puppeteer|playwright/i.test(ua)) return;
+    if (navigator.webdriver) return;
+
+    // 2. Already routed once, or the visitor has chosen a market by hand. Either way, leave them.
+    if (cookie(COOKIE) || cookie(CHOICE)) return;
+
+    // 3. Respect an explicit request for the national page.
+    if (/[?&](national|stay)\b/.test(location.search)) { setCookie(COOKIE, "stay", 30); return; }
+
+    function go() {
+      var done = false;
+      var ctl = typeof AbortController === "function" ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, TIMEOUT);
+
+      fetch("https://ipapi.co/json/", ctl ? { signal: ctl.signal } : undefined)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          clearTimeout(timer);
+          if (done || !d) return;
+          done = true;
+
+          var city = String(d.city || "").toLowerCase();
+          var region = String(d.region_code || d.region || "").toLowerCase();
+          var slug = null;
+
+          for (var i = 0; i < MARKETS.length; i++) {
+            var m = MARKETS[i];
+            for (var j = 0; j < m.cities.length; j++) {
+              if (city.indexOf(m.cities[j]) !== -1 && (!m.regions.length || m.regions.indexOf(region) !== -1)) {
+                slug = m.slug; break;
+              }
+            }
+            if (slug) break;
+          }
+
+          // Write the cookie WHETHER OR NOT we redirect. A visitor outside the three metros should
+          // not pay for a geo lookup on every visit either.
+          setCookie(COOKIE, slug || "none", 30);
+          if (!slug) return;
+
+          // `replace`, not `assign` — the national page does not go into history, so Back from the
+          // market page goes where the visitor actually came from rather than bouncing.
+          location.replace("/" + slug + "/?geo=1");
+        })
+        .catch(function () { clearTimeout(timer); });
+    }
+
+    // 4. After paint. requestAnimationFrame twice puts this after the first rendered frame.
+    if (document.readyState === "complete") requestAnimationFrame(function () { requestAnimationFrame(go); });
+    else window.addEventListener("load", function () { requestAnimationFrame(function () { requestAnimationFrame(go); }); });
+  })();
+</script>

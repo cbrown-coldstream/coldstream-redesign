@@ -1,0 +1,57 @@
+---
+// HOW IT WORKS — four steps from call to finished job, horizontal, on a connecting line.
+//
+// Dark full-bleed band. It sits between two light sections on purpose: the page needs rhythm more
+// than it needs another card grid, and this is the moment in the scroll where a homeowner is
+// deciding whether calling is going to be a hassle.
+//
+// The steps are the live site's own process, rewritten. Nothing here is a claim — it is a
+// description of what happens, which is the one kind of persuasion that needs no source.
+const { eyebrow = "How it works", heading, steps = [] } = Astro.props;
+---
+<section class="how reveal">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{heading}</h2>
+    </div>
+    <ol class="steps-rail">
+      {steps.map((s, i) => (
+        <li>
+          <span class="sdot" aria-hidden="true">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+<style>
+  .how{background:var(--cs-deep-dark);color:var(--cs-paper)}
+  .how .wrap{padding:60px 22px 64px}
+  .how h2{color:var(--cs-paper)}
+  .how .shead{margin-bottom:38px}
+
+  .steps-rail{list-style:none;margin:0;padding:0;position:relative;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+
+  /* The connecting line. Drawn behind the markers, inset so it starts and ends at the first and
+     last dot rather than running off the ends of the row. */
+  .steps-rail::before{content:"";position:absolute;top:19px;left:12.5%;right:12.5%;height:2px;
+    background:color-mix(in srgb, var(--cs-paper) 22%, transparent)}
+
+  .steps-rail li{position:relative;display:flex;flex-direction:column;gap:11px;align-items:flex-start}
+  .sdot{position:relative;z-index:1;width:40px;height:40px;border-radius:50%;
+    background:var(--cs-accent);color:var(--cs-paper);display:grid;place-items:center;
+    font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:1.06rem;
+    box-shadow:0 0 0 6px var(--cs-deep-dark)}
+  .steps-rail h3{color:var(--cs-paper);font-size:1.1rem;margin:0}
+  .steps-rail p{margin:0;font-size:.94rem;line-height:1.6;
+    color:color-mix(in srgb, var(--cs-paper) 74%, transparent);max-width:30ch}
+
+  @media(max-width:860px){
+    .steps-rail{grid-template-columns:1fr 1fr;gap:30px 22px}
+    .steps-rail::before{display:none}
+  }
+  @media(max-width:520px){.steps-rail{grid-template-columns:1fr}}
+</style>

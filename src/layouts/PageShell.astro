@@ -1,0 +1,100 @@
+---
+// The shell every NATIONAL page uses — /about-us/, /free-estimate/, /financing/, the legal pages
+// and 404. Same chrome as the market templates, minus the market: these pages belong to the
+// company, not to a metro, so they carry the national number and the national footer.
+//
+// It exists so the global pages are a content file each, the same way a market is a data file
+// each. Six pages repeating the same eight lines of chrome is how chrome starts to drift.
+import BaseLayout from "./BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import Reviews from "../components/Reviews.astro";
+import OfferBand from "../components/OfferBand.astro";
+import CTABand from "../components/CTABand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { NATIONAL } from "../data/markets.js";
+import { TESTIMONIALS } from "../data/claims.js";
+
+const {
+  title, description, canonical, noindex = false, schema = [],
+  eyebrow, heading, intro, cta = true, breadcrumbs = [],
+  // ROUND 8: the global pages join the design system. They used to open with a plain centred
+  // heading block while every market page opened with the hero; that difference was the only
+  // reason /about-us/ looked like a different website from /cincinnati/about/.
+  //
+  // `hero` renders the market-landing hero treatment. `badges`, `reviews` and `offer` add the rest
+  // of the landing's rhythm. The legal pages opt out of the social proof — a privacy policy with a
+  // reviews carousel in it is not a privacy policy anybody trusts.
+  hero = true, badges = true, reviews = false, offer = false, heroSub,
+} = Astro.props;
+
+const market = NATIONAL;
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  market={market}
+  noindex={noindex}
+  schema={schema}
+  breadcrumbs={breadcrumbs.length ? breadcrumbs : [{ name: "Home", href: "/" }, { name: heading, href: canonical }]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  {hero ? (
+    <Hero market={market} eyebrow={eyebrow} headline={heading} sub={heroSub ?? intro} />
+  ) : (
+    <section>
+      <div class="wrap" style="max-width:760px">
+        <div class="shead">
+          {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+          <h1>{heading}</h1>
+          {intro && <p>{intro}</p>}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {badges && <BadgeRow aboveTheFold={true} />}
+
+  <slot />
+
+  {reviews && (
+    <Reviews heading="Proven. Trusted. Backed by Your Neighbors."
+             intro="Feedback from homeowners across all three markets."
+             reviews={TESTIMONIALS.national} />
+  )}
+  {offer && <OfferBand />}
+
+  {cta && (
+    <CTABand
+      market={market}
+      heading="Ready for a free, no-pressure estimate?"
+      body="Tell us what you need — we'll take a look and give you an honest number."
+    />
+  )}
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style is:global>
+  .prose{max-width:760px;margin:0 auto}
+  .prose h2{font-size:clamp(1.35rem,2.4vw,1.75rem);margin:34px 0 12px}
+  .prose h3{font-size:1.05rem;margin:24px 0 8px}
+  .prose p,.prose li{color:var(--cs-text-muted);line-height:1.7;font-size:1.02rem}
+  .prose p{margin:0 0 14px}
+  .prose ul{margin:0 0 16px;padding-left:20px}
+  .prose li{margin-bottom:7px}
+  /* An unsourced block that has to be visible in the page itself, not just the build log —
+     nobody reads a build log before hitting publish. */
+  .unsourced{border:1px dashed var(--cs-line);border-left:4px solid var(--cs-accent, #d2691e);
+    background:var(--cs-paper);border-radius:8px;padding:14px 18px;margin:18px 0}
+  .unsourced strong{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .unsourced p{margin:0;font-size:.95rem}
+</style>

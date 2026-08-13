@@ -1,0 +1,67 @@
+---
+// Footer NAP must match the Google Business Profile EXACTLY for this market — real office
+// address, not virtual. Consistent NAP across site + GBP + citations is a direct local-ranking
+// factor, which is why the address comes from the market config and is never retyped.
+import { MARKET_LIST, servicesFor, serviceHref, estimateHref, aboutHref } from "../data/markets.js";
+import { marketsWithGallery } from "../data/locations.js";
+import { marketsWithReviews } from "../data/claims.js";
+const { market } = Astro.props;
+// servicesFor, NOT homeownerServicesFor — the footer is where the commercial hub gets its
+// site-wide link, so it is reachable from every page rather than orphaned.
+const services = servicesFor(market);
+const o = market.office;
+const year = 2026;
+
+// Reviews and Gallery are in the plan's page system and are BUILT — as templates gated on real
+// proof, so a market has those pages only once real reviews and real job photos exist for it.
+// Asking the same question here that getStaticPaths asks means the link and the page can never
+// disagree: the day the GBP pull and the Contractors Cloud pull land, these appear by themselves.
+const extras = market.slug
+  ? [
+      marketsWithReviews().includes(market.slug) && { href: `/${market.slug}/reviews/`, label: "Reviews" },
+      marketsWithGallery().includes(market.slug) && { href: `/${market.slug}/gallery/`, label: "Our Work" },
+    ].filter(Boolean)
+  : [];
+---
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <a class="brand" href="/"><img src="/logo-coldstream-exteriors.jpg" alt="Coldstream Exteriors" width="240" height="70" /></a>
+        {o ? (
+          <address class="addr" style="font-style:normal">
+            <strong style="color:var(--cs-paper)">{o.label}</strong><br />
+            {o.street}<br />{o.city}, {o.state} {o.zip}<br />
+            <a href={market.telHref}>{market.phone}</a>
+          </address>
+        ) : (
+          <address class="addr" style="font-style:normal">
+            <strong style="color:var(--cs-paper)">Ohio &amp; Missouri</strong><br />
+            <a href={market.telHref}>{market.phone}</a>
+          </address>
+        )}
+      </div>
+      <div>
+        <h4>Services</h4>
+        {services.map((s) => <a href={serviceHref(market, s)}>{s.label}</a>)}
+      </div>
+      <div>
+        <h4>Company</h4>
+        {extras.map((e) => <a href={e.href}>{e.label}</a>)}
+        <a href={aboutHref(market)}>About</a>
+        {market.slug && <a href="/about-us/">The Company</a>}
+        <a href="/blog/">Advice</a>
+        <a href="/financing/">Financing</a>
+        <a href={estimateHref(market)}>Free Estimate</a>
+      </div>
+      <div>
+        <h4>Markets</h4>
+        {MARKET_LIST.map((m) => <a href={`/${m.slug}/`}>{m.name}</a>)}
+      </div>
+    </div>
+    <div class="bot">
+      <span>© {year} Coldstream Exteriors. Licensed &amp; insured.</span>
+      <span><a href="/privacy-policy/" style="display:inline">Privacy</a> · <a href="/terms/" style="display:inline">Terms</a> · <a href="/sitemap.xml" style="display:inline">Sitemap</a></span>
+    </div>
+  </div>
+</footer>

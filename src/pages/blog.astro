@@ -1,0 +1,118 @@
+---
+// TEMPLATE 11 — BLOG INDEX. The index only; the posts are a separate decision.
+//
+// Build order round 6: "/blog/ is an index page — build the template and the index; individual
+// posts are a separate decision." So this is a finished index with nothing in it yet, and it says
+// so rather than pretending otherwise.
+//
+// THE 48 LIVE POSTS STAY ON WORDPRESS FOR NOW and their redirect rows stay PENDING. That is not
+// indecision, it is the one place on this migration where a guess is expensive in both directions:
+// folding a post that carries backlinks throws away the only off-site authority this domain has
+// earned, and carrying a post nobody reads into the new site imports exactly the thin content the
+// consolidation removed 299 pages to fix. Each post needs its own traffic and backlink numbers.
+//
+// NOINDEX while empty. An index page with no entries has nothing for a crawler, and the flag comes
+// off the moment the first post is migrated — no code change.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import MarketRouter from "../components/MarketRouter.astro";
+import CTABand from "../components/CTABand.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import OfferBand from "../components/OfferBand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+import { NATIONAL, MARKET_LIST } from "../data/markets.js";
+import { BLOG } from "../data/redirects.js";
+
+const market = NATIONAL;
+
+/** Posts migrated into this site. Empty by design — see the header. */
+const POSTS = [];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Coldstream Exteriors — Advice and Updates",
+  url: "https://coldstreamexteriors.com/blog/",
+  publisher: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  blogPost: POSTS,
+};
+---
+<BaseLayout
+  title="Roofing & Exteriors Advice | Coldstream Exteriors"
+  description="Practical advice on roofing, siding, windows and gutters from the Coldstream Exteriors crews across Ohio and Missouri."
+  canonical="/blog/"
+  market={market}
+  noindex={POSTS.length === 0}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Advice", href: "/blog/" }]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow="Advice and updates"
+    headline="Straight Answers About Your Home's Exterior"
+    sub="What our crews get asked most, written down — when a repair beats a replacement, what a storm actually does to a roof, and which upgrades are worth the money."
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  {POSTS.length === 0 ? (
+    <section>
+      <div class="wrap" style="max-width:720px">
+        <div class="shead"><span class="eyebrow">Coming across shortly</span><h2>We are moving our writing over</h2></div>
+        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+          Our existing articles are still on the old site while we work out which of them are worth
+          carrying across. That is a real question rather than a formality: a piece that people
+          actually find and read should move over intact, and one that nobody reads is better
+          retired than reprinted.
+        </p>
+        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+          Rather than put up a page of filler in the meantime, this index is empty and honest about
+          it. If you have a question now, the fastest route to an answer is to call the office
+          nearest you — the numbers are below and a person picks up.
+        </p>
+      </div>
+    </section>
+  ) : (
+    <section>
+      <div class="wrap">
+        <div class="posts">
+          {POSTS.map((p) => (
+            <article class="post">
+              <h2><a href={p.url}>{p.title}</a></h2>
+              <p>{p.excerpt}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <MarketRouter
+    heading="Ask the crew nearest you"
+    intro="Three markets, three local offices, and a person on the end of each phone."
+  />
+
+  <CTABand market={market} heading="Want someone to take a look?" body="Free, no-obligation inspections across Ohio and Missouri." />
+
+
+  <OfferBand />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
+<style>
+  .posts{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .post h2{font-size:1.24rem;margin-bottom:7px}
+  .post h2 a{color:var(--cs-text);text-decoration:none}
+  .post h2 a:hover{color:var(--cs-primary)}
+  .post p{color:var(--cs-text-muted);font-size:.97rem;margin:0}
+</style>

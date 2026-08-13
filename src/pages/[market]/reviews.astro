@@ -1,0 +1,130 @@
+---
+// TEMPLATE 6 — MARKET REVIEWS. One file, one page per market with real reviews on file.
+//
+// site-plan lists reviews/ under every market. This is the page where getting it wrong is most
+// expensive, so the gate is the hardest on the site:
+//
+// EVERY MARKET GETS THIS PAGE (build order, round 6), and it is the page where the content rule
+// matters most. The prototype shipped three invented testimonials — named people, quoted words,
+// the same three quotes on two pages with different towns attached. Fabricated endorsements are an
+// FTC problem, so the empty state below says plainly that the reviews are not here yet and points
+// at the profiles instead. IT DOES NOT INVENT ONE. A page with no sourced reviews carries a
+// noindex until they land.
+//
+// AGGREGATE RATING IS STILL NOT EMITTED, even here. Review schema below marks up the individual
+// reviews that are actually on file — each with its own reviewer, its own words and its own star
+// count. An aggregateRating additionally needs the real total review count from the GBP listing,
+// which is a different number from "how many quotes we chose to publish"; marking up the second
+// as if it were the first is exactly the structured-data violation Google issues manual actions
+// for. It goes in when market.reviews carries a sourced { rating, count } and not before.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import Reviews from "../../components/Reviews.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import FAQ from "../../components/FAQ.astro";
+import CTABand from "../../components/CTABand.astro";
+import OfferBand from "../../components/OfferBand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { MARKETS, businessId } from "../../data/markets.js";
+import { TESTIMONIALS } from "../../data/claims.js";
+
+export async function getStaticPaths() {
+  const { marketsWithReviews } = await import("../../data/claims.js");
+  return marketsWithReviews().map((market) => ({ params: { market } }));
+}
+
+const { market: mSlug } = Astro.params;
+const market = MARKETS[mSlug];
+const reviews = TESTIMONIALS[mSlug] ?? [];
+const empty = reviews.length === 0;
+const office = market.office;
+
+// Individual Review nodes, referencing the market's single business entity by @id. No address
+// and no LocalBusiness restatement here — same rule as every non-landing page.
+const schema = reviews
+  .filter((r) => Number.isFinite(r.rating))
+  .map((r) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: { "@type": "RoofingContractor", "@id": businessId(market) },
+    author: { "@type": "Person", name: r.name },
+    reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+    reviewBody: r.quote,
+    ...(r.date ? { datePublished: r.date } : {}),
+  }));
+
+const servedFrom = `Served from our ${office.city} office.`;
+---
+<BaseLayout
+  title={`Customer Reviews in ${market.name} | Coldstream Exteriors`}
+  description={`What ${market.name} homeowners say about their roofing, siding, window and gutter projects with Coldstream Exteriors. ${servedFrom}`}
+  canonical={`/${mSlug}/reviews/`}
+  market={market}
+  noindex={empty}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: market.name, href: `/${mSlug}/` },
+    { name: "Reviews", href: `/${mSlug}/reviews/` },
+  ]}
+  schema={schema}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="path" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${market.name} · Reviews`}
+    headline={`What ${market.name} Homeowners Say`}
+    sub={`Reviews from customers across ${market.region}, in their own words. ${servedFrom}`}
+    bullets={["Free, no-obligation inspection", "Our own crews on every job", "25-year workmanship warranty"]}
+  />
+
+  <BadgeRow aboveTheFold={true} />
+
+  {empty && (
+    <section>
+      <div class="wrap" style="max-width:720px">
+        <div class="shead"><span class="eyebrow">Reviews</span><h2>Our {market.name} reviews live on Google</h2></div>
+        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+          We are not going to write testimonials and put customers' names under them. The reviews
+          for our {market.name} team sit on our Google Business Profile in the reviewers' own
+          words, and we are in the middle of pulling them across so that every one published here
+          links back to the original and can be checked.
+        </p>
+        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
+          Until that is done, this page has nothing on it worth reading — which is the honest state
+          of it. Call {market.phone} and we will happily put you in touch with a recent customer
+          who has agreed to talk.
+        </p>
+      </div>
+    </section>
+  )}
+
+  <Reviews
+    eyebrow="Reviews"
+    heading={`Feedback from ${market.name} homeowners`}
+    intro={`Every review on this page is from a real customer of our ${market.name} team.`}
+    reviews={reviews}
+  />
+
+  <ServicesGrid market={market} heading="What we do here" intro="The same crews and the same warranty across every service." />
+
+  <OfferBand />
+
+  <FAQ items={[
+    { q: "Where do these reviews come from?", a: "Our Google Business Profile for this market. They are the reviewers' own words, published as written." },
+    { q: "Can I speak to a recent customer?", a: "Ask, and where a customer has agreed to it we will put you in touch. We do not hand out anyone's details without their say-so." },
+  ]} />
+
+  <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>
