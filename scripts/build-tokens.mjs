@@ -2,11 +2,12 @@
 //
 // brand/tokens.json is the source of truth for colour — locked 2026-07-29.
 //
-// IT IS A VENDORED COPY. The original lives in the coldstream-os repo at
-// design-systems/exteriors/tokens.json, where render-post reads it to rasterise social posts.
-// That repo is authoritative: if a brand colour changes it changes THERE, and `npm run brand:sync`
-// pulls it back here. Editing the copy makes the website and the rendered posts two brands that
-// merely resemble each other, which is the exact failure this file exists to prevent.
+// THIS REPO IS AUTHORITATIVE FOR IT (reversed 2026-08-13; it used to be a vendored copy of
+// coldstream-os/design-systems/exteriors/tokens.json). A brand colour changes HERE, and
+// `npm run brand:publish` pushes it out to coldstream-os, where seed-brand.sh loads it into the
+// database that render-post rasterises social posts from. Changing it there instead makes the
+// website and the rendered posts two brands that merely resemble each other, which is the exact
+// failure this file exists to prevent — the direction flipped, the failure did not.
 //
 //   npm run tokens
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";

@@ -661,7 +661,49 @@ readable. Flagged, not decided; making it private is a one-click reversal if tha
 
 ---
 
-## 16. Checks
+## 16. Round 14 — brand truth moved here, and the pull became a publish
+
+**This is a reversal, and it is written down as one.** §Brand files and every comment in the repo
+said coldstream-os was authoritative for `tokens.json` and `voice-spec.json`, and that
+`npm run brand:sync` pulled them down. That is no longer true. **This repo owns them.**
+
+`scripts/brand-sync.mjs` is **deleted, not kept as a fallback.** A pull that still worked would
+overwrite the source of truth with a copy the first time someone ran it out of habit — the failure
+is silent and repaints the whole site. `npm run brand:publish` replaces it and runs the other way.
+
+**The two copies were byte-identical when this flipped**, so nothing had to be reconciled. Worth
+recording: had they drifted, choosing a winner would have been a brand decision, not a merge.
+
+**What is downstream, and the step that is easy to skip.** coldstream-os is now the vendored end.
+Its `design-systems/exteriors/` is read by `supabase/seed-brand.sh exteriors`, which loads the JSON
+into the `content_portal_brands` table — and `render-post` rasterises from **that table, not the
+file**. So a colour reaches a rendered post only after both:
+
+```
+npm run brand:publish                 # here → coldstream-os/design-systems/exteriors/
+./supabase/seed-brand.sh exteriors    # there: file → database
+```
+
+Publish without seed is the drift to watch: the website repaints, the posts do not, and every file
+on disk looks right. The script says so on exit rather than leaving it to memory.
+
+**`brand:publish` writes files and stops.** It does not commit, push or seed. Cross-repo automation
+that also commits is how a brand change lands in a repo nobody was looking at. The original refused
+to push for the same class of reason; the direction reversed, the caution did not.
+
+**What did not change.** The files stay committed here, and nothing in `npm run build` calls the
+publish script — this repo still has to build on a host that has never heard of coldstream-os. And
+the two design systems remain separate: `--cs-web-*` is the website, `--cs-*` is social. Owning the
+brand files does not merge them, and §11 still stands.
+
+**Left alone, flagged not fixed:** `coldstream-os/site/` is still a full stale copy of this project
+from before the split. Nothing points at it now that staging builds from `coldstream-redesign`
+(§15), but it is a second copy of these same files and a plausible thing to edit by mistake.
+Deleting it is a change to that repo, so it is not made here.
+
+---
+
+## 17. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

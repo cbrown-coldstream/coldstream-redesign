@@ -21,7 +21,7 @@ npm run dev       # local
 | `src/pages/` | 13 templates. Three markets are data, not three sites. |
 | `src/components/` | Shared sections. |
 | `src/styles/` | `tokens.css` and `ui-tokens.css` are generated; `base.css` is not. |
-| `brand/` | Vendored from the `coldstream-os` repo. `npm run brand:sync` re-pulls. |
+| `brand/` | The brand source of truth. `npm run brand:publish` pushes it to `coldstream-os`. |
 | `scripts/` | Build-time generators and the gates. |
 | `redirects/` | Source of the 273-rule 301 map. |
 | `public/preview/` | The approved design prototype. It is the reference, not a leftover. |

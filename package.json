@@ -17,7 +17,7 @@
     "pagemap": "node scripts/build-pagemap.mjs",
     "live:pull": "node scripts/pull-live-copy.mjs",
     "handoff:site": "node scripts/build-handoff.mjs",
-    "brand:sync": "node scripts/brand-sync.mjs",
+    "brand:publish": "node scripts/brand-publish.mjs",
     "pages": "node scripts/build-pages-md.mjs",
     "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs"
   },

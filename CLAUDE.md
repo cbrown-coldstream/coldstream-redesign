@@ -77,7 +77,7 @@ npm run test:gates   # proves the gates fail when they should
 npm run inventory    # 58 planned pages vs what built; extras must be named
 npm run contracts    # data-shape checks for the Contractors Cloud / GBP pulls
 npm run live:pull    # re-read the live WordPress copy into src/data/live-copy/
-npm run brand:sync   # re-pull brand/ from coldstream-os
+npm run brand:publish # push brand/ out to coldstream-os (this repo owns it)
 ```
 
 ## What is done, and what is not
@@ -110,11 +110,28 @@ early points 273 rules at a 404.
 
 ## Brand files
 
-`brand/tokens.json` and `brand/voice-spec.json` are **vendored copies**. The originals live in the
-**coldstream-os** repo at `design-systems/exteriors/`, where a `render-post` edge function reads
-them to rasterise social and print assets. That repo is authoritative: change a brand value there,
-then `npm run brand:sync` here. They are committed rather than imported because this repo has to
-build on a host that has never heard of coldstream-os.
+`brand/tokens.json` and `brand/voice-spec.json` are **the originals. This repo is authoritative for
+them.** A brand value changes here and nowhere else.
+
+**This reversed on 2026-08-13.** coldstream-os used to hold the originals and `npm run brand:sync`
+pulled them down; that script is deleted, because pulling now would overwrite the truth with a copy.
+Older comments elsewhere may still describe the old direction — this section wins.
+
+Downstream, `coldstream-os/design-systems/exteriors/` is a **vendored copy of these two files**.
+`supabase/seed-brand.sh exteriors` loads that copy into the `content_portal_brands` table, and the
+`render-post` edge function rasterises social and print assets from the **table, not the file**. So
+a brand change reaches a rendered post only after both steps:
+
+```
+npm run brand:publish                 # here → coldstream-os/design-systems/exteriors/
+./supabase/seed-brand.sh exteriors    # in coldstream-os: file → database
+```
+
+Publishing without seeding is the drift to watch for: the website repaints, the posts do not, and
+every file on disk looks correct. `brand:publish` writes files only — it does not commit or seed.
+
+The files stay committed here rather than imported because this repo has to build on a host that has
+never heard of coldstream-os. Nothing in `npm run build` calls `brand:publish`.
 
 ## Working style this repo expects
 
