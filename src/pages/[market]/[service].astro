@@ -14,6 +14,7 @@ import UtilityBar from "../../components/UtilityBar.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
 import Hero from "../../components/Hero.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
+import ProcessScrub from "../../components/ProcessScrub.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
 import FAQ from "../../components/FAQ.astro";
@@ -29,6 +30,7 @@ import { TESTIMONIALS } from "../../data/claims.js";
 import { SERVICE_CONTENT, localFor } from "../../data/services.js";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
+import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
 
 export async function getStaticPaths() {
   const { MARKETS, servicesFor } = await import("../../data/markets.js");
@@ -49,6 +51,18 @@ const ctx = MARKET_CONTEXT[mSlug];
 const subs = Object.entries(SUBSERVICES[sKey] ?? {});
 const h1 = svc.h1(market);
 const lead = copyFor(svc.lead, market);
+
+// THE FOOTAGE IS THE GATE, NOT THE SERVICE LIST. A trade appears here only once there is a real
+// clip of that trade; roofing's lives on the market landing, and windows, garage doors and
+// commercial have no footage, so they get no section rather than a borrowed one. Adding a trade is
+// a clip, a poster and a line in this map — ProcessScrub itself renders nothing without all of it.
+const PROCESS_MEDIA = {
+  siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
+  gutters: { poster: "/video/gutters-build-poster.jpg", mp4: "/video/gutters-build-scrub.mp4" },
+};
+const scrubMedia = PROCESS_MEDIA[sKey] ?? null;
+const scrubSteps = PROCESS[sKey] ?? [];
+const scrubIntro = PROCESS_INTRO[sKey] ?? {};
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -95,6 +109,17 @@ const serviceSchema = {
     heading={`${svc.label} services in ${market.name}`}
     intro={local?.intro}
     cards={svc.sections}
+  />
+
+  {/* After the detail cards and well below the fold. It says what the words above just described,
+      which is why it follows them rather than opening the page — and it is never behind the hero,
+      because the AA gate's fixed 13.6:1 and 7.1:1 hold only while no page passes media to Hero.
+      See ProcessScrub.astro. */}
+  <ProcessScrub
+    id={`${sKey}-process`}
+    media={scrubMedia}
+    {...scrubIntro}
+    steps={scrubSteps}
   />
 
   {subs.length > 0 && (

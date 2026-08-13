@@ -324,20 +324,79 @@ footer .bot{padding-top:18px;color:var(--cs-steel);font-size:.85rem;display:flex
    150–250ms, ease-out, transform and opacity only. Every hover has a :focus-visible twin, and
    the whole lot is switched off under prefers-reduced-motion at the bottom of this file. */
 
-/* Service cards — lift, border to primary, icon fills, arrow slides. */
-.svc{position:relative;overflow:hidden;
-  transition:transform .2s ease-out,box-shadow .2s ease-out,border-color .2s ease-out}
-.svc::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--cs-accent);
-  transform:scaleX(0);transform-origin:left;transition:transform .25s ease-out}
-.svc:hover,.svc:focus-within{transform:translateY(-4px);border-color:var(--cs-primary);
+/* ── Service cards — FLIP. This REPLACES round 7's hover layer, it does not sit on top of it ──
+   What was removed and why: the card lifted on translateY, a ::before accent bar wiped in across
+   the top, and the icon rotated -4deg. All three animate the same element a rotateY now owns, and
+   `overflow:hidden` — which that ::before needed to clip against the radius — would have cropped
+   the card mid-rotation. Two of them also read as "this is a link" on a card that now reveals a
+   panel instead. Kept: the border and shadow response, which are the card reacting to the cursor
+   rather than a second thing moving. */
+/* Scoped as .svc-grid .svc, not .svc, and that is not decoration. The reveal layer further down
+   sets `transition:opacity,transform` on [data-reveal="stagger"]>* — which IS this element — and
+   at equal specificity the later rule wins the whole shorthand, so a bare `.svc` here would have
+   its border and shadow response silently replaced by the reveal's. Two classes outrank one
+   attribute selector, so this survives. The flip's own transition is safe either way: it lives on
+   .svc-flip, which the reveal never touches. */
+.svc-grid .svc{position:relative;perspective:1100px;
+  transition:box-shadow .2s ease-out,border-color .2s ease-out}
+.svc:hover,.svc:focus-within{border-color:var(--cs-primary);
   box-shadow:0 16px 34px color-mix(in srgb, var(--cs-primary) 18%, transparent)}
-.svc:hover::before,.svc:focus-within::before{transform:scaleX(1)}
-.svc .ic{transition:background-color .2s ease-out,transform .2s ease-out}
-.svc:hover .ic,.svc:focus-within .ic{background:var(--cs-accent);transform:translateY(-2px) rotate(-4deg)}
+
+/* BOTH FACES SHARE ONE GRID CELL — they are not absolutely positioned, and that is the whole
+   reason this sizes correctly. The blurb is copyFor(s.blurb, market), so it differs per market,
+   and the back face's bullet count depends on which claims are sourced. Absolute faces are out of
+   flow, so the card would need a fixed height guessed from the longest of twelve strings and would
+   clip the moment a market's copy grew or a gated claim landed. In one grid cell the card is
+   simply as tall as its taller face, per market, automatically. */
+.svc-flip{display:grid;transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.7,.3,1)}
+.svc-face{grid-area:1/1;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  /* THE CROSSFADE IS THE FALLBACK, NOT A FLOURISH — do not "simplify" it away.
+     backface-visibility only hides anything while a real 3D context survives. preserve-3d is
+     flattened by any ancestor that gains a filter, will-change, contain or a grouping property,
+     and several mobile browsers flatten it regardless. Flattened, the back face is no longer
+     rotated away from the viewer: it paints on top of the front as mirrored, unreadable text.
+     Because opacity is doing the actual hiding, that failure degrades to a plain crossfade — the
+     card still swaps faces and still reads correctly, it just stops being 3D.
+     The .25s delay is half of the .55s flip, so the swap lands at the midpoint where both faces
+     are edge-on and neither is legible anyway. */
+  transition:opacity .18s ease-out .25s}
+.svc-front{opacity:1}
+.svc-back{opacity:0;transform:rotateY(180deg);display:flex;flex-direction:column;gap:10px}
+.svc-back-h{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+  font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cs-primary-deep);margin:0}
+.svc-assure{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;flex:1}
+.svc-assure li{font-size:.9rem;color:var(--cs-text);display:flex;gap:9px;align-items:flex-start;line-height:1.45}
+.svc-assure li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;
+  background:var(--cs-accent);margin-top:.5em}
 .svc a{display:inline-flex;align-items:center;gap:7px}
 .svc a span{transition:transform .18s ease-out}
-.svc:hover a,.svc a:focus-visible{color:var(--cs-accent)}
-.svc:hover a span,.svc a:focus-visible span{transform:translateX(5px)}
+.svc a:hover,.svc a:focus-visible{color:var(--cs-accent)}
+.svc a:hover span,.svc a:focus-visible span{transform:translateX(5px)}
+
+/* THE FLIP ITSELF IS OPT-IN BY INPUT DEVICE. hover:hover and pointer:fine together mean a real
+   cursor — hover:hover alone is true on some stylus and hybrid devices that cannot hover usefully.
+   :focus-within is the keyboard twin: tabbing to the back face's link flips the card, which is why
+   that link is the only focusable thing in here (see ServicesGrid.astro). */
+@media (hover:hover) and (pointer:fine){
+  .svc:hover .svc-flip,.svc:focus-within .svc-flip{transform:rotateY(180deg)}
+  .svc:hover .svc-front,.svc:focus-within .svc-front{opacity:0}
+  .svc:hover .svc-back,.svc:focus-within .svc-back{opacity:1}
+}
+
+/* TOUCH, AND REDUCED MOTION, GET THE SAME STACKED CARD — no flip, nothing hidden.
+   A device that cannot hover cannot reach a face that only hover reveals, and content behind an
+   interaction the hardware cannot perform is content that does not exist. So the two faces stop
+   sharing a cell and become two rows: the assurances and the link render underneath the blurb as
+   part of the card. Reduced motion lands here too, because base.css kills every transition
+   globally under that query — the flip would not animate, it would snap 180deg on hover. */
+@media (hover:none),(prefers-reduced-motion:reduce){
+  .svc-flip{grid-template-rows:auto auto;gap:14px;transform:none!important;transform-style:flat}
+  .svc-face{grid-area:auto;opacity:1!important;transform:none!important;
+    -webkit-backface-visibility:visible;backface-visibility:visible}
+  .svc-back{border-top:1px solid var(--cs-line);padding-top:14px}
+}
 
 /* The "what's included" list inside each card */
 .svc-inc{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -381,8 +440,10 @@ footer a{transition:color .18s ease-out}
   .svc,.sub-card,.loc-card,.btn,.areas a,.loc-cta span,
   nav.main a::after,.dcard .dlink,footer a{transition:none!important}
   .svc:hover,.sub-card:hover,.loc-card:hover,.btn:hover,.areas a:hover{transform:none!important}
-  .svc::before,.svc .ic,.svc a span{transition:none!important}
-  .svc:hover .ic{transform:none!important}
+  /* The card's ::before accent bar and icon rotate were removed when the flip replaced round 7's
+     hover layer; what needs silencing now is the flip itself, which the stacked-layout query above
+     already handles. This keeps the transitions off for the same reason it always did. */
+  .svc a span,.svc-flip,.svc-face{transition:none!important}
   .msvc li a:hover span,.loc-cta:hover span{transform:none!important}
   nav.main a:hover::after,nav.main a:focus-visible::after{transform:scaleX(1)}
 }
@@ -530,57 +591,94 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
    known quantity at all. Keeping the media below the hero keeps the gate meaningful. A section
    that looks better and makes the accessibility check unverifiable is not a trade worth making.
 
-   THE TRACK IS TALL AND THE STAGE IS STICKY. Scroll distance through .rbuild-track is the
-   progress input; .rbuild-stage pins to the viewport and does the changing. */
-.rbuild{background:var(--cs-deep-dark);color:var(--cs-paper);padding:0}
-.rbuild-track{position:relative;height:300vh}
-.rbuild-stage{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:70px 0}
-.rbuild-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-.rbuild h2{color:var(--cs-paper);font-size:clamp(1.7rem,3vw,2.4rem);
+   THE TRACK IS TALL AND THE STAGE IS STICKY. Scroll distance through .pscrub-track is the
+   progress input; .pscrub-stage pins to the viewport and does the changing. */
+.pscrub{background:var(--cs-deep-dark);color:var(--cs-paper);padding:0}
+/* 340vh, not 300. Each step now owns a quarter of the track, and at 300vh a quarter was short
+   enough that two steps could arrive within one flick of a trackpad — which is the thing this
+   change exists to stop. No scroll-snap: it fights trackpad momentum and takes the scroll away
+   from the reader, and the section is a thing you scroll PAST, not a slideshow you step through. */
+.pscrub-track{position:relative;height:340vh}
+.pscrub-stage{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:70px 0}
+.pscrub-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.pscrub h2{color:var(--cs-paper);font-size:clamp(1.7rem,3vw,2.4rem);
   font-weight:var(--cs-web-display-weight-strong);margin:9px 0 14px}
-.rbuild-intro{color:color-mix(in srgb, var(--cs-paper) 78%, transparent);font-size:1.02rem;
+.pscrub-intro{color:color-mix(in srgb, var(--cs-paper) 78%, transparent);font-size:1.02rem;
   line-height:1.7;margin:0 0 26px;max-width:46ch}
 
 /* Numbered steps. The list is real markup in document order — it reads as a sequence with the
    script off, which is the point of using <ol> rather than divs and a counter. */
-.rbuild-steps{list-style:none;counter-reset:rb;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
-.rbuild-steps li{counter-increment:rb;display:grid;grid-template-columns:auto 1fr;gap:14px;
-  align-items:start;opacity:.38;transition:opacity .35s ease-out}
-.rbuild-steps li.on{opacity:1}
-.rbuild-steps li::before{content:counter(rb);flex:none;width:34px;height:34px;border-radius:50%;
-  display:grid;place-items:center;background:color-mix(in srgb, var(--cs-paper) 14%, transparent);
+/* Progress rail. transform:scaleX, never width — the fill updates on the same frames as the video
+   seek, and width would put a layout pass on every one of them where a transform composites.
+   It DEFAULTS TO FULL for the same reason the steps default to visible: with no script there is no
+   progress to report, and an empty rail would read as a section that failed to load. */
+.pscrub-rail{height:3px;border-radius:2px;margin:0 0 22px;overflow:hidden;
+  background:color-mix(in srgb, var(--cs-paper) 16%, transparent)}
+.pscrub-rail-fill{display:block;height:100%;background:var(--cs-accent);
+  transform:scaleX(1);transform-origin:0 50%;will-change:transform}
+
+/* ── the steps, and the inversion they inherit from [data-reveal] ────────────────────────────
+   STEPS DEFAULT TO VISIBLE. The hidden state lives behind .is-armed, which only the script adds,
+   and only once it has decided the scrub will actually run. Authoring `opacity:0` here instead
+   would mean a script error, JS off, or an early return leaves four steps of real copy invisible
+   on a page whose HTML was complete — the same failure [data-reveal] is written to avoid, and
+   worse here, because the copy IS the section. Every path that does not arm leaves all four
+   readable.
+
+   Once a step arrives it keeps .in. The script only ever adds that class, never removes it, so
+   scrolling back up cannot un-reveal a step — a homeowner comparing contractors scrolls back, and
+   copy that vanishes on the way up is copy they cannot re-read. */
+.pscrub-steps{list-style:none;counter-reset:ps;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.pscrub-steps li{counter-increment:ps;display:grid;grid-template-columns:auto 1fr;gap:14px;
+  align-items:start;transition:opacity .5s ease-out,transform .5s ease-out}
+.pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:0;transform:translateY(18px)}
+.pscrub-steps li::before{content:counter(ps);flex:none;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;background:var(--cs-accent);
   color:var(--cs-paper);font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
-  font-size:.92rem;transition:background-color .35s ease-out}
-.rbuild-steps li.on::before{background:var(--cs-accent)}
-.rbuild-steps h3{color:var(--cs-paper);font-size:1.06rem;margin:5px 0 3px}
-.rbuild-steps p{margin:0;font-size:.94rem;line-height:1.55;
+  font-size:.92rem}
+/* The marker pop is scoped under .is-armed so the unarmed fallback — where every step is already
+   .in from the outset — cannot fire four animations at once on load. */
+.pscrub-track.is-armed .pscrub-steps li.in::before{animation:ps-pop .42s ease-out}
+@keyframes ps-pop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.pscrub-steps h3{color:var(--cs-paper);font-size:1.06rem;margin:5px 0 3px}
+.pscrub-steps p{margin:0;font-size:.94rem;line-height:1.55;
   color:color-mix(in srgb, var(--cs-paper) 72%, transparent)}
 
 /* Poster and video stack in the same box. The poster is plain markup and always paints; the
    video fades over it only once the script has decided it will actually be used. */
-.rbuild-media{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;
+.pscrub-media{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;
   background:var(--cs-deep-dark);box-shadow:0 30px 70px rgba(0,0,0,.45)}
-.rbuild-media img,.rbuild-media video{position:absolute;inset:0;width:100%;height:100%;
+.pscrub-media img,.pscrub-media video{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block}
-.rbuild-media video{opacity:0;transition:opacity .4s ease-out}
-.rbuild-media video.ready{opacity:1}
+.pscrub-media video{opacity:0;transition:opacity .4s ease-out}
+.pscrub-media video.ready{opacity:1}
 
 /* THE END STATE, NEVER A BLANK STAGE. Under reduced motion or on a narrow screen the track
    collapses to an ordinary section: no sticky, no 300vh of empty scrolling, poster only, and
    every step at full opacity — because a step list dimmed to 38%% with nothing left to drive it
    is unreadable, and a sticky stage with no scrub is just a section that will not scroll away. */
+/* Both fallback branches must UNDO .is-armed rather than merely avoid setting it. The script
+   decides once, on load; a visitor who arms at desktop width and then rotates or narrows the
+   window keeps the class, and without these overrides the steps it had not reached yet would stay
+   at opacity 0 in a layout that no longer has a scrub to reveal them. `!important` on the rail is
+   there to beat the inline transform the script may have left mid-progress — CSS cannot outrank an
+   inline style otherwise, and a half-filled rail on a static section is a progress bar reporting
+   progress through nothing. */
 @media(max-width:900px){
-  .rbuild-track{height:auto}
-  .rbuild-stage{position:static;min-height:0;padding:62px 0}
-  .rbuild-grid{grid-template-columns:1fr;gap:30px}
-  .rbuild-steps li{opacity:1}
-  .rbuild-steps li::before{background:var(--cs-accent)}
-  .rbuild-media video{display:none}
+  .pscrub-track{height:auto}
+  .pscrub-stage{position:static;min-height:0;padding:62px 0}
+  .pscrub-grid{grid-template-columns:1fr;gap:30px}
+  .pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:1;transform:none}
+  .pscrub-steps li::before{animation:none!important}
+  .pscrub-rail-fill{transform:scaleX(1)!important}
+  .pscrub-media video{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .rbuild-track{height:auto}
-  .rbuild-stage{position:static;min-height:0;padding:62px 0}
-  .rbuild-steps li{opacity:1!important;transition:none!important}
-  .rbuild-steps li::before{background:var(--cs-accent);transition:none!important}
-  .rbuild-media video{display:none}
+  .pscrub-track{height:auto}
+  .pscrub-stage{position:static;min-height:0;padding:62px 0}
+  .pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:1;transform:none}
+  .pscrub-steps li{opacity:1!important;transform:none!important;transition:none!important}
+  .pscrub-steps li::before{animation:none!important}
+  .pscrub-rail-fill{transform:scaleX(1)!important}
+  .pscrub-media video{display:none}
 }

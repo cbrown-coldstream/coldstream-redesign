@@ -1,0 +1,210 @@
+---
+// ProcessScrub — a job going on, scrubbed by scroll position.
+//
+// WAS RoofBuild.astro. Nothing about the pattern was ever roofing: a sticky track, a continuous
+// video scrub and a list of steps that arrive as you pass them describes siding, gutters, windows
+// or a roof equally well. It was named for the first thing it was pointed at, which is how a
+// component ends up copy-pasted three times with the noun changed — the exact failure this site
+// exists to undo at the page level. The steps come from src/data/process.js; the markup does not
+// know or care which trade it is showing.
+//
+// WHY IT IS NOT THE HERO, WHICH IS WHERE THIS WAS FIRST DRAWN. Scrubbing footage behind the hero
+// copy is the more striking version and it is the one that cannot ship. verify-build measures
+// hero contrast and passes with fixed numbers — white 13.6:1, accent 7.1:1 — and those numbers
+// are only true because no page passes hero media. The check keys off class="hero-media"; the
+// moment a hero carries video it would start measuring an asset instead, and a scrubbing clip has
+// no single frame to measure, so hero contrast would stop being a known quantity at all. The gate
+// is the contract, so the media moved down the page rather than the gate moving out of the way.
+// A section that looks better and makes the accessibility check unverifiable is not a trade.
+//
+// MEDIA IS GATED EXACTLY LIKE Hero's `media` PROP, AND FOR THE SAME REASON. No poster, or no
+// clip, and this component renders NOTHING — no frame, no dashed placeholder, no "video coming
+// soon". A placeholder that looks deliberate is worse than an absence, because nobody chases the
+// real asset for it. A trade gets this section when there is real footage of that trade, not before.
+//
+// `id` IS REQUIRED BECAUSE A PAGE CAN NOW HOLD MORE THAN ONE. Every id in the markup derives from
+// it, so two instances cannot collide on the heading's aria-labelledby target. The script does not
+// use ids at all — see the note on it below.
+//
+// THE POSTER IS PLAIN MARKUP AND THE VIDEO IS NOT. The <img> is in the HTML and paints for
+// everyone — JS off, reduced motion, narrow screen, video blocked, a decoding error. The <video>
+// ships with preload="none" and no src at all; the script attaches the source and fades it over
+// the poster only once it has decided the scrub will actually run. Nobody downloads several MB
+// for a section they will see as a still image.
+//
+// THE STEP LIST IS REAL <ol> MARKUP in document order. It reads as a sequence with no script and
+// no video — the scrub reveals the steps, it does not supply them.
+const {
+  id,
+  media = null,
+  eyebrow = "How it goes on",
+  heading,
+  intro = null,
+  steps = [],
+} = Astro.props;
+
+// The gate. Both halves must be present: a poster to paint, and something to play. Matches
+// Hero.astro's condition deliberately — one rule for "is there real footage", not two.
+const hasMedia = Boolean(media && media.poster && (media.mp4 || media.webm));
+const show = hasMedia && steps.length > 0 && Boolean(id);
+---
+{show && (
+  <section class="pscrub" id={id} aria-labelledby={`${id}-h`}>
+    <div class="pscrub-track">
+      <div class="pscrub-stage">
+        <div class="wrap">
+          <div class="pscrub-grid">
+            <div class="pscrub-copy">
+              <span class="eyebrow">{eyebrow}</span>
+              <h2 id={`${id}-h`}>{heading}</h2>
+              {intro && <p class="pscrub-intro">{intro}</p>}
+              {/* Decorative twin of the step list — it reports the same progress the numbers
+                  already show, so a screen reader gains nothing and would just read a bar. */}
+              <div class="pscrub-rail" aria-hidden="true"><span class="pscrub-rail-fill"></span></div>
+              <ol class="pscrub-steps">
+                {steps.map((s) => (
+                  <li>
+                    <div>
+                      <h3>{s.title}</h3>
+                      <p>{s.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div class="pscrub-media">
+              <img src={media.poster} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+              {/* No <source> children and no src: the script adds one, or nobody pays for it. */}
+              <video class="pscrub-video" muted playsinline preload="none" aria-hidden="true"
+                     data-mp4={media.mp4} data-webm={media.webm}></video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+{show && (
+  <script is:inline>
+    (function () {
+      // EVERY LOOKUP IS SCOPED TO ONE TRACK, AND THIS IS THE POINT OF THE CHANGE.
+      //
+      // The previous version reached for document.getElementById("rbuildTrack") and its siblings.
+      // That was correct while the component was roofing-only and appeared once per page. It
+      // becomes a real bug the moment a page holds two: ids stop being unique, getElementById
+      // returns only the first, and the second instance silently gets no scrub, no step reveal and
+      // no rail — while its markup, video and 300vh of track all still ship. A section that costs
+      // full weight and does nothing is worse than one that was never added.
+      //
+      // So: find ALL tracks, and resolve rail, steps and video from each track rather than from
+      // the document. No ids are involved, which also means nothing here breaks if two sections on
+      // one page are given the same `id` prop by mistake.
+      var tracks = Array.prototype.slice.call(document.querySelectorAll(".pscrub-track"));
+      if (!tracks.length) return;
+
+      // Astro emits this inline script once per rendered instance, so on a two-instance page it
+      // runs twice and each run sees both tracks. The per-track flag is what stops the second run
+      // double-binding scroll listeners and appending the video sources twice.
+      tracks.forEach(function (track) {
+        if (track.dataset.psInit) return;
+        track.dataset.psInit = "1";
+        init(track);
+      });
+
+      function init(track) {
+        var video = track.querySelector(".pscrub-video");
+        var list = track.querySelector(".pscrub-steps");
+        var rail = track.querySelector(".pscrub-rail-fill");
+        if (!video || !list) return;
+
+        var steps = Array.prototype.slice.call(list.children);
+        var n = steps.length;
+        if (!n) return;
+
+        // ONE function owns every progress-derived state, so the fallback and the scroll path
+        // cannot drift apart: phase(1) is exactly the state the end of the track produces.
+        //
+        // Steps are STICKY BY CONSTRUCTION — this only ever adds .in. There is no else branch and
+        // no toggle, which is what makes scrolling back up leave the copy on screen. Writing it as
+        // `toggle(p >= i/n)` would read as the same rule and quietly un-reveal on the way up.
+        function phase(p) {
+          if (rail) rail.style.transform = "scaleX(" + p + ")";
+          for (var i = 0; i < n; i++) {
+            if (p >= i / n) steps[i].classList.add("in");
+          }
+        }
+
+        // The same three questions Hero asks before fetching video, and the same answers. Under any
+        // of these the CSS has already collapsed the track to a static section showing the poster,
+        // so returning here leaves a complete, readable block — never a pinned empty stage.
+        //
+        // NOTE THE ORDER: phase(1) runs and this returns WITHOUT arming. Nothing was ever hidden,
+        // so this is the finished state — every step at full opacity, rail full, and no animation,
+        // because the marker pop is scoped under .is-armed.
+        var okMotion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+        var okSize = window.matchMedia("(min-width: 901px)").matches;
+        var c = navigator.connection || {};
+        var okNet = !c.saveData && !/(^|-)(2g|slow-2g)$/.test(c.effectiveType || "");
+        if (!(okMotion && okSize && okNet)) {
+          phase(1);
+          return;
+        }
+
+        // Past this line the scrub is running, so the hidden state is safe to arm.
+        track.classList.add("is-armed");
+
+        ["webm", "mp4"].forEach(function (t) {
+          var src = video.getAttribute("data-" + t);
+          if (!src) return;
+          var s = document.createElement("source");
+          s.src = src; s.type = t === "webm" ? "video/webm" : "video/mp4";
+          video.appendChild(s);
+        });
+        video.load();
+
+        // Only fade the video in once there is a frame to show. Swapping it in before metadata
+        // arrives flashes a black box over a poster that was already correct.
+        video.addEventListener("loadeddata", function () { video.classList.add("ready"); });
+
+        // Scroll is read inside rAF, never in the listener. getBoundingClientRect forces layout,
+        // and doing that on every scroll event is how a decorative section makes the whole page
+        // stutter. The listener only ever sets a flag; one frame does one measurement.
+        var ticking = false;
+
+        function frame() {
+          ticking = false;
+          var r = track.getBoundingClientRect();
+          var scrollable = r.height - window.innerHeight;
+          if (scrollable <= 0) return;
+
+          // 0 when the track's top reaches the top of the viewport, 1 when its bottom does.
+          var p = Math.min(1, Math.max(0, -r.top / scrollable));
+
+          // THE SCRUB IS CONTINUOUS AND INDEPENDENT OF THE STEP SEGMENTS. The video tracks raw
+          // progress across the whole track; the steps land on even fractions of it. Driving the
+          // seek off the active step index instead would make the footage jump in n increments,
+          // which is the opposite of what the sticky track is for.
+          var d = video.duration;
+          if (d && isFinite(d)) {
+            // Clamped just inside the end: seeking to exactly duration parks some browsers on a
+            // blank frame and fires `ended` on a video meant to be scrubbed, not played.
+            try { video.currentTime = Math.min(p * d, d - 0.05); } catch (e) {}
+          }
+
+          phase(p);
+        }
+
+        function onScroll() {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(frame);
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
+        frame();   // paint the correct state for wherever the page is already scrolled to
+      }
+    })();
+  </script>
+)}

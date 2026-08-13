@@ -790,7 +790,131 @@ makes the whole page stutter.
 
 ---
 
-## 18. Checks
+## 18. Round 16 — RoofBuild generalized, and the bug that was waiting for a second instance
+
+### RoofBuild → ProcessScrub
+
+Nothing about the pattern was ever roofing. A sticky track, a continuous video scrub and a list of
+steps that arrive as you pass them describes siding, gutters or windows equally well; it was named
+for the first thing it was pointed at. That is how a component ends up copy-pasted three times with
+the noun changed — **the exact failure this site exists to undo at the page level**, reappearing one
+layer down.
+
+`.rbuild-*` → `.pscrub-*` throughout, and `id` is now a **required prop** because a page can hold
+more than one. Every id in the markup derives from it, so two instances cannot collide on the
+heading's `aria-labelledby` target.
+
+The gate is unchanged and still absolute: no poster, or nothing to play, and the component renders
+nothing.
+
+### The single-instance selector — a real bug, not a tidy-up
+
+The script reached for `document.getElementById("rbuildTrack")` and its siblings. That was correct
+while the component was roofing-only and appeared once per page. **It breaks the moment a page holds
+two:** ids stop being unique, `getElementById` returns the first, and the second instance silently
+gets no scrub, no step reveal and no rail — while its markup, video and 340vh of track all still
+ship. A section that costs full weight and does nothing is worse than one never added.
+
+Now: `querySelectorAll(".pscrub-track")`, with rail, steps and video resolved **from each track**
+rather than from the document. No ids are involved, so nothing breaks even if two sections are given
+the same `id` prop by mistake.
+
+**Verified rather than assumed:** a second instance was temporarily rendered onto a market landing
+to check what Astro actually does. It emits the inline script **once per instance** — two copies on
+a two-instance page, each seeing both tracks. Without a guard that means doubled scroll listeners and
+video sources appended twice. The per-track `dataset.psInit` flag is therefore load-bearing, not
+defensive decoration. The test instance was removed afterwards.
+
+### Steps arrive per segment and persist
+
+Each step owns `1/n` of the track and gets `.in` when progress crosses it. The class is only ever
+**added** — no toggle, no else branch — so scrolling back up cannot un-reveal. A homeowner comparing
+contractors scrolls back, and copy that vanishes on the way up is copy they cannot re-read. Previously
+all four rendered at 38% opacity from the start, so the copy was already read before any scrolling and
+only the media moved.
+
+**Scroll-snapping rejected.** It fights trackpad momentum and takes the scroll away from the reader.
+This is a section you scroll past, not a slideshow you step through. Track went 300vh → 340vh instead,
+so a quarter is long enough that two steps cannot land in one flick.
+
+### process.js, and why its copy is claim-free
+
+The sequences moved to `src/data/process.js` so the market landing and the service hubs cannot drift
+into two versions of one sequence.
+
+**That file sits outside the claims gate** — it is prose in a component, not a value `claims.js` can
+null out — which makes it the easiest place on the site to reintroduce exactly what the gate removes.
+The live site's process copy is where "25+ years", "A+ rated" and "financing available" were woven
+into ordinary sentences, and once a claim is a clause in a paragraph nothing structural strips it. So
+the rule there is narrower than the voice spec: **describe craft, assert nothing** — no timeframes, no
+prices, no warranties (not even the approved 25-year one), no ratings, accreditations or certification
+tiers.
+
+### Where the sections landed
+
+Siding and gutters onto the **service hub** lane (`[market]/[service].astro`), so six pages gain one.
+Roofing's stays on the market landing. **The footage is the gate, not the service list:** windows,
+garage doors and commercial have no clip and therefore get no section rather than a borrowed one.
+
+The gutter assets were renamed `gutter-*` → `gutters-*` to match the service key.
+
+---
+
+## 19. Round 17 — the service cards flip, and what that replaced
+
+Round 7's hover layer on `.svc` was **removed, not built on**: the translateY lift, the `::before`
+accent bar wiping across the top, and the icon's `rotate(-4deg)` all animate the element a `rotateY`
+now owns, and the `overflow:hidden` that bar needed to clip against the radius would have cropped the
+card mid-rotation. Kept: the border and shadow response, which is the card reacting rather than a
+second thing moving.
+
+**Both faces share one grid cell — they are not absolutely positioned.** The blurb comes from
+`copyFor(s.blurb, market)` and differs per market, and the back's bullet count depends on which
+claims are sourced. Absolute faces are out of flow, so the card would need a fixed height guessed
+from the longest of twelve strings, and would clip the moment a market's copy grew or a gated claim
+landed. In one cell the card is as tall as its taller face, per market, automatically.
+
+**The opacity crossfade is the failure mode, not a flourish.** `backface-visibility` only hides
+anything while a real 3D context survives, and `preserve-3d` is flattened by any ancestor that gains
+a `filter`, `will-change` or `contain`, and by several mobile browsers regardless. Flattened, the
+back face is no longer rotated away — it paints over the front as mirrored, unreadable text. Because
+opacity does the actual hiding, that degrades to a plain crossfade instead: the card still swaps
+faces and still reads. The .25s delay is half the .55s flip, so the swap lands where both faces are
+edge-on. It is commented in place because it looks redundant and someone will remove it.
+
+**The link moved to the back face only, and that is an accessibility decision.** The flip triggers on
+`:focus-within` so a keyboard can reach it. Had the front kept its link, the first Tab would land
+there, the card would flip in response, and focus would be sitting on a link the crossfade had just
+faded to `opacity:0` — focus visually lost on the element that is still active. One link per card
+also keeps the internal-link graph honest: four cards, four links, not eight to the same four URLs.
+
+**Touch and reduced motion get the same stacked card.** Under `(hover:none)` the two faces stop
+sharing a cell and become two rows, the assurances and link rendering beneath the blurb as part of
+the card. Content behind an interaction the hardware cannot perform is content that does not exist.
+Reduced motion lands in the same branch because base.css kills every transition globally under that
+query — the flip would not animate, it would snap 180deg.
+
+**Bullets come from `claims.js` via a new `cardAssurances()`.** A hover-revealed panel is exactly
+where unsourced copy collects: easy to miss in review, reads as decoration, and invisible to a gate
+that greps built HTML only until it ships. Eligibility is the three always-true claims plus the three
+ungated descriptions already accepted here; `.filter(Boolean)` makes the null rule structural rather
+than a convention. Badge tiers stay out — the GAF tier is still claimed three ways.
+
+**A cascade bug found by checking rather than by looking.** The reveal layer sets
+`transition:opacity,transform` on `[data-reveal="stagger"]>*`, which *is* `.svc`, and it loads after
+the card rules. At equal specificity the later rule wins the whole shorthand, so the card's hover
+border and shadow were silently snapping instead of easing. Scoping the card rule as
+`.svc-grid .svc` (two classes) outranks the attribute selector and makes it order-independent. The
+flip's own transition was never at risk — it lives on `.svc-flip`, which the reveal never touches.
+
+**The stagger and the flip coexist.** The reveal's transform and opacity land on `.svc`, the
+*perspective* element; `.svc-flip` carries `preserve-3d` one level below and receives no grouping
+property, so the 3D context survives a scroll reveal. Verified in the built CSS: no `will-change`,
+`filter` or `contain` anywhere on that chain.
+
+---
+
+## 20. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

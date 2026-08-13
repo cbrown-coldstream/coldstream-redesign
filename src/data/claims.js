@@ -124,6 +124,34 @@ export const heroBullets = () => {
   return out.slice(0, 3);
 };
 
+/**
+ * The service card's back-face assurances.
+ *
+ * WHY THIS LIVES HERE AND NOT IN THE COMPONENT. A back face that is revealed on hover is exactly
+ * the kind of surface that collects unsourced copy: it is easy to miss in review, it reads as
+ * decoration, and "BBB A+" or "financing available" typed into a template is invisible to the gate
+ * that greps built HTML only until it ships. Assembling it here means the same rule governs it as
+ * governs a hero — a claim that is null cannot be printed, because there is nothing to print.
+ *
+ * ELIGIBILITY IS DELIBERATELY NARROW. Only the three always-true claims from
+ * brand/voice-spec.json, plus the three ungated descriptions this repo has already accepted are
+ * backed at that level of generality — three real offices and three real crews carry "locally
+ * owned" and "our own crews", and the manufacturer badges carry "factory-certified installers".
+ * Badge TIERS stay out: the GAF tier is still claimed three different ways by three sources.
+ *
+ * Nothing gated joins this list by being added below. `.filter(Boolean)` is what makes that
+ * structural rather than a convention — a value that becomes null drops its bullet instead of
+ * rendering "null", and the card simply gets shorter.
+ */
+export const cardAssurances = () => [
+  "Licensed and insured",
+  "Free, no-obligation inspections",
+  "25-year workmanship warranty",
+  "Locally owned",
+  "Our own crews",
+  "Factory-certified installers",
+].filter(Boolean);
+
 /** The hero offer chip, or null. Hero already omits the chip when this is null. */
 export const offerChip = () => (CLAIMS.offer ? CLAIMS.offer.chip : null);
 

@@ -3,15 +3,37 @@
 // market -> hub -> service, consistently, so crawlers can map the site.
 // Homeowner grid — its heading and intro address a homeowner ("Roofing is the core. Siding,
 // windows and gutters complete the home"), so the commercial hub is not one of these cards.
+//
+// THE CARDS FLIP. Front is the service; the back carries what every job includes and the link
+// through to the hub. Both faces are always in the DOM and in the accessibility tree — the flip
+// is a presentation of content that is already there, not a way of loading it.
+//
+// THE LINK IS ON THE BACK FACE ONLY, AND THAT IS AN ACCESSIBILITY DECISION, NOT A LAYOUT ONE.
+// The flip triggers on :focus-within so a keyboard reaches it at all. Had the front kept its own
+// link, the first Tab would land on it, the card would flip in response, and focus would be
+// sitting on a link the crossfade had just faded to opacity 0 — visible focus lost, on an element
+// that is still the active one. With a single link on the back, tabbing into the card flips it and
+// the focused link is the thing that becomes visible. One link per card also keeps the tab order
+// and the internal-link graph honest: four cards, four links, not eight to the same four URLs.
+//
+// BULLETS COME FROM claims.js. Nothing here is typed as copy — see cardAssurances() for why a
+// hover-revealed panel is exactly where unsourced claims like to collect.
 import { homeownerServicesFor, serviceHref, copyFor } from "../data/markets.js";
+import { cardAssurances } from "../data/claims.js";
 const { market, eyebrow = "What we do", heading, intro } = Astro.props;
 const services = homeownerServicesFor(market);
+const assurances = cardAssurances();
 ---
 <section id="services">
   <div class="wrap">
     {/* Reveal is opt-in per section, not applied globally in the layout. A whole page set to
         animate reads as a page that is loading badly; one section that arrives as you reach it
-        reads as deliberate. This is the section it was chosen for — see DECISIONS.md. */}
+        reads as deliberate. This is the section it was chosen for — see DECISIONS.md.
+
+        The stagger's transform and opacity land on .svc, which is the PERSPECTIVE element. The
+        preserve-3d element is .svc-flip, one level below it, and neither the transform nor the
+        opacity here is a grouping property applied TO that element — so the 3D context survives
+        the reveal and a card that scrolled into view still flips. */}
     <div class="shead" data-reveal>
       <span class="eyebrow">{eyebrow}</span>
       <h2>{heading}</h2>
@@ -20,10 +42,26 @@ const services = homeownerServicesFor(market);
     <div class="svc-grid" data-reveal="stagger">
       {services.map((s) => (
         <div class="svc">
-          <div class="ic" aria-hidden="true">{s.icon}</div>
-          <h3>{s.label}</h3>
-          <p>{copyFor(s.blurb, market)}</p>
-          <a href={serviceHref(market, s)}>Explore {s.label.toLowerCase()} →</a>
+          <div class="svc-flip">
+            <div class="svc-face svc-front">
+              <div class="ic" aria-hidden="true">{s.icon}</div>
+              <h3>{s.label}</h3>
+              <p>{copyFor(s.blurb, market)}</p>
+            </div>
+            <div class="svc-face svc-back">
+              {/* Not the service name again — the front already said it, and repeating it makes a
+                  screen reader announce every card's title twice. */}
+              <p class="svc-back-h">What you get</p>
+              {assurances.length > 0 && (
+                <ul class="svc-assure">
+                  {assurances.map((a) => <li>{a}</li>)}
+                </ul>
+              )}
+              <a href={serviceHref(market, s)}>
+                Explore {s.label.toLowerCase()} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
         </div>
       ))}
     </div>

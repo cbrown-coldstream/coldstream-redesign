@@ -18,7 +18,7 @@ import BadgeRow from "../../components/BadgeRow.astro";
 import ServicesGrid from "../../components/ServicesGrid.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
-import RoofBuild from "../../components/RoofBuild.astro";
+import ProcessScrub from "../../components/ProcessScrub.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
 import Reviews from "../../components/Reviews.astro";
 import OfferBand from "../../components/OfferBand.astro";
@@ -28,6 +28,7 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, businessId } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
+import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
 import { cincinnati } from "../../data/pages/cincinnati.js";
 import { columbus } from "../../data/pages/columbus.js";
 import { stLouis } from "../../data/pages/st-louis.js";
@@ -90,19 +91,15 @@ const localBusiness = {
 
   {/* Directly after the roofing detail because it is the same subject one level deeper: that
       block says what we do to a roof, this shows how. It sits BELOW the hero, not behind it —
-      see RoofBuild.astro for why the contrast gate makes that a constraint rather than a taste
-      call. The clip is generic roofing work, so all three markets share it; when a market has
-      its own footage this is the one prop that changes. */}
-  <RoofBuild
+      see ProcessScrub.astro for why the contrast gate makes that a constraint rather than a taste
+      call. Steps and headings come from process.js so this page and the service hubs cannot drift
+      into two versions of the same sequence. The clip is generic roofing work, so all three
+      markets share it; when a market has its own footage this is the one prop that changes. */}
+  <ProcessScrub
+    id="roof-build"
     media={{ poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" }}
-    heading="How a roof actually goes on."
-    intro="Most people never watch their own roof get replaced. Here is what the crew is doing up there, in the order it happens."
-    steps={[
-      { label: "Tear-off", body: "We strip the old shingles back to the bare deck. That is when soft spots and old water damage turn up, and we show you what we find before anything covers it again." },
-      { label: "Underlayment", body: "A water-resistant layer goes down over the deck, with extra protection in the valleys and along the eaves. It is the part you never see and the part doing the quiet work." },
-      { label: "Shingles", body: "Shingles go on from the bottom up, each row lapping the one below it. Nail placement matters more than it looks — get it wrong and a roof ages years early." },
-      { label: "Ridge cap", body: "Capped shingles finish the peak and the ridge vent lets hot air leave your attic. Then we run a magnet over the lawn and the drive until the nails are gone." },
-    ]}
+    {...PROCESS_INTRO.roofing}
+    steps={PROCESS.roofing}
   />
 
   <ServedAreas market={market} heading={page.areas.heading} intro={page.areas.intro} />
