@@ -19,7 +19,7 @@ const { color: c, type: ty } = t;
 
 const kebab = (s) => s.replace(/_/g, "-");
 const lines = [
-  "/* Design tokens — GENERATED from design-systems/exteriors/tokens.json.",
+  "/* Design tokens — GENERATED from brand/tokens.json (vendored from coldstream-os).",
   "   Do not hand-edit and do not write a hex literal in a component.",
   "",
   "   That file is the brand system locked 2026-07-29, and it already drives every social",
@@ -71,7 +71,7 @@ const uiLines = [
   "/* Site UI tokens — GENERATED from site/ui-tokens.json. Do not hand-edit.",
   "",
   "   ADDITIVE TO THE BRAND PALETTE, NOT A REPLACEMENT. tokens.css above is generated from",
-  "   design-systems/exteriors/tokens.json, which render-post also reads and which is",
+  "   brand/tokens.json, vendored from coldstream-os where render-post also reads it and where it is",
   "   authoritative. This file adds only what an interface needs and a composite never does:",
   "   success, error, focus, disabled, field borders.",
   "",
