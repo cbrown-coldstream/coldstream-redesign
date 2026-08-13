@@ -8,3 +8,6 @@ public/handoff
 
 # The handoff zip is a build artefact of dist/, rebuilt on demand.
 handoff/*.zip
+
+# Local Netlify folder
+.netlify
