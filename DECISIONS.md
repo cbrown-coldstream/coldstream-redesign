@@ -703,7 +703,94 @@ Deleting it is a change to that repo, so it is not made here.
 
 ---
 
-## 17. Checks
+## 17. Round 15 — the mobile overflow, and motion that stays honest
+
+### The 390px header overflow, fixed by wrapping the row — not by shrinking the CTA
+
+Open item 4 has read "the header row does not wrap, so the H1 runs off the right edge" since the
+prototype was inherited. **The H1 was never the bug.**
+
+Below 1040px the nav is hidden, leaving `header.site .wrap` a flex row of the logo (a 240×70 file at
+`height:44px`, so ~151px wide), a spacer, and the estimate CTA (~200px). With the 22px gap and the
+wrap's 44px of padding the row's minimum content is **~417px in a 390px viewport**, and it carried
+no `flex-wrap`. So it could not break — it simply got wider than the screen and widened the document
+with it. Every section then sat on a canvas wider than the viewport, and the hero H1, being the
+widest text on the page, is where you noticed. Fixing the H1 would have moved the symptom.
+
+Under `max-width:430px` the row wraps and the logo drops to 38px with `max-width:100%` and
+`object-fit:contain`.
+
+**The CTA was not touched, though it is the widest item and the obvious lever.** It is the primary
+conversion action on every page and the element most likely to be hit by a thumb; taking it below
+the 44px minimum target to reclaim horizontal space would trade an accessibility floor for a problem
+that wrapping already solves. It keeps its size and the row wraps around it.
+
+### Reveal on view — the hidden state is armed by script, never authored in CSS
+
+`[data-reveal]` carries only a transition. The hidden state lives behind `html.cs-reveal`, and the
+inline script in `BaseLayout` is the only thing that adds that class — after confirming both that
+`IntersectionObserver` exists and that reduced motion is not requested.
+
+**The inversion is the whole design.** Authoring `opacity:0` in CSS and revealing with JS means a
+script error, a missing `IntersectionObserver`, or JS off leaves finished HTML permanently
+invisible. A marketing site that silently blanks its own copy is a worse failure than one that does
+not animate. Every early return in that script is a visitor who gets the complete page, unanimated.
+
+Transform and opacity only — both composite, where animating height or top would put layout work on
+the scroll path for decoration.
+
+**Applied to the "What we do" section and nowhere else.** A whole page set to animate reads as a
+page loading badly; one section arriving as you reach it reads as deliberate. The heading fades, the
+grid staggers its cards 70ms apart.
+
+**Rejected: a horizontal scroll track for the services.** It leaves Gutters off-screen at rest — a
+service you have to scroll sideways to discover is a service the page has decided is less important
+— and it replaces a responsive 4/2/1 grid with one row at every width, which is worse on the phones
+where most of this traffic lands.
+
+**Rejected: stacking the cards as a sequence.** Roofing, siding, windows and gutters are
+alternatives, not steps. Stacking implies an order that does not exist and would tell a visitor who
+needs gutters that they are fourth in line.
+
+**Noted, not fixed:** an older reveal system (`.reveal--armed` / `.reveal--in`) still sits in
+`base.css`, and four components carry a bare `class="reveal"` that nothing arms. It is dead code and
+predates this. Left in place rather than removed as an unrequested change — it should go.
+
+### RoofBuild — a scroll-scrubbed sequence, below the hero because the gate says so
+
+A 300vh track with a sticky stage: copy and a numbered `<ol>` left, media right, scroll position
+driving both `video.currentTime` and which steps are lit.
+
+**Rejected: scrubbing it behind the hero copy.** That is the more striking version and it is the one
+that cannot ship. `verify-build` measures hero contrast and passes with fixed numbers — white
+13.6:1, accent 7.1:1 — and those numbers are only true *because no page passes hero media*. The
+check keys off `class="hero-media"`; a hero carrying video would start measuring an asset instead,
+and a scrubbing clip has no single frame to measure, so hero contrast would stop being a known
+quantity at all. **The gate is the contract, so the media moved down the page rather than the gate
+moving out of the way.** A section that looks better and makes the accessibility check unverifiable
+is not a trade worth making.
+
+**Gated exactly like Hero's `media` prop.** No poster, or nothing to play, and the component renders
+nothing at all — no frame, no dashed placeholder, no "video coming soon". A placeholder that looks
+deliberate is worse than an absence, because nobody chases the real asset for it. It is live on the
+three market landings and absent everywhere else, which is what the build shows.
+
+**The poster is plain markup; the video is not.** The `<img>` paints for everyone. The `<video>`
+ships with `preload="none"` and no source at all — the script attaches one and fades it in only once
+it has decided the scrub will run and a frame has decoded. Nobody downloads 3.7MB for a still.
+
+**Under reduced motion or below 900px the track collapses to an ordinary static section** — poster
+only, every step at full opacity. The end state, never a blank stage: a step list dimmed to 38% with
+nothing left to drive it is unreadable, and a pinned stage with no scrub is a section that will not
+scroll away.
+
+Scroll is read inside `requestAnimationFrame` with a `{passive:true}` listener, because
+`getBoundingClientRect` forces layout and doing that per scroll event is how a decorative section
+makes the whole page stutter.
+
+---
+
+## 18. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

@@ -21,7 +21,7 @@ change to every page in it.
 | 7 | Standalone | `src/pages/about-us.astro` | 1 / 6 noindex | 20 | 548 |
 | 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 883 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 450 |
-| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 657 |
+| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 821 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 844 |
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 643 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 409 |
@@ -55,7 +55,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 603 | 10 | index |
+| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 767 | 10 | index |
 | `/cincinnati/about/` | Market about | The Coldstream Crew in Cincinnati | 836 | — | index |
 | `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 944 | 2 | index |
 | `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 637 | — | index |
@@ -78,7 +78,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 663 | 11 | index |
+| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 827 | 11 | index |
 | `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 837 | — | index |
 | `/columbus/commercial-roofing/` | Service hub | Commercial Roofing in Columbus | 944 | 2 | index |
 | `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 637 | — | index |
@@ -100,7 +100,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 705 | 11 | index |
+| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 869 | 11 | index |
 | `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 858 | — | index |
 | `/st-louis/commercial-roofing/` | Service hub | Commercial Roofing in St. Louis | 960 | 2 | index |
 | `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 656 | — | index |
@@ -175,9 +175,10 @@ these sections with this copy.
 2. One team for your whole exterior
 3. Straightforward from quote to cleanup
 4. Everything roofing, on one page
-5. Serving greater Cincinnati
-6. Common questions
-7. Ready for a free, no-pressure estimate?
+5. How a roof actually goes on.
+6. Serving greater Cincinnati
+7. Common questions
+8. Ready for a free, no-pressure estimate?
 
 **Market about** — e.g. `/cincinnati/about/`
 

@@ -105,6 +105,32 @@ nav.main a:hover{color:var(--cs-primary);border-color:var(--cs-accent)}
 header .spacer{flex:1}
 @media(max-width:1040px){nav.main{display:none}}
 
+/* MOBILE HEADER OVERFLOW — the "H1 runs off the right edge at 390px" bug, and the H1 was never
+   the cause.
+
+   DIAGNOSIS. Below 1040px the nav is hidden, which leaves .wrap as a flex row of three things:
+   the logo (a 240x70 file at height:44px, so ~151px wide), the spacer, and the estimate CTA
+   (~200px). Add the 22px gap and the wrap's 44px of horizontal padding and the row's minimum
+   content is ~417px. The row had no flex-wrap, so at 390px it could not break — it just got
+   wider than the viewport and widened the document with it. Every section then sat in a
+   scrollable canvas wider than the screen, and the hero H1, being the widest text on the page,
+   was the place you noticed it. Nothing was wrong with the H1 or the hero.
+
+   THE FIX IS TO LET THE ROW BREAK, and to take the width out of the logo, which is decoration
+   at this size and scales without losing anything.
+
+   THE CTA WAS NOT THE LEVER, though it is the widest item. It is the primary conversion action
+   on every page, and the one element on a phone most likely to be tapped by a thumb — shrinking
+   it below the 44px minimum target to save horizontal space trades an accessibility floor for a
+   layout problem that wrapping already solves. It keeps its size; the row wraps around it. */
+@media(max-width:430px){
+  header.site .wrap{flex-wrap:wrap;gap:12px 16px;padding-top:12px;padding-bottom:12px}
+  .brand img{height:38px;max-width:100%;object-fit:contain}
+  /* Explicit rather than inherited: the wrap now has a second line to give, so the button is
+     free to sit at a comfortable target size instead of being squeezed by the first. */
+  header.site .btn{min-height:44px}
+}
+
 /* ── hero ───────────────────────────────────────────────────────────────────────────────
    GROUND: mid navy, not near-black ink. The plate is the prototype's 135° blue gradient over
    #101922, and the overlay above it is the prototype's 105° left-to-right wash — darkest under
@@ -442,3 +468,119 @@ footer a{transition:color .18s ease-out}
 @media(max-width:640px){.vmodal-x{top:-42px}}
 @media (prefers-reduced-motion:reduce){.playbtn,.vmodal-x{transition:none!important}
   .playbtn:hover,.vmodal-x:hover{transform:none!important}}
+
+/* ── REVEAL ON VIEW ─────────────────────────────────────────────────────────────────────────
+   THE DEFAULT STATE IS VISIBLE, AND SCRIPT ARMS THE HIDDEN ONE. That inversion is the whole
+   design, not a detail of it.
+
+   The obvious way to write this is `[data-reveal]{opacity:0}` plus a class that turns it back on.
+   That authors a site whose content is invisible until JavaScript proves otherwise — and JS-off,
+   a CDN hiccup, a syntax error in an unrelated inline script, or an IntersectionObserver-less
+   browser all resolve to the same outcome: sections that never appear, on a page whose HTML was
+   complete the whole time. A marketing site that silently blanks its own copy is a worse failure
+   than one that simply does not animate.
+
+   So the hidden state is scoped behind html.cs-reveal, which only the script in BaseLayout adds,
+   and only after it has confirmed IntersectionObserver exists and reduced motion is not
+   requested. No script, no class, no hiding — the page is just static, which is the correct
+   fallback.
+
+   Transform and opacity only. Both are compositor-friendly; animating height or top would put
+   layout work on the scroll path for decoration.
+
+   NOTE — there is an older, inert reveal system above (.reveal--armed / .reveal--in) plus a bare
+   `class="reveal"` on four components that nothing arms. It predates this and is dead code, left
+   in place rather than removed as an unrequested change. It should go. */
+[data-reveal],[data-reveal="stagger"]>*{transition:opacity .55s ease-out,transform .55s ease-out}
+
+/* The container hides itself EXCEPT in stagger mode, where hiding the container as well as its
+   children would fade the whole block in first and then fade the children in on top of it. */
+html.cs-reveal [data-reveal]:not([data-reveal="stagger"]):not(.in){opacity:0;transform:translateY(22px)}
+html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY(22px)}
+
+/* 70ms apart. Covers eight children because the widest grid this is used on is four across and
+   two rows; past that the delay would be longer than the transition and the last card would look
+   broken rather than staggered. */
+[data-reveal="stagger"]>*:nth-child(1){transition-delay:0ms}
+[data-reveal="stagger"]>*:nth-child(2){transition-delay:70ms}
+[data-reveal="stagger"]>*:nth-child(3){transition-delay:140ms}
+[data-reveal="stagger"]>*:nth-child(4){transition-delay:210ms}
+[data-reveal="stagger"]>*:nth-child(5){transition-delay:280ms}
+[data-reveal="stagger"]>*:nth-child(6){transition-delay:350ms}
+[data-reveal="stagger"]>*:nth-child(7){transition-delay:420ms}
+[data-reveal="stagger"]>*:nth-child(8){transition-delay:490ms}
+
+/* Belt and braces. The script already returns before adding cs-reveal under reduced motion, so
+   this should be unreachable — but if the class ever arrives by another route, reduced motion
+   must still mean "visible", never "hidden with the transition switched off". */
+@media (prefers-reduced-motion:reduce){
+  html.cs-reveal [data-reveal],
+  html.cs-reveal [data-reveal="stagger"]>*{opacity:1!important;transform:none!important;transition:none!important}
+}
+
+/* ── ROOF BUILD — scroll-scrubbed sequence ──────────────────────────────────────────────────
+   IT SITS BELOW THE HERO, AND THAT PLACEMENT IS A CONSTRAINT, NOT A PREFERENCE.
+
+   The rejected alternative was scrubbing this behind the hero copy, which is the more striking
+   version and the reason it was considered first. It cannot ship. verify-build measures hero
+   contrast against the CSS ground and passes with fixed numbers — white 13.6:1, accent 7.1:1 —
+   and those numbers are only true because no page passes hero media. The gate keys off
+   class="hero-media" and would start measuring a video frame instead; worse, a scrubbing video
+   has no single frame to measure, so the honest answer is that hero contrast would stop being a
+   known quantity at all. Keeping the media below the hero keeps the gate meaningful. A section
+   that looks better and makes the accessibility check unverifiable is not a trade worth making.
+
+   THE TRACK IS TALL AND THE STAGE IS STICKY. Scroll distance through .rbuild-track is the
+   progress input; .rbuild-stage pins to the viewport and does the changing. */
+.rbuild{background:var(--cs-deep-dark);color:var(--cs-paper);padding:0}
+.rbuild-track{position:relative;height:300vh}
+.rbuild-stage{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:70px 0}
+.rbuild-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.rbuild h2{color:var(--cs-paper);font-size:clamp(1.7rem,3vw,2.4rem);
+  font-weight:var(--cs-web-display-weight-strong);margin:9px 0 14px}
+.rbuild-intro{color:color-mix(in srgb, var(--cs-paper) 78%, transparent);font-size:1.02rem;
+  line-height:1.7;margin:0 0 26px;max-width:46ch}
+
+/* Numbered steps. The list is real markup in document order — it reads as a sequence with the
+   script off, which is the point of using <ol> rather than divs and a counter. */
+.rbuild-steps{list-style:none;counter-reset:rb;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.rbuild-steps li{counter-increment:rb;display:grid;grid-template-columns:auto 1fr;gap:14px;
+  align-items:start;opacity:.38;transition:opacity .35s ease-out}
+.rbuild-steps li.on{opacity:1}
+.rbuild-steps li::before{content:counter(rb);flex:none;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;background:color-mix(in srgb, var(--cs-paper) 14%, transparent);
+  color:var(--cs-paper);font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:.92rem;transition:background-color .35s ease-out}
+.rbuild-steps li.on::before{background:var(--cs-accent)}
+.rbuild-steps h3{color:var(--cs-paper);font-size:1.06rem;margin:5px 0 3px}
+.rbuild-steps p{margin:0;font-size:.94rem;line-height:1.55;
+  color:color-mix(in srgb, var(--cs-paper) 72%, transparent)}
+
+/* Poster and video stack in the same box. The poster is plain markup and always paints; the
+   video fades over it only once the script has decided it will actually be used. */
+.rbuild-media{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;
+  background:var(--cs-deep-dark);box-shadow:0 30px 70px rgba(0,0,0,.45)}
+.rbuild-media img,.rbuild-media video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block}
+.rbuild-media video{opacity:0;transition:opacity .4s ease-out}
+.rbuild-media video.ready{opacity:1}
+
+/* THE END STATE, NEVER A BLANK STAGE. Under reduced motion or on a narrow screen the track
+   collapses to an ordinary section: no sticky, no 300vh of empty scrolling, poster only, and
+   every step at full opacity — because a step list dimmed to 38%% with nothing left to drive it
+   is unreadable, and a sticky stage with no scrub is just a section that will not scroll away. */
+@media(max-width:900px){
+  .rbuild-track{height:auto}
+  .rbuild-stage{position:static;min-height:0;padding:62px 0}
+  .rbuild-grid{grid-template-columns:1fr;gap:30px}
+  .rbuild-steps li{opacity:1}
+  .rbuild-steps li::before{background:var(--cs-accent)}
+  .rbuild-media video{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .rbuild-track{height:auto}
+  .rbuild-stage{position:static;min-height:0;padding:62px 0}
+  .rbuild-steps li{opacity:1!important;transition:none!important}
+  .rbuild-steps li::before{background:var(--cs-accent);transition:none!important}
+  .rbuild-media video{display:none}
+}

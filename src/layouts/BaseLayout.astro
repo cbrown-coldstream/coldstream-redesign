@@ -70,5 +70,31 @@ const crumbSchema = breadcrumbs.length > 1 ? {
     <slot />
   </main>
   <slot name="chrome-bottom" />
+  {/* REVEAL ON VIEW — the script ARMS the hidden state; it does not undo it.
+      base.css authors nothing as hidden. `html.cs-reveal` is what makes [data-reveal] elements
+      start invisible, and this is the only place that class is ever added — after confirming
+      both that motion is wanted and that IntersectionObserver exists to turn it back off again.
+      The alternative, hiding in CSS and revealing with JS, means a script error or a browser
+      without IO leaves finished HTML permanently invisible. Every early return below is a
+      visitor who gets the full page with no animation, which is the correct failure.
+      Inline and is:inline so it cannot be deferred behind a bundle: the class must land before
+      first paint, or the sections flash in at full opacity and then jump to hidden. */}
+  <script is:inline>
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (!("IntersectionObserver" in window)) return;
+      var els = document.querySelectorAll("[data-reveal]");
+      if (!els.length) return;
+      document.documentElement.classList.add("cs-reveal");
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add("in");
+          io.unobserve(e.target);          // one-way: nothing re-hides on scroll back up
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </body>
 </html>

@@ -9,12 +9,15 @@ const services = homeownerServicesFor(market);
 ---
 <section id="services">
   <div class="wrap">
-    <div class="shead">
+    {/* Reveal is opt-in per section, not applied globally in the layout. A whole page set to
+        animate reads as a page that is loading badly; one section that arrives as you reach it
+        reads as deliberate. This is the section it was chosen for — see DECISIONS.md. */}
+    <div class="shead" data-reveal>
       <span class="eyebrow">{eyebrow}</span>
       <h2>{heading}</h2>
       {intro && <p>{intro}</p>}
     </div>
-    <div class="svc-grid">
+    <div class="svc-grid" data-reveal="stagger">
       {services.map((s) => (
         <div class="svc">
           <div class="ic" aria-hidden="true">{s.icon}</div>

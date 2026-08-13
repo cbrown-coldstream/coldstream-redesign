@@ -1,0 +1,138 @@
+---
+// RoofBuild — a roof going on, scrubbed by scroll position.
+//
+// WHY IT IS NOT THE HERO, WHICH IS WHERE THIS WAS FIRST DRAWN. Scrubbing footage behind the hero
+// copy is the more striking version and it is the one that cannot ship. verify-build measures
+// hero contrast and passes with fixed numbers — white 13.6:1, accent 7.1:1 — and those numbers
+// are only true because no page passes hero media. The check keys off class="hero-media"; the
+// moment a hero carries video it would start measuring an asset instead, and a scrubbing clip has
+// no single frame to measure, so hero contrast would stop being a known quantity at all. The gate
+// is the contract, so the media moved down the page rather than the gate moving out of the way.
+// A section that looks better and makes the accessibility check unverifiable is not a trade.
+//
+// MEDIA IS GATED EXACTLY LIKE Hero's `media` PROP, AND FOR THE SAME REASON. No poster, or no
+// clip, and this component renders NOTHING — no frame, no dashed placeholder, no "video coming
+// soon". A placeholder that looks deliberate is worse than an absence, because nobody chases the
+// real asset for it. The section exists when there is real footage of a real roof and not before.
+//
+// THE POSTER IS PLAIN MARKUP AND THE VIDEO IS NOT. The <img> is in the HTML and paints for
+// everyone — JS off, reduced motion, narrow screen, video blocked, a decoding error. The <video>
+// ships with preload="none" and no src at all; the script attaches the source and fades it over
+// the poster only once it has decided the scrub will actually run. Nobody downloads several MB
+// for a section they will see as a still image.
+//
+// THE STEP LIST IS REAL <ol> MARKUP in document order. It reads as a sequence with no script and
+// no video — the scrub lights the steps up, it does not supply them.
+const { media = null, heading, intro = null, steps = [] } = Astro.props;
+
+// The gate. Both halves must be present: a poster to paint, and something to play. Matches
+// Hero.astro's condition deliberately — one rule for "is there real footage", not two.
+const hasMedia = Boolean(media && media.poster && (media.mp4 || media.webm));
+const show = hasMedia && steps.length > 0;
+---
+{show && (
+  <section class="rbuild" aria-labelledby="rbuild-h">
+    <div class="rbuild-track" id="rbuildTrack">
+      <div class="rbuild-stage">
+        <div class="wrap">
+          <div class="rbuild-grid">
+            <div class="rbuild-copy">
+              <span class="eyebrow">On the roof</span>
+              <h2 id="rbuild-h">{heading}</h2>
+              {intro && <p class="rbuild-intro">{intro}</p>}
+              <ol class="rbuild-steps" id="rbuildSteps">
+                {steps.map((s) => (
+                  <li>
+                    <div>
+                      <h3>{s.label}</h3>
+                      <p>{s.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div class="rbuild-media">
+              <img src={media.poster} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+              {/* No <source> children and no src: the script adds one, or nobody pays for it. */}
+              <video id="rbuildVideo" muted playsinline preload="none" aria-hidden="true"
+                     data-mp4={media.mp4} data-webm={media.webm}></video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+{show && (
+  <script is:inline>
+    (function () {
+      var track = document.getElementById("rbuildTrack");
+      var video = document.getElementById("rbuildVideo");
+      var list = document.getElementById("rbuildSteps");
+      if (!track || !video || !list) return;
+
+      var steps = Array.prototype.slice.call(list.children);
+
+      // The same three questions Hero asks before fetching video, and the same answers. Under any
+      // of these the CSS has already collapsed the track to a static section showing the poster,
+      // so returning here leaves a complete, readable block — never a pinned empty stage.
+      var okMotion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+      var okSize = window.matchMedia("(min-width: 901px)").matches;
+      var c = navigator.connection || {};
+      var okNet = !c.saveData && !/(^|-)(2g|slow-2g)$/.test(c.effectiveType || "");
+      if (!(okMotion && okSize && okNet)) {
+        steps.forEach(function (li) { li.classList.add("on"); });
+        return;
+      }
+
+      ["webm", "mp4"].forEach(function (t) {
+        var src = video.getAttribute("data-" + t);
+        if (!src) return;
+        var s = document.createElement("source");
+        s.src = src; s.type = t === "webm" ? "video/webm" : "video/mp4";
+        video.appendChild(s);
+      });
+      video.load();
+
+      // Only fade the video in once there is a frame to show. Swapping it in before metadata
+      // arrives flashes a black box over a poster that was already correct.
+      video.addEventListener("loadeddata", function () { video.classList.add("ready"); });
+
+      // Scroll is read inside rAF, never in the listener. getBoundingClientRect forces layout, and
+      // doing that on every scroll event is how a decorative section makes the whole page stutter.
+      // The listener only ever sets a flag; one frame does one measurement.
+      var ticking = false;
+
+      function frame() {
+        ticking = false;
+        var r = track.getBoundingClientRect();
+        var scrollable = r.height - window.innerHeight;
+        if (scrollable <= 0) return;
+
+        // 0 when the track's top reaches the top of the viewport, 1 when its bottom does.
+        var p = Math.min(1, Math.max(0, -r.top / scrollable));
+
+        var d = video.duration;
+        if (d && isFinite(d)) {
+          // Clamped just inside the end: seeking to exactly duration parks some browsers on a
+          // blank frame and fires `ended` on a video that is supposed to be scrubbed, not played.
+          try { video.currentTime = Math.min(p * d, d - 0.05); } catch (e) {}
+        }
+
+        var active = Math.min(steps.length - 1, Math.floor(p * steps.length));
+        steps.forEach(function (li, i) { li.classList.toggle("on", i <= active); });
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      frame();   // paint the correct state for wherever the page is already scrolled to
+    })();
+  </script>
+)}
