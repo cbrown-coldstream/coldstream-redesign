@@ -53,10 +53,16 @@ const h1 = svc.h1(market);
 const lead = copyFor(svc.lead, market);
 
 // THE FOOTAGE IS THE GATE, NOT THE SERVICE LIST. A trade appears here only once there is a real
-// clip of that trade; roofing's lives on the market landing, and windows, garage doors and
-// commercial have no footage, so they get no section rather than a borrowed one. Adding a trade is
-// a clip, a poster and a line in this map — ProcessScrub itself renders nothing without all of it.
+// clip of that trade; windows, garage doors and commercial have none, so they get no section
+// rather than a borrowed one. Adding a trade is a clip, a poster and a line in this map —
+// ProcessScrub itself renders nothing without all of it.
+//
+// ROOFING JOINED THIS MAP when the scrub moved off the market landing. It was there because
+// roofing is the core of the business, but a market landing has to carry four trades and route to
+// all of them, and 360vh of sticky track about one of them made roofing the middle of the page.
+// Here it is the subject of the page it sits on.
 const PROCESS_MEDIA = {
+  roofing: { poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" },
   siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
   gutters: { poster: "/video/gutters-build-poster.jpg", mp4: "/video/gutters-build-scrub.mp4" },
 };

@@ -146,7 +146,13 @@ header .spacer{flex:1}
    either gradient — the wash reads as a scrim the moment there is something behind it. */
 .hero{position:relative;background:var(--cs-web-hero-ground),var(--cs-web-hero-base);color:var(--cs-paper);overflow:hidden;isolation:isolate}
 .hero .hero-media{position:absolute;inset:0;z-index:-2}
-.hero .hero-media img,.hero .hero-media video{width:100%;height:100%;object-fit:cover;display:block}
+/* Poster and video occupy the same box: the poster is plain markup that always paints, and the
+   video sits over it and fades in only once the script has attached a source and a frame has
+   decoded. Both are absolutely positioned so the second one does not stack below the first. */
+.hero .hero-media img,.hero .hero-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero .hero-media video{opacity:0;transition:opacity .4s ease-out}
+.hero .hero-media video.ready{opacity:1}
+@media (prefers-reduced-motion:reduce){.hero .hero-media video{display:none}}
 .hero::after{
   content:"";position:absolute;inset:0;z-index:-1;
   background:var(--cs-web-hero-scrim);
@@ -717,4 +723,134 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
     transform:none!important}
   .pscrub-rail-fill{transform:scaleX(1)!important}
   .pscrub-media video{display:none}
+}
+
+/* ── MARKET CHOOSER — national pages ─────────────────────────────────────────────────────────
+   Sits directly under the badge row, which is the first place a visitor is deciding whether this
+   company covers them. Static output cannot detect an area, so the page asks instead of guessing;
+   see MarketChooser.astro for why that is a constraint rather than a preference. */
+.mchoose{background:var(--cs-surface);border-bottom:1px solid var(--cs-line)}
+.mchoose .shead{margin-bottom:26px}
+.mchoose-grid{list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mchoose-grid>li{display:flex;flex-direction:column;gap:8px}
+.mchoose-card{display:flex;flex-direction:column;gap:5px;flex:1;
+  background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-primary);
+  border-radius:12px;padding:20px 22px;text-decoration:none;
+  transition:transform .18s ease-out,border-color .18s ease-out,box-shadow .18s ease-out}
+.mchoose-card:hover,.mchoose-card:focus-visible{transform:translateY(-2px);border-color:var(--cs-primary);
+  box-shadow:0 14px 30px color-mix(in srgb, var(--cs-primary) 16%, transparent)}
+.mchoose-card strong{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:1.3rem;color:var(--cs-text);letter-spacing:var(--cs-web-display-ls)}
+.mchoose-city{font-size:.9rem;color:var(--cs-text-muted)}
+.mchoose-phone{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:1.12rem;color:var(--cs-primary-deep);margin-top:2px}
+.mchoose-go{margin-top:auto;padding-top:10px;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight);font-size:.92rem;color:var(--cs-primary)}
+.mchoose-card:hover .mchoose-go{color:var(--cs-accent)}
+/* The call link is a SEPARATE target from the card. A card that both navigates and dials is a card
+   that dials by accident on a phone. */
+.mchoose-tel{display:block;text-align:center;padding:11px 14px;min-height:44px;
+  border:1px solid var(--cs-line);border-radius:10px;background:var(--cs-paper);
+  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;
+  color:var(--cs-primary-deep);text-decoration:none;
+  transition:background-color .18s ease-out,border-color .18s ease-out}
+.mchoose-tel:hover,.mchoose-tel:focus-visible{background:var(--cs-surface);border-color:var(--cs-primary)}
+
+/* The returning-visitor hint. `hidden` in the markup, unhidden by an inline script during parse,
+   so it costs no layout shift. */
+.mchoose-hint{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 20px;
+  background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-accent);
+  border-radius:10px;padding:12px 16px;font-size:.95rem}
+.mchoose-hint[hidden]{display:none}
+.mchoose-hint span{font-weight:600}
+.mchoose-hint a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+  color:var(--cs-primary-deep)}
+.mchoose-hint button{margin-left:auto;background:none;border:none;cursor:pointer;
+  font-family:var(--cs-web-body);font-size:.86rem;color:var(--cs-text-muted);text-decoration:underline;
+  padding:6px 4px;min-height:44px}
+.mchoose-hint button:hover{color:var(--cs-text)}
+@media(max-width:820px){.mchoose-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){
+  .mchoose-card{transition:none!important}
+  .mchoose-card:hover{transform:none!important}
+}
+
+/* ── TRUST BAND — national page, directly under the hero ─────────────────────────────────────
+   Three claims, and only ever the three in claims.js ALWAYS_TRUE. It is a band rather than cards
+   because it is a statement of fact, not a sales section: one line, read in a second, then out of
+   the way. */
+.trustband{background:var(--cs-deep-dark);color:var(--cs-paper);padding:0}
+.trustband .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:10px 30px;padding:16px 22px}
+.trustband-h{margin:0;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:.98rem;color:var(--cs-paper)}
+.trustband ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 26px}
+.trustband li{display:flex;align-items:center;gap:9px;font-size:.94rem;font-weight:600;
+  color:color-mix(in srgb, var(--cs-paper) 88%, transparent)}
+.trustband li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;
+  background:var(--cs-web-hero-accent)}
+@media(max-width:640px){
+  .trustband .wrap{flex-direction:column;align-items:flex-start;gap:10px}
+  .trustband ul{flex-direction:column;gap:8px}
+}
+
+/* ── REVIEW QUOTES INSIDE THE WHY CARDS ──────────────────────────────────────────────────────
+   Renders only when a real, linked, attributed review matched that card's theme. Nothing here has
+   an empty state because there is no empty state: no match means no figure element at all, and the
+   card is exactly the card it was. See WhyTrust.astro. */
+.wcard-quote{margin:14px 0 0;padding:13px 15px;border-radius:10px;
+  background:var(--cs-surface);border-left:3px solid var(--cs-primary)}
+.wcard-quote blockquote{margin:0;font-size:.92rem;line-height:1.55;color:var(--cs-text)}
+.wcard-quote blockquote::before{content:"\201C"}
+.wcard-quote blockquote::after{content:"\201D"}
+.wcard-quote figcaption{margin-top:8px;font-size:.82rem;color:var(--cs-text-muted);
+  display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.wcard-quote figcaption a{color:var(--cs-primary-deep);font-weight:600}
+
+/* The aggregate line. Gated on the profile's own rating AND count AND link together — see
+   REVIEW_PROFILES. It has never rendered. */
+.why-agg{text-align:center;margin:0 0 24px;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight);font-size:1.02rem}
+.why-agg a{color:var(--cs-primary-deep)}
+
+/* ── SERVED AREAS — grouped ──────────────────────────────────────────────────────────────────
+   The list answers "do you work where I live", so it is read by hunting for one name. Groups make
+   that a scan of one bucket instead of seventy-seven chips in a row. See ServedAreas.astro. */
+.areas-lede{font-size:1.05rem;color:var(--cs-text)}
+.areas-group{margin:0 0 26px}
+.areas-group h3{font-size:1.08rem;margin:0 0 4px}
+.areas-blurb{margin:0 0 12px;font-size:.92rem;color:var(--cs-text-muted);max-width:70ch}
+.areas-ask{margin:6px 0 0;padding:16px 18px;border-radius:11px;text-align:center;
+  background:var(--cs-paper);border:1px solid var(--cs-line);font-size:1rem}
+.areas-ask a{display:inline-block;margin:0 .35em;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight-strong);color:var(--cs-primary-deep);
+  text-decoration:none;min-height:44px;line-height:44px}
+.areas-ask a:hover,.areas-ask a:focus-visible{color:var(--cs-accent);text-decoration:underline}
+
+/* ── FAQ DISCLOSURE MOTION ───────────────────────────────────────────────────────────────────
+   TRANSFORM AND OPACITY ONLY — the answer slides and fades, it does not animate its height.
+   Height (or max-height) animation runs layout on every frame of every open, and on a page with
+   eight of these the jank is visible on a mid-range phone. The trade is that the row below moves
+   instantly while the answer eases in over it, which reads as intentional and costs nothing.
+
+   The panel cannot be animated on <details> alone, because the browser sets `display:none` on the
+   contents when closed and there is nothing to transition from. The inner .a is the animated
+   element and the [open] state is what releases it. */
+.q>.a{overflow:hidden}
+.q[open]>.a{animation:q-open .32s cubic-bezier(.2,.7,.2,1)}
+@keyframes q-open{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* The marker: a "+" that rotates to an "×". Rotation is a transform, so it composites. */
+.q .pm{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;
+  background:color-mix(in srgb, var(--cs-primary) 10%, transparent);color:var(--cs-primary-deep);
+  font-weight:800;line-height:1;transition:transform .25s cubic-bezier(.2,.7,.2,1),background-color .2s ease-out}
+.q[open] .pm{transform:rotate(45deg);background:var(--cs-primary);color:var(--cs-paper)}
+
+/* REDUCED MOTION: no animation, all behaviour intact. The disclosure still opens and closes and
+   the marker still turns into an ×, it just gets there without travelling. */
+@media (prefers-reduced-motion:reduce){
+  .q[open]>.a{animation:none!important}
+  .q .pm{transition:none!important}
+  .q[open] .pm{transform:rotate(45deg)}
 }

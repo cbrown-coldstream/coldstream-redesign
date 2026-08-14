@@ -116,10 +116,16 @@ export const national = {
 
   // ROOFING DEEP-DIVE. The market landing carries one of these under its services grid; the home
   // page now carries the same block, written nationally. Sections of the roofing page, not pages.
+  // THE HEADING AND INTRO USED TO EXPLAIN THE SITE TO THE READER. They said "Everything roofing,
+  // on one page" over "Sections of the roofing conversation — not thirteen separate pages saying
+  // the same thing", which is the consolidation rationale — true, load-bearing for the rebuild, and
+  // of no interest to a homeowner who never saw the thirteen pages and does not know a page count
+  // was ever a question. Internal reasoning belongs in this comment and in DECISIONS.md, not in the
+  // copy. It now answers what someone with a stained ceiling actually came to find out.
   roofing: {
     eyebrow: "Roofing",
-    heading: "Everything roofing, on one page",
-    intro: "Sections of the roofing conversation — not thirteen separate pages saying the same thing.",
+    heading: "Not sure what your roof needs?",
+    intro: "Most people call us because of a stain on a ceiling or a storm that took shingles off. We come out, get on the roof, and tell you whether it is a repair or a replacement — free, and in writing.",
     cards: [
       { title: "Roof Replacement", body: "Full tear-off and installation, sized and priced after someone has walked the roof rather than looked at a satellite image." },
       { title: "Roof Repair", body: "Leaks, emergency call-outs, storm, hail and wind damage — one repair conversation rather than five separate ones." },
@@ -140,12 +146,12 @@ export const national = {
   why: {
     heading: "Why homeowners keep calling us back",
     cards: [
-      { title: "Our own crews, never subcontracted", body: "Each market has its own office and its own crew. The people who quote your job are the people who turn up to do it, and they are the people you call afterwards." },
-      { title: "A free inspection, usually within a day", body: "We aim to have someone at your property within about 24 hours of your call. On the roof or along the elevation — not a look from the driveway or a satellite image." },
-      { title: "Honest pricing, in writing, first", body: "A written quote with the scope, the materials and the number, before anything begins. No deposit to book an inspection and no pressure afterwards." },
-      { title: "We deal with your insurer", body: "For storm damage we inspect, photograph and document the damage the way an adjuster needs it, then talk to them directly so you are not relaying messages between two parties who do this for a living." },
-      { title: "Materials chosen for this climate", body: "Architectural asphalt, impact-resistant shingles where hail is a recurring problem, TPO and EPDM on low-slope, fiber cement and vinyl siding. We quote what the building needs." },
-      { title: "A 25-year workmanship warranty", body: "Materials carry their manufacturer warranty. Our workmanship carries ours, and if something is wrong you call the same office that did the job." },
+      { title: "Our own crews, never subcontracted", match: ["crew","subcontract","same team","their own"], body: "Each market has its own office and its own crew. The people who quote your job are the people who turn up to do it, and they are the people you call afterwards." },
+      { title: "A free inspection, usually within a day", match: ["inspection","inspect","came out","next day","same day","quick"], body: "We aim to have someone at your property within about 24 hours of your call. On the roof or along the elevation — not a look from the driveway or a satellite image." },
+      { title: "Honest pricing, in writing, first", match: ["price","pricing","quote","estimate","honest","upfront","no pressure"], body: "A written quote with the scope, the materials and the number, before anything begins. No deposit to book an inspection and no pressure afterwards." },
+      { title: "We deal with your insurer", match: ["insurance","insurer","adjuster","claim"], body: "For storm damage we inspect, photograph and document the damage the way an adjuster needs it, then talk to them directly so you are not relaying messages between two parties who do this for a living." },
+      { title: "Materials chosen for this climate", match: ["shingle","material","hail","storm","tpo","siding"], body: "Architectural asphalt, impact-resistant shingles where hail is a recurring problem, TPO and EPDM on low-slope, fiber cement and vinyl siding. We quote what the building needs." },
+      { title: "A 25-year workmanship warranty", match: ["warranty","stood behind","came back","fixed it"], body: "Materials carry their manufacturer warranty. Our workmanship carries ours, and if something is wrong you call the same office that did the job." },
     ],
   },
 

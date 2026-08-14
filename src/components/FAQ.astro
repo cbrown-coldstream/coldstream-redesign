@@ -18,9 +18,15 @@ const schema = {
 ---
 <section>
   <div class="wrap">
-    <div class="shead"><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2></div>
-    <div class="faq">
+    <div class="shead" data-reveal><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2></div>
+    {/* Reuses the existing stagger from base.css — the rows arrive 70ms apart as the section comes
+        into view. It is opt-in per section and this is one, so no new mechanism is added. */}
+    <div class="faq" data-reveal="stagger">
       {items.map((i) => (
+        /* STILL NATIVE <details>/<summary>. The disclosure works with JS off, is keyboard-operable
+           for free, and reports its own expanded state to assistive tech — none of which a div with
+           a click handler and aria-expanded gets without being rebuilt by hand. The animation below
+           is decoration layered on top of that; it does not carry the behaviour. */
         <details class="q">
           <summary>{i.q}<span class="pm" aria-hidden="true">+</span></summary>
           <div class="a"><p>{i.a}</p></div>

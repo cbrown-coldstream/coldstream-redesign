@@ -1,13 +1,83 @@
 ---
-const { eyebrow = "Why homeowners choose us", heading, cards = [] } = Astro.props;
+// THE EYEBROW IS OPTIONAL, NOT REMOVED. Pass `eyebrow={null}` to suppress it on a page whose
+// heading already says the same thing — the national home page's "Why homeowners keep calling us
+// back" is directly under it, so the default was a line of accent orange restating the sentence
+// below it. Everywhere else this renders the heading is different ("What we hold ourselves to",
+// "Straightforward from quote to cleanup") and the eyebrow still does work, which is why the
+// default stays rather than every caller having to opt back in.
+//
+// ── REVIEWS: BUILT NOW, RENDERING NOTHING UNTIL THE PULL LANDS ───────────────────────────────
+//
+// Each card can carry one real customer sentence that speaks to that card's theme. None do today,
+// because TESTIMONIALS is empty in every market and this component invents nothing to fill it.
+//
+// THE SECTION IS DESIGNED TO READ COMPLETE WITHOUT THEM. Six cards, each a plain statement of how
+// the work runs — which is what ships today and what a page with no reviews should look like. A
+// quote is additive: it appears under a card when a real review happens to talk about that theme,
+// and the card is unchanged when none does. There is no empty quote slot, no "review coming soon",
+// no faded placeholder holding space for something that does not exist.
+//
+// WHY THAT MATTERS MORE HERE THAN ELSEWHERE. The prototype shipped three invented testimonials —
+// "Sarah M.", "Dave R.", "Priya K." — under a heading claiming they were local homeowners, and the
+// same three appeared on two different pages. Fabricated endorsements are an FTC problem rather
+// than a copy nit, and this is the surface where inventing one would be easiest and least noticed.
+//
+// AGGREGATE FIGURES ARE A SEPARATE GATE. A star row or a review count may only come from
+// REVIEW_PROFILES — the profile's own numbers, read off the profile. The number of reviews we chose
+// to publish is not the number the profile holds, and neither one may be guessed.
+import { matchReviewsToCards, REVIEW_PROFILES } from "../data/claims.js";
+const {
+  eyebrow = "Why homeowners choose us",
+  heading,
+  cards = [],
+  // Real, validated reviews for this market. Empty is the correct state today.
+  reviews = [],
+  // Market slug, only used to look up that market's profile figures. No slug, no aggregate.
+  marketSlug = null,
+} = Astro.props;
+
+const quotes = matchReviewsToCards(reviews, cards);
+
+// Both fields must be present AND sourced. `profile.rating` alone is not a rating — a rating with
+// no count and no link is a number nobody can check.
+const profile = marketSlug ? REVIEW_PROFILES[marketSlug] : null;
+const showAggregate = Boolean(
+  profile && typeof profile.rating === "number" && Number.isInteger(profile.count) && profile.profileUrl
+);
 ---
 <section class="mist">
   <div class="wrap">
-    <div class="shead"><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2></div>
+    <div class="shead">{eyebrow && <span class="eyebrow">{eyebrow}</span>}<h2>{heading}</h2></div>
+
+    {showAggregate && (
+      <p class="why-agg">
+        <a href={profile.profileUrl} rel="noopener">
+          {profile.rating} average from {profile.count} Google reviews
+        </a>
+      </p>
+    )}
+
     <div class="why">
-      {cards.map((c) => (
-        <div class="wcard"><h3>{c.title}</h3><p>{c.body}</p></div>
-      ))}
+      {cards.map((c, i) => {
+        const q = quotes.get(i);
+        return (
+          <div class="wcard">
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+            {q && (
+              /* Verbatim, attributed, and linked to the review on Google — the three rules in
+                 contracts.js. A review we cannot link to does not appear. */
+              <figure class="wcard-quote">
+                <blockquote>{q.quote}</blockquote>
+                <figcaption>
+                  {q.name}
+                  <a href={q.permalink} rel="noopener">on Google</a>
+                </figcaption>
+              </figure>
+            )}
+          </div>
+        );
+      })}
     </div>
   </div>
 </section>

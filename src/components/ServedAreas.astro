@@ -4,6 +4,29 @@
 // survive. Google finds pages by following links, so this is what keeps local coverage visible
 // after the consolidation; without it the location pages are orphans.
 //
+// ── REWRITTEN AROUND THE ONE QUESTION IT IS ACTUALLY ASKED ───────────────────────────────────
+//
+// A homeowner arrives here to settle one thing: do you work where I live. The previous version
+// answered that with an undifferentiated run of up to 77 chips, which is a list a person scans by
+// hunting rather than by reading — and if their town is not in it, the page says nothing at all.
+//
+// Three changes, all in service of that question:
+//
+//   1. A PLAIN SENTENCE FIRST, naming the metro and the office the crews leave from. "We work
+//      across Greater Cincinnati, out of our Milford office" answers most visitors before they
+//      read a single town.
+//   2. GROUPED, NOT ONE RUN. Towns are bucketed by the market's own areas — the same east/west or
+//      south/west split that already exists in locations.js and that produced the location pages.
+//      Someone looking for Loveland scans one group of seventeen, not a wall of seventy-seven.
+//      Columbus has no areas by design (a ring city; any two-way cut puts Westerville and Grove
+//      City together), so it renders as one honest group rather than an invented split.
+//   3. A LINE FOR THE TOWN THAT IS NOT LISTED. The list can never be complete — it is the towns
+//      with confirmed work, not the limit of where a crew will drive. Without this the page reads
+//      as a boundary, and the answer to "my town is missing" becomes "they must not cover me".
+//
+// NO COVERAGE CLAIM BEYOND THE DATA. The groups name towns that are in markets.js and nowhere
+// else, and the closing line invites a phone call rather than asserting a wider radius.
+//
 // A TOWN LINKS ONLY WHERE A LOCATION PAGE ACTUALLY EXISTS. Everything else is plain text.
 // Several Columbus and St. Louis entries on the live site currently link to "#", which is worse
 // than no link for both a crawler and a person — it is the precise failure this avoids.
@@ -11,24 +34,81 @@
 // Routing comes from data/locations.js, not from a second hand-maintained map. `areaForTown`
 // returns a slug only when that area has a page that actually built — which now requires real
 // job proof behind it — so this component cannot emit a link to a page that does not exist.
-import { areaForTown } from "../data/locations.js";
+import { areaForTown, LOCATIONS } from "../data/locations.js";
 const { market, eyebrow = "Where we work", heading, intro } = Astro.props;
-const areas = market.servedAreas ?? [];
+const towns = market.servedAreas ?? [];
+
+// Group by the market's own area definitions. A town in no area still appears — it drops into a
+// final group rather than disappearing, because the list naming every town is the whole point.
+const defs = LOCATIONS[market.slug]?.areas ?? {};
+const grouped = [];
+const placed = new Set();
+for (const def of Object.values(defs)) {
+  const inThis = towns.filter((t) => (def.towns ?? []).includes(t));
+  if (!inThis.length) continue;
+  inThis.forEach((t) => placed.add(t));
+  grouped.push({ name: def.name, blurb: def.blurb ?? null, towns: inThis });
+}
+const rest = towns.filter((t) => !placed.has(t));
+if (rest.length) {
+  // Named honestly rather than "Other": for Columbus this IS the whole market, and calling the
+  // only group "other" would read as an afterthought covering 26 towns.
+  const metro = LOCATIONS[market.slug]?.metro;
+  grouped.push({
+    name: grouped.length === 0 ? (metro?.name ?? `Across ${market.region}`) : "Also serving",
+    blurb: grouped.length === 0 ? (metro?.blurb ?? null) : null,
+    towns: rest,
+  });
+}
+
+// Resolved here rather than in the template so the null-vs-"" rule is written once.
+//
+// areaForTown returns a slug, "" for a market with ONE metro locations page, or null for a town
+// with nowhere to point. "" is FALSY, so it has to be tested against null — getting that wrong
+// silently unlinked all 26 Columbus towns. `href` is null when the town should be plain text.
+const chipFor = (town) => {
+  const area = areaForTown(market.slug, town);
+  return {
+    town,
+    href: area === null ? null : `/${market.slug}/locations/${area}${area ? "/" : ""}`,
+  };
+};
 ---
 <section class="mist" id="areas">
   <div class="wrap">
-    <div class="shead"><span class="eyebrow">{eyebrow}</span><h2>{heading}</h2>{intro && <p>{intro}</p>}</div>
-    {areas.length > 0 ? (
-      <nav class="areas" aria-label={`Areas served in ${market.name}`}>
-        {areas.map((a) => {
-          // areaForTown returns a slug, "" for a market with ONE metro locations page, or null
-          // for a town with nowhere to point. "" is falsy, so it has to be tested against null —
-          // getting that wrong silently unlinked all 26 Columbus towns.
-          const area = areaForTown(market.slug, a);
-          if (area === null) return <span class="area-text">{a}</span>;
-          return <a href={`/${market.slug}/locations/${area}${area ? "/" : ""}`}>{a}</a>;
-        })}
-      </nav>
+    <div class="shead">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{heading}</h2>
+      {/* The plain answer, before any list. Both values come from markets.js. */}
+      <p class="areas-lede">
+        We work across {market.region}, out of our {market.office.city} office.
+        {towns.length > 0 && <> Here are the towns our crews are in most often.</>}
+      </p>
+      {intro && <p>{intro}</p>}
+    </div>
+
+    {grouped.length > 0 ? (
+      <>
+        {grouped.map((g) => (
+          <div class="areas-group">
+            <h3>{g.name}</h3>
+            {g.blurb && <p class="areas-blurb">{g.blurb}</p>}
+            <nav class="areas" aria-label={`${g.name} — areas served`}>
+              {g.towns.map((t) => chipFor(t)).map((c) => (
+                c.href ? <a href={c.href}>{c.town}</a> : <span class="area-text">{c.town}</span>
+              ))}
+            </nav>
+          </div>
+        ))}
+
+        {/* THE LIST IS NOT THE BOUNDARY. Phone comes from markets.js, and telHref is derived from
+            the displayed number in that file so the two cannot disagree. */}
+        <p class="areas-ask">
+          Don't see your town? It is probably still a yes — call
+          <a href={market.telHref}>{market.phone}</a>
+          and we will tell you straight away.
+        </p>
+      </>
     ) : (
       <p style="text-align:center;color:var(--cs-text-muted)">Service-area list pending for this market.</p>
     )}

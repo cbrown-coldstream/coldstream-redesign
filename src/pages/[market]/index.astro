@@ -18,7 +18,6 @@ import BadgeRow from "../../components/BadgeRow.astro";
 import ServicesGrid from "../../components/ServicesGrid.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
-import ProcessScrub from "../../components/ProcessScrub.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
 import Reviews from "../../components/Reviews.astro";
 import OfferBand from "../../components/OfferBand.astro";
@@ -28,7 +27,6 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, businessId } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
-import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
 import { cincinnati } from "../../data/pages/cincinnati.js";
 import { columbus } from "../../data/pages/columbus.js";
 import { stLouis } from "../../data/pages/st-louis.js";
@@ -86,23 +84,21 @@ const localBusiness = {
   <BadgeRow aboveTheFold={true} />
 
   <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
-  <WhyTrust heading={page.why.heading} cards={page.why.cards} />
+  <WhyTrust heading={page.why.heading} cards={page.why.cards}
+            reviews={TESTIMONIALS[slug]} marketSlug={slug} />
   <ServiceDetail id="roofing" market={market} {...page.roofing} />
 
-  {/* Directly after the roofing detail because it is the same subject one level deeper: that
-      block says what we do to a roof, this shows how. It sits BELOW the hero, not behind it —
-      see ProcessScrub.astro for why the contrast gate makes that a constraint rather than a taste
-      call. Steps and headings come from process.js so this page and the service hubs cannot drift
-      into two versions of the same sequence. The clip is generic roofing work, so all three
-      markets share it; when a market has its own footage this is the one prop that changes. */}
-  <ProcessScrub
-    id="roof-build"
-    media={{ poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" }}
-    {...PROCESS_INTRO.roofing}
-    steps={PROCESS.roofing}
-  />
+  {/* THE ROOFING SCRUB MOVED TO /[market]/roofing/ — it is not on this page any more.
+      A market landing has to cover four trades and route to all of them; 360vh of sticky track
+      about one of them made roofing the whole middle of the page and pushed siding, windows and
+      gutters below it. On the roofing hub the same section is the subject of the page rather than
+      a detour from it. See [market]/[service].astro, where it is now driven by PROCESS_MEDIA. */}
 
-  <ServedAreas market={market} heading={page.areas.heading} intro={page.areas.intro} />
+  {/* `intro` is deliberately not passed: all three markets said "Based at our <office> office —
+      serving these communities", which is what the component's own lede now derives from
+      markets.js. Two sentences saying it was one more than the section needed, and the derived one
+      cannot drift from the office data. The prop still exists for callers with something to add. */}
+  <ServedAreas market={market} heading={page.areas.heading} />
   <Reviews heading={page.reviews.heading} intro={page.reviews.intro} reviews={TESTIMONIALS[slug]} />
   <OfferBand />
   <FAQ items={page.faq} />

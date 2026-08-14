@@ -42,6 +42,33 @@ const {
   // deliberate one — a viewer chooses to watch it, with sound and controls.
   videoModal = false,
 } = Astro.props;
+// ── THE MEDIA GATE, AND THE CONTRAST NUMBERS THAT DEPEND ON IT ───────────────────────────────
+//
+// VIDEO NEEDS A POSTER *AND* A SOURCE. Neither half alone renders anything — same rule as
+// ProcessScrub's media prop, and for the same reason: a hero with a source and no poster shows a
+// black rectangle until the first frame decodes, and a poster with no source is a still pretending
+// to be a video. With neither, the hero paints the CSS gradient ground exactly as it does today.
+// No placeholder clip, no grey box, no dashed frame.
+//
+// ⚠ READ THIS BEFORE ENABLING VIDEO ON ANY PAGE.
+//
+// scripts/verify-build.mjs asserts hero contrast with FIXED NUMBERS — white at 13.6:1 and the
+// accent phrase at 7.1:1. Those numbers are computed against the CSS gradient ground in
+// ui-tokens.json, and they are only valid BECAUSE NO PAGE PASSES MEDIA. The gate keys off
+// class="hero-media": pass a still and it measures that file instead; pass a video and there is no
+// single frame to measure at all.
+//
+// So when real footage arrives, the contrast check must be RE-DERIVED AGAINST ACTUAL FRAMES, not
+// assumed to carry over. A scrim tuned on a smooth navy gradient can fail completely on footage —
+// a bright sky behind white headline text is the obvious case, and it is exactly the frame a
+// roofing video is likely to contain. Sample frames across the clip, take the worst, and if it
+// does not clear AA the fix is a heavier scrim or different footage, not a looser gate.
+//
+// NOTHING PASSES `media` TODAY. This is capability, deliberately unused.
+const hasVideo = Boolean(media && media.poster && (media.mp4 || media.webm));
+const hasStill = Boolean(media && media.img);
+const showMedia = hasVideo || hasStill;
+
 const reviews = market.reviews ?? null;
 const bbb = CLAIMS.bbb;
 const words = headline.trim().split(/\s+/);
@@ -49,12 +76,24 @@ const head = words.slice(0, -1).join(" ");
 const last = words[words.length - 1];
 ---
 <section class="hero" id="quote">
-  {media && (
+  {showMedia && (
     <div class="hero-media" aria-hidden="true">
-      {media.mp4 || media.webm
-        ? <video id="heroVideo" poster={media.poster} muted loop playsinline preload="none"
+      {hasVideo ? (
+        <>
+          {/* THE POSTER IS A PLAIN <img>, NOT THE VIDEO'S poster ATTRIBUTE. As an attribute it is
+              only shown by browsers that got as far as laying the video out; as markup it paints
+              for everyone — JS off, reduced motion, a blocked or failed video, a decode error —
+              and it is the LCP candidate rather than a frame nobody has downloaded yet. */}
+          <img src={media.poster} alt="" width="1600" height="900" fetchpriority="high" />
+          {/* No src and no <source> children: the inline script below attaches one only after it
+              has decided the video will be used. Under prefers-reduced-motion it never does, so
+              reduced motion means poster only — the file is not even fetched. */}
+          <video id="heroVideo" muted loop playsinline preload="none"
                  data-mp4={media.mp4} data-webm={media.webm}></video>
-        : <img src={media.img ?? media.poster} alt="" width="1600" height="900" fetchpriority="high" />}
+        </>
+      ) : (
+        <img src={media.img} alt="" width="1600" height="900" fetchpriority="high" />
+      )}
     </div>
   )}
   <div class="wrap">
@@ -159,6 +198,9 @@ const last = words[words.length - 1];
       s.src = src; s.type = t === "webm" ? "video/webm" : "video/mp4";
       v.appendChild(s);
     });
+    // Fade in only once a frame exists. Revealing on `load()` shows a black box over a poster that
+    // was already correct, which is worse than the poster staying put a moment longer.
+    v.addEventListener("loadeddata", function () { v.classList.add("ready"); });
     v.autoplay = true; v.load();
     var p = v.play(); if (p && p.catch) p.catch(function () {});
   })();

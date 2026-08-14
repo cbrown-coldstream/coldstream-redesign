@@ -1,0 +1,96 @@
+---
+// MARKET CHOOSER — the national page's answer to "which one of you is near me".
+//
+// WHY THIS EXISTS AT THE TOP OF THE PAGE. The national page shows the 844 number and cannot show
+// anything else: the output is static, so there is no server to detect an area and no honest way to
+// swap a phone number before the page is sent. Everything that follows from that is a choice
+// between guessing and asking, and this asks.
+//
+// The routing that already existed was the utility bar's <select>, the footer's three offices and
+// the locations section three-quarters of the way down. All of it works and none of it is visible
+// at the moment a visitor is deciding whether this company covers them. This is the same three
+// markets, at the top, as the first thing after the hero.
+//
+// EVERY NUMBER AND ADDRESS COMES FROM markets.js. `phone` is the displayed string and `telHref` is
+// DERIVED from it in that file, so the two cannot disagree — which is the specific bug the live
+// WordPress home page still has, printing (888) 625-5960 while linking a different number. Nothing
+// here is typed.
+//
+// ── THE RETURNING-VISITOR HINT (progressive enhancement) ─────────────────────────────────────
+//
+// If a previous visit stored a market, this surfaces one dismissible line pointing at it. It reads
+// the SAME `cs_market` cookie the utility bar's select and MarketNotice already write — a new key
+// would mean two records of one preference, and they would drift.
+//
+// NO IP LOOKUP HAPPENS HERE. GeoRedirect does that, once, on this page, and it is a separate
+// mechanism with a separate cookie. This only reads a choice the visitor already made.
+//
+// NO LAYOUT SHIFT. The hint is in the HTML with `hidden` set, and the script that unhides it is
+// inline and sits immediately after the markup, so it runs during parse — before first paint,
+// not after it. Nothing pops in. With no cookie, or JS off, the element stays hidden and the
+// chooser reads exactly as authored.
+import { MARKET_LIST } from "../data/markets.js";
+const { heading = "Three markets, three local crews", intro = "Pick the one nearest you and you will get that office, that crew and that phone number." } = Astro.props;
+---
+<section class="mchoose" aria-labelledby="mchoose-h">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Find your area</span>
+      <h2 id="mchoose-h">{heading}</h2>
+      <p>{intro}</p>
+    </div>
+
+    {/* Rendered always, revealed only if a stored choice exists. `hidden` rather than a class so
+        it is hidden for assistive tech too, not just visually. */}
+    <p class="mchoose-hint" id="mchooseHint" hidden>
+      <span id="mchooseHintText"></span>
+      <a id="mchooseHintLink" href="/">Go there</a>
+      <button type="button" id="mchooseHintX" aria-label="Dismiss">Dismiss</button>
+    </p>
+
+    <ul class="mchoose-grid">
+      {MARKET_LIST.map((m) => (
+        <li>
+          <a class="mchoose-card" href={`/${m.slug}/`} data-market={m.slug}>
+            <strong>{m.name}</strong>
+            <span class="mchoose-city">{m.office.city}, {m.office.state}</span>
+            {/* Displayed number only — this is a link to the market page, not a call link. The
+                tel: link is below, so a tap on the card cannot dial by accident. */}
+            <span class="mchoose-phone">{m.phone}</span>
+            <span class="mchoose-go">See {m.name} <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="mchoose-tel" href={m.telHref}>Call {m.name}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<script is:inline>
+  (function () {
+    var hint = document.getElementById("mchooseHint");
+    if (!hint) return;
+
+    // Same cookie the market <select> and MarketNotice write. Reading only — this never sets it.
+    var slug = document.cookie.split("; ").reduce(function (a, c) {
+      var p = c.split("=");
+      return p[0] === "cs_market" ? decodeURIComponent(p.slice(1).join("=")) : a;
+    }, "");
+    if (!slug) return;
+
+    // The slug has to match a card that is actually on the page. A cookie holding a stale or
+    // hand-edited value must produce nothing, not a link to a URL that does not exist.
+    var card = document.querySelector('.mchoose-card[data-market="' + slug + '"]');
+    if (!card) return;
+
+    var name = card.querySelector("strong").textContent;
+    document.getElementById("mchooseHintText").textContent = "Looking for " + name + "?";
+    var link = document.getElementById("mchooseHintLink");
+    link.setAttribute("href", card.getAttribute("href"));
+    link.textContent = "Go to " + name;
+    hint.hidden = false;
+
+    document.getElementById("mchooseHintX").addEventListener("click", function () {
+      hint.hidden = true;
+    });
+  })();
+</script>

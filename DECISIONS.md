@@ -984,7 +984,119 @@ unable to resize it later; ignored, because none of it belongs in a deploy. `.DS
 
 ---
 
-## 21. Checks
+## 21. Round 19 — the scrub moves, the national page gets a router, and reviews get built before they exist
+
+**The roofing scrub moved to `/[market]/roofing/`.** A market landing has to carry four trades and
+route to all of them, and 360vh of sticky track about one of them made roofing the middle of the
+page and pushed siding, windows and gutters below it. On the roofing hub the same section is the
+subject of the page rather than a detour from it. It is now driven by `PROCESS_MEDIA` like siding
+and gutters, so all three arrive the same way.
+
+**The `WhyTrust` eyebrow is optional, not deleted.** `eyebrow={null}` suppresses it. Only the
+national page needed that — its heading is "Why homeowners keep calling us back" directly under an
+accent-orange "Why homeowners choose us". The other seven callers have different headings
+("What we hold ourselves to", "Straightforward from quote to cleanup") where the eyebrow still does
+work, so the default stays rather than every caller opting back in.
+
+**The roofing hub copy stopped explaining the site to the reader.** It said "Everything roofing, on
+one page" over "Sections of the roofing conversation — not thirteen separate pages saying the same
+thing". That is the consolidation rationale: true, load-bearing for this rebuild, and of no interest
+to a homeowner who never saw the thirteen pages. Internal reasoning belongs in a comment and in this
+file. It now opens "Not sure what your roof needs?" and answers it.
+
+### The national page cannot detect an area, so it asks
+
+Static output means no server, no request-time detection, and no honest way to swap a phone number
+before the page is sent. **The 844 number stays the national default** — everything else would be a
+guess printed as fact.
+
+`MarketChooser` sits directly under the badge row: three cards, each with the office city, that
+market's number and a separate call link. The `#locations` section three-quarters down stays as it
+was; it is the same three offices in more detail, and it was never visible at the moment someone is
+deciding whether they are covered. Every number comes from `markets.js`, where `telHref` is derived
+from the displayed string, so the two cannot disagree — the bug the live WordPress home page still
+has, printing (888) 625-5960 while linking a different number.
+
+**The returning-visitor hint reads the cookie that already exists.** `cs_market` is written by the
+utility bar's select and by `MarketNotice`; a second key would be a second record of one preference
+and they would drift. It is read-only here, never written, and **no IP lookup happens** —
+`GeoRedirect` does that separately with its own cookie. The hint ships in the HTML with `hidden`
+set and an inline script immediately after it, so it resolves during parse rather than after paint:
+no layout shift, and no cookie means nothing renders.
+
+### Reviews: the matching built now, rendering nothing
+
+`matchReviewsToCards` attaches a real review to a themed "why us" card by keyword, at build time,
+because which review belongs under which card cannot be decided while the reviews do not exist. Each
+review is used under at most one card, quotes are verbatim, attributed and linked — the three rules
+from `contracts.js`. **No match means no quote and the card is unchanged**, which is also the state
+of every card today.
+
+**The section is designed to read complete without them.** There is no empty quote slot and no
+"review coming soon" — the six cards are a finished section, and a quote is additive. This is the
+surface where inventing a testimonial would be easiest and least noticed, and the prototype already
+shipped three invented ones under a heading claiming they were local homeowners.
+
+`REVIEW_PROFILES` gates aggregates separately and is null everywhere. **A rating needs the profile's
+own rating AND count AND link, together** — the number of reviews we publish is not the number the
+profile holds, and that conflation is the "400+ five-star reviews" problem.
+
+Proven rather than assumed: built with `COLDSTREAM_FIXTURES=1` and confirmed a fixture review
+containing "a fair price" attaches to the pricing card, that no review is used twice, that a review
+matching no theme produces nothing, and that the aggregate still does not render because
+`REVIEW_PROFILES` is null. Then rebuilt clean — zero fixture strings in `dist/`.
+
+### Trust band, and what is still not claimed
+
+`page.trust` had existed since round 7 and **nothing ever rendered it**, so the three approved claims
+appeared on the national page only as prose inside other sections. The band now renders from a new
+`ALWAYS_TRUE` array in `claims.js` rather than from page data — the same three strings the hero
+bullets and the service-card backs use. Written per surface they had already begun to vary ("Free,
+no-obligation inspection" against "Free inspections"), and a claim phrased three ways is three
+claims to check.
+
+**"BBB accredited" and "fully insured" are still absent, deliberately.** `CLAIMS.bbb` now names what
+would unlock it — the accreditation record itself, not a screenshot or the live site's own claim —
+and records that the seal is a second, separate blocker because BBB's programme requires their
+hosted seal. "Fully insured" is on the pending list; the approved wording is "Licensed and insured".
+
+### Hero video: capability, unused
+
+Gated exactly like `ProcessScrub` — **poster AND source, or nothing renders**. The poster is now a
+plain `<img>` rather than the `poster` attribute, so it paints for everyone rather than only for
+browsers that laid the video out, and it is the LCP candidate instead of a frame nobody downloaded.
+Under reduced motion the source is never attached, so the file is not even fetched.
+
+**Written into the component in capitals, because it is the trap:** `verify-build` asserts hero
+contrast with fixed numbers — white 13.6:1, accent 7.1:1 — and those are **only valid because no
+page passes media**. When footage arrives the check must be re-derived against actual frames. A
+scrim tuned on a smooth navy gradient can fail on a bright sky behind white headline text, which is
+exactly the frame a roofing video is likely to contain. **Nothing passes `media` today.**
+
+### Served areas, rewritten around the question it is asked
+
+A homeowner arrives to settle one thing: do you work where I live. Three changes — a plain sentence
+first naming the metro and the office the crews leave from, both derived from `markets.js`; towns
+grouped by the market's own areas rather than one run of up to 77 chips; and a line for the town
+that is not listed, because the list is the towns with confirmed work, not the limit of where a crew
+will drive. Without that last line the page reads as a boundary and "my town is missing" becomes
+"they must not cover me". Columbus stays one honest group — it is a ring city and any two-way cut
+puts Westerville and Grove City together.
+
+The per-market `intro` is no longer passed: all three said "Based at our <office> office", which is
+what the derived lede now says and cannot drift from.
+
+### FAQ
+
+Still native `<details>`/`<summary>` — it works with JS off, is keyboard-operable for free and
+reports its own expanded state. The animation is decoration layered on top and does not carry the
+behaviour. **Transform and opacity only:** height animation runs layout every frame, and eight rows
+of it janks on a mid-range phone. The rows stagger in through the existing `[data-reveal="stagger"]`
+rather than a new mechanism. Under reduced motion nothing animates and everything still works.
+
+---
+
+## 22. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

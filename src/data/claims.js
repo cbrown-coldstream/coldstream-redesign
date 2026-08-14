@@ -60,9 +60,41 @@ export const CLAIMS = {
    */
   customersServed: null,
 
-  /** BBB accreditation, e.g. `{ rating: "A+", profileUrl }`. No seal asset exists yet. */
+  /**
+   * BBB accreditation. Shape: `{ rating: "A+", profileUrl: "https://www.bbb.org/..." }`.
+   *
+   * WHAT UNLOCKS IT: the accreditation record itself — the BBB business profile showing Coldstream
+   * as an accredited business and the letter grade BBB currently assigns. Not a screenshot, not the
+   * live site's own claim, not a brief. The live WordPress home page prints "BBB A+ Accredited" and
+   * nothing anywhere sources it, which is why it is here rather than in the copy.
+   *
+   * TWO SEPARATE THINGS ARE MISSING and filling one does not release the other:
+   *   1. the record above, which is what this field gates
+   *   2. the seal image, which BBB's programme requires be their hosted, linked seal — it has to
+   *      come from the accreditation account, so it cannot be recreated. badges.js keeps a slot.
+   *
+   * Fill this in and the badge row's BBB slot and the hero's rating line both appear on their own.
+   */
   bbb: null,
 };
+
+/**
+ * The three claims that are always true, from brand/voice-spec.json's `always_true_claims`.
+ *
+ * ONE ARRAY, SO THE WORDING CANNOT DRIFT. These strings appear in the hero bullets, the national
+ * trust band and the service-card back faces. Written out per surface they had already started to
+ * vary — "Free, no-obligation inspection" against "Free inspections" against "Free, no-obligation
+ * inspections" — and a claim that is phrased three ways is three claims to check rather than one.
+ *
+ * NOT A PLACE TO ADD THINGS. Anything not in voice-spec's approved list belongs in CLAIMS above,
+ * gated, however obviously true it feels. "Fully insured" in particular is NOT one of these: the
+ * approved wording is "Licensed and insured", and the stronger phrasing sits on the pending list.
+ */
+export const ALWAYS_TRUE = [
+  "Locally owned and operated",
+  "Licensed and insured",
+  "Free, no-obligation inspections",
+];
 
 /**
  * Customer testimonials, per market plus `national`.
@@ -109,6 +141,63 @@ export const marketsWithSourcedReviews = () =>
 /** Markets with no sourced reviews — no reviews page. Named by the build on every run. */
 export const REVIEWS_PAGE_PENDING = Object.entries(TESTIMONIALS)
   .filter(([k, t]) => k !== "national" && !t.length).map(([k]) => k);
+
+/**
+ * The per-market Google Business Profile figures — the ONLY thing that may back an aggregateRating.
+ *
+ * Shape per market, validated by `validateProfile` in contracts.js:
+ *   { rating: 4.8, count: 412, profileUrl: "https://..." }
+ *
+ * TWO NUMBERS THAT ARE NOT THE SAME NUMBER, which is the whole reason this is separate from
+ * TESTIMONIALS. `count` is the profile's own total. The number of reviews we chose to publish is
+ * `TESTIMONIALS[market].length`. Printing the second as if it were the first, or the first without
+ * having read it off the profile today, is the "400+ five-star reviews" problem the claims gate
+ * exists to stop — three artifacts disagreed about that figure and none of them was the profile.
+ *
+ * NULL MEANS NO RATING RENDERS ANYWHERE. Not a 5, not "great reviews", not stars with nothing under
+ * them. A star row is a factual claim about a real profile and it needs that profile as its source.
+ */
+export const REVIEW_PROFILES = {
+  cincinnati: null,
+  columbus: null,
+  "st-louis": null,
+  national: null,
+};
+
+/**
+ * Attach a real review to a themed card, by keyword.
+ *
+ * WHY MATCHING RATHER THAN A FIXED LIST. The six "why us" cards are themes — own crews, free
+ * inspection, written pricing, insurance, materials, warranty. When reviews land, some of them will
+ * talk about exactly those things in the customer's own words, and a real sentence under a claim is
+ * worth more than the claim alone. Which review lands under which card cannot be decided now
+ * because the reviews do not exist yet, so this decides it at build time from the text.
+ *
+ * THE RULES IT WILL NOT BREAK, inherited from contracts.js:
+ *   · `quote` is used verbatim. This selects a review; it never edits one.
+ *   · A review is used under AT MOST ONE card, so the section cannot print the same sentence twice.
+ *   · No match means no quote on that card, and the card renders exactly as it does today.
+ *
+ * Returns a Map of cardIndex -> review. Empty when there are no reviews, which is today.
+ */
+export const matchReviewsToCards = (reviews = [], cards = []) => {
+  const out = new Map();
+  if (!Array.isArray(reviews) || !reviews.length) return out;
+
+  const used = new Set();
+  cards.forEach((card, i) => {
+    const keys = card.match ?? [];
+    if (!keys.length) return;
+    // Longest quote among the matches, on the theory that a review that says more about a theme is
+    // the more useful one — not the highest rating, which would quietly select for 5s.
+    const hit = reviews
+      .filter((r) => !used.has(r.permalink) && typeof r.quote === "string")
+      .filter((r) => keys.some((k) => r.quote.toLowerCase().includes(k)))
+      .sort((a, b) => b.quote.length - a.quote.length)[0];
+    if (hit) { out.set(i, hit); used.add(hit.permalink); }
+  });
+  return out;
+};
 
 /**
  * The hero bullet list, assembled from what is actually sourced.

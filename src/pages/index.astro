@@ -22,6 +22,7 @@ import UtilityBar from "../components/UtilityBar.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import Hero from "../components/Hero.astro";
 import BadgeRow from "../components/BadgeRow.astro";
+import MarketChooser from "../components/MarketChooser.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
 import GeoRedirect from "../components/GeoRedirect.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
@@ -35,7 +36,7 @@ import OfferBand from "../components/OfferBand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
-import { TESTIMONIALS } from "../data/claims.js";
+import { TESTIMONIALS, ALWAYS_TRUE } from "../data/claims.js";
 import { national as page } from "../data/pages/national.js";
 
 const market = NATIONAL;
@@ -90,10 +91,36 @@ const org = {
       for the same searches. Same shape, honest data. */}
   <Hero market={market} video={video} videoModal={true} {...page.hero} />
   <MarketNotice market={market} />
+
+  {/* TRUST BAND. page.trust existed in national.js since round 7 and nothing ever rendered it, so
+      the three approved claims were on the page only as prose inside other sections. The items
+      come from ALWAYS_TRUE in claims.js rather than from the page data — they are the same three
+      strings the hero bullets and the service-card backs use, and one array is the only way three
+      surfaces stay phrased identically. "BBB accredited" and "fully insured" are deliberately not
+      here: the first has no source and the second is on the pending list. */}
+  <section class="trustband" aria-label="What is true on every job">
+    <div class="wrap">
+      <p class="trustband-h">{page.trust.heading}</p>
+      <ul>
+        {ALWAYS_TRUE.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  </section>
   <BadgeRow aboveTheFold={true} />
 
+  {/* DIRECTLY UNDER THE BADGE ROW, because this is where a visitor is deciding whether we cover
+      them — not three-quarters down at #locations, which is the same three offices in more detail
+      and stays where it is. Static output cannot detect an area, so the page asks rather than
+      guesses; the 844 number remains the national default and every number here comes from
+      markets.js. See MarketChooser.astro. */}
+  <MarketChooser />
+
   <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
-  <WhyTrust heading={page.why.heading} cards={page.why.cards} />
+  {/* eyebrow suppressed: "Why homeowners choose us" over "Why homeowners keep calling us back" is
+      the same sentence twice, and the eyebrow is accent orange, so it was also the loudest thing
+      in the section competing with nothing. */}
+  <WhyTrust eyebrow={null} heading={page.why.heading} cards={page.why.cards}
+            reviews={TESTIMONIALS.national} marketSlug="national" />
   <ServiceDetail id="roofing" market={market} {...page.roofing} />
 
   {/* The market landing's served-areas block. Nationally the towns belong to three markets, so the
