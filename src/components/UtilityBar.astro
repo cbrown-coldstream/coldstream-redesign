@@ -6,13 +6,42 @@
 // The market <select> is the plan's "market router" in its simplest, host-agnostic form: it
 // works with JS off (it is a real form control inside a <noscript>-safe <form>), it is visible
 // to every visitor, and it never redirects a crawler.
-import { MARKET_LIST } from "../data/markets.js";
+//
+// ── WHAT CHANGED, AND THE BUG IT FIXES ───────────────────────────────────────────────────────
+//
+// The select's change handler used to live in MarketNotice.astro, whose script opens with
+// `if (!SLUG) return`. On a market page that is fine. On the NATIONAL pages, where market.slug is
+// null, it meant the select had no handler at all — a visitor picked their city and nothing
+// happened. That is precisely the page where a market picker earns its place, and it was the one
+// page where it was inert. The behaviour now lives in the component that renders the control.
+//
+// TWO BEHAVIOURS, BECAUSE THE PAGES ARE DIFFERENT:
+//
+//   · ON A MARKET PAGE, choosing another market NAVIGATES to it. You are reading Cincinnati
+//     content; switching to Columbus has to change the content, not just the number, or the page
+//     would say Cincinnati while the phone said Columbus.
+//   · ON A NATIONAL PAGE, choosing a market SWAPS THE NUMBERS IN PLACE. The page is about all
+//     three markets and stays true; the visitor asked for their local number, and they get it
+//     without being thrown off the page they chose to be on.
+//
+// EVERY NUMBER COMES FROM markets.js AND IS SWAPPED AS A PAIR. `phone` is the displayed string and
+// `telHref` is derived from it in that file, so the two cannot disagree — the live WordPress home
+// page prints (888) 625-5960 while linking a different number, and that is the failure this shape
+// exists to prevent. The map below is serialised from MARKET_LIST; nothing is typed here, and the
+// 844 national number remains the default that ships in the HTML.
+import { MARKET_LIST, NATIONAL } from "../data/markets.js";
 const { market, resolvedFrom = "default" } = Astro.props;
+
+// slug -> { phone, telHref }. "" is the national default, so "Other / not sure" restores it.
+const PHONES = Object.fromEntries([
+  ["", { phone: NATIONAL.phone, telHref: NATIONAL.telHref }],
+  ...MARKET_LIST.map((m) => [m.slug, { phone: m.phone, telHref: m.telHref }]),
+]);
 ---
 <div class="util" data-resolved-from={resolvedFrom}>
   <div class="wrap">
     <div class="left">
-      <label for="mkt" style="font-weight:600">Your area:</label>
+      <label for="mkt">Your area:</label>
       <form method="get" action="/" id="mktForm">
         <select id="mkt" name="market" aria-label="Choose your market">
           {MARKET_LIST.map((m) => (
@@ -28,12 +57,54 @@ const { market, resolvedFrom = "default" } = Astro.props;
         every page of the site. The quote link now goes to the estimate page, which does the
         same job honestly; the blog link comes back when there is a blog. */}
     <div class="right">
-      <a class="ph" href={market.telHref}>{market.phone}</a>
+      {/* data-cs-phone marks every element whose number may be swapped. The href and the text are
+          updated together, never separately. */}
+      <a class="ph" href={market.telHref} data-cs-phone><span data-cs-phone-text>{market.phone}</span></a>
       <a class="iq" href="/free-estimate/">Get a Free Estimate</a>
     </div>
   </div>
 </div>
-<style>
-  #mktForm{display:inline-flex;gap:8px;align-items:center;margin:0}
-  .util-go{font-family:var(--cs-web-body);font-weight:700;font-size:.82rem;padding:5px 10px;border-radius:7px;border:1px solid color-mix(in srgb, var(--cs-paper) 35%, transparent);background:color-mix(in srgb, var(--cs-paper) 16%, transparent);color:var(--cs-paper);cursor:pointer}
-</style>
+<script is:inline define:vars={{ PHONES, CURRENT: market.slug ?? "" }}>
+  (function () {
+    var sel = document.getElementById("mkt");
+    if (!sel) return;
+
+    function setCookie(n, v, days) {
+      document.cookie = n + "=" + encodeURIComponent(v) + ";path=/;max-age=" +
+        60 * 60 * 24 * days + ";samesite=lax";
+    }
+
+    sel.addEventListener("change", function () {
+      var slug = sel.value;
+      setCookie("cs_market", slug, 30);
+
+      // On a market page the CONTENT has to change too, so navigate. "Other / not sure" goes to
+      // the national page rather than nowhere.
+      if (CURRENT) {
+        location.href = slug ? "/" + slug + "/" : "/?national=1";
+        return;
+      }
+
+      // National page: swap in place. Both halves of every phone, together, from the map.
+      var next = PHONES[slug];
+      if (!next) return;
+      Array.prototype.forEach.call(document.querySelectorAll("[data-cs-phone]"), function (el) {
+        el.setAttribute("href", next.telHref);
+        var t = el.querySelector("[data-cs-phone-text]");
+        if (t) t.textContent = next.phone;
+      });
+
+      // Say what happened. A number changing silently in the corner of the screen is a change
+      // nobody notices; this is also what a screen reader gets, via the live region below.
+      var say = document.getElementById("mktSaid");
+      if (say) {
+        say.textContent = slug
+          ? "Now showing the " + sel.options[sel.selectedIndex].text + " number."
+          : "Showing our main number.";
+      }
+    });
+  })();
+</script>
+{/* Announced politely so the swap is not silent for anyone using a screen reader. Empty until a
+    choice is made, so it says nothing on load. */}
+<p id="mktSaid" class="visually-hidden" role="status" aria-live="polite"></p>

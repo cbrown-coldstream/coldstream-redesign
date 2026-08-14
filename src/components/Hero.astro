@@ -129,8 +129,11 @@ const last = words[words.length - 1];
             <span class="playbtn-txt">Watch the 60-second tour<small>See how a job runs</small></span>
           </button>
         )}
-        <a class="callnow" href={market.telHref}>
-          Or call {market.phone}
+        {/* data-cs-phone lets the utility bar's market select swap this number in place on the
+            national pages — see UtilityBar.astro. The number sits in its own span so the href and
+            the visible text are replaced as a pair; "Or call" and the sub-line are not touched. */}
+        <a class="callnow" href={market.telHref} data-cs-phone>
+          Or call <span data-cs-phone-text>{market.phone}</span>
           <small>We answer live — no phone trees</small>
         </a>
       </div>

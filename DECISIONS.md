@@ -1151,7 +1151,47 @@ Both left untouched.
 
 ---
 
-## 23. Checks
+## 23. Round 21 — the market select was inert on the pages that needed it
+
+**THE BUG.** The select's `change` handler lived in `MarketNotice.astro`, whose script opens with
+`if (!SLUG) return`. On a market page that is fine. On the **national** pages, where `market.slug`
+is null, it meant the select had no handler at all: a visitor picked their city and nothing
+happened — no navigation, no number change, nothing. That is the one page where a market picker
+earns its place, and it was the one page where it did nothing.
+
+The behaviour now lives in `UtilityBar.astro`, the component that renders the control. One handler
+instead of a handler in a sibling that may or may not have returned early.
+
+**Two behaviours, because the pages are genuinely different:**
+
+- **On a market page, choosing another market navigates.** You are reading Cincinnati content;
+  switching to Columbus has to change the content, not just the number, or the page would say
+  Cincinnati while the phone said Columbus.
+- **On a national page, it swaps the numbers in place.** The page is about all three markets and
+  stays true no matter which number is showing, so there is nothing to navigate away from — the
+  visitor asked for their local number and gets it without losing the page they chose.
+
+**Both halves of every number move together.** A `slug -> { phone, telHref }` map is serialised from
+`MARKET_LIST`; the swap sets the `href` and the visible text from the same record, and there is no
+path that writes one without the other. Nothing is typed into the component — the only literal
+number anywhere near it is in a comment, naming the live WordPress page that prints
+(888) 625-5960 while linking a different number. That is the failure this shape exists to prevent.
+The 844 remains what ships in the HTML and what "Other / not sure" restores.
+
+Marked elements are the utility bar's number and the hero's "Or call" — the number sits in its own
+span so the surrounding words are untouched. The change is announced through a polite live region,
+because a number quietly changing in the corner of the screen is a change nobody notices, and a
+screen reader would otherwise get nothing at all.
+
+**The select was also invisible, which is its own bug.** It was a 5px-padded control at 16% white on
+a blue bar — the same visual weight as the text label beside it. It is the site's market router and
+the only control that follows a visitor onto every page. It now reads as a control: solid paper
+ground, its own drawn caret (a data: URI — an external request for a triangle is not worth it), a
+44px target, and a border that is actually visible.
+
+---
+
+## 24. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
