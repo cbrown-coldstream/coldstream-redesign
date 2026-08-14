@@ -190,17 +190,26 @@ header .spacer{flex:1}
    part of one row. Explicit width/height on every <img> keeps CLS at zero.
 
    THEY ARE BIGGER THAN THEY WERE — 52px of height was small enough that the wordmarks read as
-   texture rather than as names, which is the whole point of an accreditation row. The source
-   files are 450–1024px wide, so there is resolution in hand at every size below. */
+   texture rather than as names, which is the whole point of an accreditation row.
+
+   AND BIGGER AGAIN, 72 -> 92 AT THE TOP END. 92 is not a round number picked for looks: it is
+   what the smallest asset in the row supports. google-five-star is 184x189 native, so a 92px cap
+   is exactly 2x for a retina display and the first thing to soften if this goes higher. The
+   replaced uploads had more raw pixels but carried a wide empty margin; these are cropped to the
+   mark, so at the same cap they read larger while having less headroom left. Raising the cap past
+   92 means resupplying that file first — check the smallest `w`/`h` in badges.js before touching
+   the numbers below. */
 .logos{background:var(--cs-paper);border-bottom:1px solid var(--cs-line)}
-.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px 26px;padding:26px 22px}
-.badge{display:flex;align-items:center;justify-content:center;min-height:72px}
-/* The width cap is what keeps all seven on one line at 1180px — the two wide lockups are the
-   whole budget, and letting them run to 210px pushed GAF onto a second row by itself. */
-.badge img{max-height:clamp(52px,5.4vw,72px);max-width:clamp(130px,13.5vw,185px);
+.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px 30px;padding:30px 22px}
+.badge{display:flex;align-items:center;justify-content:center;min-height:92px}
+/* The width cap is what keeps the row from breaking badly — the wide lockups are the whole budget,
+   and letting them run unchecked pushed GAF onto a second row by itself. Raised in step with the
+   height so the two wordmarks (GAF at 710x182, Owens Corning at 798x248) still resolve by height
+   rather than being clipped to the width first. */
+.badge img{max-height:clamp(64px,6.8vw,92px);max-width:clamp(150px,16vw,225px);
   width:auto;height:auto;object-fit:contain}
 .badge-pending{display:grid;place-items:center;min-height:56px;min-width:120px;border:1.5px dashed var(--cs-line);border-radius:10px;padding:8px 14px;color:var(--cs-text-muted);font-family:var(--cs-web-body);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;text-align:center}
-@media(max-width:720px){.logos .wrap{gap:12px 18px}.badge{min-height:44px}}
+@media(max-width:720px){.logos .wrap{gap:14px 20px}.badge{min-height:56px}}
 
 section{padding:62px 0}
 .mist{background:var(--cs-surface)}
@@ -594,11 +603,13 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
    THE TRACK IS TALL AND THE STAGE IS STICKY. Scroll distance through .pscrub-track is the
    progress input; .pscrub-stage pins to the viewport and does the changing. */
 .pscrub{background:var(--cs-deep-dark);color:var(--cs-paper);padding:0}
-/* 340vh, not 300. Each step now owns a quarter of the track, and at 300vh a quarter was short
-   enough that two steps could arrive within one flick of a trackpad — which is the thing this
-   change exists to stop. No scroll-snap: it fights trackpad momentum and takes the scroll away
-   from the reader, and the section is a thing you scroll PAST, not a slideshow you step through. */
-.pscrub-track{position:relative;height:340vh}
+/* 360vh. The beats are spread from 0.04 to 0.80 of progress, so the gap between two of them is
+   about a quarter of the track; at 300vh that quarter was short enough for two steps to land in one
+   flick of a trackpad, which is the thing the per-beat arrival exists to stop. 340 was not quite
+   enough once the last cue moved out to 0.80. No scroll-snap: it fights trackpad momentum and takes
+   the scroll away from the reader, and this is a section you scroll PAST, not a slideshow you step
+   through. */
+.pscrub-track{position:relative;height:360vh}
 .pscrub-stage{position:sticky;top:0;min-height:100vh;display:grid;align-items:center;padding:70px 0}
 .pscrub-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
 .pscrub h2{color:var(--cs-paper);font-size:clamp(1.7rem,3vw,2.4rem);
@@ -630,16 +641,28 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
    copy that vanishes on the way up is copy they cannot re-read. */
 .pscrub-steps{list-style:none;counter-reset:ps;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
 .pscrub-steps li{counter-increment:ps;display:grid;grid-template-columns:auto 1fr;gap:14px;
-  align-items:start;transition:opacity .5s ease-out,transform .5s ease-out}
+  align-items:start;transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
 .pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:0;transform:translateY(18px)}
+
+/* ── THREE MARKER STATES, AND NONE OF THEM IS ACCENT ORANGE ──────────────────────────────────
+   Orange is the headline's emphasis and the focus ring, and on this section it is already spending
+   itself on the eyebrow. A marker that walks through orange as you scroll would make the one colour
+   that is supposed to mean "look here" mean four different things in one viewport.
+   So the progression runs through the blue end of the palette instead: dim → light blue while
+   active → primary once passed. Only ONE step is active at a time; the script owns that.
+
+   upcoming — the resting state, and the one a marker holds before its beat. */
 .pscrub-steps li::before{content:counter(ps);flex:none;width:34px;height:34px;border-radius:50%;
-  display:grid;place-items:center;background:var(--cs-accent);
-  color:var(--cs-paper);font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
-  font-size:.92rem}
-/* The marker pop is scoped under .is-armed so the unarmed fallback — where every step is already
-   .in from the outset — cannot fire four animations at once on load. */
-.pscrub-track.is-armed .pscrub-steps li.in::before{animation:ps-pop .42s ease-out}
-@keyframes ps-pop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+  display:grid;place-items:center;background:rgba(255,255,255,.12);
+  color:color-mix(in srgb, var(--cs-paper) 72%, transparent);
+  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:.92rem;
+  transition:background-color .35s ease-out,color .35s ease-out,transform .35s cubic-bezier(.2,.7,.2,1)}
+/* completed — the beat has passed. */
+.pscrub-steps li.is-done::before{background:var(--cs-primary);color:var(--cs-paper)}
+/* active — declared AFTER completed so it wins when a step is both arrived and current. */
+.pscrub-steps li.is-active::before{background:var(--cs-web-hero-accent);color:var(--cs-deep-dark);
+  transform:scale(1.1)}
 .pscrub-steps h3{color:var(--cs-paper);font-size:1.06rem;margin:5px 0 3px}
 .pscrub-steps p{margin:0;font-size:.94rem;line-height:1.55;
   color:color-mix(in srgb, var(--cs-paper) 72%, transparent)}
@@ -653,23 +676,30 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
 .pscrub-media video{opacity:0;transition:opacity .4s ease-out}
 .pscrub-media video.ready{opacity:1}
 
-/* THE END STATE, NEVER A BLANK STAGE. Under reduced motion or on a narrow screen the track
-   collapses to an ordinary section: no sticky, no 300vh of empty scrolling, poster only, and
-   every step at full opacity — because a step list dimmed to 38%% with nothing left to drive it
-   is unreadable, and a sticky stage with no scrub is just a section that will not scroll away. */
-/* Both fallback branches must UNDO .is-armed rather than merely avoid setting it. The script
-   decides once, on load; a visitor who arms at desktop width and then rotates or narrows the
-   window keeps the class, and without these overrides the steps it had not reached yet would stay
-   at opacity 0 in a layout that no longer has a scrub to reveal them. `!important` on the rail is
-   there to beat the inline transform the script may have left mid-progress — CSS cannot outrank an
-   inline style otherwise, and a half-filled rail on a static section is a progress bar reporting
-   progress through nothing. */
+/* THE END STATE, NEVER A BLANK STAGE AND NEVER A STEP STUCK MID-ANIMATION. Under reduced motion or
+   on a narrow screen the track collapses to an ordinary section: no sticky, no 360vh of empty
+   scrolling, poster only, every step arrived at full opacity, the rail full, and the LAST step
+   marked active with the ones before it completed — which is exactly the state phase(1) produces,
+   so the static layout and the end of the scrub agree.
+
+   The :last-child / :not(:last-child) marker rules below are what make that true WITHOUT JS. The
+   script's phase(1) sets the same classes, but it only runs if the script runs at all; with JS off
+   every marker would otherwise sit at the dim upcoming state on a section that is plainly finished.
+
+   Both branches must also UNDO .is-armed rather than merely avoid setting it. The script decides
+   once, on load; a visitor who arms at desktop width and then rotates or narrows keeps the class,
+   and without these overrides the steps it had not reached yet would stay at opacity 0 in a layout
+   with no scrub left to reveal them. `!important` on the rail beats the inline transform the script
+   may have left mid-progress — CSS cannot outrank an inline style otherwise, and a half-filled rail
+   on a static section is a progress bar reporting progress through nothing. */
 @media(max-width:900px){
   .pscrub-track{height:auto}
   .pscrub-stage{position:static;min-height:0;padding:62px 0}
   .pscrub-grid{grid-template-columns:1fr;gap:30px}
   .pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:1;transform:none}
-  .pscrub-steps li::before{animation:none!important}
+  .pscrub-steps li:not(:last-child)::before{background:var(--cs-primary);color:var(--cs-paper)}
+  .pscrub-steps li:last-child::before{background:var(--cs-web-hero-accent);color:var(--cs-deep-dark);
+    transform:scale(1.1)}
   .pscrub-rail-fill{transform:scaleX(1)!important}
   .pscrub-media video{display:none}
 }
@@ -678,7 +708,13 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
   .pscrub-stage{position:static;min-height:0;padding:62px 0}
   .pscrub-track.is-armed .pscrub-steps li:not(.in){opacity:1;transform:none}
   .pscrub-steps li{opacity:1!important;transform:none!important;transition:none!important}
-  .pscrub-steps li::before{animation:none!important}
+  /* The marker keeps its three states here — they are colour, not motion, and a finished section
+     should still read as finished. Only the scale on `active` is dropped, because that is the one
+     part of it that is movement. */
+  .pscrub-steps li::before{transition:none!important}
+  .pscrub-steps li:not(:last-child)::before{background:var(--cs-primary);color:var(--cs-paper)}
+  .pscrub-steps li:last-child::before{background:var(--cs-web-hero-accent);color:var(--cs-deep-dark);
+    transform:none!important}
   .pscrub-rail-fill{transform:scaleX(1)!important}
   .pscrub-media video{display:none}
 }

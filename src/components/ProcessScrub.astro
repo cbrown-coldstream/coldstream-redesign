@@ -122,16 +122,40 @@ const show = hasMedia && steps.length > 0 && Boolean(id);
         var n = steps.length;
         if (!n) return;
 
+        // CUE POINTS, DERIVED FROM n RATHER THAN LISTED.
+        //
+        // The beats are spread evenly between FIRST and LAST instead of over the whole 0..1 range,
+        // and both ends are deliberate. FIRST is 0.04, not 0: the stage pins the moment the section
+        // reaches the top of the viewport, and a cue at 0 would mean the first step arrives at the
+        // exact frame the pin happens — visually it never animates, and at 0 with the track already
+        // scrolled it is simply there. A hair of travel makes it arrive. LAST is 0.80, not 1: the
+        // final step has to land before the section starts releasing, or the reader watches it fade
+        // in as the whole thing scrolls away.
+        //
+        // For n = 4 this gives [0.04, 0.29, 0.55, 0.80]. n = 1 collapses to FIRST rather than
+        // dividing by zero.
+        var FIRST = 0.04, LAST = 0.80;
+        function cueFor(i) { return n === 1 ? FIRST : FIRST + i * (LAST - FIRST) / (n - 1); }
+
         // ONE function owns every progress-derived state, so the fallback and the scroll path
         // cannot drift apart: phase(1) is exactly the state the end of the track produces.
         //
-        // Steps are STICKY BY CONSTRUCTION — this only ever adds .in. There is no else branch and
-        // no toggle, which is what makes scrolling back up leave the copy on screen. Writing it as
-        // `toggle(p >= i/n)` would read as the same rule and quietly un-reveal on the way up.
+        // ARRIVAL IS STICKY, MARKER STATE IS NOT, AND THE DIFFERENCE IS THE POINT.
+        // `.in` is only ever added — no else, no toggle — so scrolling back up cannot un-reveal a
+        // step. A homeowner comparing contractors scrolls back, and copy that vanishes on the way up
+        // is copy they cannot re-read. The marker classes DO toggle, because "which step are you on"
+        // is a fact about where the scroll is right now, not something that accumulates; walking
+        // back up should walk the highlight back with it. Exactly one .is-active, always.
         function phase(p) {
           if (rail) rail.style.transform = "scaleX(" + p + ")";
+
+          var active = -1;
           for (var i = 0; i < n; i++) {
-            if (p >= i / n) steps[i].classList.add("in");
+            if (p >= cueFor(i)) { steps[i].classList.add("in"); active = i; }
+          }
+          for (var j = 0; j < n; j++) {
+            steps[j].classList.toggle("is-active", j === active);
+            steps[j].classList.toggle("is-done", active > -1 && j < active);
           }
         }
 

@@ -11,3 +11,12 @@ handoff/*.zip
 
 # Local Netlify folder
 .netlify
+
+# macOS writes these into any folder Finder opens. One of them had already been staged.
+.DS_Store
+
+# Working files for assets that DID ship: raw exports, contact sheets, logo dumps. Kept because
+# throwing away the high-resolution source of a badge is how you end up unable to resize it later,
+# and ignored because none of it belongs in a deploy — the two preview sheets alone were 233 KB
+# of public/ that nothing linked to.
+_assets-source/

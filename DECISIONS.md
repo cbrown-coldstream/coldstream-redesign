@@ -914,7 +914,77 @@ property, so the 3D context survives a scroll reveal. Verified in the built CSS:
 
 ---
 
-## 20. Checks
+## 20. Round 18 — step beats, and the badge row resupplied
+
+### Each step arrives on its own beat
+
+Cue points are derived from `n`, not listed: `FIRST + i * (LAST - FIRST) / (n - 1)`, with FIRST 0.04
+and LAST 0.80 — for four steps, `[0.04, 0.29, 0.55, 0.80]`.
+
+Neither end is round by accident. **FIRST is 0.04, not 0**, because the stage pins the instant the
+section reaches the top of the viewport and a cue at 0 would fire on that same frame — the step
+would never appear to arrive, it would just be there. **LAST is 0.80, not 1**, because the final
+step has to land before the section starts releasing, or the reader watches it fade in while the
+whole thing scrolls away. `n === 1` collapses to FIRST rather than dividing by zero.
+
+Track 340vh → **360vh**: the beats now span 0.04–0.80 rather than 0–0.75, so the gap between two of
+them needed the extra distance. Still no scroll-snap — it fights trackpad momentum, and this is a
+section you scroll past, not a slideshow you step through.
+
+**Arrival is sticky, marker state is not, and the difference is deliberate.** `.in` is only ever
+added, so scrolling back up cannot un-reveal copy. The marker classes *do* toggle, because "which
+step are you on" is a fact about where the scroll is right now rather than something that
+accumulates — walking back up should walk the highlight back with it. Exactly one `.is-active`.
+
+**Three marker states, and none of them is accent orange.** Orange is the headline's emphasis and
+the focus ring, and on this section it is already spent on the eyebrow; a marker walking through it
+would make the one colour that means "look here" mean four things in one viewport. The progression
+runs through the blues instead: dim → `--cs-web-hero-accent` while active → `--cs-primary` once
+passed.
+
+**One measured problem, left as specified.** White on `--cs-primary` is **3.76:1**, and the marker
+numeral is 0.92rem bold ≈ 14.7px — under the 18.66px large-text threshold, so AA wants 4.5:1. The
+other two states are fine (upcoming 7.22:1, active 9.01:1). `--cs-primary-deep` would give 6.07:1
+and is a one-token change. Recorded rather than made, because it is a visible design choice.
+`npm run verify` does not catch this — that gate measures hero contrast only.
+
+The fallback branches now carry `:last-child` / `:not(:last-child)` marker rules so the finished
+state is right **without JS**. `phase(1)` sets the same classes, but only if the script runs at all.
+
+### The badge row — all seven resupplied, and the GAF tier resolved
+
+Every badge is now supplied artwork rather than a WordPress media-library upload. Two defects are
+fixed by the swap rather than by code: Owens Corning is finally the "Preferred Contractor" lockup
+its alt text has claimed since this row was built, and each badge's png and webp are now the same
+image at the same size — `james-hardie-elite` had been shipping a 1024x853 webp beside a 592x488
+png, so the declared dimensions were right for one format and wrong for the other.
+
+The superseded uploads are **deleted, not kept alongside**. Two files for one badge is how a row
+ends up half-updated, which is the state this replaced.
+
+**THE GAF TIER IS NOW STATED.** This file withheld it for good reason — site-plan said "GoldElite",
+the old filename said "Commercial Roofers", the brief said "Certified", and misstating a
+manufacturer certification is a compliance problem. But that position had stopped making sense: the
+artwork itself reads "GAF GoldElite™ Commercial Contractor" and always did, so the tier was already
+on screen for every sighted visitor and withholding it from `alt` only meant a screen reader got
+less than the image said. The supplied asset is GAF-issued artwork naming the tier and it agrees
+with both site-plan and the old filename. If GAF's contractor portal ever disagrees, the portal wins.
+
+**Badges are bigger**: height cap 72 → 92px, width 185 → 225px. **92 is what the smallest asset
+supports** — `google-five-star` is 184x189 native, so 92px is exactly 2x for a retina display and
+the first thing to soften above it. Two of the new files have fewer pixels than what they replaced
+but are cropped tight to the mark where the old uploads carried wide empty margins, so at the same
+cap they read larger with less headroom left. Raising the cap means resupplying that file first.
+
+**Working files moved out of the deploy path.** `_assets-source/` (gitignored) now holds the raw
+exports, the two contact sheets and a 10 MB `Partner Logos/` dump that were sitting in `public/` and
+the repo root. Kept, because discarding the high-resolution source of a badge is how you end up
+unable to resize it later; ignored, because none of it belongs in a deploy. `.DS_Store` added to
+`.gitignore` — one had already been staged.
+
+---
+
+## 21. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
