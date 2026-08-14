@@ -29,8 +29,34 @@
 // inline and sits immediately after the markup, so it runs during parse — before first paint,
 // not after it. Nothing pops in. With no cookie, or JS off, the element stays hidden and the
 // chooser reads exactly as authored.
+// ── ONE COMPONENT, TWO PLACEMENTS, BECAUSE IT IS ONE QUESTION ────────────────────────────────
+//
+// The national home page and the national service pages both had their own answer to "which of you
+// is near me": an #locations block on the home page and an .ns-pick grid on the service pages. Two
+// hand-written grids, two sets of markup, one question — and the service-page version was already
+// the better idea, because it deep-linked to that market's version of the SAME service rather than
+// dumping the visitor on a market landing to find it again.
+//
+// So that behaviour is the prop rather than a second component. Pass `service` and the cards go to
+// /{market}/{service}/; leave it off and they go to /{market}/. Nothing else differs.
+//
+// `markets` is a prop too, because a service line does not run in every market — garage doors is
+// St. Louis only — and a chooser offering a market that cannot do the job is worse than one that
+// does not list it.
 import { MARKET_LIST } from "../data/markets.js";
-const { heading = "Three markets, three local crews", intro = "Pick the one nearest you and you will get that office, that crew and that phone number." } = Astro.props;
+const {
+  heading = "Three markets, three local crews",
+  intro = "Pick the one nearest you and you will get that office, that crew and that phone number.",
+  // Which markets to offer. Defaults to all three.
+  markets = MARKET_LIST,
+  // Optional service key. Set it and each card deep-links to that market's page for this service.
+  service = null,
+  // Shown when the service does not run everywhere, so the shorter list is explained rather than
+  // looking like an omission.
+  note = null,
+} = Astro.props;
+
+const hrefFor = (m) => (service ? `/${m.slug}/${service}/` : `/${m.slug}/`);
 ---
 <section class="mchoose" aria-labelledby="mchoose-h">
   <div class="wrap">
@@ -49,13 +75,13 @@ const { heading = "Three markets, three local crews", intro = "Pick the one near
     </p>
 
     <ul class="mchoose-grid">
-      {MARKET_LIST.map((m) => (
+      {markets.map((m) => (
         <li>
-          <a class="mchoose-card" href={`/${m.slug}/`} data-market={m.slug}>
+          <a class="mchoose-card" href={hrefFor(m)} data-market={m.slug}>
             <strong>{m.name}</strong>
             <span class="mchoose-city">{m.office.city}, {m.office.state}</span>
-            {/* Displayed number only — this is a link to the market page, not a call link. The
-                tel: link is below, so a tap on the card cannot dial by accident. */}
+            {/* Displayed number only — this is a link to a page, not a call link. The tel: link is
+                below, so a tap on the card cannot dial by accident. */}
             <span class="mchoose-phone">{m.phone}</span>
             <span class="mchoose-go">See {m.name} <span aria-hidden="true">→</span></span>
           </a>
@@ -63,6 +89,8 @@ const { heading = "Three markets, three local crews", intro = "Pick the one near
         </li>
       ))}
     </ul>
+
+    {note && <p class="mchoose-note">{note}</p>}
   </div>
 </section>
 <script is:inline>

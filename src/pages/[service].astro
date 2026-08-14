@@ -28,6 +28,8 @@ import SiteHeader from "../components/SiteHeader.astro";
 import Hero from "../components/Hero.astro";
 import BadgeRow from "../components/BadgeRow.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
+import ProcessScrub from "../components/ProcessScrub.astro";
+import MarketChooser from "../components/MarketChooser.astro";
 import HowItWorks from "../components/HowItWorks.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
@@ -36,6 +38,7 @@ import CTABand from "../components/CTABand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/markets.js";
 import { SERVICE_CONTENT } from "../data/services.js";
+import { PROCESS, PROCESS_INTRO } from "../data/process.js";
 
 // A service gets a national page when more than one market runs it. That is exactly the set the
 // header and footer link nationally, and it is the test that keeps a single-market service line
@@ -100,6 +103,22 @@ const schema = {
   provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
   areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
 };
+// Same map as [market]/[service].astro, and the same rule: the FOOTAGE is the gate, not the
+// service list. Gutters has no clip yet, so the national gutters page renders no section at all
+// rather than a placeholder — ProcessScrub returns nothing without a poster and a source.
+//
+// The component needs no market: its steps describe how the work is done, not where, so the
+// national page and the three market pages show the identical sequence. That is why generalising
+// RoofBuild was worth doing rather than writing a national variant.
+const PROCESS_MEDIA = {
+  roofing: { poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" },
+  siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
+  gutters: { poster: "/video/gutters-build-poster.jpg", mp4: "/video/gutters-build-scrub.mp4" },
+};
+const scrubMedia = PROCESS_MEDIA[service] ?? null;
+const scrubSteps = PROCESS[service] ?? [];
+const scrubIntro = PROCESS_INTRO[service] ?? {};
+
 ---
 <BaseLayout
   title={title}
@@ -132,29 +151,29 @@ const schema = {
     cards={svc.sections}
   />
 
-  {/* The point of the page: pick the crew that will actually turn up. */}
-  <section class="mist ns-pick reveal">
-    <div class="wrap">
-      <div class="shead">
-        <span class="eyebrow">Pick your market</span>
-        <h2>Who does this where you are</h2>
-        <p>Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover.</p>
-      </div>
-      <div class="ns-grid">
-        {markets.map((m) => (
-          <a class="ns-card" href={`/${m.slug}/${service}/`}>
-            <h3>{svc.label} in {m.name}</h3>
-            <span class="ns-region">{m.region}</span>
-            <span class="ns-tel">{m.phone}</span>
-            <span class="ns-go">See {m.name} <span aria-hidden="true">→</span></span>
-          </a>
-        ))}
-      </div>
-      {markets.length < MARKET_LIST.length && (
-        <p class="ns-note">Not offered in every market — the ones listed are the ones that run this service line.</p>
-      )}
-    </div>
-  </section>
+  {/* Below the fold, after the detail cards that describe the work and before the FAQ — the same
+      position it holds in [market]/[service].astro. Never behind hero copy: verify-build's fixed
+      13.6:1 and 7.1:1 hold only while no page passes media to Hero. See ProcessScrub.astro. */}
+  <ProcessScrub
+    id={`${service}-process`}
+    media={scrubMedia}
+    {...scrubIntro}
+    steps={scrubSteps}
+  />
+
+  {/* WAS a bespoke .ns-pick grid. Same question the home page asks, so it is the same component
+      now — see MarketChooser.astro. It keeps the deep link this page always had: the cards go to
+      that market's page for THIS service, not to the market landing, because someone reading the
+      national siding page wants Columbus siding rather than Columbus. */}
+  <MarketChooser
+    heading={`Who does this where you are`}
+    intro="Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover."
+    markets={markets}
+    service={service}
+    note={markets.length < MARKET_LIST.length
+      ? "Not offered in every market — the ones listed are the ones that run this service line."
+      : null}
+  />
 
   {svc.process && (
     <HowItWorks
@@ -188,19 +207,6 @@ const schema = {
   </Fragment>
 </BaseLayout>
 
-<style>
-  .ns-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:18px}
-  .ns-card{display:flex;flex-direction:column;gap:5px;background:var(--cs-paper);border:1px solid var(--cs-line);
-    border-radius:12px;padding:24px 22px;text-decoration:none;color:inherit;
-    transition:transform .2s ease-out,box-shadow .2s ease-out,border-color .2s ease-out}
-  .ns-card:hover,.ns-card:focus-visible{transform:translateY(-3px);border-color:var(--cs-primary);
-    box-shadow:0 14px 30px color-mix(in srgb, var(--cs-primary) 16%, transparent)}
-  .ns-card h3{font-size:1.18rem;margin:0}
-  .ns-region{font-size:.86rem;color:var(--cs-text-muted)}
-  .ns-tel{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
-    font-size:1.16rem;color:var(--cs-primary-deep);margin-top:6px}
-  .ns-go{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.9rem;
-    color:var(--cs-primary);margin-top:10px}
-  .ns-card:hover .ns-go{color:var(--cs-accent)}
-  .ns-note{margin:18px 0 0;color:var(--cs-text-muted);font-size:.92rem}
-</style>
+{/* The scoped .ns-* styles that were here belonged to the bespoke market grid this page no
+    longer renders. Its replacement, MarketChooser, carries its own styles in base.css. */}
+

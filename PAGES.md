@@ -19,14 +19,14 @@ change to every page in it.
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 865 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1162 |
 | 7 | Standalone | `src/pages/about-us.astro` | 1 / 6 noindex | 20 | 548 |
-| 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 883 |
+| 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 975 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 526 |
 | 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 803 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1000 |
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 724 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 565 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 528 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1393 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1302 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 676 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 682 |
 
@@ -36,20 +36,20 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1393 | — | index |
+| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1302 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 935 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 391 | — | noindex |
-| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 916 | — | index |
+| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 917 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 790 | — | noindex |
 | `/free-estimate/` | Standalone | Tell us what you need. We'll take a look. | 381 | 11 | index |
-| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 853 | — | index |
+| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 1002 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 382 | — | noindex |
-| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 927 | — | index |
+| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1095 | — | index |
 | `/service-areas/` | Service areas | Cities we service | 682 | — | index |
-| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 874 | — | index |
+| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1013 | — | index |
 | `/terms/` | Standalone | Terms of use | 337 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 618 | 9 | noindex |
-| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 846 | — | index |
+| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 850 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
@@ -222,10 +222,9 @@ these sections with this copy.
 3. Everything on the outside of your house
 4. Why homeowners keep calling us back
 5. Not sure what your roof needs?
-6. Three offices, three local crews
-7. Materials from manufacturers who stand behind them
-8. Questions we get asked most
-9. Book a free inspection
+6. Materials from manufacturers who stand behind them
+7. Questions we get asked most
+8. Book a free inspection
 
 **Locations index** — e.g. `/columbus/locations/`
 

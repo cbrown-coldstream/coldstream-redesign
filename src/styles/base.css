@@ -854,3 +854,6 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
   .q .pm{transition:none!important}
   .q[open] .pm{transform:rotate(45deg)}
 }
+/* Shown on a service chooser when the line does not run in every market — the shorter list is
+   explained rather than reading as an omission. */
+.mchoose-note{margin:16px 0 0;text-align:center;color:var(--cs-text-muted);font-size:.92rem}

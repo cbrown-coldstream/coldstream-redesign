@@ -123,29 +123,16 @@ const org = {
             reviews={TESTIMONIALS.national} marketSlug="national" />
   <ServiceDetail id="roofing" market={market} {...page.roofing} />
 
-  {/* The market landing's served-areas block. Nationally the towns belong to three markets, so the
-      equivalent is the three offices — which is also the routing for anyone the geo redirect
-      did not catch. */}
-  <section class="mist" id="locations">
-    <div class="wrap">
-      <div class="shead">
-        <span class="eyebrow">Where we work</span>
-        <h2>{page.areas.heading}</h2>
-        <p>{page.areas.intro}</p>
-      </div>
-      <div class="loc-grid">
-        {MARKET_LIST.map((m) => (
-          <div class="loc-card">
-            <h3><a href={`/${m.slug}/`}>{m.name}</a></h3>
-            <address>{m.office.street}<br />{m.office.city}, {m.office.state} {m.office.zip}</address>
-            <a class="loc-tel" href={m.telHref}>{m.phone}</a>
-            <p class="loc-region">{m.region} — {m.servedAreas.length} communities</p>
-            <a class="loc-cta" href={`/${m.slug}/free-estimate/`}>Book a free inspection<span aria-hidden="true">→</span></a>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  {/* THE #locations BLOCK WAS HERE AND IS GONE. It asked the same question MarketChooser asks
+      directly under the badge row — "which of the three is near me" — and answering it twice on one
+      page is worse than answering it once, because the second answer reads as a different question
+      the reader then has to check. The chooser is higher, which is where the question is actually
+      asked.
+
+      NOTHING IS ORPHANED BY THIS. The block was one of 20 pages linking to
+      /{market}/free-estimate/ — the header, footer, hero and CTA band all carry it on every market
+      page. The three office addresses are unchanged in the Organization schema above and in the
+      footer, so the NAP did not live here either. */}
 
   {/* Kept from the previous pass, as asked: the manufacturer strip. */}
   <PartnerStrip {...page.partners} />

@@ -1096,7 +1096,62 @@ rather than a new mechanism. Under reduced motion nothing animates and everythin
 
 ---
 
-## 22. Checks
+## 22. Round 20 — the scrub reaches the national service pages, and one chooser replaces two
+
+### The scrub was never missing — it was on a different template
+
+`/roofing/` and `/[market]/roofing/` are built by two different files, and only the market one
+carried `ProcessScrub`. Anyone checking the national URL saw nothing and concluded the section had
+not shipped. It is now on `src/pages/[service].astro` too, in the same position it holds on the
+market template: after the detail cards, before the FAQ.
+
+**The component needed no changes to work there**, which is the payoff from generalising RoofBuild
+in §18. Its steps describe how the work is done, not where, so the national page and the three
+market pages show the identical sequence — no market prop, no national variant, no second copy of
+the copy.
+
+The media map is the gate, as before: roofing, siding and gutters have footage and render; windows
+and commercial-roofing have none and render nothing at all.
+
+### One chooser, not three implementations of one question
+
+Three separate answers to "which of you is near me" had accumulated: `MarketChooser` under the badge
+row on the home page, an `#locations` grid further down that page, and a bespoke `.ns-pick` grid on
+every national service page. Same question, three sets of markup.
+
+`MarketChooser` now takes `markets`, `service` and `note`, which is everything the other two did:
+
+- **`service`** keeps the deep link `.ns-pick` always had, and it was the better idea — someone on
+  the national siding page wants Columbus **siding**, not Columbus. Without the prop the cards go to
+  the market landing, which is right for the home page.
+- **`markets`** exists because a service line does not run everywhere — garage doors is St. Louis
+  only — and a chooser offering a market that cannot do the job is worse than a shorter list.
+
+`#locations` is **deleted rather than left below the chooser**. Answering the same question twice on
+one page is worse than answering it once: the second answer reads as a different question the reader
+then has to check. Nothing was orphaned — that block was one of twenty pages linking to
+`/{market}/free-estimate/`, and the three office addresses live in the Organization schema and the
+footer, not there.
+
+`.ns-pick`'s scoped `<style>` block went with it. Every rule in it styled a grid the page no longer
+renders.
+
+### ServedAreas stays off the national pages, deliberately
+
+It renders on six market templates and zero national ones, and that is correct rather than an
+oversight. A national visitor is asking **which of your three markets am I in**; a list of 77
+neighbourhoods answers "which street are you on", which is a question they cannot have yet. The
+market landing is where that list belongs, and the chooser is what gets them there.
+
+### The map
+
+An earlier instruction asked for the keyless Google map to be preserved inside `ServedAreas`. There
+was never a map in that component — it is `ServiceAreaMap.astro`, used only on `/service-areas/`.
+Both left untouched.
+
+---
+
+## 23. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
