@@ -53,6 +53,7 @@ const KEPT_BEYOND_INVENTORY = {
   "/privacy-policy/": "The estimate form collects a name, phone and ZIP. A site taking personal data needs a policy behind it, and the footer links it on every page.",
   "/terms/": "Warranty, payment and dispute terms. Linked site-wide from the footer alongside the privacy policy.",
   "/financing/": "Linked from the footer and referenced by the offer band. Its figures are gated in claims.js and the page is noindex until a lender is confirmed.",
+  "/sitemap/": "The human sitemap. The footer has linked \"Sitemap\" since this site was built and it pointed at raw XML; this is the page it should have gone to. Derived from data/sitemap.js, so it cannot drift from what is actually crawlable.",
 };
 
 // ── what was built ───────────────────────────────────────────────────────────────────────────

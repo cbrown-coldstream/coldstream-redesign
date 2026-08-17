@@ -1191,7 +1191,55 @@ ground, its own drawn caret (a data: URI — an external request for a triangle 
 
 ---
 
-## 24. Checks
+## 24. Round 22 — the footer's "Sitemap" link finally goes somewhere a person can read
+
+The footer has linked **Sitemap → /sitemap.xml** since this site was built. That link is in the
+human part of the page, next to Privacy and Terms, and it handed anyone who clicked it a wall of
+raw XML. `/sitemap/` is the page it should always have pointed at. The XML keeps its own job and is
+unchanged — it is for Google, and sitemaps do not list sitemaps.
+
+**Derived from the same computation as the XML.** `urls()` in `data/sitemap.js` already decides what
+is crawlable and why, so the page asks it rather than keeping a second list beside it. A hand-kept
+HTML sitemap is wrong the first time anyone adds a page, and this one would have been wrong within a
+day, because pages here become indexable as their data lands.
+
+**Noindex and empty are not the same thing, and an earlier draft of this page conflated them.**
+The first version linked only indexable pages, which meant a sitemap that silently omitted the
+privacy policy while the footer linked it on every page. Four company pages — about, financing,
+privacy, terms — are noindex because a *fact* on them is unsourced, not because they are empty; they
+have real content, and linking an indexable page to a noindex one is normal, since noindex still
+means follow. They are listed. The genuinely empty ones are not: sending someone from a sitemap to
+an empty gallery is the same failure as shipping the thin page.
+
+**Two counting bugs, both caught by checking rather than by looking.**
+
+The "pages being prepared" line said **13**, which swept in the privacy policy, the 404 and the
+thank-you page alongside the galleries. It counts only galleries and reviews now — **6** — because
+those are the pages a visitor might actually come looking for.
+
+The headline total was a **sum of the group lengths**, which double-counted each market landing:
+it is rendered twice, once as the group heading and once as "<Market> home". It now derives from a
+`Set` of everything linked. A sitemap whose own total is wrong is the least forgivable page on a
+site to get wrong.
+
+*(A third mismatch I chased was in my verification regex, not the page — it required two slashes and
+so dropped `href="/"`. The page was right.)*
+
+**Designed to be read rather than endured.** A sitemap is usually an undifferentiated wall of blue
+links, which is exactly as useful as the XML it replaces. This one is grouped the way the site is
+actually put together — company, then each market with its services, its detail pages and its
+places — so the shape of the company is visible in the shape of the page. Each market heading
+carries its office city and phone, both from `markets.js`, because a sitemap is a routing page and
+the number is the fastest route of all. Raw paths sit alongside the titles in a quiet grey, useful
+when checking a URL and invisible when browsing; they are hidden below 600px.
+
+`/sitemap/` lists itself, deliberately: a page linked from every footer that is absent from its own
+sitemap is the one URL a crawler reaches constantly and is told nothing about. Named in
+`KEPT_BEYOND_INVENTORY` — the inventory now reports 58 required, 10 beyond and accounted for.
+
+---
+
+## 25. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

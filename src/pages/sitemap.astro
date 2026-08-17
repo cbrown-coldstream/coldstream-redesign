@@ -1,0 +1,180 @@
+---
+// /sitemap/ — the HUMAN sitemap. /sitemap.xml is the machine one and stays exactly as it is.
+//
+// WHY BOTH. The footer has linked "Sitemap" to /sitemap.xml since this site was built, which hands
+// a visitor a wall of raw XML. That link was for people; the XML is for Google. This is the page it
+// should always have pointed at, and the XML keeps its own job.
+//
+// DERIVED FROM THE SAME COMPUTATION AS THE XML. `urls()` in data/sitemap.js already decides what is
+// crawlable and why, so this page asks it rather than keeping a second list beside it. A hand-kept
+// HTML sitemap is a list that is wrong the first time anyone adds a page — and this one would have
+// been wrong within a day, because pages here become indexable as their data lands.
+//
+// WHAT IS LINKED IS DECIDED BY WHETHER A PAGE HAS ANYTHING ON IT, NOT BY WHETHER IT IS INDEXABLE.
+// Those are different questions and an earlier draft of this page conflated them — see the note on
+// `linkableNoindex` below. Every indexable page is linked; four noindex company pages are linked
+// too, because they have real content and the footer links them; the empty ones are counted in a
+// sentence instead. All of it is derived, so a page joins the list the moment its data lands.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import CTABand from "../components/CTABand.astro";
+import { NATIONAL, MARKETS, MARKET_LIST } from "../data/markets.js";
+import { INDEXABLE, NOINDEXED } from "../data/sitemap.js";
+
+const market = NATIONAL;
+const indexable = INDEXABLE().map((u) => u.path);
+
+// NOINDEX AND EMPTY ARE NOT THE SAME THING, and this page has to tell them apart.
+//
+// Four company pages are noindex because a FACT on them is unsourced — the founding year, the
+// lender's terms, the real data practices, counsel's review of the warranty. They have real content
+// and the footer links every one of them, so a sitemap that omitted them would be the only page on
+// the site pretending they do not exist. A visitor looking for the privacy policy should find it
+// here. Linking an indexable page to a noindex one is normal — noindex still means follow.
+//
+// The genuinely empty ones — galleries with no photos, reviews with no reviews, a blog with no
+// posts — are not linked, because sending someone from a sitemap to an empty page is the same
+// failure as shipping the thin page. `/thank-you/` and `/404.html` are never listed anywhere.
+const linkableNoindex = ["/about-us/", "/financing/", "/privacy-policy/", "/terms/"]
+  .filter((p) => NOINDEXED().some((u) => u.path === p));
+
+// Counted honestly: only the pages a visitor might actually come looking for. Saying "13 pages are
+// being prepared" would have swept in the privacy policy and the 404.
+const preparing = NOINDEXED().filter((u) => /\/(gallery|reviews)\/$/.test(u.path)).length;
+
+// A readable label per URL. Derived from the path rather than stored, so a new page cannot appear
+// here with no name — the last segment is always something, and the special cases are the handful
+// of paths whose slug does not read as a title.
+const NAMES = {
+  "/": "Home",
+  "/free-estimate/": "Free estimate",
+  "/service-areas/": "Service areas",
+  "/commercial-roofing/": "Commercial roofing",
+  "/about-us/": "About Coldstream",
+  "/financing/": "Financing",
+  "/privacy-policy/": "Privacy policy",
+  "/terms/": "Terms",
+  "/blog/": "Advice",
+};
+const titleFor = (path) => {
+  if (NAMES[path]) return NAMES[path];
+  const seg = path.replace(/\/$/, "").split("/").pop() ?? "";
+  return seg.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+};
+
+// Company-wide pages: everything not under a market slug.
+const marketSlugs = Object.keys(MARKETS);
+const company = [...indexable, ...linkableNoindex]
+  .filter((p) => !marketSlugs.some((s) => p.startsWith(`/${s}/`)))
+  .sort((a, b) => (a === "/" ? -1 : b === "/" ? 1 : a.localeCompare(b)));
+
+// Per market, grouped the way the site is actually organised rather than alphabetically.
+const groups = MARKET_LIST.map((m) => {
+  const own = indexable.filter((p) => p.startsWith(`/${m.slug}/`));
+  const depth = (p) => p.replace(/^\/|\/$/g, "").split("/").length;
+  return {
+    market: m,
+    landing: `/${m.slug}/`,
+    services: own.filter((p) => depth(p) === 2 && !["about", "free-estimate", "locations", "gallery", "reviews"].includes(p.split("/")[2])),
+    deeper: own.filter((p) => depth(p) === 3 && !p.includes("/locations/")),
+    places: own.filter((p) => p.includes("/locations/")),
+    pages: own.filter((p) => depth(p) === 2 && ["about", "free-estimate", "gallery", "reviews"].includes(p.split("/")[2])),
+  };
+});
+
+// THE COUNT IN THE HEADLINE IS THE SET, NOT A SUM. Adding the group lengths gave 60 while the page
+// linked 59 distinct pages: each market landing is rendered twice — once as the group heading and
+// once as "<Market> home" — and a sum counts it twice. A sitemap whose own total is wrong is the
+// least forgivable page on a site to get wrong.
+const linkedPages = new Set([
+  ...company,
+  ...groups.flatMap((g) => [g.landing, ...g.services, ...g.deeper, ...g.places, ...g.pages]),
+]);
+---
+<BaseLayout
+  title="Sitemap | Coldstream Exteriors"
+  description="Every page on coldstreamexteriors.com — roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis."
+  canonical="/sitemap/"
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Sitemap", href: "/sitemap/" }]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <section class="smap-head">
+    <div class="wrap">
+      <span class="eyebrow">Sitemap</span>
+      <h1>Every page on this site</h1>
+      <p>{linkedPages.size} pages, grouped the way the site is put together. If you are looking for a service in a particular area, start with your market.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="smap-block" data-reveal>
+        <h2>Company</h2>
+        <ul class="smap-list">
+          {company.map((p) => <li><a href={p}>{titleFor(p)}</a><span class="smap-url">{p}</span></li>)}
+        </ul>
+      </div>
+
+      {groups.map((g) => (
+        <div class="smap-block" data-reveal>
+          <h2>
+            <a href={g.landing}>{g.market.name}</a>
+            <span class="smap-office">{g.market.office.city}, {g.market.office.state} · <a href={g.market.telHref}>{g.market.phone}</a></span>
+          </h2>
+
+          <div class="smap-cols">
+            <div>
+              <h3>Services</h3>
+              <ul class="smap-list">
+                {g.services.map((p) => <li><a href={p}>{titleFor(p)}</a></li>)}
+              </ul>
+            </div>
+
+            {g.deeper.length > 0 && (
+              <div>
+                <h3>In detail</h3>
+                <ul class="smap-list">
+                  {g.deeper.map((p) => (
+                    <li><a href={p}>{titleFor(p)}</a><span class="smap-url">{titleFor(`/${p.split("/")[2]}/`)}</span></li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div>
+              <h3>This market</h3>
+              <ul class="smap-list">
+                <li><a href={g.landing}>{g.market.name} home</a></li>
+                {g.pages.map((p) => <li><a href={p}>{titleFor(p)}</a></li>)}
+                {g.places.map((p) => <li><a href={p}>{titleFor(p)} area</a></li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Counted, not linked — see the note at the top of this file. */}
+      {preparing > 0 && (
+        <p class="smap-waiting">
+          {preparing} more pages are being prepared — a photo gallery and a reviews page for each
+          market. They are not listed yet because there is nothing on them, and an empty page is
+          not worth your click. They will appear here once there is real work and real reviews
+          behind them.
+        </p>
+      )}
+    </div>
+  </section>
+
+  <CTABand market={market} heading="Cannot find what you need?" body="Tell us what is going on and we will point you at the right person — or come and look at it." />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

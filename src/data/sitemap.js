@@ -26,6 +26,10 @@ export const urls = () => {
     // my town". Added in round 12 — before it, four nav items pointed at `/#services` and there
     // was no service-areas page at all.
     { path: "/service-areas/", index: true, priority: "0.7" },
+    // The HUMAN sitemap. It lists itself deliberately: a page linked from every footer that is
+    // absent from its own sitemap is the one URL a crawler reaches constantly and is told nothing
+    // about. /sitemap.xml stays the machine copy and is not listed — sitemaps do not list sitemaps.
+    { path: "/sitemap/", index: true, priority: "0.3" },
     // Same rule the template's getStaticPaths uses: a service gets a national page when more than
     // one market runs it. Deriving it here from anything else is how a built page ends up missing
     // from the sitemap, which is exactly what happened the first time.
