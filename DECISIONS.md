@@ -1278,7 +1278,53 @@ here and in the page's own header.
 
 ---
 
-## 26. Checks
+## 26. Round 24 — the board explains the consolidation, and the Supabase question
+
+### Why 68 and not 443, computed rather than asserted
+
+The consolidation is the point of this rebuild and its reasoning lived only in prose — CLAUDE.md's
+"100+ neighbourhood pages that were one skeleton with synonyms swapped", the fold tables in this
+file. None of it told a reviewer **which old URLs fold into the page in front of them**, which is
+the question they actually have: what was here before, and did we keep what it was for?
+
+`data/consolidation.js` reads the **generated `_redirects` file**, not `redirects.js`. The rules
+there are patterns; `_redirects` is what those patterns expanded to and what will actually ship.
+Recomputing the expansion would be a second implementation of `build-redirects.mjs`, and the two
+would disagree the first time either changed. The ordering is safe — `npm run build` is
+`tokens && redirects && astro build` — and a missing file yields empty rather than throwing.
+
+The numbers it produces: **273 rules, 272 redirects and one 410, landing on 39 of the surviving
+pages** — 94 neighbourhood pages, 91 duplicate slugs, 82 folded into a hub, 5 duplicate conversion
+pages. Every page on the board now shows its own fold count as a badge, and expanding it lists each
+retired URL with the reason it was retired. **29 pages show "nothing redirects here — this page is
+new, not a survivor"**, which is a distinction nobody could previously make.
+
+### Groupings
+
+Rows now carry a readable lane label — Market landing, Service hub, Sub-service, Location,
+Conversion, Company/legal — because a reviewer judges a sub-service page against a different bar
+than a market landing. Added an "Absorbed URLs" filter alongside not-done, has-notes and blocked.
+
+### Supabase — not done, and why
+
+**There is no Supabase MCP connected to this session.** I checked the tool registry and the config;
+the servers available are Contractors Cloud, Netlify, Gmail, Drive, Higgsfield, Microsoft 365 and
+Wispr Flow. Nothing can create a project, run DDL or write rows, so the shared-database version of
+this board could not be built.
+
+There **is** a Supabase project in the organisation — coldstream-os uses one for the social
+pipeline. Its credentials sit in that repo's `.env`. **They were deliberately not used.** That
+project is the render pipeline's production database; adding tables to it for a website review board
+is a decision about someone else's system, and reaching into another repo's secrets to write to a
+production database unasked is not a thing to do quietly.
+
+The board keeps localStorage plus JSON export/import, which works today and is honest about being
+per-browser. **See §27 for what moving to Supabase actually requires** — it is a real piece of work,
+not a switch.
+
+---
+
+## 27. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

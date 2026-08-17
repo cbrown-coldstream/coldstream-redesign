@@ -18,7 +18,7 @@ change to every page in it.
 |---:|---|---|---|---:|---:|
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 865 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1162 |
-| 8 | Standalone | `src/pages/about-us.astro` | 1 / 7 noindex | 20 | 888 |
+| 8 | Standalone | `src/pages/about-us.astro` | 1 / 7 noindex | 20 | 1126 |
 | 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 975 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 526 |
 | 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 803 |
@@ -47,7 +47,7 @@ change to every page in it.
 | `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1095 | — | index |
 | `/service-areas/` | Service areas | Cities we service | 682 | — | index |
 | `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1013 | — | index |
-| `/sitemap/` | Standalone | Page review board | 3267 | — | noindex |
+| `/sitemap/` | Standalone | Page review board | 5170 | — | noindex |
 | `/terms/` | Standalone | Terms of use | 337 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 618 | 9 | noindex |
 | `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 850 | — | index |

@@ -26,6 +26,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { NATIONAL, MARKETS, MARKET_LIST } from "../data/markets.js";
 import { INDEXABLE, NOINDEXED } from "../data/sitemap.js";
 import { REVIEW_SECTIONS, laneFor, REVIEW_STATES } from "../data/review-sections.js";
+import { foldsInto, summary, REASONS } from "../data/consolidation.js";
 
 const market = NATIONAL;
 const marketSlugs = Object.keys(MARKETS);
@@ -59,6 +60,23 @@ const groups = ["Company and national", ...MARKET_LIST.map((m) => m.name)].map((
     .sort((a, b) => a.path.localeCompare(b.path)),
 }));
 
+const folds = foldsInto();
+const cons = summary();
+
+// LANE LABELS. The board grouped by market, which is how the work divides up, but a reviewer also
+// needs to know what KIND of page they are looking at — a sub-service page and a market landing get
+// judged against different bars.
+const LANE_LABEL = {
+  "national-home": "National home",
+  "national-service": "National service",
+  "market-landing": "Market landing",
+  "service-hub": "Service hub",
+  "sub-service": "Sub-service",
+  location: "Location",
+  conversion: "Conversion",
+  company: "Company / legal",
+};
+
 const totalPages = all.length;
 const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, marketSlugs)]?.length ?? 0), 0);
 ---
@@ -89,6 +107,7 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
           <button type="button" data-filter="open" aria-pressed="false">Not done</button>
           <button type="button" data-filter="noted" aria-pressed="false">Has notes</button>
           <button type="button" data-filter="blocked" aria-pressed="false">Blocked</button>
+          <button type="button" data-filter="absorbed" aria-pressed="false">Absorbed URLs</button>
         </div>
         <div class="rb-tools">
           {/* localStorage is per-browser and there is no server to sync to. Export/import is how
@@ -105,6 +124,31 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
       </p>
     </header>
 
+    {/* WHY 68 AND NOT 443. This is the question the whole rebuild answers, and until now it lived
+        only in prose in CLAUDE.md. Every number here is computed from the shipped _redirects file
+        rather than asserted — see data/consolidation.js. */}
+    <section class="rb-why-panel">
+      <h2>Why 68 pages and not 443</h2>
+      <p class="rb-why-lead">
+        The live site is <b>443 URLs</b>. An audit found it was mostly the same page repeated, so
+        <b>{cons.total}</b> retired URLs now redirect into <b>{cons.absorbing}</b> of the pages that
+        survived. Nothing was deleted without a destination except one.
+      </p>
+      <div class="rb-why-grid">
+        {Object.entries(cons.byReason).sort((a, b) => b[1] - a[1]).map(([k, n]) => (
+          <div class="rb-why-card">
+            <b>{n}</b>
+            <strong>{REASONS[k].label}</strong>
+            <span>{REASONS[k].blurb}</span>
+          </div>
+        ))}
+      </div>
+      <p class="rb-why-foot">
+        Open any page below to see exactly which old URLs fold into it. A page with none is a page
+        that is genuinely new rather than a survivor.
+      </p>
+    </section>
+
     <main class="rb-body">
       {groups.map((g) => (
         <section class="rb-group">
@@ -113,14 +157,19 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
           {g.rows.map((row) => {
             const sections = REVIEW_SECTIONS[row.lane] ?? [];
             return (
-              <article class="rb-page" data-path={row.path} data-blocked={String(!row.index)}>
+              <article class="rb-page" data-path={row.path} data-blocked={String(!row.index)} data-folds={String((folds[row.path] ?? []).length)} data-lane={row.lane}>
                 <div class="rb-head">
                   <input type="checkbox" class="rb-check" id={`c${row.path}`} aria-label={`Mark ${row.title} reviewed`} />
                   <button type="button" class="rb-toggle" aria-expanded="false">
                     <span class="rb-title">{row.title}</span>
                     <code>{row.path}</code>
                   </button>
-                  <span class="rb-lane">{row.lane}</span>
+                  <span class="rb-lane" title={row.lane}>{LANE_LABEL[row.lane] ?? row.lane}</span>
+                  {(folds[row.path] ?? []).length > 0 && (
+                    <span class="rb-fold-badge" title={`${(folds[row.path] ?? []).length} retired URLs redirect here`}>
+                      ←{(folds[row.path] ?? []).length}
+                    </span>
+                  )}
                   {!row.index && <span class="rb-flag" title={row.why ?? ""}>noindex</span>}
                   <select class="rb-state" aria-label={`Status for ${row.title}`}>
                     {REVIEW_STATES.map((s) => <option value={s.key}>{s.label}</option>)}
@@ -147,6 +196,20 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
                       </ul>
                     </div>
                     <div>
+                      <h3>Absorbed {(folds[row.path] ?? []).length} old URLs</h3>
+                      {(folds[row.path] ?? []).length === 0 ? (
+                        <p class="rb-none">Nothing redirects here — this page is new, not a survivor.</p>
+                      ) : (
+                        <ul class="rb-folds">
+                          {(folds[row.path] ?? []).map((f) => (
+                            <li>
+                              <code>{f.from}</code>
+                              <span class="rb-reason" title={REASONS[f.reason].blurb}>{REASONS[f.reason].label}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
                       <h3>Page notes</h3>
                       <textarea class="rb-note" rows="8" placeholder="Copy, design, anything the team needs to decide…" aria-label={`Notes for ${row.title}`}></textarea>
                     </div>
@@ -234,7 +297,8 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
           var show = f === "all"
             || (f === "open" && !r.done)
             || (f === "noted" && el.getAttribute("data-noted") === "true")
-            || (f === "blocked" && (el.dataset.blocked === "true" || r.status === "blocked"));
+            || (f === "blocked" && (el.dataset.blocked === "true" || r.status === "blocked"))
+            || (f === "absorbed" && el.dataset.folds !== "0");
           el.hidden = !show;
         });
         document.querySelectorAll(".rb-group").forEach(function (s) {
@@ -384,6 +448,33 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
     border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
   .rb-snote::placeholder,.rb-note::placeholder{color:#5d6f83}
   .rb-note{resize:vertical;line-height:1.5}
+
+
+  /* ── WHY 68 AND NOT 443 ─────────────────────────────────────────────────────────────────── */
+  .rb-why-panel{max-width:1400px;margin:22px auto 0;padding:20px clamp(14px,3vw,30px);
+    background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  .rb-why-panel h2{margin:0 0 8px;font-size:1.05rem;color:var(--ink)}
+  .rb-why-lead{margin:0 0 16px;font-size:.92rem;color:var(--dim);max-width:80ch;line-height:1.6}
+  .rb-why-lead b{color:var(--ink)}
+  .rb-why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+  .rb-why-card{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:13px 14px;
+    display:flex;flex-direction:column;gap:5px}
+  .rb-why-card b{font-size:1.5rem;line-height:1;color:var(--design)}
+  .rb-why-card strong{font-size:.86rem;color:var(--ink)}
+  .rb-why-card span{font-size:.78rem;color:var(--dim);line-height:1.5}
+  .rb-why-foot{margin:14px 0 0;font-size:.82rem;color:var(--dim)}
+
+  /* the fold badge on a row, and the list inside it */
+  .rb-fold-badge{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;font-weight:700;
+    color:#cfe3f7;background:#1d3550;border-radius:5px;padding:3px 7px;white-space:nowrap}
+  .rb-folds{list-style:none;margin:0 0 16px;padding:0;max-height:230px;overflow:auto;
+    display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:7px;padding:8px}
+  .rb-folds li{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 10px}
+  .rb-folds code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.76rem;color:#b9cbde;
+    word-break:break-all}
+  .rb-reason{font-size:.68rem;color:var(--dim);background:var(--panel2);border-radius:4px;padding:2px 6px;
+    white-space:nowrap;cursor:help}
+  .rb-none{margin:0 0 16px;font-size:.83rem;color:var(--dim);font-style:italic}
 
   @media(max-width:900px){
     .rb-cols{grid-template-columns:1fr}
