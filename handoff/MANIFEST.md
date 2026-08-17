@@ -1,6 +1,6 @@
 # Coldstream Exteriors — static site handoff
 
-Build of 2026-08-11. **62 pages · 273 redirect rules.**
+Build of 2026-08-11. **69 pages · 273 redirect rules.**
 
 This is a complete static site: plain HTML with a real heading structure, no client
 framework, no server runtime, no build step on your side. It is designed to be served by
@@ -42,7 +42,7 @@ loses the ranking value exactly as a 404 does while looking handled.
 
 ## What is indexable, and what is not
 
-**49 of 62 pages are indexable.** That is intentional and is not a
+**55 of 69 pages are indexable.** That is intentional and is not a
 broken build. Everything else carries `<meta name="robots" content="noindex">` because the
 content it needs has not been sourced yet, and a thin page that ranks is worse than a page
 that waits. The sitemap lists only the indexable set, so the two never contradict.
@@ -51,6 +51,12 @@ Indexable today:
 
 - `/`
 - `/free-estimate/`
+- `/service-areas/`
+- `/roofing/`
+- `/siding/`
+- `/windows/`
+- `/gutters/`
+- `/commercial-roofing/`
 - `/cincinnati/`
 - `/cincinnati/about/`
 - `/cincinnati/free-estimate/`
@@ -99,8 +105,9 @@ Indexable today:
 - `/st-louis/locations/north/`
 - `/columbus/locations/`
 
-Noindex today (13) — grouped by what each is waiting on:
+Noindex today (14) — grouped by what each is waiting on:
 
+- **internal team review board — never for publication** — 1 page(s): `/sitemap/`
 - **no job photos yet** — 3 page(s): `/cincinnati/gallery/`, `/columbus/gallery/`, `/st-louis/gallery/`
 - **no sourced reviews yet** — 3 page(s): `/cincinnati/reviews/`, `/columbus/reviews/`, `/st-louis/reviews/`
 - **index built, no posts migrated yet** — 1 page(s): `/blog/`
@@ -138,7 +145,7 @@ Three things, and the first is the one blocking a claim we cannot currently make
 
 ## Known gaps in this build
 
-9 factual claims are gated off the site entirely until someone sources them —
+10 factual claims are gated off the site entirely until someone sources them —
 the promotion, the financing figures, the BBB accreditation, the years-in-business number
 and all customer testimonials. They are absent from the HTML rather than approximated:
 
@@ -146,6 +153,7 @@ and all customer testimonials. They are absent from the HTML rather than approxi
 - `financing` — lender, advertised monthly payment, APR and terms (Reg Z)
 - `paymentTerms` — "no payment until complete" — confirm it is policy
 - `experience` — founding year, for the "25+ years" claim
+- `customersServed` — homes served, for the "3,000+ customers" figure
 - `bbb` — accreditation status, rating and profile URL
 - `testimonials.national` — real, attributable reviews from the GBP listing
 - `testimonials.cincinnati` — real, attributable reviews from the GBP listing

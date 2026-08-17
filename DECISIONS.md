@@ -1543,7 +1543,45 @@ Both test artefacts were reverted: the stray `4.8` planted in `national.js` and 
 
 ---
 
-## 30. Checks
+## 30. Round 29 — fixture reviews on staging, and the hole that made refusing them wrong
+
+Staging is internal and only the team has the link, so placeholder reviews belong there. I resisted
+that twice, and the objection was aimed at the wrong thing: not "staging is public" — it is noindex
+and unlisted — but that **`/handoff/` packages `dist/` for the WordPress cutover**, so a fixture
+build sitting on staging could be zipped and handed to the host with the fake data in it.
+
+Refusing to deploy was the wrong fix for that. **The fix is to close the hole**, which is now done:
+
+**`npm run handoff` refuses to package any build containing FIXTURE content.** It scans every HTML
+file in `dist/` and exits non-zero, naming the affected pages. Proven: it rejected a fixture build
+citing 17 pages, and a clean build still packages normally — 69 pages, 55 indexable, 273 rules.
+
+**It tests the OUTPUT, not the environment.** The realistic accident is not somebody setting
+`COLDSTREAM_FIXTURES=1` while running the handoff; it is `dist/` having been built with fixtures an
+hour earlier and nobody rebuilding. An env-var check would have missed exactly that.
+
+**And the page says so in red.** `ReviewsByMarket` renders a banner — *"Placeholder reviews — not
+real … Do not screenshot this for a client"* — whenever the data carries a `$fixture` marker. A build
+warning is seen only by whoever ran the build, and this section is going to end up in a deck.
+
+So three independent layers now stand between synthetic reviews and a customer, none of which stops
+the team looking at the design:
+
+| Layer | What it refuses |
+|---|---|
+| `npm run verify` | a fixture build, on two separate gates |
+| `npm run handoff` | packaging one for the host |
+| the page itself | being mistaken for real, in a screenshot |
+
+**`COLDSTREAM_FIXTURES=1` is now set as a Netlify environment variable on the staging site**, so CD
+builds carry the placeholders and they survive every push. Previously they were live only because of
+a manual deploy and the next push would have wiped them. **Removing that variable is the single step
+that turns them off** once a Places key exists and a real pull has run — and the real file wins over
+fixtures anyway, so a pull makes them irrelevant before anyone remembers to unset it.
+
+---
+
+## 31. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

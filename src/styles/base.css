@@ -943,3 +943,10 @@ a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
   /* The duplicate list is decoration for the loop; with no loop it is repetition. */
   .rbm-track .rbm-list[aria-hidden="true"]{display:none}
 }
+/* The fixture banner. Deliberately the loudest thing in the section — a build warning is seen only
+   by whoever ran the build, and a screenshot carries no console output. See ReviewsByMarket.astro. */
+.rbm-fixture{margin:0 0 22px;padding:14px 18px;border-radius:11px;font-size:.95rem;line-height:1.55;
+  background:#fdf0e6;border:2px solid #C0392B;color:#7a2318}
+.rbm-fixture b{color:#C0392B}
+.rbm-fixture code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;
+  background:#fff;border-radius:4px;padding:1px 5px}

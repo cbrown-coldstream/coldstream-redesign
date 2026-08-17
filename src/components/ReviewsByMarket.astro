@@ -88,6 +88,13 @@ if (!DATA && process.env.COLDSTREAM_FIXTURES === "1") {
 
 const { heading = "What homeowners say, office by office" } = Astro.props;
 
+// ON-PAGE, NOT JUST IN THE TERMINAL. A build warning is seen by the person who ran the build and
+// nobody else. This section is going to be looked at by a team, screenshotted, and pasted into a
+// deck — and a screenshot carries no console output. If the reviews are synthetic the page has to
+// say so where the eye lands, or somebody will eventually show a client a fabricated 4.8 in good
+// faith. It is the loudest thing in the section by design.
+const IS_FIXTURE = DATA?.$fixture != null;
+
 const columns = MARKET_LIST
   .map((m) => {
     const d = DATA?.markets?.[m.slug];
@@ -126,6 +133,14 @@ const starsFor = (r) => {
           nothing reordered, nothing left out. Google shows up to five per profile.
         </p>
       </div>
+
+      {IS_FIXTURE && (
+        <p class="rbm-fixture" role="status">
+          <b>Placeholder reviews — not real.</b> Every name and quote below is invented, for reviewing
+          the layout only. Real reviews arrive via <code>npm run reviews:pull</code> once a Google
+          Places key exists. Do not screenshot this for a client.
+        </p>
+      )}
 
       <div class="rbm-cols">
         {columns.map((c, ci) => (

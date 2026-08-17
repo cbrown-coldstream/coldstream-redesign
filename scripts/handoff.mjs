@@ -10,10 +10,10 @@
 // The manifest is GENERATED, not written, so it cannot describe a build it did not come from.
 // Page counts, the indexable list, the noindex reasons and the redirect count are all read out of
 // the same data the site is built from.
-import { writeFileSync, mkdirSync, copyFileSync, readFileSync, existsSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { MARKETS, servicesFor } from "../src/data/markets.js";
 import { urls, INDEXABLE, NOINDEXED } from "../src/data/sitemap.js";
 import { BLOG } from "../src/data/redirects.js";
@@ -25,6 +25,36 @@ const root = resolve(here, "..");
 const out = resolve(root, "handoff");
 const dist = resolve(root, "dist");
 if (!existsSync(dist)) { console.error("  ✗ no dist/ — run npm run build first"); process.exit(1); }
+
+// ── THE HANDOFF WILL NOT PACKAGE A FIXTURE BUILD ─────────────────────────────────────────────
+//
+// This is the one script that turns dist/ into something that goes on the production host, and it
+// had no idea what was in dist/. `npm run verify` catches fabricated reviews and synthetic jobs, but
+// verify is a separate command nobody is obliged to run — so a fixture build sitting in dist/ could
+// be zipped and handed over, and the fake would arrive on coldstreamexteriors.com.
+//
+// It is checked here rather than trusted to process, because the risk is not "someone sets the env
+// var while running the handoff" — it is "dist/ was built with fixtures an hour ago and nobody
+// rebuilt". So the test is the OUTPUT, not the environment.
+const leaked = [];
+const scan = (d) => {
+  for (const f of readdirSync(d)) {
+    const p = join(d, f);
+    if (statSync(p).isDirectory()) scan(p);
+    else if (f.endsWith(".html") && /FIXTURE/i.test(readFileSync(p, "utf8"))) leaked.push(relative(dist, p));
+  }
+};
+scan(dist);
+if (leaked.length) {
+  console.error(`\n  ✗ REFUSING TO PACKAGE — ${leaked.length} page(s) in dist/ contain FIXTURE content.\n`);
+  for (const f of leaked.slice(0, 8)) console.error(`      ${f}`);
+  if (leaked.length > 8) console.error(`      … and ${leaked.length - 8} more`);
+  console.error("\n    This build has synthetic reviews or job records in it. Handing it over would");
+  console.error("    publish fabricated endorsements on the live site.\n");
+  console.error("    Rebuild without fixtures and run the gates:");
+  console.error("      npm run build && npm run verify\n");
+  process.exit(1);
+}
 mkdirSync(out, { recursive: true });
 
 // The build date is passed in rather than read from the clock so two runs of the same source
