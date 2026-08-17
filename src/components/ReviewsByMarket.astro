@@ -1,0 +1,199 @@
+---
+// REVIEWS BY MARKET — three offices, three real review profiles, side by side.
+//
+// THE ANGLE IS THE THING WE CAN SUBSTANTIATE. An anonymous wall of quotes is what every contractor
+// site has and it proves nothing; three named offices each with their own Google profile, their own
+// star average and their own review count is a claim a visitor can check in one click. It is also
+// simply true of this business in a way it is not true of a franchise with one national number.
+//
+// ── THE CEILING IS FIVE PER MARKET AND THE DESIGN ADMITS IT ───────────────────────────────────
+//
+// The Places API returns at most five reviews per place. No pagination, no sort parameter. Fifteen
+// across three markets is the maximum this section can ever show, so it is built as three readable
+// columns rather than a grid that looks broken at fifteen cards and empty at three. A market with
+// two reviews still reads as finished.
+//
+// ── THE GATE. THIS IS THE PART THAT MATTERS MOST ──────────────────────────────────────────────
+//
+// The claims gate exists because the prototype shipped three invented testimonials — "Sarah M.",
+// "Dave R.", "Priya K." — under a heading claiming they were local homeowners, on two different
+// pages. Fabricated endorsements are an FTC problem, not a copy nit.
+//
+// So: NO DATA, NO SECTION. Not a skeleton, not placeholder stars, not "reviews coming soon", not a
+// dashed frame promising something. If src/data/generated/reviews.json is absent or empty this
+// component returns nothing at all, and the page reads as complete without it. There is no sample
+// review anywhere in this file, no default prop carrying a name, and nothing for a fixture to
+// inject — `npm run verify` greps the built HTML for fixture content and this cannot trip it,
+// because there is nothing to trip it with.
+//
+// A market with reviews but no profile figures shows its reviews and no aggregate. A market with
+// nothing DROPS ITS COLUMN rather than showing a zero. Zeros are a claim too.
+//
+// ── GOOGLE'S TERMS, AS RENDERED HERE ─────────────────────────────────────────────────────────
+//
+// Checked 2026-08-17 against
+// https://developers.google.com/maps/documentation/places/web-service/policies:
+//
+//   · ATTRIBUTION IS REQUIRED: "always credit the author ... (author's avatar image, name, and
+//     profile link)". Every card carries all three. A review missing any of them was dropped by
+//     the pull rather than rendered anonymously here.
+//   · NOT EDITED, NOT FILTERED, NOT REORDERED. Text is printed verbatim; the order is the order the
+//     API returned. The policy requires a "clear notice that describes how reviews are being
+//     ordered and filtered" — the note under the heading is that notice.
+//   · AVATARS ARE REFERENCED, NEVER DOWNLOADED. The policy forbids caching Places content and is
+//     silent on storing avatars, so the compliant reading is to point at Google's URL at render
+//     time. `referrerpolicy="no-referrer"` and lazy loading keep that as cheap as possible.
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { MARKET_LIST } from "../data/markets.js";
+
+// READ FROM DISK, NOT `import`. The generated file is optional by design — a fresh clone has no
+// reviews and must still build — and `await import()` cannot express that: Rollup resolves imports
+// statically, so a missing file is a build failure that no try/catch around the import can catch.
+// It failed exactly that way the first time. readFileSync is checked at build run-time instead, so
+// "no reviews yet" is an ordinary state rather than a broken build.
+const FILE = resolve(process.cwd(), "src/data/generated/reviews.json");
+let DATA = null;
+if (existsSync(FILE)) {
+  try {
+    DATA = JSON.parse(readFileSync(FILE, "utf8"));
+  } catch (e) {
+    // A malformed file is louder than a missing one: it means the pull wrote something wrong, and
+    // silently rendering no reviews would hide that. The build still completes.
+    console.warn(`  ⚠ reviews.json could not be parsed — the reviews section will not render. ${e.message}`);
+    DATA = null;
+  }
+}
+
+const { heading = "What homeowners say, office by office" } = Astro.props;
+
+const columns = MARKET_LIST
+  .map((m) => {
+    const d = DATA?.markets?.[m.slug];
+    const reviews = Array.isArray(d?.reviews) ? d.reviews : [];
+    return {
+      market: m,
+      reviews,
+      // Both fields, or no aggregate. `count` is the profile's total, not the number we show.
+      aggregate:
+        typeof d?.rating === "number" && Number.isInteger(d?.count) && d.count > 0
+          ? { rating: d.rating, count: d.count, url: d.profileUrl ?? null }
+          : null,
+    };
+  })
+  .filter((c) => c.reviews.length > 0);
+
+const show = columns.length > 0;
+
+// Stars are drawn from the number. The number is also printed for a screen reader, because five
+// glyphs are not a rating to anything that cannot see them.
+const starsFor = (r) => {
+  const full = Math.floor(r);
+  const half = r - full >= 0.5;
+  return { full, half, empty: 5 - full - (half ? 1 : 0) };
+};
+---
+{show && (
+  <section class="rbm" aria-labelledby="rbm-h">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Reviews</span>
+        <h2 id="rbm-h">{heading}</h2>
+        {/* The ordering-and-filtering notice Google's policy requires. It is also just true. */}
+        <p class="rbm-note">
+          Straight from each office's Google Business Profile, in the order Google returns them —
+          nothing reordered, nothing left out. Google shows up to five per profile.
+        </p>
+      </div>
+
+      <div class="rbm-cols">
+        {columns.map((c, ci) => (
+          <div class="rbm-col">
+            <div class="rbm-office">
+              <h3>{c.market.name}</h3>
+              <p class="rbm-city">{c.market.office.city}, {c.market.office.state}</p>
+
+              {c.aggregate ? (
+                <p class="rbm-agg">
+                  <span class="rbm-stars" aria-hidden="true">
+                    {Array.from({ length: starsFor(c.aggregate.rating).full }).map(() => <span class="s-f">★</span>)}
+                    {starsFor(c.aggregate.rating).half && <span class="s-h">★</span>}
+                    {Array.from({ length: starsFor(c.aggregate.rating).empty }).map(() => <span class="s-e">★</span>)}
+                  </span>
+                  <span class="rbm-agg-txt">
+                    {c.aggregate.url ? (
+                      <a href={c.aggregate.url} target="_blank" rel="noopener nofollow">
+                        {c.aggregate.rating} from {c.aggregate.count} Google reviews
+                      </a>
+                    ) : (
+                      <>{c.aggregate.rating} from {c.aggregate.count} Google reviews</>
+                    )}
+                  </span>
+                </p>
+              ) : (
+                /* Reviews but no profile figures: show the reviews, claim no average. */
+                <p class="rbm-agg rbm-agg-none">Reviews from this office's Google profile</p>
+              )}
+            </div>
+
+            {/* THE MARQUEE. Columns are offset by index so the three do not move in lockstep, which
+                is what makes it read as three separate profiles rather than one animation. The
+                duplicate exists only to make the loop seamless and is aria-hidden — a screen reader
+                gets each review once. Pauses on hover AND focus-within, so tabbing into a link
+                stops the track rather than dragging the focused element out of view. */}
+            <div class="rbm-track" style={`--rbm-delay:${ci * -7}s;--rbm-n:${c.reviews.length}`}>
+              <ul class="rbm-list">
+                {c.reviews.map((r) => (
+                  <li class="rbm-card">
+                    <div class="rbm-who">
+                      {r.profile_photo_url && (
+                        <img src={r.profile_photo_url} alt="" width="34" height="34"
+                             loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                      )}
+                      <div>
+                        <a class="rbm-name" href={r.author_url} target="_blank" rel="noopener nofollow">{r.name}</a>
+                        {r.relative_time_description && <span class="rbm-when">{r.relative_time_description}</span>}
+                      </div>
+                    </div>
+                    <p class="rbm-rating">
+                      <span aria-hidden="true">
+                        {Array.from({ length: starsFor(r.rating).full }).map(() => <span class="s-f">★</span>)}
+                        {Array.from({ length: 5 - starsFor(r.rating).full }).map(() => <span class="s-e">★</span>)}
+                      </span>
+                      <span class="visually-hidden">{r.rating} out of 5</span>
+                    </p>
+                    {/* Verbatim. Astro escapes it; nothing here trims or truncates the text. */}
+                    <blockquote>{r.quote}</blockquote>
+                  </li>
+                ))}
+              </ul>
+              <ul class="rbm-list" aria-hidden="true">
+                {c.reviews.map((r) => (
+                  <li class="rbm-card">
+                    <div class="rbm-who">
+                      {r.profile_photo_url && (
+                        <img src={r.profile_photo_url} alt="" width="34" height="34"
+                             loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                      )}
+                      <div>
+                        <span class="rbm-name">{r.name}</span>
+                        {r.relative_time_description && <span class="rbm-when">{r.relative_time_description}</span>}
+                      </div>
+                    </div>
+                    <p class="rbm-rating">
+                      <span>
+                        {Array.from({ length: starsFor(r.rating).full }).map(() => <span class="s-f">★</span>)}
+                        {Array.from({ length: 5 - starsFor(r.rating).full }).map(() => <span class="s-e">★</span>)}
+                      </span>
+                    </p>
+                    <blockquote>{r.quote}</blockquote>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

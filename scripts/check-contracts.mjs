@@ -13,12 +13,17 @@
 //
 // Exits non-zero if real data is invalid, or if fixture content has leaked into real data. Invalid
 // FIXTURES are also a failure — they are the spec.
+import { readFileSync, existsSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { MARKETS, SERVICES } from "../src/data/markets.js";
 import { LOCATIONS, allMarketJobs } from "../src/data/locations.js";
 import { TESTIMONIALS } from "../src/data/claims.js";
-import { validateJob, validateReview, qualifiesFor, SURFACES, JOB_FIELDS, REVIEW_FIELDS, REVIEW_RULES } from "../src/data/contracts.js";
+import { validateJob, validateReview, validateProfile, qualifiesFor, SURFACES, JOB_FIELDS, REVIEW_FIELDS, REVIEW_RULES } from "../src/data/contracts.js";
 import { SAMPLE_JOBS } from "../src/data/fixtures/jobs.sample.js";
 import { SAMPLE_REVIEWS } from "../src/data/fixtures/reviews.sample.js";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const SERVICE_KEYS = SERVICES.map((s) => s.key);
 const areaFor = (market, town) => {
@@ -97,6 +102,58 @@ for (const r of realReviews) {
   if (issues.length) {
     problem(`real review "${r.name}" (${r.market}) is invalid`);
     for (const i of issues) console.log(`      · ${i}`);
+  }
+}
+
+// ── 2b. THE PULLED GOOGLE REVIEWS, VALIDATED AGAINST THE SAME CONTRACT ───────────────────────
+//
+// scripts/pull-reviews.mjs writes src/data/generated/reviews.json. It is checked here rather than
+// trusted: "the pull satisfies the contract" is a claim, and this is the thing that makes it a fact.
+// The first version of that script wrote the Places API's own field names — author_name, text — and
+// would have sailed past a check that never ran.
+//
+// Absent is fine and silent-ish: no key, no pull, no file. Present and wrong is a failure.
+const REVIEWS_FILE = resolve(root, "src/data/generated/reviews.json");
+if (existsSync(REVIEWS_FILE)) {
+  let pulled = null;
+  try {
+    pulled = JSON.parse(readFileSync(REVIEWS_FILE, "utf8"));
+  } catch (e) {
+    problem(`generated/reviews.json is not valid JSON — ${e.message}`);
+  }
+  if (pulled) {
+    const markets = Object.entries(pulled.markets ?? {});
+    console.log(`\n  PULLED GOOGLE REVIEWS — ${markets.length} market(s), pulled ${pulled.pulledAt ?? "?"}`);
+    let n = 0;
+    for (const [slug, m] of markets) {
+      if (!MARKETS[slug]) problem(`reviews.json has an unknown market \`${slug}\``);
+      // The aggregate is all-or-nothing: a rating with no count, or either with no link, is a figure
+      // nobody can check. validateProfile is the same gate the component applies at render time.
+      const hasAny = m.rating != null || m.count != null || m.profileUrl != null;
+      if (hasAny) {
+        const pIssues = validateProfile(m);
+        if (pIssues.length) {
+          problem(`${slug} profile figures are invalid`);
+          for (const i of pIssues) console.log(`      · ${i}`);
+        }
+      }
+      for (const r of m.reviews ?? []) {
+        n++;
+        const issues = validateReview(r, MARKETS);
+        if (issues.length) {
+          problem(`pulled review "${r.name ?? "?"}" (${slug}) is invalid`);
+          for (const i of issues) console.log(`      · ${i}`);
+        }
+        // Google's attribution requirement is avatar, name AND profile link. The contract does not
+        // know about author_url because it predates this pull, so it is asserted here.
+        if (!r.author_url) problem(`pulled review "${r.name ?? "?"}" (${slug}) has no author_url — attribution is required`);
+        if (/FIXTURE|VERIFY-ONLY/i.test(r.name ?? "")) problem(`placeholder review "${r.name}" HAS BEEN COMMITTED AS REAL DATA`);
+      }
+      // Five per place is the API ceiling. More than that means something invented rows.
+      if ((m.reviews ?? []).length > 5) problem(`${slug} has ${m.reviews.length} reviews — the Places API returns at most 5`);
+      console.log(`    ✓ ${slug.padEnd(12)} ${(m.reviews ?? []).length} reviews · ${m.rating ?? "no"} rating of ${m.count ?? "no"} count`);
+    }
+    console.log(`    ${n} pulled review(s) checked against the same contract as the fixtures`);
   }
 }
 

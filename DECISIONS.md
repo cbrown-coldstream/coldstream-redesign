@@ -1385,7 +1385,90 @@ from the environment and exits with instructions if it is missing.
 
 ---
 
-## 28. Checks
+## 28. Round 26 — real Google reviews, three offices side by side
+
+### Pulled at build time, not fetched in the browser
+
+`npm run reviews:pull` → `src/data/generated/reviews.json`, committed as data. **Not part of
+`npm run build`**: a build that depends on a third-party API being up, a key being present and a
+quota having room is a deploy that is a coin toss.
+
+Client-side was never an option. The site is static output on a host with no runtime, so a browser
+fetch would need the Places key in the page — and a Places key in public HTML is a billable key
+anyone can lift. There is no server to proxy through.
+
+Failure is loud and never partial: a missing key, a failed request or a market with nothing usable
+exits non-zero and writes **nothing**. Overwriting good data with a partial file is the failure that
+matters, because the site would quietly lose reviews and nobody would look.
+
+### Five per market is the ceiling, and the design admits it
+
+The Places API returns at most five reviews per place, with no pagination and no sort. Fifteen across
+three markets is the maximum this section can ever show. So it is **three columns, one per office** —
+readable at three reviews and at fifteen — rather than a wall that looks sparse either way.
+
+**Per-market columns are the creative decision, and they are chosen because they are substantiable.**
+An anonymous wall of quotes is what every contractor site has and proves nothing. Three named
+offices, each with its own Google profile, its own star average and its own review count, is a claim
+a visitor can check in one click — and it is true of this business in a way it is not true of a
+franchise with one national number. A market with no data **drops its column** rather than showing
+zeros; zeros are a claim too.
+
+### What Google's policy actually says — checked, not assumed
+
+From the [Places API policies](https://developers.google.com/maps/documentation/places/web-service/policies),
+2026-08-17:
+
+- **Caching, confirmed:** *"You must not pre-fetch, cache, or store Places API content beyond the
+  allowed exceptions."* Place IDs are the named exception and may be stored indefinitely — which is
+  why the IDs are env config and the review text is not stored anywhere permanent.
+- **Duration, NOT confirmed.** The widely-repeated "30 consecutive calendar days" appears in the
+  Service Specific Terms against **latitude and longitude** for Directions and Geocoding. I could not
+  verify it extends to review text: `cloud.google.com/maps-platform/terms` truncates on fetch and the
+  Places policy page states no duration at all. **So the cadence is conservative by choice rather
+  than by guesswork** — treat the file as short-lived, re-pull before a deploy that displays reviews.
+  A defensible number has to come from Google's terms or their support, and it is recorded as an open
+  question rather than invented.
+- **Attribution, confirmed and required:** *"always credit the author ... (author's avatar image,
+  name, and profile link)."* All three render on every card; a review missing any of them is dropped
+  by the pull rather than shown anonymously.
+- **Ordering, confirmed:** the policy requires *"a clear notice that describes how reviews are being
+  ordered and filtered."* Nothing is sorted, filtered by sentiment or reordered, and the note under
+  the heading says so.
+- **Avatars:** the policy covers displaying them and is silent on storing them. Since it forbids
+  caching Places content generally, the compliant reading is to reference Google's URL at render time
+  and never download the file. That is what happens.
+
+### The gate
+
+No data, no section. Not a skeleton, not placeholder stars, not "reviews coming soon". There is no
+sample review in the component, no default prop carrying a name, and nothing for a fixture to inject.
+Aggregates render only when the profile's rating **and** count **and** link are all present.
+
+**Two counting mistakes were caught by checking rather than by looking.** The first version used
+`await import()` for the optional JSON — Rollup resolves imports statically, so a missing file was a
+hard build failure that no `try/catch` could catch, and it failed exactly that way. It reads from disk
+now. The second: the pull originally wrote the Places API's own field names — `author_name`, `text` —
+which satisfied the field list it was given and **failed the contract it was told to meet**. Records
+now carry the contract's names and the Places extras.
+
+`npm run contracts` validates the pulled file against the same `validateReview`/`validateProfile` the
+fixtures go through, and it was proven in both directions: a deliberately broken file produced nine
+distinct failures and exit 1 (bad rating, unknown market, non-https permalink, missing attribution,
+placeholder name, more than five reviews); a valid one passed and rendered two columns with the third
+correctly dropped. Both throwaway files were deleted and the repo greps clean.
+
+### Placement
+
+Directly below "Why homeowners keep calling us back", and the stacking is the point: those six cards
+are our account of how the work runs, this is somebody else's. The six cards are untouched.
+
+Stars use a gold of their own — **not `--cs-accent`**. Orange is headline emphasis and the focus
+ring, and it has been spreading; stars pull the eye regardless and do not need to borrow it.
+
+---
+
+## 29. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

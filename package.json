@@ -18,6 +18,7 @@
     "pagemap": "node scripts/build-pagemap.mjs",
     "review": "node scripts/build-review-wall.mjs",
     "live:pull": "node scripts/pull-live-copy.mjs",
+    "reviews:pull": "node scripts/pull-reviews.mjs",
     "handoff:site": "node scripts/build-handoff.mjs",
     "brand:publish": "node scripts/brand-publish.mjs",
     "pages": "node scripts/build-pages-md.mjs",

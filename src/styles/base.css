@@ -880,3 +880,66 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
 
 /* The public /sitemap/ styles were removed when that page became the internal review board — it
    deliberately does not use the web design system, and carries its own CSS. See sitemap.astro. */
+
+/* ── REVIEWS BY MARKET — three offices, three profiles ───────────────────────────────────────
+   NO ACCENT ORANGE IN HERE. Orange is the headline's emphasis phrase and the focus ring, and it has
+   been spreading; stars are the one thing on a reviews section that will pull the eye regardless, so
+   they take a gold of their own and leave the brand accent to do its job. See ReviewsByMarket.astro.
+
+   The section is built for FIFTEEN REVIEWS AT MOST — five per market is the Places API ceiling — so
+   it is three readable columns, not a grid that looks sparse at three cards and broken at fifteen. */
+.rbm{background:var(--cs-surface)}
+.rbm-note{font-size:.92rem;color:var(--cs-text-muted);max-width:62ch;margin:10px auto 0}
+.rbm-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+
+.rbm-col{background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:14px;
+  overflow:hidden;display:flex;flex-direction:column}
+.rbm-office{padding:20px 22px 16px;border-bottom:1px solid var(--cs-line);background:var(--cs-paper)}
+.rbm-office h3{font-size:1.24rem;font-weight:var(--cs-web-display-weight-strong);margin:0}
+.rbm-city{margin:3px 0 10px;font-size:.88rem;color:var(--cs-text-muted)}
+.rbm-agg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0;font-size:.9rem}
+.rbm-agg-txt a{color:var(--cs-primary-deep);font-weight:600;text-decoration:none}
+.rbm-agg-txt a:hover{text-decoration:underline}
+.rbm-agg-none{color:var(--cs-text-muted);font-size:.86rem}
+
+/* Stars: a gold that belongs to ratings and nothing else on this site. */
+.rbm-stars,.rbm-rating span{letter-spacing:1px;font-size:.95rem;line-height:1}
+.s-f{color:#E2A32D}
+.s-h{color:#E2A32D;opacity:.55}
+.s-e{color:var(--cs-mist)}
+
+/* THE TRACK. Two identical lists stacked; the second is aria-hidden and exists only so the
+   translate can loop without a visible jump. Duration scales with the number of cards so a column
+   with two reviews does not race a column with five. */
+.rbm-track{position:relative;flex:1;overflow:hidden;padding:4px 0;
+  mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent);
+  max-height:430px}
+.rbm-track .rbm-list{list-style:none;margin:0;padding:0 18px;display:flex;flex-direction:column;gap:14px;
+  animation:rbm-scroll calc(var(--rbm-n,3) * 11s) linear infinite;
+  animation-delay:var(--rbm-delay,0s);will-change:transform}
+@keyframes rbm-scroll{from{transform:translateY(0)}to{transform:translateY(-100%)}}
+/* Hover AND focus-within: tabbing to a reviewer's link must stop the track, or focus scrolls away
+   from under the person using it. */
+.rbm-track:hover .rbm-list,.rbm-track:focus-within .rbm-list{animation-play-state:paused}
+
+.rbm-card{background:var(--cs-surface);border:1px solid var(--cs-line);border-radius:11px;padding:14px 15px}
+.rbm-who{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rbm-who img{width:34px;height:34px;border-radius:50%;flex:none;object-fit:cover;background:var(--cs-mist)}
+.rbm-name{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;
+  color:var(--cs-text);text-decoration:none;display:block}
+a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
+.rbm-when{font-size:.78rem;color:var(--cs-text-muted)}
+.rbm-rating{margin:0 0 7px}
+.rbm-card blockquote{margin:0;font-size:.91rem;line-height:1.6;color:var(--cs-text)}
+
+@media(max-width:940px){.rbm-cols{grid-template-columns:1fr;gap:18px}.rbm-track{max-height:none}}
+
+/* REDUCED MOTION: NO MARQUEE AT ALL. Not a slower one — none. The track becomes a plain stack with
+   no height cap, no mask and no animation, so every review is readable and nothing is clipped. */
+@media (prefers-reduced-motion:reduce){
+  .rbm-track{max-height:none;overflow:visible;mask-image:none;-webkit-mask-image:none}
+  .rbm-track .rbm-list{animation:none!important}
+  /* The duplicate list is decoration for the loop; with no loop it is repetition. */
+  .rbm-track .rbm-list[aria-hidden="true"]{display:none}
+}

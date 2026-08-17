@@ -31,6 +31,7 @@ import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
 import ServicesGrid from "../components/ServicesGrid.astro";
 import WhyTrust from "../components/WhyTrust.astro";
+import ReviewsByMarket from "../components/ReviewsByMarket.astro";
 import Reviews from "../components/Reviews.astro";
 import OfferBand from "../components/OfferBand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
@@ -121,6 +122,15 @@ const org = {
       in the section competing with nothing. */}
   <WhyTrust eyebrow={null} heading={page.why.heading} cards={page.why.cards}
             reviews={TESTIMONIALS.national} marketSlug="national" />
+
+  {/* DIRECTLY BELOW "Why homeowners keep calling us back", and the stacking is the point: those six
+      cards say how the work runs, this says who vouches for it. One is our claim, the other is
+      somebody else's — they answer different questions and neither replaces the other, so the six
+      cards are untouched.
+
+      Renders NOTHING until reviews are pulled. See ReviewsByMarket.astro for why there is no
+      placeholder: the prototype's three invented testimonials are the reason this gate exists. */}
+  <ReviewsByMarket />
   <ServiceDetail id="roofing" market={market} {...page.roofing} />
 
   {/* THE #locations BLOCK WAS HERE AND IS GONE. It asked the same question MarketChooser asks

@@ -12,6 +12,12 @@ handoff/*.zip
 # Local Netlify folder
 .netlify
 
+# Real credentials. .env.example is the committed template; .env itself never is — this repo is
+# public, and a Places key or a Supabase service-role key in it would be a billable key anyone
+# can lift.
+.env
+.env.local
+
 # macOS writes these into any folder Finder opens. One of them had already been staged.
 .DS_Store
 

@@ -273,12 +273,19 @@ npm run inventory      # planned pages vs what built; extras must be named
 npm run contracts      # data-shape checks for the Contractors Cloud / GBP pulls
 npm run live:pull      # re-read the live WordPress copy into src/data/live-copy/
 npm run brand:publish  # push brand/ out to coldstream-os
+npm run reviews:pull   # pull Google reviews into src/data/generated/reviews.json
+npm run review:sync    # push the page list to the review board's database
 ```
+
+`reviews:pull` is **deliberately not part of `npm run build`** — a build must not depend on a
+third-party API being up or a key being present. Reviews are pulled when someone decides to, and the
+result is committed. See `scripts/pull-reviews.mjs` for what Google's policy does and does not say
+about how long the result may be kept.
 
 ### Generated — never hand-edit
 
 `src/styles/tokens.css` · `src/styles/ui-tokens.css` · `public/_redirects` · `pagemap.html` ·
-`/handoff/` · `PAGES.md`
+`/handoff/` · `PAGES.md` · `review.html` · **`src/data/generated/reviews.json`**
 
 ---
 
