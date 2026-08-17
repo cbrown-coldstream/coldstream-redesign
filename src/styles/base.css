@@ -878,55 +878,5 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
    explained rather than reading as an omission. */
 .mchoose-note{margin:16px 0 0;text-align:center;color:var(--cs-text-muted);font-size:.92rem}
 
-/* ── /sitemap/ — the human one ───────────────────────────────────────────────────────────────
-   Designed to be READ, not endured. A sitemap is usually a wall of undifferentiated blue links,
-   which is exactly as useful as the XML it replaces; this one is grouped the way the site is put
-   together, so the shape of the company is visible in the shape of the page. */
-.smap-head{background:var(--cs-web-hero-ground),var(--cs-web-hero-base);color:var(--cs-paper);
-  padding:52px 0 46px}
-.smap-head .eyebrow{color:var(--cs-web-hero-eyebrow);display:block;margin-bottom:9px}
-.smap-head h1{color:var(--cs-paper);font-size:clamp(1.9rem,3.6vw,2.9rem);
-  font-weight:var(--cs-web-display-weight-hero);margin:0 0 12px}
-.smap-head p{margin:0;font-size:1.06rem;max-width:60ch;color:var(--cs-web-hero-sub)}
-
-.smap-block{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--cs-line)}
-.smap-block:last-of-type{border-bottom:none;padding-bottom:6px}
-.smap-block>h2{font-size:1.5rem;font-weight:var(--cs-web-display-weight-strong);margin:0 0 18px;
-  display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
-.smap-block>h2>a{color:var(--cs-text);text-decoration:none}
-.smap-block>h2>a:hover{color:var(--cs-primary)}
-/* The office line rides on the market heading — a sitemap is a routing page, and the number is
-   the fastest route of all. Both values come from markets.js. */
-.smap-office{font-family:var(--cs-web-body);font-weight:500;font-size:.92rem;color:var(--cs-text-muted)}
-.smap-office a{color:var(--cs-primary-deep);font-weight:700;text-decoration:none}
-.smap-office a:hover{color:var(--cs-accent)}
-
-.smap-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 30px}
-.smap-cols h3{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--cs-text-muted);font-weight:var(--cs-web-display-weight);margin:0 0 10px}
-
-.smap-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-.smap-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
-.smap-list a{display:block;flex:1;min-width:0;padding:8px 10px;margin-left:-10px;border-radius:8px;
-  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.98rem;
-  color:var(--cs-primary-deep);text-decoration:none;
-  transition:background-color .15s ease-out,color .15s ease-out,transform .15s ease-out}
-.smap-list a:hover,.smap-list a:focus-visible{background:var(--cs-surface);color:var(--cs-primary);
-  transform:translateX(3px)}
-/* The raw path, kept quiet. Useful when you are checking a URL rather than browsing, invisible
-   when you are not. */
-.smap-url{font-family:var(--cs-web-body);font-size:.8rem;color:var(--cs-steel);white-space:nowrap}
-
-.smap-waiting{margin:8px 0 0;padding:16px 18px;border-radius:11px;font-size:.96rem;
-  background:var(--cs-surface);border-left:4px solid var(--cs-accent);color:var(--cs-text-muted);
-  max-width:70ch}
-
-@media(max-width:900px){.smap-cols{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){
-  .smap-cols{grid-template-columns:1fr;gap:22px}
-  .smap-url{display:none}
-}
-@media (prefers-reduced-motion:reduce){
-  .smap-list a{transition:none!important}
-  .smap-list a:hover{transform:none!important}
-}
+/* The public /sitemap/ styles were removed when that page became the internal review board — it
+   deliberately does not use the web design system, and carries its own CSS. See sitemap.astro. */

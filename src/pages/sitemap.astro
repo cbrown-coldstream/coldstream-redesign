@@ -1,180 +1,402 @@
 ---
-// /sitemap/ — the HUMAN sitemap. /sitemap.xml is the machine one and stays exactly as it is.
+// /sitemap/ — THE TEAM REVIEW BOARD. Not a public sitemap any more.
 //
-// WHY BOTH. The footer has linked "Sitemap" to /sitemap.xml since this site was built, which hands
-// a visitor a wall of raw XML. That link was for people; the XML is for Google. This is the page it
-// should always have pointed at, and the XML keeps its own job.
+// WHAT CHANGED AND WHY IT MATTERS. This started as a human-readable sitemap for visitors. It is now
+// the page the team walks the build from: every page listed, a checkbox per page and per section, a
+// status, and a notes field for what needs to change in copy or design. That is a different kind of
+// page with different rules, so three things moved with it:
 //
-// DERIVED FROM THE SAME COMPUTATION AS THE XML. `urls()` in data/sitemap.js already decides what is
-// crawlable and why, so this page asks it rather than keeping a second list beside it. A hand-kept
-// HTML sitemap is a list that is wrong the first time anyone adds a page — and this one would have
-// been wrong within a day, because pages here become indexable as their data lands.
+//   1. IT IS NOINDEX. A checklist of unfinished work, with internal notes in it, is not something to
+//      hand Google. See data/sitemap.js, where it is registered `index: false`.
+//   2. IT IS OUT OF sitemap.xml, for the same reason.
+//   3. IT DOES NOT FOLLOW THE WEB DESIGN SYSTEM, on instruction. It is a tool: dense, high-contrast,
+//      monospace where that helps scanning. It deliberately does not look like the marketing site,
+//      because looking like the marketing site is how an internal page ends up shown to a customer.
 //
-// WHAT IS LINKED IS DECIDED BY WHETHER A PAGE HAS ANYTHING ON IT, NOT BY WHETHER IT IS INDEXABLE.
-// Those are different questions and an earlier draft of this page conflated them — see the note on
-// `linkableNoindex` below. Every indexable page is linked; four noindex company pages are linked
-// too, because they have real content and the footer links them; the empty ones are counted in a
-// sentence instead. All of it is derived, so a page joins the list the moment its data lands.
+// THE LINKS IN THE HEADER AND FOOTER ARE STILL THERE. They were added on request and the team needs
+// to reach this quickly. ⚠ THEY MUST COME OUT BEFORE CUTOVER — a nav link to an internal review
+// board on the live site is the kind of thing nobody notices until a customer clicks it.
+//
+// NOTES AND TICKS LIVE IN localStorage, WHICH MEANS THEY ARE PER-BROWSER. There is no server on this
+// site to save them to — it is static output on a host with no runtime. So the board also has
+// Export and Import: one JSON file, passed around or dropped in a shared drive, is how two people
+// end up looking at the same review. That is a real limitation and it is stated on the page rather
+// than discovered when someone loses an afternoon of notes.
 import BaseLayout from "../layouts/BaseLayout.astro";
-import UtilityBar from "../components/UtilityBar.astro";
-import SiteHeader from "../components/SiteHeader.astro";
-import SiteFooter from "../components/SiteFooter.astro";
-import CTABand from "../components/CTABand.astro";
 import { NATIONAL, MARKETS, MARKET_LIST } from "../data/markets.js";
 import { INDEXABLE, NOINDEXED } from "../data/sitemap.js";
+import { REVIEW_SECTIONS, laneFor, REVIEW_STATES } from "../data/review-sections.js";
 
 const market = NATIONAL;
-const indexable = INDEXABLE().map((u) => u.path);
-
-// NOINDEX AND EMPTY ARE NOT THE SAME THING, and this page has to tell them apart.
-//
-// Four company pages are noindex because a FACT on them is unsourced — the founding year, the
-// lender's terms, the real data practices, counsel's review of the warranty. They have real content
-// and the footer links every one of them, so a sitemap that omitted them would be the only page on
-// the site pretending they do not exist. A visitor looking for the privacy policy should find it
-// here. Linking an indexable page to a noindex one is normal — noindex still means follow.
-//
-// The genuinely empty ones — galleries with no photos, reviews with no reviews, a blog with no
-// posts — are not linked, because sending someone from a sitemap to an empty page is the same
-// failure as shipping the thin page. `/thank-you/` and `/404.html` are never listed anywhere.
-const linkableNoindex = ["/about-us/", "/financing/", "/privacy-policy/", "/terms/"]
-  .filter((p) => NOINDEXED().some((u) => u.path === p));
-
-// Counted honestly: only the pages a visitor might actually come looking for. Saying "13 pages are
-// being prepared" would have swept in the privacy policy and the 404.
-const preparing = NOINDEXED().filter((u) => /\/(gallery|reviews)\/$/.test(u.path)).length;
-
-// A readable label per URL. Derived from the path rather than stored, so a new page cannot appear
-// here with no name — the last segment is always something, and the special cases are the handful
-// of paths whose slug does not read as a title.
-const NAMES = {
-  "/": "Home",
-  "/free-estimate/": "Free estimate",
-  "/service-areas/": "Service areas",
-  "/commercial-roofing/": "Commercial roofing",
-  "/about-us/": "About Coldstream",
-  "/financing/": "Financing",
-  "/privacy-policy/": "Privacy policy",
-  "/terms/": "Terms",
-  "/blog/": "Advice",
-};
-const titleFor = (path) => {
-  if (NAMES[path]) return NAMES[path];
-  const seg = path.replace(/\/$/, "").split("/").pop() ?? "";
-  return seg.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
-};
-
-// Company-wide pages: everything not under a market slug.
 const marketSlugs = Object.keys(MARKETS);
-const company = [...indexable, ...linkableNoindex]
-  .filter((p) => !marketSlugs.some((s) => p.startsWith(`/${s}/`)))
-  .sort((a, b) => (a === "/" ? -1 : b === "/" ? 1 : a.localeCompare(b)));
 
-// Per market, grouped the way the site is actually organised rather than alphabetically.
-const groups = MARKET_LIST.map((m) => {
-  const own = indexable.filter((p) => p.startsWith(`/${m.slug}/`));
-  const depth = (p) => p.replace(/^\/|\/$/g, "").split("/").length;
-  return {
-    market: m,
-    landing: `/${m.slug}/`,
-    services: own.filter((p) => depth(p) === 2 && !["about", "free-estimate", "locations", "gallery", "reviews"].includes(p.split("/")[2])),
-    deeper: own.filter((p) => depth(p) === 3 && !p.includes("/locations/")),
-    places: own.filter((p) => p.includes("/locations/")),
-    pages: own.filter((p) => depth(p) === 2 && ["about", "free-estimate", "gallery", "reviews"].includes(p.split("/")[2])),
-  };
-});
+// EVERY page, including the ones waiting on data — this is a build checklist, so a page that is
+// not finished is exactly the page the team most needs in front of them. The public version of this
+// list hid them; this one flags them instead.
+const all = [
+  ...INDEXABLE().map((u) => ({ path: u.path, index: true, why: null })),
+  ...NOINDEXED().map((u) => ({ path: u.path, index: false, why: u.why ?? null })),
+].filter((u) => u.path !== "/404.html");
 
-// THE COUNT IN THE HEADLINE IS THE SET, NOT A SUM. Adding the group lengths gave 60 while the page
-// linked 59 distinct pages: each market landing is rendered twice — once as the group heading and
-// once as "<Market> home" — and a sum counts it twice. A sitemap whose own total is wrong is the
-// least forgivable page on a site to get wrong.
-const linkedPages = new Set([
-  ...company,
-  ...groups.flatMap((g) => [g.landing, ...g.services, ...g.deeper, ...g.places, ...g.pages]),
-]);
+const NAMES = {
+  "/": "Home", "/free-estimate/": "Free estimate", "/service-areas/": "Service areas",
+  "/commercial-roofing/": "Commercial roofing", "/about-us/": "About Coldstream",
+  "/financing/": "Financing", "/privacy-policy/": "Privacy policy", "/terms/": "Terms",
+  "/blog/": "Advice", "/thank-you/": "Thank you", "/sitemap/": "This board",
+};
+const titleFor = (p) => NAMES[p] ?? (p.replace(/\/$/, "").split("/").pop() ?? "").replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+
+// Grouped by market, because that is how the work gets divided up.
+const groupOf = (p) => {
+  const seg = p.replace(/^\//, "").split("/")[0];
+  return marketSlugs.includes(seg) ? MARKETS[seg].name : "Company and national";
+};
+const groups = ["Company and national", ...MARKET_LIST.map((m) => m.name)].map((name) => ({
+  name,
+  rows: all
+    .filter((u) => groupOf(u.path) === name)
+    .map((u) => ({ ...u, lane: laneFor(u.path, marketSlugs), title: titleFor(u.path) }))
+    .sort((a, b) => a.path.localeCompare(b.path)),
+}));
+
+const totalPages = all.length;
+const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, marketSlugs)]?.length ?? 0), 0);
 ---
 <BaseLayout
-  title="Sitemap | Coldstream Exteriors"
-  description="Every page on coldstreamexteriors.com — roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis."
+  title="Page review board — internal | Coldstream Exteriors"
+  description="Internal review board. Not for publication."
   canonical="/sitemap/"
   market={market}
-  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Sitemap", href: "/sitemap/" }]}
+  noindex={true}
 >
-  <Fragment slot="chrome-top">
-    <UtilityBar market={market} resolvedFrom="default" />
-    <SiteHeader market={market} />
-  </Fragment>
-
-  <section class="smap-head">
-    <div class="wrap">
-      <span class="eyebrow">Sitemap</span>
-      <h1>Every page on this site</h1>
-      <p>{linkedPages.size} pages, grouped the way the site is put together. If you are looking for a service in a particular area, start with your market.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="smap-block" data-reveal>
-        <h2>Company</h2>
-        <ul class="smap-list">
-          {company.map((p) => <li><a href={p}>{titleFor(p)}</a><span class="smap-url">{p}</span></li>)}
-        </ul>
+  <div class="rb">
+    <header class="rb-top">
+      <div class="rb-top-in">
+        <div>
+          <p class="rb-kicker">Internal — not for customers</p>
+          <h1>Page review board</h1>
+          <p class="rb-sub">{totalPages} pages · {totalSections} sections. Tick as you go, set a status, leave notes for the team.</p>
+        </div>
+        <div class="rb-progress" aria-hidden="true">
+          <div class="rb-ring"><span id="rbPct">0%</span></div>
+          <p><b id="rbDone">0</b> of {totalPages} pages done</p>
+        </div>
       </div>
 
-      {groups.map((g) => (
-        <div class="smap-block" data-reveal>
-          <h2>
-            <a href={g.landing}>{g.market.name}</a>
-            <span class="smap-office">{g.market.office.city}, {g.market.office.state} · <a href={g.market.telHref}>{g.market.phone}</a></span>
-          </h2>
-
-          <div class="smap-cols">
-            <div>
-              <h3>Services</h3>
-              <ul class="smap-list">
-                {g.services.map((p) => <li><a href={p}>{titleFor(p)}</a></li>)}
-              </ul>
-            </div>
-
-            {g.deeper.length > 0 && (
-              <div>
-                <h3>In detail</h3>
-                <ul class="smap-list">
-                  {g.deeper.map((p) => (
-                    <li><a href={p}>{titleFor(p)}</a><span class="smap-url">{titleFor(`/${p.split("/")[2]}/`)}</span></li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <div>
-              <h3>This market</h3>
-              <ul class="smap-list">
-                <li><a href={g.landing}>{g.market.name} home</a></li>
-                {g.pages.map((p) => <li><a href={p}>{titleFor(p)}</a></li>)}
-                {g.places.map((p) => <li><a href={p}>{titleFor(p)} area</a></li>)}
-              </ul>
-            </div>
-          </div>
+      <div class="rb-bar">
+        <div class="rb-filters" role="group" aria-label="Filter pages">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="open" aria-pressed="false">Not done</button>
+          <button type="button" data-filter="noted" aria-pressed="false">Has notes</button>
+          <button type="button" data-filter="blocked" aria-pressed="false">Blocked</button>
         </div>
+        <div class="rb-tools">
+          {/* localStorage is per-browser and there is no server to sync to. Export/import is how
+              two people review the same build — see the header note in this file. */}
+          <button type="button" id="rbExport">Export notes</button>
+          <label class="rb-import">Import<input type="file" id="rbImport" accept="application/json" hidden /></label>
+          <button type="button" id="rbExpand">Expand all</button>
+          <button type="button" id="rbReset" class="rb-danger">Reset</button>
+        </div>
+      </div>
+      <p class="rb-warn">
+        Ticks and notes are saved in <b>this browser only</b> — there is no server behind this site.
+        Use <b>Export notes</b> to share them, and <b>Import</b> to load someone else's.
+      </p>
+    </header>
+
+    <main class="rb-body">
+      {groups.map((g) => (
+        <section class="rb-group">
+          <h2>{g.name} <span class="rb-count">{g.rows.length}</span></h2>
+
+          {g.rows.map((row) => {
+            const sections = REVIEW_SECTIONS[row.lane] ?? [];
+            return (
+              <article class="rb-page" data-path={row.path} data-blocked={String(!row.index)}>
+                <div class="rb-head">
+                  <input type="checkbox" class="rb-check" id={`c${row.path}`} aria-label={`Mark ${row.title} reviewed`} />
+                  <button type="button" class="rb-toggle" aria-expanded="false">
+                    <span class="rb-title">{row.title}</span>
+                    <code>{row.path}</code>
+                  </button>
+                  <span class="rb-lane">{row.lane}</span>
+                  {!row.index && <span class="rb-flag" title={row.why ?? ""}>noindex</span>}
+                  <select class="rb-state" aria-label={`Status for ${row.title}`}>
+                    {REVIEW_STATES.map((s) => <option value={s.key}>{s.label}</option>)}
+                  </select>
+                  <a class="rb-open" href={row.path} target="_blank" rel="noopener">Open ↗</a>
+                </div>
+
+                <div class="rb-detail" hidden>
+                  {row.why && <p class="rb-why"><b>Waiting on:</b> {row.why}</p>}
+
+                  <div class="rb-cols">
+                    <div>
+                      <h3>Sections</h3>
+                      <ul class="rb-sections">
+                        {sections.map((s, i) => (
+                          <li>
+                            <label>
+                              <input type="checkbox" class="rb-scheck" data-sec={i} />
+                              <span>{s}</span>
+                            </label>
+                            <input type="text" class="rb-snote" data-sec={i} placeholder="note…" aria-label={`Note for ${s}`} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h3>Page notes</h3>
+                      <textarea class="rb-note" rows="8" placeholder="Copy, design, anything the team needs to decide…" aria-label={`Notes for ${row.title}`}></textarea>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </section>
       ))}
-
-      {/* Counted, not linked — see the note at the top of this file. */}
-      {preparing > 0 && (
-        <p class="smap-waiting">
-          {preparing} more pages are being prepared — a photo gallery and a reviews page for each
-          market. They are not listed yet because there is nothing on them, and an empty page is
-          not worth your click. They will appear here once there is real work and real reviews
-          behind them.
-        </p>
-      )}
-    </div>
-  </section>
-
-  <CTABand market={market} heading="Cannot find what you need?" body="Tell us what is going on and we will point you at the right person — or come and look at it." />
-
-  <Fragment slot="chrome-bottom">
-    <SiteFooter market={market} />
-  </Fragment>
+    </main>
+  </div>
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var KEY = "cs_review_board_v1";
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+
+    var pages = Array.prototype.slice.call(document.querySelectorAll(".rb-page"));
+
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      paint();
+    }
+    function rec(path) {
+      if (!state[path]) state[path] = { done: false, status: "", note: "", sec: {}, secNote: {} };
+      return state[path];
+    }
+
+    function paint() {
+      var done = 0;
+      pages.forEach(function (el) {
+        var r = state[el.dataset.path];
+        if (r && r.done) done++;
+        el.classList.toggle("is-done", !!(r && r.done));
+        el.setAttribute("data-status", (r && r.status) || "");
+        el.setAttribute("data-noted", String(!!(r && (r.note || Object.keys(r.secNote || {}).some(function (k) { return r.secNote[k]; })))));
+      });
+      var pct = pages.length ? Math.round((done / pages.length) * 100) : 0;
+      document.getElementById("rbPct").textContent = pct + "%";
+      document.getElementById("rbDone").textContent = done;
+      document.querySelector(".rb-ring").style.setProperty("--pct", pct);
+    }
+
+    // Restore, then bind. Restoring first means a half-typed note is never clobbered by a paint.
+    pages.forEach(function (el) {
+      var path = el.dataset.path;
+      var r = state[path];
+      if (r) {
+        el.querySelector(".rb-check").checked = !!r.done;
+        el.querySelector(".rb-state").value = r.status || "";
+        el.querySelector(".rb-note").value = r.note || "";
+        el.querySelectorAll(".rb-scheck").forEach(function (c) { c.checked = !!(r.sec || {})[c.dataset.sec]; });
+        el.querySelectorAll(".rb-snote").forEach(function (n) { n.value = (r.secNote || {})[n.dataset.sec] || ""; });
+      }
+
+      el.querySelector(".rb-check").addEventListener("change", function (e) { rec(path).done = e.target.checked; save(); });
+      el.querySelector(".rb-state").addEventListener("change", function (e) { rec(path).status = e.target.value; save(); });
+      el.querySelector(".rb-note").addEventListener("input", function (e) { rec(path).note = e.target.value; save(); });
+      el.querySelectorAll(".rb-scheck").forEach(function (c) {
+        c.addEventListener("change", function () { rec(path).sec[c.dataset.sec] = c.checked; save(); });
+      });
+      el.querySelectorAll(".rb-snote").forEach(function (n) {
+        n.addEventListener("input", function () { rec(path).secNote[n.dataset.sec] = n.value; save(); });
+      });
+
+      var tog = el.querySelector(".rb-toggle");
+      tog.addEventListener("click", function () {
+        var open = tog.getAttribute("aria-expanded") === "true";
+        tog.setAttribute("aria-expanded", String(!open));
+        el.querySelector(".rb-detail").hidden = open;
+      });
+    });
+
+    // Filters
+    var fbtns = Array.prototype.slice.call(document.querySelectorAll("[data-filter]"));
+    fbtns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        fbtns.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+        var f = b.dataset.filter;
+        pages.forEach(function (el) {
+          var r = state[el.dataset.path] || {};
+          var show = f === "all"
+            || (f === "open" && !r.done)
+            || (f === "noted" && el.getAttribute("data-noted") === "true")
+            || (f === "blocked" && (el.dataset.blocked === "true" || r.status === "blocked"));
+          el.hidden = !show;
+        });
+        document.querySelectorAll(".rb-group").forEach(function (s) {
+          s.hidden = !Array.prototype.some.call(s.querySelectorAll(".rb-page"), function (p) { return !p.hidden; });
+        });
+      });
+    });
+
+    var expanded = false;
+    document.getElementById("rbExpand").addEventListener("click", function (e) {
+      expanded = !expanded;
+      pages.forEach(function (el) {
+        el.querySelector(".rb-toggle").setAttribute("aria-expanded", String(expanded));
+        el.querySelector(".rb-detail").hidden = !expanded;
+      });
+      e.target.textContent = expanded ? "Collapse all" : "Expand all";
+    });
+
+    document.getElementById("rbExport").addEventListener("click", function () {
+      var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "coldstream-review-notes.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    document.getElementById("rbImport").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0];
+      if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        try {
+          var incoming = JSON.parse(fr.result);
+          // MERGE, NEVER REPLACE. Someone importing a colleague's file should not lose their own
+          // afternoon; a per-page conflict keeps whichever record has a note on it.
+          Object.keys(incoming).forEach(function (p) {
+            var mine = state[p], theirs = incoming[p];
+            state[p] = (mine && mine.note && !theirs.note) ? mine : theirs;
+          });
+          save();
+          pages.forEach(function (el) {
+            var r = state[el.dataset.path]; if (!r) return;
+            el.querySelector(".rb-check").checked = !!r.done;
+            el.querySelector(".rb-state").value = r.status || "";
+            el.querySelector(".rb-note").value = r.note || "";
+            el.querySelectorAll(".rb-scheck").forEach(function (c) { c.checked = !!(r.sec || {})[c.dataset.sec]; });
+            el.querySelectorAll(".rb-snote").forEach(function (n) { n.value = (r.secNote || {})[n.dataset.sec] || ""; });
+          });
+        } catch (err) { alert("That file could not be read as review notes."); }
+      };
+      fr.readAsText(f);
+    });
+
+    document.getElementById("rbReset").addEventListener("click", function () {
+      if (!confirm("Clear every tick and note in this browser? Export first if you want to keep them.")) return;
+      state = {}; save(); location.reload();
+    });
+
+    paint();
+  })();
+</script>
+
+<style is:global>
+  /* ── REVIEW BOARD — DELIBERATELY NOT THE WEB DESIGN SYSTEM ─────────────────────────────────
+     On instruction. This is a tool, not a page of the site: dense rows, high contrast, monospace
+     for paths and lanes so they scan, and a palette that could not be mistaken for the marketing
+     site. That mismatch is a feature — an internal board that looks like the live site is one
+     somebody eventually shows a customer. */
+  body:has(.rb){background:#10151c}
+  .rb{--ink:#e8eef5;--dim:#8fa3b8;--line:#243044;--panel:#161d27;--panel2:#1b2431;
+      --wip:#3A89C7;--copy:#B7791F;--design:#8fc0ea;--blocked:#C0392B;--done:#16A34A;
+      color:var(--ink);font-family:Inter,system-ui,sans-serif;min-height:100vh;padding-bottom:60px}
+  .rb *{box-sizing:border-box}
+
+  .rb-top{position:sticky;top:0;z-index:20;background:#10151c;border-bottom:1px solid var(--line);
+    padding:20px clamp(14px,3vw,30px) 14px}
+  .rb-top-in{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;justify-content:space-between;
+    max-width:1400px;margin:0 auto}
+  .rb-kicker{margin:0 0 4px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#C0392B;font-weight:700}
+  .rb h1{margin:0;font-size:1.5rem;color:var(--ink);font-family:Inter,system-ui,sans-serif;letter-spacing:-.01em}
+  .rb-sub{margin:5px 0 0;color:var(--dim);font-size:.9rem}
+
+  .rb-progress{display:flex;align-items:center;gap:12px}
+  .rb-progress p{margin:0;font-size:.84rem;color:var(--dim)}
+  .rb-progress b{color:var(--ink)}
+  /* conic-gradient ring — no library, no svg, one element */
+  .rb-ring{--pct:0;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+    background:conic-gradient(var(--done) calc(var(--pct)*1%), #243044 0);font-size:.8rem;font-weight:700}
+  .rb-ring span{width:44px;height:44px;border-radius:50%;background:#10151c;display:grid;place-items:center}
+
+  .rb-bar{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:space-between;align-items:center;
+    max-width:1400px;margin:14px auto 0}
+  .rb-filters,.rb-tools{display:flex;flex-wrap:wrap;gap:8px}
+  .rb button,.rb-import{font:inherit;font-size:.84rem;font-weight:600;cursor:pointer;color:var(--ink);
+    background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:8px 13px;min-height:38px}
+  .rb button:hover,.rb-import:hover{background:#222d3d}
+  .rb button[aria-pressed=true]{background:var(--wip);border-color:var(--wip);color:#fff}
+  .rb .rb-danger{color:#ff9a8f;border-color:#4a2a2a}
+  .rb-import{display:inline-flex;align-items:center}
+  .rb :focus-visible{outline:2px solid var(--design);outline-offset:2px}
+  .rb-warn{max-width:1400px;margin:12px auto 0;font-size:.8rem;color:var(--dim);
+    background:#1b1a12;border:1px solid #3a3520;border-radius:7px;padding:9px 12px}
+
+  .rb-body{max-width:1400px;margin:0 auto;padding:22px clamp(14px,3vw,30px) 0}
+  .rb-group{margin:0 0 30px}
+  .rb-group>h2{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+    margin:0 0 10px;display:flex;align-items:center;gap:10px}
+  .rb-count{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:1px 9px;font-size:.72rem;letter-spacing:0}
+
+  .rb-page{background:var(--panel);border:1px solid var(--line);border-radius:9px;margin-bottom:7px;overflow:hidden}
+  .rb-page[hidden]{display:none}
+  /* Status shows as a left edge — visible while scanning fifty rows, invisible when you are not
+     looking for it. */
+  .rb-page[data-status=reviewing]{border-left:4px solid var(--wip)}
+  .rb-page[data-status=copy]{border-left:4px solid var(--copy)}
+  .rb-page[data-status=design]{border-left:4px solid var(--design)}
+  .rb-page[data-status=blocked]{border-left:4px solid var(--blocked)}
+  .rb-page[data-status=done],.rb-page.is-done{border-left:4px solid var(--done)}
+  .rb-page.is-done .rb-title{text-decoration:line-through;color:var(--dim)}
+
+  .rb-head{display:flex;align-items:center;gap:10px;padding:9px 12px}
+  .rb-check{width:19px;height:19px;flex:none;accent-color:#16A34A;cursor:pointer}
+  .rb-toggle{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;
+    background:none!important;border:none!important;text-align:left;padding:4px 0!important;min-height:0!important}
+  .rb-title{font-weight:600;font-size:.98rem}
+  .rb-head code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;color:var(--dim)}
+  .rb-lane{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;color:var(--dim);
+    background:var(--panel2);border-radius:5px;padding:3px 7px;white-space:nowrap}
+  .rb-flag{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:#ffb3a7;background:#3a1f1c;border-radius:5px;padding:3px 7px;white-space:nowrap}
+  .rb-state{font:inherit;font-size:.8rem;background:var(--panel2);color:var(--ink);
+    border:1px solid var(--line);border-radius:7px;padding:6px 8px;min-height:36px;cursor:pointer}
+  .rb-open{font-size:.8rem;color:var(--design);text-decoration:none;white-space:nowrap;padding:6px}
+  .rb-open:hover{text-decoration:underline}
+
+  .rb-detail{border-top:1px solid var(--line);background:#131a24;padding:14px}
+  .rb-detail[hidden]{display:none}
+  .rb-why{margin:0 0 12px;font-size:.84rem;color:#ffcfc7;background:#2a1a18;border-radius:7px;padding:9px 11px}
+  .rb-cols{display:grid;grid-template-columns:1.3fr 1fr;gap:20px}
+  .rb-detail h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .rb-sections{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+  .rb-sections li{display:grid;grid-template-columns:1fr 190px;gap:8px;align-items:center}
+  .rb-sections label{display:flex;align-items:center;gap:9px;font-size:.87rem;cursor:pointer;min-width:0}
+  .rb-sections input[type=checkbox]{width:16px;height:16px;flex:none;accent-color:#3A89C7;cursor:pointer}
+  .rb-snote,.rb-note{font:inherit;font-size:.83rem;background:#0e141c;color:var(--ink);
+    border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
+  .rb-snote::placeholder,.rb-note::placeholder{color:#5d6f83}
+  .rb-note{resize:vertical;line-height:1.5}
+
+  @media(max-width:900px){
+    .rb-cols{grid-template-columns:1fr}
+    .rb-sections li{grid-template-columns:1fr}
+    .rb-head{flex-wrap:wrap}
+    .rb-lane{display:none}
+  }
+  /* The board is a working surface — printing it is a legitimate way to take it into a meeting. */
+  @media print{
+    body:has(.rb){background:#fff}
+    .rb{color:#000;background:#fff}
+    .rb-top{position:static}.rb-filters,.rb-tools,.rb-open{display:none}
+    .rb-detail{display:block!important}
+    .rb-page{break-inside:avoid;border:1px solid #999}
+  }
+</style>

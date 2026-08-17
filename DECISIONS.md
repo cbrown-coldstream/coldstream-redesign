@@ -1239,7 +1239,42 @@ sitemap is the one URL a crawler reaches constantly and is told nothing about. N
 
 ---
 
-## 25. Checks
+## 25. Round 23 — /sitemap/ became the team's review board
+
+It was a public sitemap for about an hour. It is now the page the team walks the build from, and
+that is a different kind of page with different rules.
+
+**Three things moved with the purpose.** It is `noindex`; it is out of `sitemap.xml`; and **it does
+not follow the web design system**, on instruction. A checklist of unfinished work with the team's
+internal commentary on it is not something to hand a crawler, and the visual mismatch is deliberate
+— an internal board that looks like the marketing site is one somebody eventually shows a customer.
+Dark ground, dense rows, monospace paths and lane tags, a conic-gradient progress ring.
+
+**What it carries.** All 68 pages including the unfinished ones — a build checklist that hides the
+incomplete pages is useless — grouped by market. Per page: a tick, a status (in review · needs copy
+· needs design · blocked · approved) shown as a coloured left edge so it scans down a long list, an
+"open in new tab" link, and a notes field. Expanded, each page lists its own sections with a tick
+and a one-line note each: **521 section checkboxes** across the site, from `REVIEW_SECTIONS` keyed
+by template lane rather than by URL, because three markets share one template and a per-URL list
+would be the same strings three times, drifting the first time one was edited.
+
+Filters for not-done, has-notes and blocked. Expand-all. A print stylesheet, because taking the
+board into a meeting on paper is a real thing people do.
+
+**THE REAL LIMITATION, STATED ON THE PAGE RATHER THAN DISCOVERED.** Ticks and notes live in
+`localStorage`, so they are **per browser**. This site is static output on a host with no runtime —
+there is no server to save them to and adding one is not a small decision. So the board exports and
+imports a JSON file, which is how two people end up looking at the same review, and the warning sits
+in the header where it cannot be missed. Import **merges rather than replaces**, keeping whichever
+record carries a note, so loading a colleague's file cannot wipe your own afternoon.
+
+**⚠ THE HEADER AND FOOTER LINKS MUST COME OUT BEFORE CUTOVER.** They were added on request and the
+team needs them now. A nav link to an internal review board on the live site is exactly the kind of
+thing nobody notices until a customer clicks it. This is recorded here and in the page's own header.
+
+---
+
+## 26. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
