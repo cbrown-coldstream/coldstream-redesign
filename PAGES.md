@@ -16,7 +16,7 @@ change to every page in it.
 
 | Pages | Lane | Template | Index | 301s in | Avg words |
 |---:|---|---|---|---:|---:|
-| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 879 |
+| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1001 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1176 |
 | 8 | Standalone | `src/pages/about-us.astro` | 1 / 7 noindex | 20 | 1239 |
 | 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 987 |
@@ -70,9 +70,9 @@ change to every page in it.
 | `/cincinnati/roofing/roof-repair/` | Sub-service | Roof Repair in Cincinnati | 872 | 12 | index |
 | `/cincinnati/roofing/roof-replacement/` | Sub-service | Roof Replacement in Cincinnati | 896 | 3 | index |
 | `/cincinnati/siding/` | Service hub | Siding in Cincinnati | 1271 | 4 | index |
-| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 883 | 6 | index |
+| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1247 | 6 | index |
 | `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 862 | 6 | index |
-| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 848 | 3 | index |
+| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1216 | 3 | index |
 | `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 999 | 1 | index |
 
 ### Columbus — 17 pages (15 indexable, 2 noindex)
@@ -92,9 +92,9 @@ change to every page in it.
 | `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 860 | 12 | index |
 | `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 888 | 3 | index |
 | `/columbus/siding/` | Service hub | Siding in Columbus | 1263 | 4 | index |
-| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 875 | 6 | index |
+| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1239 | 6 | index |
 | `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 854 | 6 | index |
-| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 835 | 3 | index |
+| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1203 | 3 | index |
 | `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 996 | 1 | index |
 
 ### St. Louis — 18 pages (16 indexable, 2 noindex)
@@ -115,9 +115,9 @@ change to every page in it.
 | `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 910 | 12 | index |
 | `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 941 | 3 | index |
 | `/st-louis/siding/` | Service hub | Siding in St. Louis | 1313 | 4 | index |
-| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 927 | 6 | index |
+| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1291 | 6 | index |
 | `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 907 | 6 | index |
-| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 884 | 3 | index |
+| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1252 | 3 | index |
 | `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1046 | 1 | index |
 
 ## Section order per lane

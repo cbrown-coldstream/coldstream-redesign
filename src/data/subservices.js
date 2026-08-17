@@ -158,6 +158,29 @@ export const SUBSERVICES = {
         { q: `Is it a good fit for houses in ${m.name}?`, a: `It suits the stock here well. ${c.stock}` },
         ...commonFaq(m),
       ],
+      // ── PRODUCT DEPTH (team call follow-up, 2026-08-18) ────────────────────────────────────
+      // Same problem as the vinyl page: strong product sections, ~19% of sentences on the product.
+      // This is fiber cement specifically — weight, cutting, clearances and finish — and it is
+      // written to be read next to the vinyl page by someone deciding between the two.
+      depth: {
+        eyebrow: "About the material",
+        heading: "Fiber cement is a different job, not a different colour",
+        intro: "James Hardie is cement, sand and cellulose. That makes it behave nothing like vinyl on the wall or in the hands of the crew fitting it.",
+        blocks: [
+          { h: "It is heavy, and that changes the crew",
+            p: ["A fiber cement plank weighs several times what a vinyl panel does. It needs more hands, different fastening and a substrate that can carry it, and it does not forgive being hung on a wall nobody checked first.",
+                "It is also cut rather than snapped. Cutting it releases silica dust, so it is cut with the right blade and the right control — which is a working practice, not a preference."] },
+          { h: "Clearances are where installations fail",
+            p: ["Fiber cement has specified gaps: above the roof line, above decking and horizontal surfaces, and at grade. Those clearances exist because the board will wick water if it sits in it, and wicked water in a freeze-thaw climate splits the board from the inside.",
+                "It is the single most common thing we find wrong on fiber cement that somebody else fitted. The board is fine; it was installed tight to a roof and has been drinking for three winters."] },
+          { h: "ColorPlus or site-painted",
+            p: ["ColorPlus is finished in the factory — baked on, consistent, and it arrives that colour. Site-painted means primed board finished on the wall, which costs less and lets you choose any colour, but the finish is only as good as the day it was applied.",
+                "Neither is wrong. Factory finish for longevity and consistency; site paint for colour freedom and for matching something existing. We will quote either and say which we would put on our own house."] },
+          { h: "Why it suits this climate",
+            p: ["Fiber cement does not soften in heat or grow brittle in cold, and it does not give insects anything to eat. In a market that crosses freezing repeatedly through the winter, dimensional stability is worth more than it sounds.",
+                "The trade-off is honest: it costs more than vinyl, it is heavier to work with, and a bad installation is more expensive to put right. It is the better material and it is the less forgiving one."] },
+        ],
+      },
     },
 
     "vinyl-siding": {
@@ -178,6 +201,30 @@ export const SUBSERVICES = {
         { q: "Can you match my existing siding?", a: "Sometimes. Profiles and colours get discontinued, so an exact match on an older house is not always possible — we will check before promising it." },
         ...commonFaq(m),
       ],
+      // ── PRODUCT DEPTH (team call follow-up, 2026-08-18) ────────────────────────────────────
+      // The page was 741 words with only about a fifth of its sentences mentioning vinyl at all —
+      // four good product sections wrapped in shared boilerplate. This is the part that is about
+      // the material: how it is fastened, what sits behind it, and what actually goes wrong.
+      // Written for a homeowner choosing between vinyl and fiber cement, not for a crawler.
+      depth: {
+        eyebrow: "About the material",
+        heading: "What decides whether vinyl looks right in ten years",
+        intro: "Vinyl is the value option and it earns that honestly — but it is less forgiving of a bad installation than almost anything else on a house.",
+        blocks: [
+          { h: "It has to be hung loose, not nailed tight",
+            p: ["A vinyl panel expands and contracts with temperature — noticeably, along its length, every day. It is designed to hang on the nail rather than be pinned by it, which means the nail head sits slightly proud and the panel slides behind it.",
+                "Nail it tight and the panel has nowhere to go, so it buckles in the first hot week and stays buckled. Wavy vinyl on a wall is almost never a bad product. It is a crew that drove the nails home."] },
+          { h: "The wall behind it does the work",
+            p: ["Vinyl is a rain screen, not a seal. Water gets behind it by design and has to drain out, which makes the weather-resistant barrier, the flashing and the condition of the sheathing more important than the panel you chose.",
+                "That is why we take the old siding off rather than going over it. Going over hides whatever is rotting underneath and adds a second layer for water to sit between."] },
+          { h: "Insulated vinyl, and when it is worth it",
+            p: ["Insulated panels have foam bonded to the back. They are stiffer, so they look flatter on the wall and sound less hollow, and they add a modest amount of R-value.",
+                "The honest version: buy it for the flatness and the rigidity, not for the energy saving. If someone is selling insulated vinyl mainly on heating bills, ask them for the number in writing."] },
+          { h: "Colour, and the repair problem",
+            p: ["Darker colours hold heat and fade faster, and a south or west elevation ages ahead of the rest of the house. Modern formulations are far better than they were, but the sunny wall is still the one that shows age first.",
+                "Matching matters later. Profiles and colours get discontinued, so a partial repair on a ten-year-old wall often cannot be matched exactly. We will tell you when a patch is going to be visible rather than doing it and letting you find out."] },
+        ],
+      },
     },
   },
 };

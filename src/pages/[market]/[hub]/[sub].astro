@@ -18,6 +18,7 @@ import UtilityBar from "../../../components/UtilityBar.astro";
 import SiteHeader from "../../../components/SiteHeader.astro";
 import Hero from "../../../components/Hero.astro";
 import ServiceDetail from "../../../components/ServiceDetail.astro";
+import MarketDepth from "../../../components/MarketDepth.astro";
 import WhyTrust from "../../../components/WhyTrust.astro";
 import ServedAreas from "../../../components/ServedAreas.astro";
 import FAQ from "../../../components/FAQ.astro";
@@ -100,6 +101,13 @@ const schema = {
     heading={`${svc.label} in ${market.name}`}
     cards={svc.sections}
   />
+
+  {/* PRODUCT DEPTH. Sits straight after the product sections and before the shared trust cards —
+      a reader deciding between materials should hit the material argument before the boilerplate.
+      Renders nothing for sub-services that have no depth block yet. */}
+  {/* `svc`, not `sub` — `sub` is the URL param string from Astro.params and `.depth` on a
+      string is undefined, which renders nothing and fails silently. It did exactly that once. */}
+  <MarketDepth market={market} depth={svc.depth} />
 
   <WhyTrust
     heading="Straightforward from quote to cleanup"

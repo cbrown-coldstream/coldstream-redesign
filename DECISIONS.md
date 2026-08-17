@@ -1749,7 +1749,45 @@ The punch list now greps as 64 × `roofful-embed`, 3 × `team-photo-*`, 2 × `he
 
 ---
 
-## 33. Checks
+## 33. Round 32 — the vinyl and Hardie pages are about vinyl and Hardie
+
+The pages already existed, one per market, with product-specific section headings and
+product-specific FAQs. The problem was proportion: **741 and 775 words of which roughly a fifth of
+the sentences were about the material at all.** Four good product sections wrapped in the same
+trust cards, served-areas list and CTA every other page carries.
+
+Each now carries a product depth block — the material argument a homeowner choosing between the two
+actually needs:
+
+**Vinyl** — that it hangs loose on the nail rather than being pinned by it, and that wavy vinyl is
+almost never a bad product but a crew that drove the nails home; that it is a rain screen so the
+wall behind it does the work; that insulated panels are worth buying for flatness and rigidity
+rather than for the heating bill; and that a partial repair on a ten-year-old wall often cannot be
+colour-matched, which we say before doing it rather than after.
+
+**Fiber cement** — that it is several times the weight of vinyl and needs a different crew and a
+substrate somebody checked; that cutting it releases silica and is a working practice rather than a
+preference; that specified clearances at roof, deck and grade are where installations fail, and that
+board installed tight to a roof has been drinking for three winters; and ColorPlus against
+site-painted with a straight answer on when each is right.
+
+**Measured, not asserted:** 741 → **1109** and 775 → **1139** words, with the product sections now
+**43% and 41%** of the body. The two pages score **21.6% similarity against each other in the same
+market** — what they share is the boilerplate, not the argument.
+
+**A note on the metric, because the obvious one is wrong.** Counting sentences containing the literal
+word "vinyl" moved only 20% → 23%, and that is the measure failing rather than the copy. Good writing
+uses a pronoun the second time; repeating the product name in every sentence is the keyword stuffing
+the call explicitly ruled out. The share-of-page figure is the honest number.
+
+**A silent-render bug, found by checking the word count rather than the diff.** The section was wired
+as `sub.depth`, but `sub` is the URL param string from `Astro.params` — the object is `svc`. `.depth`
+on a string is `undefined`, so `MarketDepth` rendered nothing and every gate passed. The word count
+was unchanged from before the copy was written, which is the only reason it was caught.
+
+---
+
+## 34. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
