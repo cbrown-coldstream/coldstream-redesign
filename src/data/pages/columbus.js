@@ -13,6 +13,8 @@ export const columbus = {
     eyebrow: "Central Ohio Roofing and Exteriors",
     headline: "Roofing and Exteriors Built for Central Ohio Weather",
     sub: "Free estimates with honest pricing from our Galloway office. Backed by our own Central Ohio crews and a 25-year workmanship warranty.",
+    // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
+    cta: "Get my free Columbus estimate →",
   },
   services: {
     heading: "One team for your whole exterior",

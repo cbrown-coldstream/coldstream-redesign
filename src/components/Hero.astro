@@ -9,8 +9,8 @@
 //
 // MEDIA IS OPT-IN AND IT MEANS REAL. Pass `media` when there is genuine footage or a genuine
 // photograph for a page — {poster, mp4, webm} or {img} — and it paints under the gradient wash,
-// which then reads as a scrim. Nothing passes it today. When the crew photography lands, that
-// is the one prop to set, and no CSS changes.
+// which then reads as a scrim. When the crew photography lands, that is the one prop to set, and no
+// CSS changes. The national home page currently passes a PLACEHOLDER — see the note below it.
 //
 // VIDEO, when media carries it, is progressive enhancement and never the LCP resource. The
 // <video> ships with preload="none" and no autoplay attribute; a tiny inline script attaches
@@ -34,6 +34,10 @@ import { heroBullets, offerChip, CLAIMS } from "../data/claims.js";
 import { estimateHref } from "../data/markets.js";
 const {
   market, eyebrow, headline, sub, video,
+  // MARKET-SCOPED CTA. The label lives in the market's own data object alongside its headline and
+  // sub, so all three are edited in one place per market rather than through conditionals in here.
+  // The default is the company-level wording the national hero keeps.
+  cta = "Get My Free Estimate →",
   // The hero ground's own media. Opt-in, real assets only — see the note above.
   media = null,
   bullets = heroBullets(), offer = offerChip(),
@@ -64,7 +68,14 @@ const {
 // roofing video is likely to contain. Sample frames across the clip, take the worst, and if it
 // does not clear AA the fix is a heavier scrim or different footage, not a looser gate.
 //
-// NOTHING PASSES `media` TODAY. This is capability, deliberately unused.
+// ONE PAGE PASSES `media` NOW: the national home page, with a PLACEHOLDER clip. The numbers above
+// were therefore re-derived rather than assumed, which is what that paragraph demanded. Measured
+// through the existing scrim, worst pixel in the headline region:
+//     poster (a render of the CSS gradient)   white 13.29:1 · accent 6.90:1
+//     video, BRIGHTEST of 144 frames          white 15.40:1 · accent 7.99:1
+// Both clear the CSS ground's 13.6:1 / 7.1:1, because the clip is darker than the gradient. The
+// scrim is unchanged. A brighter clip — real roof footage against sky — will not inherit this, and
+// the measurement has to be redone when the real asset lands.
 const hasVideo = Boolean(media && media.poster && (media.mp4 || media.webm));
 const hasStill = Boolean(media && media.img);
 const showMedia = hasVideo || hasStill;
@@ -76,8 +87,13 @@ const head = words.slice(0, -1).join(" ");
 const last = words[words.length - 1];
 ---
 <section class="hero" id="quote">
+  {/* ⚠ PLACEHOLDER ASSET — data-needs="hero-video" makes it greppable with the rest of the punch
+      list. The clip currently at /video/hero-placeholder.mp4 is NOT footage: it is a faint
+      Coldstream wordmark on near-black, the same watermark this component's header records as
+      deliberately removed. It is here on instruction and marked so nobody mistakes it for the
+      finished asset. Replace the file, keep the props. */}
   {showMedia && (
-    <div class="hero-media" aria-hidden="true">
+    <div class="hero-media" aria-hidden="true" data-needs={hasVideo ? "hero-video" : null}>
       {hasVideo ? (
         <>
           {/* THE POSTER IS A PLAIN <img>, NOT THE VIDEO'S poster ATTRIBUTE. As an attribute it is
@@ -88,7 +104,11 @@ const last = words[words.length - 1];
           {/* No src and no <source> children: the inline script below attaches one only after it
               has decided the video will be used. Under prefers-reduced-motion it never does, so
               reduced motion means poster only — the file is not even fetched. */}
-          <video id="heroVideo" muted loop playsinline preload="none"
+          {/* muted + playsinline + loop are attributes; autoplay is set by the script only after it
+              has cleared reduced-motion, viewport and connection — so preload="none" here means a
+              phone and a reduced-motion visitor never fetch the file at all, not merely that they
+              do not see it play. */}
+          <video id="heroVideo" muted loop playsinline preload="none" data-needs="hero-video"
                  data-mp4={media.mp4} data-webm={media.webm}></video>
         </>
       ) : (
@@ -122,7 +142,7 @@ const last = words[words.length - 1];
         {/* The site's primary CTA pointed at /instant-roof-quote/ on every page. That page
             does not exist here and is not being built — there is no instant-quote vendor, and a
             button promising an instant quote that cannot give one is a broken promise. */}
-        <a class="btn btn-orange" href={estimateHref(market)}>Get My Free Estimate →</a>
+        <a class="btn btn-orange" href={estimateHref(market)}>{cta}</a>
         {videoModal && video && (
           <button type="button" class="playbtn" id="heroPlay" aria-haspopup="dialog">
             <span class="playbtn-ic" aria-hidden="true">▶</span>

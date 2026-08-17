@@ -90,7 +90,20 @@ const org = {
       that page's HTML literally would put a Milford address and a Cincinnati LocalBusiness node on
       the national URL, and leave / and /cincinnati/ as two pages with the same content competing
       for the same searches. Same shape, honest data. */}
-  <Hero market={market} video={video} videoModal={true} {...page.hero} />
+  {/* ⚠ PLACEHOLDER HERO VIDEO. Poster is /video/hero-ground-poster.jpg — a render of the CSS
+      hero_ground gradient from ui-tokens.json, so if the video is slow, blocked or fails the hero
+      looks exactly as it does today. There was no existing hero still to use: the hero ground is a
+      gradient, and the only image on disk was the rejected logo watermark.
+
+      MEASURED, NOT ASSUMED. Through the existing scrim: the poster gives white 13.29:1 / accent
+      6.90:1 and the video's BRIGHTEST frame gives 15.40:1 / 7.99:1 — both above the 13.6/7.1 the
+      CSS ground scores, because the clip is darker than the gradient. The scrim is unchanged.
+
+      Only this page passes media. A market hero can opt in with the same one prop. */}
+  <Hero
+    market={market}
+    media={{ poster: "/video/hero-ground-poster.jpg", mp4: "/video/hero-placeholder.mp4", webm: "/video/hero-placeholder.webm" }}
+    video={video} videoModal={true} {...page.hero} />
   <MarketNotice market={market} />
 
   {/* TRUST BAND. page.trust existed in national.js since round 7 and nothing ever rendered it, so

@@ -11,6 +11,8 @@ export const stLouis = {
     eyebrow: "Greater St. Louis Roofing and Exteriors",
     headline: "Roofing, Siding and Exteriors Across Greater St. Louis",
     sub: "Free estimates with honest pricing from our Geyer Road office. Backed by our own local crews and a 25-year workmanship warranty.",
+    // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
+    cta: "Get my free St. Louis estimate →",
   },
   services: {
     heading: "One team for your whole exterior",

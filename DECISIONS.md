@@ -1581,7 +1581,72 @@ fixtures anyway, so a pull makes them irrelevant before anyone remembers to unse
 
 ---
 
-## 31. Checks
+## 31. Round 30 — a placeholder hero video, market-scoped CTAs, and the hint removed
+
+### The hero video is a marked placeholder, and it is the watermark
+
+`/video/hero-placeholder.mp4` is not footage. It is a faint Coldstream wordmark on near-black, six
+seconds, barely animated — **the same asset Hero.astro's header records as deliberately removed**,
+on the grounds that "a placeholder that looks deliberate is worse than an empty ground: nobody
+chases the real asset for it."
+
+It is back on instruction, on the national home page only, and marked so nobody mistakes it for the
+finished thing: `data-needs="hero-video"` on both the media wrapper and the `<video>`, greppable with
+the rest of the punch list, plus a PLACEHOLDER note in the component. **Replace the file, keep the
+props.**
+
+**There was no "current hero still" to use as the poster.** The brief required one; the hero ground
+is a CSS gradient and the only still on disk was the rejected watermark. So the poster is
+**generated** — `hero-ground-poster.jpg`, a 1600x900 render of `hero_ground` straight from
+`ui-tokens.json`. That is the current hero still in the only sense that exists, and it satisfies what
+the requirement was actually for: if the video is slow, blocked or fails, the hero looks exactly as
+it does today.
+
+**Contrast was re-derived, not assumed** — which is what the warning added in §26 demanded of anyone
+enabling this. Worst pixel in the headline region, through the **unchanged** scrim:
+
+| Surface | White | Accent |
+|---|---|---|
+| Poster (gradient render) | 13.29:1 | 6.90:1 |
+| Video, brightest of 144 frames | **15.40:1** | **7.99:1** |
+| CSS ground (prior baseline) | 13.6:1 | 7.1:1 |
+
+The video scores *better* than the gradient because it is darker. The scrim needed no change. **Real
+roof footage against a bright sky will not inherit this** and the measurement has to be redone —
+the component says so where someone swapping the file will read it.
+
+Behaviour: `muted`, `playsinline`, `loop`, `preload="none"`; autoplay is set by script only after
+clearing reduced-motion, viewport and connection. So a phone and a reduced-motion visitor **never
+fetch the file at all** rather than merely not seeing it play.
+
+### Market-scoped CTA — the last piece of hero copy still living in the component
+
+The market heroes were already city-only and already in their market data objects; none hedged
+across markets and the national hero kept the company-level language. The one gap was the CTA label,
+hardcoded in `Hero.astro`. It is now a `cta` prop defaulting to the company wording, set per market
+in `pages/{market}.js` beside that market's headline and sub — one place to edit per market, no
+conditionals in the component.
+
+No coverage was invented: nothing was added about surrounding communities that is not already in
+`markets.js`.
+
+### The "Looking for St. Louis?" prompt — REVERSAL
+
+Added two rounds ago in §19 as a returning-visitor hint reading the `cs_market` cookie. **Removed on
+instruction.** Recording it as a reversal because adding it was a deliberate decision, not an
+accident.
+
+**Checked before deleting, as asked: it orphaned nothing.** Its `href` was written by script at
+runtime, so it was never part of the crawlable link graph at all — and each market landing is linked
+from **all 68 other pages** by the footer's Markets list and the chooser cards. The orphan gate
+passes. No replacement link was added anywhere.
+
+Removing it took this component's only JavaScript with it: the three cards are plain links and the
+call targets are plain `tel:` hrefs. The dead `.mchoose-hint` CSS went too.
+
+---
+
+## 32. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

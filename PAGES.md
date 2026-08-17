@@ -19,14 +19,14 @@ change to every page in it.
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 865 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1162 |
 | 8 | Standalone | `src/pages/about-us.astro` | 1 / 7 noindex | 20 | 1226 |
-| 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 975 |
+| 5 | National service | `src/pages/[service].astro` | 5 / 0 noindex | 0 | 972 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 526 |
-| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 803 |
+| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 804 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1000 |
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 724 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 565 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 528 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1302 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1299 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 676 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 682 |
 
@@ -36,27 +36,27 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1302 | — | index |
+| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1299 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 935 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 391 | — | noindex |
-| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 917 | — | index |
+| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 914 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 790 | — | noindex |
 | `/free-estimate/` | Standalone | Tell us what you need. We'll take a look. | 381 | 11 | index |
-| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 1002 | — | index |
+| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 999 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 382 | — | noindex |
-| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1095 | — | index |
+| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1092 | — | index |
 | `/service-areas/` | Service areas | Cities we service | 682 | — | index |
-| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1013 | — | index |
+| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1010 | — | index |
 | `/sitemap/` | Standalone | Page review board | 5970 | — | noindex |
 | `/terms/` | Standalone | Terms of use | 337 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 618 | 9 | noindex |
-| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 850 | — | index |
+| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 847 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 745 | 10 | index |
+| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 746 | 10 | index |
 | `/cincinnati/about/` | Market about | The Coldstream Crew in Cincinnati | 987 | — | index |
 | `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 1019 | 2 | index |
 | `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 712 | — | index |
@@ -79,7 +79,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 797 | 11 | index |
+| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 798 | 11 | index |
 | `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 980 | — | index |
 | `/columbus/commercial-roofing/` | Service hub | Commercial Roofing in Columbus | 1011 | 2 | index |
 | `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 704 | — | index |
@@ -101,7 +101,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 867 | 11 | index |
+| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 869 | 11 | index |
 | `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 1033 | — | index |
 | `/st-louis/commercial-roofing/` | Service hub | Commercial Roofing in St. Louis | 1059 | 2 | index |
 | `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 755 | — | index |

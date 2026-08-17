@@ -34,6 +34,8 @@ export const cincinnati = {
     eyebrow: "Cincinnati's Trusted Roofing Contractors",
     headline: "Roofing, Siding, Window & Gutter Services in Cincinnati",
     sub: "Free estimates with honest pricing. No surprises. Backed by our own Southwest Ohio crews and a 25-year workmanship warranty.",
+    // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
+    cta: "Get my free Cincinnati estimate →",
   },
 
   services: {

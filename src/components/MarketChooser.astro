@@ -16,19 +16,13 @@
 // WordPress home page still has, printing (888) 625-5960 while linking a different number. Nothing
 // here is typed.
 //
-// ── THE RETURNING-VISITOR HINT (progressive enhancement) ─────────────────────────────────────
+// ── THE RETURNING-VISITOR HINT IS GONE (removed on instruction) ──────────────────────────────
 //
-// If a previous visit stored a market, this surfaces one dismissible line pointing at it. It reads
-// the SAME `cs_market` cookie the utility bar's select and MarketNotice already write — a new key
-// would mean two records of one preference, and they would drift.
+// It read the stored `cs_market` cookie and offered "Looking for St. Louis?" as a dismissible line.
+// Removing it also removed this component's only JavaScript — the three cards are plain links and
+// the call targets are plain tel: hrefs. Recorded as a reversal in DECISIONS.md, because adding it
+// was a deliberate decision two rounds earlier.
 //
-// NO IP LOOKUP HAPPENS HERE. GeoRedirect does that, once, on this page, and it is a separate
-// mechanism with a separate cookie. This only reads a choice the visitor already made.
-//
-// NO LAYOUT SHIFT. The hint is in the HTML with `hidden` set, and the script that unhides it is
-// inline and sits immediately after the markup, so it runs during parse — before first paint,
-// not after it. Nothing pops in. With no cookie, or JS off, the element stays hidden and the
-// chooser reads exactly as authored.
 // ── ONE COMPONENT, TWO PLACEMENTS, BECAUSE IT IS ONE QUESTION ────────────────────────────────
 //
 // The national home page and the national service pages both had their own answer to "which of you
@@ -66,13 +60,11 @@ const hrefFor = (m) => (service ? `/${m.slug}/${service}/` : `/${m.slug}/`);
       <p>{intro}</p>
     </div>
 
-    {/* Rendered always, revealed only if a stored choice exists. `hidden` rather than a class so
-        it is hidden for assistive tech too, not just visually. */}
-    <p class="mchoose-hint" id="mchooseHint" hidden>
-      <span id="mchooseHintText"></span>
-      <a id="mchooseHintLink" href="/">Go there</a>
-      <button type="button" id="mchooseHintX" aria-label="Dismiss">Dismiss</button>
-    </p>
+    {/* THE "Looking for St. Louis?" HINT WAS HERE AND IS GONE — removed on instruction.
+        It read a stored cs_market cookie and offered a one-line shortcut back to that market. It
+        orphaned nothing when it went: its href was written by script at runtime, so it was never
+        part of the crawlable link graph, and each market landing is linked from all 68 other pages
+        by the footer's Markets list and the chooser cards below. Reversal recorded in DECISIONS.md. */}
 
     <ul class="mchoose-grid">
       {markets.map((m) => (
@@ -93,32 +85,7 @@ const hrefFor = (m) => (service ? `/${m.slug}/${service}/` : `/${m.slug}/`);
     {note && <p class="mchoose-note">{note}</p>}
   </div>
 </section>
-<script is:inline>
-  (function () {
-    var hint = document.getElementById("mchooseHint");
-    if (!hint) return;
+{/* The inline script that drove the hint went with it. Nothing else on this component needed
+    JavaScript: the three cards are plain links and the call targets are plain tel: hrefs, which is
+    why removing the hint removes the script entirely rather than leaving an empty listener. */}
 
-    // Same cookie the market <select> and MarketNotice write. Reading only — this never sets it.
-    var slug = document.cookie.split("; ").reduce(function (a, c) {
-      var p = c.split("=");
-      return p[0] === "cs_market" ? decodeURIComponent(p.slice(1).join("=")) : a;
-    }, "");
-    if (!slug) return;
-
-    // The slug has to match a card that is actually on the page. A cookie holding a stale or
-    // hand-edited value must produce nothing, not a link to a URL that does not exist.
-    var card = document.querySelector('.mchoose-card[data-market="' + slug + '"]');
-    if (!card) return;
-
-    var name = card.querySelector("strong").textContent;
-    document.getElementById("mchooseHintText").textContent = "Looking for " + name + "?";
-    var link = document.getElementById("mchooseHintLink");
-    link.setAttribute("href", card.getAttribute("href"));
-    link.textContent = "Go to " + name;
-    hint.hidden = false;
-
-    document.getElementById("mchooseHintX").addEventListener("click", function () {
-      hint.hidden = true;
-    });
-  })();
-</script>
