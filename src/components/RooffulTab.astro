@@ -1,0 +1,36 @@
+---
+// ROOFFUL INSTANT-QUOTE TAB — PLACEMENT RESERVED, NOT INTEGRATED (team call, 2026-08-18).
+//
+// ⚠ THERE IS NO EMBED CODE YET. This renders the right-edge tab and nothing behind it. It does not
+// load a script, does not open a panel, and does not promise an instant quote — because a button
+// that says "Instant Quote" and then does nothing is worse than no button, and the live WordPress
+// site already had exactly that: a header CTA pointing at /instant-roof-quote/, a page that does
+// not exist and is not being built.
+//
+// WHERE THE EMBED DROPS IN. Roofful supplies either a <script> tag or an iframe URL. Neither goes
+// in this file:
+//
+//   1. The script tag belongs in BaseLayout, before </body>, as `is:inline` — the same treatment
+//      the reveal and market-select scripts get, so it is not deferred behind a bundle.
+//   2. This component keeps the tab and gains the click handler that opens whatever Roofful gives
+//      us — a panel, a modal or a redirect.
+//   3. Delete `data-needs="roofful-embed"` when it is wired, and the punch-list grep stops
+//      reporting it.
+//
+// UNTIL THEN THE TAB IS INERT AND SAYS SO. It is a plain link to the estimate page, which is the
+// honest version of the same promise: a real quote from a person who has looked at the roof. When
+// the embed lands, that href becomes the fallback for anyone whose JavaScript did not run.
+//
+// It is deliberately NOT rendered on the estimate pages themselves — a floating tab pointing at the
+// page you are already on is noise.
+import { estimateHref } from "../data/markets.js";
+const { market } = Astro.props;
+---
+<a
+  class="roofful-tab"
+  href={estimateHref(market)}
+  data-needs="roofful-embed"
+  aria-label="Get a free estimate"
+>
+  <span class="roofful-tab-txt">Free Estimate</span>
+</a>

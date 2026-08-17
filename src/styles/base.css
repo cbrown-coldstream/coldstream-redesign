@@ -119,11 +119,73 @@ img{max-width:100%;display:block}
 header.site{position:sticky;top:0;z-index:50;background:var(--cs-paper);border-bottom:1px solid var(--cs-line);box-shadow:0 1px 8px color-mix(in srgb, var(--cs-text) 4%, transparent)}
 header.site .wrap{display:flex;align-items:center;gap:22px;min-height:78px}
 .brand img{height:44px;width:auto}
-nav.main{display:flex;gap:18px;margin-left:6px;flex-wrap:wrap}
-nav.main a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;color:var(--cs-text);text-decoration:none;padding:6px 0;border-bottom:3px solid transparent}
+/* ── PRIMARY NAV — 7 items after the team call, with a real mobile menu ──────────────────────
+   THE BREAKPOINTS, MEASURED RATHER THAN GUESSED (see the report in DECISIONS.md):
+     ≥1180px  all six trade items + About + CTA sit on one line with room to spare
+     1024px   the row is tight; gap tightens and font drops a step, still one line
+     <960px   the horizontal nav is REPLACED by the Menu disclosure, not hidden
+   The old rule was `@media(max-width:1040px){nav.main{display:none}}` — at four items that was
+   survivable, at seven it meant 85% of visitors had no way to reach a service page from the
+   header. The panel below is the answer. */
+nav.main{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.navpanel{display:flex;align-items:center;gap:22px;flex:1;min-width:0}
+.main-right{margin-left:auto}
+.navitem{position:relative}
+nav.main a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;color:var(--cs-text);text-decoration:none;padding:6px 0;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:5px}
 nav.main a:hover{color:var(--cs-primary);border-color:var(--cs-accent)}
-header .spacer{flex:1}
-@media(max-width:1040px){nav.main{display:none}}
+.caret{font-size:.7em;opacity:.7}
+
+/* Dropdowns open on hover AND focus-within — a hover-only submenu cannot be reached by keyboard. */
+.subnav{position:absolute;top:100%;left:-14px;min-width:210px;margin:0;padding:8px;list-style:none;
+  background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:11px;
+  box-shadow:0 18px 40px color-mix(in srgb, var(--cs-text) 14%, transparent);
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .16s ease-out,transform .16s ease-out,visibility .16s;z-index:60}
+.has-sub:hover .subnav,.has-sub:focus-within .subnav{opacity:1;visibility:visible;transform:none}
+.subnav a{display:block;padding:9px 12px;border-radius:7px;border-bottom:none;font-size:.92rem;min-height:44px}
+.subnav a:hover,.subnav a:focus-visible{background:var(--cs-surface);color:var(--cs-primary-deep);border-bottom:none}
+
+.navtoggle{display:none;align-items:center;gap:9px;background:var(--cs-surface);border:1px solid var(--cs-line);
+  border-radius:9px;padding:9px 14px;min-height:44px;cursor:pointer;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight);font-size:.94rem;color:var(--cs-text);margin-left:auto}
+.navtoggle-bars{display:grid;gap:4px}
+.navtoggle-bars span{display:block;width:18px;height:2px;background:var(--cs-text);border-radius:2px;transition:transform .18s ease-out,opacity .18s}
+.navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(2){opacity:0}
+.navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.navcta{white-space:nowrap}
+
+@media(max-width:1180px){
+  .navpanel{gap:16px}
+  nav.main{gap:14px}
+  nav.main a{font-size:.9rem}
+}
+@media(max-width:960px){
+  .navtoggle{display:inline-flex}
+  /* Closed only once the script has confirmed it can open it again. */
+  .cs-nav-js .navpanel{position:absolute;top:100%;left:0;right:0;display:none;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:var(--cs-paper);border-top:1px solid var(--cs-line);
+    box-shadow:0 22px 44px color-mix(in srgb, var(--cs-text) 16%, transparent);
+    padding:10px 22px 18px;max-height:calc(100vh - 78px);overflow:auto}
+  .cs-nav-js .navpanel.is-open{display:flex}
+  header.site .wrap{position:relative;flex-wrap:wrap}
+  nav.main{flex-direction:column;align-items:stretch;gap:0;width:100%}
+  .navitem{border-bottom:1px solid var(--cs-line)}
+  nav.main a{padding:14px 2px;min-height:48px;font-size:1rem;border-bottom:none}
+  .main-right{margin-left:0}
+  /* Submenus are plain nested lists on touch — there is no hover to open them with. */
+  .subnav{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;
+    background:transparent;padding:0 0 8px 14px;min-width:0}
+  .subnav a{padding:11px 2px;font-size:.94rem;color:var(--cs-text-muted)}
+  .caret{display:none}
+  .navcta{margin-top:14px;width:100%;justify-content:center}
+}
+body.cs-nav-locked{overflow:hidden}
+@media (prefers-reduced-motion:reduce){
+  .subnav{transition:none!important}
+  .navtoggle-bars span{transition:none!important}
+}
 
 /* MOBILE HEADER OVERFLOW — the "H1 runs off the right edge at 390px" bug, and the H1 was never
    the cause.
@@ -226,16 +288,16 @@ header .spacer{flex:1}
    92 means resupplying that file first — check the smallest `w`/`h` in badges.js before touching
    the numbers below. */
 .logos{background:var(--cs-paper);border-bottom:1px solid var(--cs-line)}
-.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px 30px;padding:30px 22px}
-.badge{display:flex;align-items:center;justify-content:center;min-height:92px}
+.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 52px;padding:34px 22px}
+.badge{display:flex;align-items:center;justify-content:center;min-height:70px}
 /* The width cap is what keeps the row from breaking badly — the wide lockups are the whole budget,
    and letting them run unchecked pushed GAF onto a second row by itself. Raised in step with the
-   height so the two wordmarks (GAF at 710x182, Owens Corning at 798x248) still resolve by height
+   height so the wide wordmarks (GAF at 710x182) still resolve by height
    rather than being clipped to the width first. */
-.badge img{max-height:clamp(64px,6.8vw,92px);max-width:clamp(150px,16vw,225px);
+.badge img{max-height:clamp(48px,5vw,68px);max-width:clamp(118px,12vw,168px);
   width:auto;height:auto;object-fit:contain}
 .badge-pending{display:grid;place-items:center;min-height:56px;min-width:120px;border:1.5px dashed var(--cs-line);border-radius:10px;padding:8px 14px;color:var(--cs-text-muted);font-family:var(--cs-web-body);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;text-align:center}
-@media(max-width:720px){.logos .wrap{gap:14px 20px}.badge{min-height:56px}}
+@media(max-width:720px){.logos .wrap{gap:20px 30px}.badge{min-height:48px}}
 
 section{padding:62px 0}
 .mist{background:var(--cs-surface)}
@@ -939,3 +1001,52 @@ a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
 .rbm-fixture b{color:#C0392B}
 .rbm-fixture code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;
   background:#fff;border-radius:4px;padding:1px 5px}
+
+/* ── TEAM PHOTO SLOT — placeholder until real photographs exist ──────────────────────────────
+   The dashed frame is the standing treatment for an asset that is genuinely coming. No stock
+   photograph stands in for a crew: a placeholder that looks like a real team is worse than an
+   empty frame, because nobody chases the real asset for it. See TeamPhoto.astro. */
+.teamphoto{background:var(--cs-paper)}
+.teamphoto-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.teamphoto-grid h2{font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:var(--cs-web-display-weight-strong);margin:9px 0 12px}
+.teamphoto-grid p{color:var(--cs-text-muted);font-size:1.02rem;line-height:1.7;margin:0 0 14px;max-width:52ch}
+.teamphoto-office{font-size:.94rem;color:var(--cs-text-muted)}
+.teamphoto-office a{display:inline-block;margin-left:10px;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight-strong);color:var(--cs-primary-deep);text-decoration:none;min-height:44px;line-height:44px}
+.teamphoto-office a:hover{color:var(--cs-accent)}
+.teamphoto-frame{margin:0;aspect-ratio:4/3;border:2px dashed var(--cs-line);border-radius:14px;
+  display:grid;place-items:center;align-content:center;gap:10px;background:var(--cs-surface);padding:24px}
+.teamphoto-mark{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);
+  text-transform:uppercase;letter-spacing:.16em;font-size:.76rem;color:var(--cs-steel)}
+.teamphoto-frame figcaption{font-size:.86rem;color:var(--cs-text-muted)}
+@media(max-width:900px){.teamphoto-grid{grid-template-columns:1fr;gap:26px}}
+
+/* ── ROOFFUL TAB — placement reserved, nothing integrated ────────────────────────────────────
+   Right-edge vertical tab. It is a plain link to the estimate page until the embed exists; see
+   RooffulTab.astro for where the script and the handler drop in. Hidden below 900px: a fixed
+   vertical tab on a phone overlaps content and competes with the CTA that is already in the
+   header panel. */
+.roofful-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:45;
+  background:var(--cs-accent);color:var(--cs-paper);text-decoration:none;
+  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);font-size:.92rem;
+  letter-spacing:.02em;padding:16px 11px;border-radius:10px 0 0 10px;
+  box-shadow:-4px 0 18px color-mix(in srgb, var(--cs-text) 22%, transparent);
+  transition:padding-right .16s ease-out,background-color .16s ease-out}
+.roofful-tab-txt{writing-mode:vertical-rl;transform:rotate(180deg);display:block}
+.roofful-tab:hover,.roofful-tab:focus-visible{padding-right:16px;background:color-mix(in srgb, var(--cs-accent) 86%, black)}
+@media(max-width:900px){.roofful-tab{display:none}}
+@media (prefers-reduced-motion:reduce){.roofful-tab{transition:none!important}}
+
+/* ── MARKET BODY COPY ────────────────────────────────────────────────────────────────────────
+   MOBILE FIRST, 85/15. Two columns on a desktop, one on a phone, and each block carries its own
+   subhead so the section is scanned rather than read start to finish. Measure is capped near 62ch:
+   a paragraph running the full width of a phone is the thing that makes copy feel like a wall. */
+.mdepth{background:var(--cs-paper)}
+.mdepth-blocks{display:grid;grid-template-columns:1fr 1fr;gap:30px 44px;margin-top:34px}
+.mdepth-block h3{font-size:1.16rem;font-weight:var(--cs-web-display-weight-strong);margin:0 0 9px}
+.mdepth-block p{margin:0 0 12px;font-size:1rem;line-height:1.72;color:var(--cs-text-muted);max-width:62ch}
+.mdepth-block p:last-child{margin-bottom:0}
+@media(max-width:860px){
+  .mdepth-blocks{grid-template-columns:1fr;gap:26px}
+  .mdepth-block p{font-size:1.02rem;line-height:1.75}
+}

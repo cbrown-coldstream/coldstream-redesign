@@ -9,10 +9,14 @@ export const columbus = {
   description:
     "Roofing, siding, windows and gutters across Central Ohio, from Dublin to Gahanna. Free, no-obligation inspections and a 25-year workmanship warranty.",
 
+  // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
+  // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
+  // The differentiator is one point of contact: a project manager who stays on the job rather than
+  // a salesperson who hands off at signing. Market-scoped, and it lives here rather than in Hero.
   hero: {
     eyebrow: "Central Ohio Roofing and Exteriors",
     headline: "Roofing and Exteriors Built for Central Ohio Weather",
-    sub: "Free estimates with honest pricing from our Galloway office. Backed by our own Central Ohio crews and a 25-year workmanship warranty.",
+    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Galloway office and a 25-year workmanship warranty.",
     // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
     cta: "Get my free Columbus estimate →",
   },
@@ -57,4 +61,26 @@ export const columbus = {
     heading: "Ready for a free, no-pressure estimate?",
     body: "Tell us what you need — we'll take a look and give you an honest number.",
   },
+  // ── BODY COPY DEPTH (team call, 2026-08-18) ───────────────────────────────────────────────
+  // Written from Columbus's own conditions: flat open ground, wind, and a suburban ring largely
+  // built in the 1990s and 2000s. Deliberately shares no structure with the other markets.
+  depth: {
+    eyebrow: "Working on Central Ohio homes",
+    heading: "Flat ground, open wind, and a lot of houses the same age",
+    intro: "Columbus is a ring city on flat ground, and its housing stock is unusually uniform. Both of those change what goes wrong and when.",
+    blocks: [
+      { h: "Wind, not slope, is the problem here",
+        p: ["There is very little to break the wind across Central Ohio. Storms come across open ground and hit a roofline at full strength, and what fails first is almost always an edge — a ridge cap, a rake edge, the first course above a gable.",
+            "So the details we fuss over here are different from a hillside market. Starter course, nailing pattern and ridge attachment are where a Columbus roof is won or lost, and a roof that loses shingles in the first big blow usually lost them at the perimeter."] },
+      { h: "A suburban ring built within about fifteen years",
+        p: ["Dublin, Powell, Hilliard, New Albany, Westerville and Gahanna filled in largely between the early nineties and the mid two-thousands. That means an enormous number of houses in this market are hitting twenty-five to thirty years old at the same time — which is exactly when an original builder-grade roof stops being repairable.",
+            "It is why we do more full replacements and fewer patch jobs here than in the other markets. If your neighbours are all replacing roofs, that is not a coincidence and it is not a sales pitch — the street went up together."] },
+      { h: "Ice damming on shallow pitches",
+        p: ["A lot of that same building era used shallow pitches and generous overhangs. Snow sits on a shallow pitch instead of shedding, warm attic air melts it from underneath, the water runs to a cold eave and refreezes. The dam it forms pushes water back up under the shingles.",
+            "The fix is rarely the roof surface. It is ventilation and ice-and-water protection at the eave, and if someone quotes you a Columbus ice dam without looking in the attic, they are guessing."] },
+      { h: "The ring is not one place",
+        p: ["I-270 makes Columbus easy to describe and misleading to treat as uniform. German Village and Clintonville are pre-war and dense; Galena and Grove City are neither. We cover the whole ring from the Galloway office, and the estimate reflects the house rather than the metro average."] },
+    ],
+  },
+
 };

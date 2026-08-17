@@ -63,6 +63,10 @@ export const MARKETS = {
       // Placeholder until the GBP listing is confirmed — footer NAP must match Google exactly.
       mapUrl: null,
     },
+    // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
+    // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
+    // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
+    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING — see REVIEWS note above
     // Replaces ~117 thin neighbourhood pages. These link to the surviving location pages, which
@@ -91,6 +95,10 @@ export const MARKETS = {
       mapUrl: null,
     },
     // site-plan's market-landing note for Columbus: "Keeps commercial roofing."
+    // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
+    // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
+    // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
+    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [
@@ -127,6 +135,10 @@ export const MARKETS = {
     // in this market and it is on the live site, so it is not deleted: it stays a section on the
     // St. Louis landing page and /st-louis/garage-doors/ 301s to that page rather than 404ing.
     // Flagged in DECISIONS.md as the one place the inventory and the live site disagree.
+    // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
+    // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
+    // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
+    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [

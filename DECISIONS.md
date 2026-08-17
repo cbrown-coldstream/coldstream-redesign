@@ -1646,7 +1646,110 @@ call targets are plain `tel:` hrefs. The dead `.mchoose-hint` CSS went too.
 
 ---
 
-## 32. Checks
+## 32. Round 31 — the team review call (2026-08-18)
+
+Eight items from the call. **Everything else raised on that call is still open and did not ship.**
+
+### 1 · Nav restructure
+
+Six trade/area items — Roofing · Siding · Windows · Gutters · Storm Damage · Service Areas — with
+About pushed right against the CTA. Dropdowns on Roofing and Siding only; Windows and Gutters are
+top-level links with none, as decided. **Not one "Services" dropdown**: top-level visibility was the
+explicit call, and the horizontal room it costs is spent deliberately.
+
+**THE MOBILE NAV IS THE REAL CHANGE.** The old rule was `@media(max-width:1040px){nav.main{display:none}}`
+— at four items survivable, at seven it meant **85% of visitors had no way to reach a service page
+from the header at all**. It is now a disclosure: `<button aria-expanded>` + panel, Escape closes,
+focus moves in on open and back on close, tap-outside dismisses, and with JS off the panel is simply
+visible rather than permanently shut.
+
+Breakpoints, measured: **≥1180px** one line with room; **1024px** tight, gap 18→14px and font
+.94→.90rem, still one line; **<960px** the horizontal nav is *replaced*, not hidden; **390px**
+full-width panel, 48px rows, submenus as nested lists.
+
+**Two items do not match the pages that exist, and are flagged rather than faked:**
+
+- **Stone Veneer has no page.** Siding sub-services are vinyl, James Hardie and siding-replacement.
+  Linking it would be a dead internal link — a gate failure, and a nav item promising a page we
+  cannot show. Omitted; the line sits commented in `nav.js`.
+- **Storm Damage is standalone in the nav, but its URL is still nested** at
+  `/{market}/roofing/insurance-storm-damage/` — exactly where the call said it should not sit.
+  Moving it needs a new page, a redirect rule and an inventory entry, none of which was authorised.
+
+### 2 · "Local crews, in all three markets" removed
+
+It implied a crew sourced per market — subcontracting, which we do not do. Replaced with the actual
+differentiator: **one project manager who stays on the job**, not a salesperson who hands off at
+signing. Market-scoped, written into each market's data object beside its headline.
+
+**One correction to the brief:** that string rendered on the **national home page only**, not on
+St. Louis. What St. Louis carried was "backed by our own local crews" in its hero sub — the same
+implication, different sentence. Both are gone.
+
+### 3 · Owens Corning removed
+
+Badge, `MANUFACTURERS` entry, partner-strip entry, three artwork files, a stale CSS comment, and
+five references inside the ported WordPress archive in `live-copy/` — that last one because the
+archive is the source for the copy port, so leaving it there risked it coming back in. **Zero in
+source, zero in 69 built pages** (was 64). The three hits left in this file are the historical
+record; rewriting the log to erase a past decision would make it lie.
+
+### 4 · Badge row
+
+Trimmed to credentials only — the row used to mix accreditations with review-platform logos, which
+argue differently. **The set now reads from `markets.js`**, so per-market credentials are a data
+edit rather than a refactor: Leaf Preferred (Columbus) and Malarkey (St. Louis) are real but
+unconfirmed and therefore **absent**. Size cap 92→68px, spacing 30→52px.
+
+**⚠ BBB A+ IS WIRED BUT NOT RENDERING.** `CLAIMS.bbb` is null and `"BBB A+"` is on verify's
+banned-claims list — the live WordPress site prints it with no accreditation record behind it. The
+slot is in place and ordered; fill `CLAIMS.bbb` and it appears with no code change. **The gate was
+not touched.**
+
+### 5 · Body copy depth
+
+Measured before writing: service hubs were already at ~1045 words median and the **market landings
+were the thinnest pages on the site at ~703** — thinner than the pages they route to.
+
+The three landings now run **1124 / 1162 / 1241 words**, written from each market's own conditions:
+Cincinnati's river-valley freeze-thaw and hillside drainage; Columbus's open wind and a suburban ring
+built within about fifteen years; St. Louis's hail and a brick housing stock. **Swapping a city name
+into another market's blocks would produce factually wrong sentences** — which is the test the old
+site failed.
+
+`npm run similarity` is a new command: 5-word shingles, chrome stripped, flagging above 80%.
+**Nothing is at or above 80%, before or after.** Market-landing similarity **halved, 54.4% → 28.8%**.
+Service hubs sit at 69–74%; three pages about one trade sharing vocabulary is expected, and the
+number is reported rather than padded away.
+
+Mobile first at 85/15: blocks with their own subheads, measure capped near 62ch, one column below
+860px.
+
+### 6 · Phone swap
+
+Already implemented in §23 and verified here rather than rebuilt: schema `telephone`, every `tel:`
+link and the visible number agree per market with **one variant each** — no drift. National holds
+844. Client-side swap on the same URL; no redirect, no URL change.
+
+### 7 · Team photo slot
+
+One per market, placeholder frame, `data-needs="team-photo-{market}"`. **No stock photograph stands
+in for a crew** — a placeholder that looks like a real team is worse than an empty frame, the same
+reasoning that took the watermark off the hero ground. Individual PM bios and headshots were raised
+and declined on the call and are deliberately absent.
+
+### 8 · Roofful widget
+
+Right-edge tab, placement reserved, `data-needs="roofful-embed"`. **Nothing integrated** — no embed
+code exists. Until it does the tab is a plain link to the estimate page, which is the honest version
+of the same promise; the live site already had an "instant quote" CTA pointing at a page that does
+not exist. `RooffulTab.astro` documents exactly where the script and the handler drop in.
+
+The punch list now greps as 64 × `roofful-embed`, 3 × `team-photo-*`, 2 × `hero-video`.
+
+---
+
+## 33. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

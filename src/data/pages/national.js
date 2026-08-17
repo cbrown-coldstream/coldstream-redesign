@@ -38,8 +38,13 @@ export const national = {
 
   // 2 — TRUST BAND. Live: "Locally Owned & Operated | BBB A+ Accredited | Fully Insured".
   // BBB is gated, so the third item is one of the three pre-approved claims instead.
+  //
+  // HEADING CHANGED ON THE TEAM CALL (2026-08-18). It read "Local crews, in all three markets",
+  // which implies a crew sourced per market — subcontracting, which we do not do. Replaced with the
+  // actual differentiator: one project manager who stays on the job, not a salesperson who hands
+  // off after close.
   trust: {
-    heading: "Local crews, in all three markets",
+    heading: "One project manager on your job, start to finish",
     items: ["Locally owned and operated", "Licensed and insured", "Free, no-obligation inspections"],
   },
 

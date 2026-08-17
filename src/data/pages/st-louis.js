@@ -7,10 +7,14 @@ export const stLouis = {
   description:
     "Roofing, siding, windows, gutters and garage doors across Greater St. Louis. Free, no-obligation inspections and a 25-year workmanship warranty.",
 
+  // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
+  // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
+  // The differentiator is one point of contact: a project manager who stays on the job rather than
+  // a salesperson who hands off at signing. Market-scoped, and it lives here rather than in Hero.
   hero: {
     eyebrow: "Greater St. Louis Roofing and Exteriors",
     headline: "Roofing, Siding and Exteriors Across Greater St. Louis",
-    sub: "Free estimates with honest pricing from our Geyer Road office. Backed by our own local crews and a 25-year workmanship warranty.",
+    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Geyer Road office and a 25-year workmanship warranty.",
     // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
     cta: "Get my free St. Louis estimate →",
   },
@@ -64,4 +68,27 @@ export const stLouis = {
     heading: "Ready for a free, no-pressure estimate?",
     body: "Tell us what you need — we'll take a look and give you an honest number.",
   },
+  // ── BODY COPY DEPTH (team call, 2026-08-18) ───────────────────────────────────────────────
+  // Written from St. Louis's own conditions: hail, humidity, and a brick housing stock that is
+  // close to unique in the Midwest. Nothing here transfers to the Ohio markets.
+  depth: {
+    eyebrow: "Working on Greater St. Louis homes",
+    heading: "Hail, humidity, and a city built out of brick",
+    intro: "St. Louis has a housing stock that does not look like anywhere else we work, and a storm season that does most of the damage in a handful of afternoons.",
+    blocks: [
+      { h: "Hail is the single biggest driver",
+        p: ["This market sits where it gets real hail, and a bad afternoon can bruise every roof on a street. Hail damage is also the kind that does not announce itself: the granules come off, the mat underneath is exposed, and the roof looks fine from the driveway while its remaining life quietly halves.",
+            "That is why most of our St. Louis work starts as an inspection rather than a quote. We photograph what we find the way an adjuster needs it documented, and if the honest answer is that there is no claim here, we say that."] },
+      { h: "Brick changes the whole conversation",
+        p: ["South City, The Hill, Tower Grove and much of the older county are brick, and brick houses fail at the joints rather than the field — the tuckpointing, the chimney, the parapet, the flashing where brick meets roof.",
+            "It also means siding work here is often trim, soffit and fascia rather than a full elevation. A siding quote that assumes a frame house will be wrong on a brick one, and we do not write one until we have seen which we are dealing with."] },
+      { h: "Humidity, and what it does to attics",
+        p: ["Summers here are genuinely humid, and a poorly ventilated attic in August is a moisture problem before it is a temperature one. We see decking that has cupped, nail heads that have rusted through from the underside, and insulation that has been quietly damp for years.",
+            "None of that is visible from outside. It is the reason our inspection includes the attic wherever we can safely get into it."] },
+      { h: "South County, West County and one town north",
+        p: ["The served area is really two: South County and the southern city through Affton, Oakville, Mehlville and down to Arnold, and West County through Kirkwood, Webster Groves, Chesterfield, Des Peres and Creve Coeur. Berkeley is our one North County entry.",
+            "Those are different housing stocks and different price points, and we quote them differently. Working out of the Geyer Road office puts us in the middle of both."] },
+    ],
+  },
+
 };

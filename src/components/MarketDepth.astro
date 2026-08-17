@@ -1,0 +1,53 @@
+---
+// MARKET BODY COPY — the depth pass (team call, 2026-08-18).
+//
+// THE PROBLEM THIS SOLVES. The layout was right and the market landings were the thinnest pages on
+// the site at roughly 700 words of body text — thinner than the service hubs they route to. A page
+// that routes well and says little is a page that ranks for nothing and gets skimmed by the reader
+// it did reach.
+//
+// THE HARD REQUIREMENT, AND WHY IT SHAPED THE COPY RATHER THAN DECORATED IT. No market page may be
+// another market page with the city swapped. That exact pattern — identical municipality copy
+// across Cincinnati and St. Louis — is the diagnosed cause of the old site's collapse, so this
+// content is not a template with `{city}` in it. Each market's blocks are written from its own
+// climate, its own housing stock and its own communities:
+//
+//   Cincinnati  river-valley freeze-thaw, hillside drainage, pre-war brick and frame
+//   Columbus    open flat ground and wind, 1990s-2000s suburban builds, ice damming
+//   St. Louis   humidity and hail, and a brick housing stock almost unique in the Midwest
+//
+// Nothing here is interchangeable. Swapping the city name into another market's blocks would
+// produce sentences that are factually wrong, which is the test the old site failed.
+//
+// MOBILE FIRST — 85/15. Short blocks with their own subheads rather than one wall of text: at
+// 390px a reader scans subheads and stops where it is relevant. Paragraphs are capped near 60ch so
+// a line does not run the full width of a phone.
+//
+// KEYWORDS ARE NOT STUFFED. If "roof replacement {city}" does not read as a sentence, it is not
+// written as one. Every town named is in that market's `servedAreas` — no coverage is implied that
+// the data does not carry.
+//
+// CLAIMS: nothing here asserts a timeframe, a price, a warranty beyond the approved 25-year
+// workmanship one, a rating or a certification. See claims.js for why.
+const { market, depth } = Astro.props;
+const show = depth?.blocks?.length > 0;
+---
+{show && (
+  <section class="mdepth" aria-labelledby={`mdepth-${market.slug}`}>
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">{depth.eyebrow ?? `Working on ${market.region} homes`}</span>
+        <h2 id={`mdepth-${market.slug}`}>{depth.heading}</h2>
+        {depth.intro && <p>{depth.intro}</p>}
+      </div>
+      <div class="mdepth-blocks" data-reveal="stagger">
+        {depth.blocks.map((b) => (
+          <article class="mdepth-block">
+            <h3>{b.h}</h3>
+            {b.p.map((para) => <p>{para}</p>)}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

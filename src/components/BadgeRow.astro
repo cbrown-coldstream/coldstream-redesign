@@ -6,11 +6,29 @@
 // the hero poster, and competing with it would make the page slower, not faster.
 import { BADGES } from "../data/badges.js";
 import { CLAIMS } from "../data/claims.js";
-const { aboveTheFold = false } = Astro.props;
+import { NATIONAL } from "../data/markets.js";
+
+// THE SET COMES FROM THE MARKET, NOT FROM THIS COMPONENT (team call, 2026-08-18). Pass a market and
+// its `credentials` array decides which badges show and in what order; the national default is the
+// company-wide set. Manufacturer programmes differ by market, so a per-market set later is a data
+// edit in markets.js rather than a change here.
+const { aboveTheFold = false, market = NATIONAL } = Astro.props;
+const wanted = market?.credentials ?? ["gaf", "james-hardie", "homeadvisor", "bbb"];
+
 // A badge with no asset renders a text placeholder, which is fine for a logo we own and are
 // waiting on — but BBB is an ACCREDITATION CLAIM, and "BBB A+" printed as a placeholder asserts
 // it just as loudly as the seal would. It is gated with the other unsourced claims.
-const badges = BADGES.filter((b) => b.key !== "bbb" || CLAIMS.bbb);
+//
+// ⚠ THE CALL ASKED FOR "BBB A+" TO BE ADDED AND IT IS NOT RENDERING YET. Nothing sources it:
+// CLAIMS.bbb is null, and verify-build lists "BBB A+" among the unsourced claims that must not
+// reach built HTML — the live WordPress site prints it with no accreditation record behind it.
+// The slot is wired and ordered; fill CLAIMS.bbb with the record and the rating and it appears
+// with no further change. See claims.js for exactly what unlocks it.
+const byKey = Object.fromEntries(BADGES.map((b) => [b.key, b]));
+const badges = wanted
+  .map((k) => byKey[k])
+  .filter(Boolean)
+  .filter((b) => b.key !== "bbb" || CLAIMS.bbb);
 ---
 <div class="logos" aria-label="Ratings and certifications">
   <div class="wrap">

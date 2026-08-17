@@ -19,6 +19,8 @@ import ServicesGrid from "../../components/ServicesGrid.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
+import TeamPhoto from "../../components/TeamPhoto.astro";
+import MarketDepth from "../../components/MarketDepth.astro";
 import Reviews from "../../components/Reviews.astro";
 import OfferBand from "../../components/OfferBand.astro";
 import FAQ from "../../components/FAQ.astro";
@@ -81,7 +83,7 @@ const localBusiness = {
 
   <Hero market={market} {...page.hero} />
   <MarketNotice market={market} />
-  <BadgeRow aboveTheFold={true} />
+  <BadgeRow market={market} aboveTheFold={true} />
 
   <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
   <WhyTrust heading={page.why.heading} cards={page.why.cards}
@@ -98,6 +100,15 @@ const localBusiness = {
       serving these communities", which is what the component's own lede now derives from
       markets.js. Two sentences saying it was one more than the section needed, and the derived one
       cannot drift from the office data. The prop still exists for callers with something to add. */}
+  {/* The depth pass. Sits after the roofing detail, where a reader who has decided we do the work
+      wants to know whether we understand their houses. Written per market from its own climate and
+      stock — see MarketDepth.astro on why it is not a template. */}
+  <MarketDepth market={market} depth={page.depth} />
+
+  {/* Team photo sits after the areas list and before reviews: the page has just said where we
+      work, and this says who turns up. Placeholder — see TeamPhoto.astro. */}
+  <TeamPhoto market={market} />
+
   <ServedAreas market={market} heading={page.areas.heading} />
   <Reviews heading={page.reviews.heading} intro={page.reviews.intro} reviews={TESTIMONIALS[slug]} />
   <OfferBand />

@@ -1,33 +1,97 @@
 ---
 // Logo + primary nav + estimate button. No phone — see UtilityBar.
-// Homeowner nav. Commercial roofing is deliberately absent — different buyer, different search,
-// and it is linked from the footer and from the roofing hub instead. See homeownerServicesFor.
+//
+// NAV RESTRUCTURED ON THE TEAM CALL (2026-08-18): six trade/area items left, About pushed right
+// against the CTA. See data/nav.js for the order, the two dropdowns, and the two items whose
+// pages do not match what was asked for.
+//
+// ── THE MOBILE NAV IS THE REAL NAV ────────────────────────────────────────────────────────────
+//
+// 85% of traffic is mobile, and the old behaviour below 1040px was `display:none` — the entire
+// primary nav simply vanished, leaving a logo and one button. That was survivable at four items
+// and is indefensible at seven: on the majority of visits there was no way to reach a service page
+// from the header at all.
+//
+// So there is now a real disclosure menu. It is a <button aria-expanded> and a panel, not a
+// checkbox hack and not a link to an anchor: the button reports its own state to assistive tech,
+// Escape closes it, and focus is sent into the panel on open and back to the button on close.
+// With JavaScript off the panel is simply visible — the details/summary fallback is not needed
+// because the panel is not hidden by default in the markup, only by CSS that the script overrides.
+//
+// DROPDOWNS OPEN ON HOVER *AND* FOCUS-WITHIN on desktop, and are plain nested lists on mobile —
+// a hover-only submenu is unreachable by keyboard and meaningless on a touch screen.
 import { homeownerServicesFor, serviceHref, estimateHref, aboutHref, areasHref } from "../data/markets.js";
+import { NAV, NAV_RIGHT, navHref, childHref } from "../data/nav.js";
 const { market } = Astro.props;
-const services = homeownerServicesFor(market);
 ---
 <header class="site">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Coldstream Exteriors home">
       <img src="/logo-coldstream-exteriors.jpg" alt="Coldstream Exteriors" width="240" height="70" />
     </a>
-    <nav class="main" aria-label="Primary">
-      {services.map((s) => <a href={serviceHref(market, s)}>{s.label}</a>)}
-      {/* Service Areas answers "do you cover my town", which is the question the nav had no answer
-          to at all. One national page with a map and the towns per market; a market context
-          deep-links to its own section of it. */}
-      <a href={areasHref(market)}>Service Areas</a>
-      {/* About and Reviews follow the market: on a Cincinnati page these go to the Cincinnati
-          pages, and on the national pages they go to the company ones. */}
-      <a href={aboutHref(market)}>About</a>
-      {market.slug && <a href={`/${market.slug}/reviews/`}>Reviews</a>}
-      {/* NO SITEMAP LINK HERE, DELIBERATELY. It was in this nav briefly, when /sitemap/ was a
-          public page. That page is now the internal team review board — noindex, full of unfinished
-          work and the team's own notes — and the primary nav is the last place it belongs: it is
-          the one row of links a customer reads on every page. The footer keeps the link, which is
-          enough for the team and is one fewer thing to remember to remove at cutover. */}
-    </nav>
-    <div class="spacer"></div>
-    <a class="btn" href={estimateHref(market)}>Get Free Estimate</a>
+
+    <button type="button" class="navtoggle" id="navToggle" aria-expanded="false" aria-controls="navPanel">
+      <span class="navtoggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="navtoggle-txt">Menu</span>
+    </button>
+
+    <div class="navpanel" id="navPanel">
+      <nav class="main" aria-label="Primary">
+        {NAV.map((item) => (
+          item.children?.length ? (
+            <div class="navitem has-sub">
+              <a href={navHref(item, market)} aria-haspopup="true">{item.label}<span class="caret" aria-hidden="true">▾</span></a>
+              <ul class="subnav">
+                {item.children.map((c) => (
+                  <li><a href={childHref(item, c, market)}>{c.label}</a></li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div class="navitem"><a href={navHref(item, market)}>{item.label}</a></div>
+          )
+        ))}
+      </nav>
+
+      {/* Pushed right, adjacent to the CTA — the call's wording. On mobile it falls to the bottom
+          of the panel, where the CTA also sits, so the pairing survives the layout change. */}
+      <nav class="main main-right" aria-label="Secondary">
+        {NAV_RIGHT.map((item) => (
+          <div class="navitem"><a href={navHref(item, market)}>{item.label}</a></div>
+        ))}
+      </nav>
+
+      <a class="btn navcta" href={estimateHref(market)}>Get Free Estimate</a>
+    </div>
   </div>
 </header>
+<script is:inline>
+  (function () {
+    var btn = document.getElementById("navToggle");
+    var panel = document.getElementById("navPanel");
+    if (!btn || !panel) return;
+
+    // The panel is open in the markup and closed here, so a visitor with no JavaScript keeps a
+    // usable nav rather than one that can never be opened.
+    document.documentElement.classList.add("cs-nav-js");
+
+    function set(open) {
+      btn.setAttribute("aria-expanded", String(open));
+      panel.classList.toggle("is-open", open);
+      document.body.classList.toggle("cs-nav-locked", open);
+    }
+    btn.addEventListener("click", function () {
+      var open = btn.getAttribute("aria-expanded") === "true";
+      set(!open);
+      if (!open) { var f = panel.querySelector("a"); if (f) f.focus(); }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
+    });
+    // A tap outside closes it. Inside is left alone so a submenu tap does not dismiss the panel.
+    document.addEventListener("click", function (e) {
+      if (btn.getAttribute("aria-expanded") !== "true") return;
+      if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) set(false);
+    });
+  })();
+</script>

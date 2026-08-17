@@ -1,0 +1,49 @@
+---
+// MARKET TEAM PHOTO — placeholder slot (team call, 2026-08-18).
+//
+// One photo per market: the crew that will actually turn up. It pairs with the project-manager
+// point the hero now leads on — that claim is much easier to believe next to a picture of the
+// people making it.
+//
+// ⚠ NO PHOTOS EXIST YET. This renders the standing placeholder treatment — the same dashed frame
+// used elsewhere on the site for an asset that is genuinely coming — and carries
+// data-needs="team-photo-{market}" so it greps with the rest of the punch list.
+//
+// WHAT WAS DECLINED ON THE SAME CALL, AND IS DELIBERATELY ABSENT: individual project-manager bios
+// and headshots. This is one group photo per market and nothing more. Do not add a names list here
+// without taking it back to the team — it was raised and turned down.
+//
+// NO INVENTED FACES. There is no stock photograph and no illustration standing in for a crew. A
+// placeholder that looks like a real team is worse than an empty frame, because nobody chases the
+// real asset for it — the same reasoning that took the watermark off the hero ground.
+const { market, heading, body } = Astro.props;
+
+const title = heading ?? `The ${market.name} crew`;
+const copy =
+  body ??
+  `The people who quote your job are the people who do it, and the project manager who walks your ` +
+  `roof on day one is the one you call afterwards. Photo of the ${market.office.city} team coming.`;
+---
+<section class="teamphoto" aria-labelledby={`team-${market.slug}-h`}>
+  <div class="wrap">
+    <div class="teamphoto-grid">
+      <div>
+        <span class="eyebrow">Who turns up</span>
+        <h2 id={`team-${market.slug}-h`}>{title}</h2>
+        <p>{copy}</p>
+        <p class="teamphoto-office">
+          {market.office.street}, {market.office.city}, {market.office.state} {market.office.zip}
+          <a href={market.telHref}>{market.phone}</a>
+        </p>
+      </div>
+
+      {/* The placeholder frame. `role="img"` with a label so a screen reader is told what is
+          missing rather than meeting an unexplained empty box. */}
+      <figure class="teamphoto-frame" data-needs={`team-photo-${market.slug}`}
+              role="img" aria-label={`Photograph of the ${market.name} team — not yet available`}>
+        <span class="teamphoto-mark">Photo pending</span>
+        <figcaption>{market.name} team · {market.office.city}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

@@ -1,4 +1,18 @@
-// Review and accreditation badges for the hero row, in the order the live site uses.
+// CREDENTIAL badges for the hero row.
+//
+// ── CREDENTIALS ONLY, AND PER MARKET (team call, 2026-08-18) ─────────────────────────────────
+//
+// The row used to mix two different kinds of thing: accreditations we hold (GAF, James Hardie,
+// BBB, HomeAdvisor) and review-platform logos (Google, Yelp, Angi). They argue differently — a
+// certification says a manufacturer trained and vetted us, a platform logo says people can leave
+// us reviews there — and a row that mixes them reads as neither. The platform logos came out; the
+// reviews section says what the profiles actually hold, with real numbers.
+//
+// WHICH CREDENTIALS SHOW IS NOW A PER-MARKET DATA FIELD. `markets.js` carries a `credentials`
+// array of keys; this file carries the artwork for each. Manufacturer programmes genuinely differ
+// by market — Leaf Preferred is Columbus-only and Malarkey is St. Louis-only, both unconfirmed and
+// therefore ABSENT — so adding one later is a key in one array, not a change here or in the
+// component.
 //
 // SELF-HOSTED. Files live in /public/badges/ — the live WordPress uploads are never hotlinked.
 // Each carries its native dimensions so an explicit width/height can be emitted and CLS stays
@@ -14,9 +28,9 @@
 // uploads this row was first built from. Two things that were wrong before are fixed by the swap
 // rather than by code:
 //
-//   · Owens Corning is now the "Preferred Contractor" lockup. The alt text has claimed that since
-//     this file was written while the artwork was the bare corporate logo; image and alt finally
-//     agree.
+//   · OWENS CORNING IS GONE ENTIRELY (team call, 2026-08-18): we do not run that line. The badge,
+//     the partner-strip entry, the MANUFACTURERS row and both artwork files were removed rather
+//     than commented out — a credential we do not hold is worse than a missing one.
 //   · The png and webp of each badge are now the same image at the same dimensions. They were not:
 //     james-hardie-elite shipped a 1024x853 webp beside a 592x488 png, so the declared size was
 //     right for one format and wrong for the other.
@@ -50,53 +64,12 @@
 
 export const BADGES = [
   {
-    key: "owens-corning",
-    alt: "Owens Corning Preferred Contractor",
-    file: "/badges/owens-corning-preferred.webp",
-    fallback: "/badges/owens-corning-preferred.png",
-    w: 798, h: 248,
-    href: null,
-    source: "supplied artwork, 2026-08-14",
-  },
-  {
     key: "homeadvisor",
     alt: "HomeAdvisor Top Rated",
     file: "/badges/homeadvisor-top-rated.webp",
     fallback: "/badges/homeadvisor-top-rated.png",
     w: 580, h: 666,
     href: null,            // PENDING — HomeAdvisor profile URL
-    source: "supplied artwork, 2026-08-14",
-  },
-  {
-    key: "yelp",
-    alt: "Yelp Reviews",
-    file: "/badges/yelp-five-star.webp",
-    fallback: "/badges/yelp-five-star.png",
-    w: 451, h: 334,
-    href: null,            // PENDING — Yelp profile URL
-    source: "supplied artwork, 2026-08-14",
-  },
-  {
-    key: "google",
-    // FEWER PIXELS THAN THE FILE IT REPLACED (184x189 against 450x228) AND STILL THE RIGHT SWAP.
-    // The row caps by height, so what matters is how much of the frame is logo rather than the raw
-    // count: the old upload carried a wide margin of empty white, this one is cropped to the mark,
-    // and at the same cap it reads larger. It is also the smallest asset in the row, so it is the
-    // one that limits how far the height cap can go — see .badge img in base.css.
-    alt: "Google Reviews",
-    file: "/badges/google-five-star.webp",
-    fallback: "/badges/google-five-star.png",
-    w: 184, h: 189,
-    href: null,            // PENDING — Google Business Profile review URL
-    source: "supplied artwork, 2026-08-14",
-  },
-  {
-    key: "angi",
-    alt: "Angi Reviews",
-    file: "/badges/angi-five-star.webp",
-    fallback: "/badges/angi-five-star.png",
-    w: 310, h: 221,
-    href: null,            // PENDING — Angi profile URL
     source: "supplied artwork, 2026-08-14",
   },
   {
@@ -132,5 +105,5 @@ export const BADGES = [
 // from the accreditation badges above.
 export const MANUFACTURERS = [
   "James Hardie", "James Hardie Elite", "ProVia", "Royal",
-  "Norandex", "CertainTeed", "WinCore", "Owens Corning",
+  "Norandex", "CertainTeed", "WinCore",
 ];
