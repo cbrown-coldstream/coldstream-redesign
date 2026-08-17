@@ -1468,7 +1468,50 @@ ring, and it has been spreading; stars pull the eye regardless and do not need t
 
 ---
 
-## 29. Checks
+## 29. Round 27 — a fixture preview, and a gate that will reject real reviews
+
+### Placeholder reviews, quarantined behind an env var rather than written to a file
+
+Asked for placeholder data so the section could be looked at before a Places key exists.
+`COLDSTREAM_FIXTURES=1 npm run build` now fills it from
+`src/data/fixtures/reviews-places.sample.js` — 5 / 4 / 3 reviews across the three markets, ratings
+of 3, 4 and 5, and St. Louis deliberately carrying no profile figures so the "reviews but no
+aggregate" branch is visible too.
+
+**Not a placeholder `generated/reviews.json`, and the reason matters.** That file is committed in
+normal use — the host builds from the repo, so real reviews have to be in git — which puts a
+placeholder version one `git add -A` from production. **Netlify runs `npm run build`, not
+`npm run verify`**, so the gate would never see it. Nothing is written to disk: the data is
+unreachable without the env var, there is nothing to commit by accident and nothing to clean up.
+
+Every name and quote contains the string FIXTURE, and it never overrides a real pull.
+
+**Two independent gates refuse a fixture build**, verified — exit 1: the FIXTURE-in-HTML check, and
+the unsourced-claim check catching the rating figure. Defence in depth was not designed, it was
+discovered, and it is worth keeping.
+
+### ⚠ THE GATE WILL REJECT REAL REVIEWS. NOT FIXED — STATED.
+
+`BANNED_CLAIMS` in verify-build.mjs contains the literal string **`"4.8"`**, from when that figure
+was invented prototype copy. The check is a substring scan over built HTML, so it cannot distinguish
+a 4.8 typed into a template from a 4.8 this build read off the Google profile.
+
+**The day a real pull returns a 4.8 average for any market, `npm run verify` fails.** The figure will
+be sourced, correct, and rejected.
+
+It is deliberately not patched here. This file's own rule: *"If a change needs a gate relaxed, that is
+a decision to state out loud, not a line to quietly edit."* Deleting `"4.8"` from the list would
+remove the protection that caught the original fabrication, and editing a gate so a build passes is
+the thing that must not happen quietly.
+
+**The fix, when someone decides to make it:** the check should fail on `4.8` *unless*
+`generated/reviews.json` actually carries that rating for a market — sourced becomes the exemption,
+and a typed 4.8 still fails. That is a real change to what the gate means and belongs in a round of
+its own.
+
+---
+
+## 30. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

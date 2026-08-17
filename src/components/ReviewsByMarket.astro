@@ -65,6 +65,27 @@ if (existsSync(FILE)) {
   }
 }
 
+// ── FIXTURE PREVIEW, QUARANTINED HARDER THAN THE DATA IT STANDS IN FOR ───────────────────────
+//
+// COLDSTREAM_FIXTURES=1 fills the section with synthetic reviews so the layout can be looked at
+// before a Places key exists. Every name and every quote contains the string FIXTURE, and
+// verify-build fails any build whose HTML contains it — "a build that shipped them would be
+// publishing fabricated endorsements".
+//
+// IT IS AN ENV VAR AND NOT A PLACEHOLDER FILE, DELIBERATELY. The obvious approach is to write a
+// placeholder generated/reviews.json, and that file is committed in normal use because the host
+// builds from the repo. A placeholder version would then be one `git add -A` from production, and
+// Netlify runs `npm run build`, not `npm run verify` — the gate would never see it. Nothing is
+// written to disk here, so there is nothing to accidentally commit and nothing to clean up.
+//
+// It never overrides real data: if a pull has happened, the real file wins.
+if (!DATA && process.env.COLDSTREAM_FIXTURES === "1") {
+  const { SAMPLE_PLACES_REVIEWS } = await import("../data/fixtures/reviews-places.sample.js");
+  console.warn("  ⚠⚠  FIXTURES ON — SYNTHETIC REVIEWS are being built into this site.");
+  console.warn("      COLDSTREAM_FIXTURES=1. This output must never be deployed; npm run verify will refuse it.\n");
+  DATA = SAMPLE_PLACES_REVIEWS;
+}
+
 const { heading = "What homeowners say, office by office" } = Astro.props;
 
 const columns = MARKET_LIST
