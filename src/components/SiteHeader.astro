@@ -21,13 +21,11 @@ const services = homeownerServicesFor(market);
           pages, and on the national pages they go to the company ones. */}
       <a href={aboutHref(market)}>About</a>
       {market.slug && <a href={`/${market.slug}/reviews/`}>Reviews</a>}
-      {/* Sitemap in the PRIMARY nav is unusual — it normally lives only in the footer, where this
-          site also carries it. It is here on request. It is last deliberately: it is a wayfinding
-          page rather than a service, so it should not sit between two things a homeowner came for.
-
-          The nav is hidden below 1040px, so this adds nothing to the mobile header and cannot
-          affect the 390px overflow that §17 fixed; on a phone the footer link is the route. */}
-      <a href="/sitemap/">Sitemap</a>
+      {/* NO SITEMAP LINK HERE, DELIBERATELY. It was in this nav briefly, when /sitemap/ was a
+          public page. That page is now the internal team review board — noindex, full of unfinished
+          work and the team's own notes — and the primary nav is the last place it belongs: it is
+          the one row of links a customer reads on every page. The footer keeps the link, which is
+          enough for the team and is one fewer thing to remember to remove at cutover. */}
     </nav>
     <div class="spacer"></div>
     <a class="btn" href={estimateHref(market)}>Get Free Estimate</a>

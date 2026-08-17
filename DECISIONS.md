@@ -1268,9 +1268,13 @@ imports a JSON file, which is how two people end up looking at the same review, 
 in the header where it cannot be missed. Import **merges rather than replaces**, keeping whichever
 record carries a note, so loading a colleague's file cannot wipe your own afternoon.
 
-**⚠ THE HEADER AND FOOTER LINKS MUST COME OUT BEFORE CUTOVER.** They were added on request and the
-team needs them now. A nav link to an internal review board on the live site is exactly the kind of
-thing nobody notices until a customer clicks it. This is recorded here and in the page's own header.
+**The header nav link came straight back out.** It was added when `/sitemap/` was still a public
+page; the primary nav is the one row of links a customer reads on every page, and an internal board
+full of unfinished work and the team's own notes is the last thing that belongs in it. The footer
+keeps the link — enough for the team, and one fewer thing to remember at cutover.
+
+**⚠ THE FOOTER LINK STILL HAS TO COME OUT BEFORE CUTOVER**, along with the page itself. Recorded
+here and in the page's own header.
 
 ---
 
