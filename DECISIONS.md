@@ -1324,7 +1324,68 @@ not a switch.
 
 ---
 
-## 27. Checks
+## 27. Round 25 — the board became a CMS, on its own database
+
+### A dedicated Supabase project, and why not the two that existed
+
+`Coldstream Review Board` — `riwmmxhrpgcunfwikxqm`, us-east-1, billable compute on the Pro plan.
+
+The two existing projects were both wrong homes. **Coldstream OS** is the render pipeline's
+production database; a marketing-site review board does not belong in it. The second project looked
+empty and is not — it runs a field-sales app (`agencies`, `prospects`, `referrals`, `field_users`)
+with five auth users, and sharing it would have meant those five could sign into this board and
+anyone added here could sign into that app's auth. It was also **unhealthy**: `ACTIVE_HEALTHY` at
+project level while db, rest and auth all reported "failed to connect". A restart fixed the database
+even though the health endpoint stayed stale, which is worth knowing if it happens again.
+
+### The security model, which is the whole design
+
+The board is static HTML on a public URL built from a **public GitHub repo**. The anon key ships in
+that HTML. That is normal for Supabase and safe only if the database is closed by default, so:
+
+- everything lives in a `review` schema, not `public`
+- `usage` on that schema is granted to `authenticated` and `service_role` **only** — `anon` gets
+  nothing, so an anonymous caller is refused at the **schema boundary**, before RLS is consulted
+- every table has RLS on, deny by default, with one policy per door
+- comments are **append-only** — no update or delete policy, because a thread that records what the
+  team decided is not a record if someone can quietly rewrite it
+
+**Verified against the live project rather than assumed.** Anonymous reads and writes return
+`permission denied for schema review` on every table. A throwaway user was created, signed in, read
+successfully, and was deleted. The committed key was decoded to confirm it carries `role: anon` and
+not `service_role`, and the staged diff was swept for the service key and the management token
+before pushing.
+
+### What it does now
+
+`review.pages` is synced from the build — 68 rows, upserted, **never deleted**: a page that
+disappears keeps its notes and its edit requests, because a page vanishing from a build is usually a
+rename, and that is exactly when the discussion is worth keeping.
+
+Ticks, statuses, section checks and notes now live in Postgres, so two people see one board rather
+than three private localStorage copies. On top of that, the CMS part: **edit requests** per page and
+per section — kind (copy · design · data · bug · question), priority, status, filed against the page
+they concern, with an open-count badge on the row and a filter for pages carrying one.
+
+**No SDK.** The Supabase JS client would be a CDN script on a page that loads none, for calls that
+are four headers and a fetch. The repo's no-client-framework rule holds and the board's behaviour
+stays readable in one file. Anything a person typed is written with `textContent`, never `innerHTML`.
+
+**Signed out, the board is structure only** — the page list and the consolidation breakdown are in
+the HTML and are useful on their own; every tick, note and request needs a sign-in and is visibly
+inert without one. The database would refuse regardless; the greyed-out state is so nobody types
+into a field that cannot save.
+
+### The credential
+
+The management token was pasted into chat. It grants access to every project on the account, it is
+in that transcript, and **it should be rotated**. It was used in-session only and written to no file
+here. The service-role key is likewise never committed — `scripts/sync-review-board.mjs` reads it
+from the environment and exits with instructions if it is missing.
+
+---
+
+## 28. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

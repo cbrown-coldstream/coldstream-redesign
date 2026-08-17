@@ -10,6 +10,7 @@
     "preview": "astro preview",
     "verify": "node scripts/verify-build.mjs",
     "contracts": "node scripts/check-contracts.mjs",
+    "review:sync": "node scripts/sync-review-board.mjs",
     "test:gates": "node scripts/test-gates.mjs",
     "briefs": "node scripts/build-briefs.mjs",
     "handoff": "node scripts/handoff.mjs",

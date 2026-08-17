@@ -27,6 +27,7 @@ import { NATIONAL, MARKETS, MARKET_LIST } from "../data/markets.js";
 import { INDEXABLE, NOINDEXED } from "../data/sitemap.js";
 import { REVIEW_SECTIONS, laneFor, REVIEW_STATES } from "../data/review-sections.js";
 import { foldsInto, summary, REASONS } from "../data/consolidation.js";
+import { REVIEW_DB } from "../data/review-db.js";
 
 const market = NATIONAL;
 const marketSlugs = Object.keys(MARKETS);
@@ -108,20 +109,33 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
           <button type="button" data-filter="noted" aria-pressed="false">Has notes</button>
           <button type="button" data-filter="blocked" aria-pressed="false">Blocked</button>
           <button type="button" data-filter="absorbed" aria-pressed="false">Absorbed URLs</button>
+          <button type="button" data-filter="requests" aria-pressed="false">Open requests</button>
         </div>
         <div class="rb-tools">
           {/* localStorage is per-browser and there is no server to sync to. Export/import is how
               two people review the same build — see the header note in this file. */}
-          <button type="button" id="rbExport">Export notes</button>
-          <label class="rb-import">Import<input type="file" id="rbImport" accept="application/json" hidden /></label>
           <button type="button" id="rbExpand">Expand all</button>
-          <button type="button" id="rbReset" class="rb-danger">Reset</button>
         </div>
       </div>
-      <p class="rb-warn">
-        Ticks and notes are saved in <b>this browser only</b> — there is no server behind this site.
-        Use <b>Export notes</b> to share them, and <b>Import</b> to load someone else's.
-      </p>
+      {/* SIGNED OUT, THE BOARD IS READ-ONLY STRUCTURE. The page list and the consolidation
+          breakdown are baked into the HTML and are useful on their own; every tick, note and edit
+          request comes from the database and needs a sign-in. That split is deliberate — an
+          anonymous visitor who finds this URL sees what the site is made of, never the team's
+          working notes. The database refuses them at the schema boundary regardless. */}
+      <div class="rb-auth" id="rbAuth">
+        <form id="rbSignIn" class="rb-signin">
+          <span class="rb-auth-lead">Sign in to tick, note and request edits</span>
+          <input type="email" id="rbEmail" placeholder="you@coldstreamsolar.com" autocomplete="username" required />
+          <input type="password" id="rbPass" placeholder="password" autocomplete="current-password" required />
+          <button type="submit">Sign in</button>
+          <span class="rb-auth-msg" id="rbAuthMsg" role="status" aria-live="polite"></span>
+        </form>
+        <div class="rb-signed" id="rbSigned" hidden>
+          <span>Signed in as <b id="rbWho"></b></span>
+          <span class="rb-sync" id="rbSync" role="status" aria-live="polite"></span>
+          <button type="button" id="rbSignOut">Sign out</button>
+        </div>
+      </div>
     </header>
 
     {/* WHY 68 AND NOT 443. This is the question the whole rebuild answers, and until now it lived
@@ -211,7 +225,27 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
                       )}
 
                       <h3>Page notes</h3>
-                      <textarea class="rb-note" rows="8" placeholder="Copy, design, anything the team needs to decide…" aria-label={`Notes for ${row.title}`}></textarea>
+                      <textarea class="rb-note" rows="5" placeholder="Copy, design, anything the team needs to decide…" aria-label={`Notes for ${row.title}`}></textarea>
+
+                      <h3>Edit requests</h3>
+                      <div class="rb-reqs" data-reqs></div>
+                      <form class="rb-newreq" data-newreq>
+                        <select data-kind aria-label="Kind of change">
+                          <option value="copy">Copy</option>
+                          <option value="design">Design</option>
+                          <option value="data">Data</option>
+                          <option value="bug">Bug</option>
+                          <option value="question">Question</option>
+                        </select>
+                        <select data-priority aria-label="Priority">
+                          <option value="normal">Normal</option>
+                          <option value="high">High</option>
+                          <option value="low">Low</option>
+                        </select>
+                        <input type="text" data-title placeholder="What needs changing?" required />
+                        <textarea data-body rows="2" placeholder="Detail (optional)"></textarea>
+                        <button type="submit">Request edit</button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -224,85 +258,299 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
   </div>
 </BaseLayout>
 
-<script is:inline>
+<script is:inline define:vars={{ DB: REVIEW_DB }}>
   (function () {
-    var KEY = "cs_review_board_v1";
-    var state = {};
-    try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+    // ── THE BOARD'S CLIENT. Hand-rolled fetch, no SDK ────────────────────────────────────────
+    //
+    // Supabase's JS client would be a CDN script on a page that currently loads none, for calls
+    // that are four headers and a fetch. The repo's rule is no client framework; this honours it
+    // and keeps the board's behaviour readable in one file.
+    //
+    // WHAT IS STORED WHERE. The session token goes in localStorage — that is the browser's own
+    // login, not the team's data. Every tick, note and edit request lives in Postgres, so two
+    // people on two machines see one board. Signed out, nothing loads and nothing can be written:
+    // the database refuses the anon key at the schema boundary, so this is belt and braces.
+    var SESSION_KEY = "cs_review_session_v1";
+    var session = null;
+    try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch (e) {}
 
     var pages = Array.prototype.slice.call(document.querySelectorAll(".rb-page"));
+    var byPath = {};
+    pages.forEach(function (el) { byPath[el.dataset.path] = el; });
 
-    function save() {
-      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
-      paint();
+    var el = {
+      auth: document.getElementById("rbAuth"),
+      form: document.getElementById("rbSignIn"),
+      signed: document.getElementById("rbSigned"),
+      who: document.getElementById("rbWho"),
+      msg: document.getElementById("rbAuthMsg"),
+      sync: document.getElementById("rbSync"),
+      pct: document.getElementById("rbPct"),
+      done: document.getElementById("rbDone"),
+      ring: document.querySelector(".rb-ring"),
+    };
+
+    function say(t, bad) { el.sync.textContent = t || ""; el.sync.className = "rb-sync" + (bad ? " is-bad" : ""); }
+
+    // ── REST helpers ────────────────────────────────────────────────────────────────────────
+    function rest(path, opts) {
+      opts = opts || {};
+      var h = {
+        apikey: DB.anonKey,
+        Authorization: "Bearer " + (session ? session.access_token : DB.anonKey),
+        "Content-Type": "application/json",
+      };
+      // PostgREST needs the schema named explicitly — `review` is not `public`.
+      if (opts.method && opts.method !== "GET") h["Content-Profile"] = DB.schema;
+      else h["Accept-Profile"] = DB.schema;
+      if (opts.prefer) h.Prefer = opts.prefer;
+      return fetch(DB.url + "/rest/v1/" + path, {
+        method: opts.method || "GET", headers: h,
+        body: opts.body ? JSON.stringify(opts.body) : undefined,
+      }).then(function (r) {
+        if (r.status === 401 || r.status === 403) { signOut(true); throw new Error("session expired"); }
+        if (!r.ok) return r.text().then(function (t) { throw new Error(t.slice(0, 160)); });
+        return r.status === 204 ? null : r.json();
+      });
     }
-    function rec(path) {
-      if (!state[path]) state[path] = { done: false, status: "", note: "", sec: {}, secNote: {} };
-      return state[path];
+
+    // ── auth ────────────────────────────────────────────────────────────────────────────────
+    el.form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      el.msg.textContent = "…";
+      fetch(DB.url + "/auth/v1/token?grant_type=password", {
+        method: "POST",
+        headers: { apikey: DB.anonKey, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("rbEmail").value,
+          password: document.getElementById("rbPass").value,
+        }),
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        if (!d.access_token) { el.msg.textContent = d.error_description || d.msg || "Sign-in failed"; return; }
+        session = d;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(d));
+        el.msg.textContent = "";
+        onSignedIn();
+      }).catch(function () { el.msg.textContent = "Could not reach the server"; });
+    });
+
+    function signOut(expired) {
+      session = null;
+      localStorage.removeItem(SESSION_KEY);
+      el.form.hidden = false; el.signed.hidden = true;
+      if (expired) el.msg.textContent = "Session expired — sign in again";
+      document.body.classList.remove("rb-live");
+    }
+    document.getElementById("rbSignOut").addEventListener("click", function () { signOut(false); });
+
+    function onSignedIn() {
+      el.form.hidden = true; el.signed.hidden = false;
+      el.who.textContent = (session.user && session.user.email) || "";
+      document.body.classList.add("rb-live");
+      load();
+    }
+
+    // ── load everything the board shows ─────────────────────────────────────────────────────
+    function load() {
+      say("loading…");
+      Promise.all([
+        rest("page_status?select=*"),
+        rest("section_checks?select=*"),
+        rest("edit_requests?select=*&order=created_at.desc"),
+      ]).then(function (r) {
+        applyStatus(r[0]); applySections(r[1]); applyRequests(r[2]);
+        paint(); say("");
+      }).catch(function (e) { say(e.message, true); });
+    }
+
+    function applyStatus(rows) {
+      pages.forEach(function (p) {
+        p.querySelector(".rb-check").checked = false;
+        p.querySelector(".rb-state").value = "";
+        p.querySelector(".rb-note").value = "";
+        p.removeAttribute("data-status");
+      });
+      (rows || []).forEach(function (r) {
+        var p = byPath[r.path]; if (!p) return;
+        p.querySelector(".rb-check").checked = !!r.reviewed;
+        p.querySelector(".rb-state").value = r.status || "";
+        p.querySelector(".rb-note").value = r.notes || "";
+        p.setAttribute("data-status", r.status || "");
+        p.classList.toggle("is-done", !!r.reviewed);
+      });
+    }
+
+    function applySections(rows) {
+      pages.forEach(function (p) {
+        p.querySelectorAll(".rb-scheck").forEach(function (c) { c.checked = false; });
+        p.querySelectorAll(".rb-snote").forEach(function (n) { n.value = ""; });
+      });
+      (rows || []).forEach(function (r) {
+        var p = byPath[r.path]; if (!p) return;
+        var c = p.querySelector('.rb-scheck[data-sec="' + r.section_index + '"]');
+        var n = p.querySelector('.rb-snote[data-sec="' + r.section_index + '"]');
+        if (c) c.checked = !!r.checked;
+        if (n) n.value = r.note || "";
+      });
+    }
+
+    var KIND = { copy: "Copy", design: "Design", data: "Data", bug: "Bug", question: "Question" };
+    function applyRequests(rows) {
+      pages.forEach(function (p) {
+        var box = p.querySelector("[data-reqs]"); if (box) box.innerHTML = "";
+        p.setAttribute("data-reqs-open", "0");
+      });
+      (rows || []).forEach(function (r) {
+        var p = byPath[r.path]; if (!p) return;
+        var box = p.querySelector("[data-reqs]"); if (!box) return;
+        var open = r.status !== "done" && r.status !== "wontfix";
+        if (open) p.setAttribute("data-reqs-open", String(+(p.getAttribute("data-reqs-open") || 0) + 1));
+        var d = document.createElement("div");
+        d.className = "rb-req is-" + r.status;
+        d.innerHTML =
+          '<div class="rb-req-top"><b></b>' +
+          '<span class="rb-req-kind">' + (KIND[r.kind] || r.kind) + "</span>" +
+          (r.priority === "high" ? '<span class="rb-req-hi">high</span>' : "") +
+          "</div>" +
+          '<p class="rb-req-body"></p>' +
+          '<div class="rb-req-foot"><select class="rb-req-state">' +
+          ["open", "in_progress", "blocked", "done", "wontfix"].map(function (s) {
+            return '<option value="' + s + '"' + (s === r.status ? " selected" : "") + ">" + s.replace("_", " ") + "</option>";
+          }).join("") +
+          "</select></div>";
+        // textContent, never innerHTML, for anything a person typed.
+        d.querySelector("b").textContent = r.title;
+        d.querySelector(".rb-req-body").textContent = r.body || "";
+        d.querySelector(".rb-req-state").addEventListener("change", function (e) {
+          rest("edit_requests?id=eq." + r.id, { method: "PATCH", body: { status: e.target.value } })
+            .then(function () { say("saved"); setTimeout(function () { say(""); }, 900); load(); })
+            .catch(function (err) { say(err.message, true); });
+        });
+        box.appendChild(d);
+      });
+      paintBadges();
+    }
+
+    function paintBadges() {
+      pages.forEach(function (p) {
+        var n = +(p.getAttribute("data-reqs-open") || 0);
+        var b = p.querySelector(".rb-open-reqs");
+        if (!b) {
+          b = document.createElement("span");
+          b.className = "rb-open-reqs";
+          p.querySelector(".rb-head").insertBefore(b, p.querySelector(".rb-state"));
+        }
+        b.textContent = n ? n + " open" : "";
+        b.hidden = !n;
+      });
     }
 
     function paint() {
-      var done = 0;
-      pages.forEach(function (el) {
-        var r = state[el.dataset.path];
-        if (r && r.done) done++;
-        el.classList.toggle("is-done", !!(r && r.done));
-        el.setAttribute("data-status", (r && r.status) || "");
-        el.setAttribute("data-noted", String(!!(r && (r.note || Object.keys(r.secNote || {}).some(function (k) { return r.secNote[k]; })))));
-      });
+      var done = pages.filter(function (p) { return p.classList.contains("is-done"); }).length;
       var pct = pages.length ? Math.round((done / pages.length) * 100) : 0;
-      document.getElementById("rbPct").textContent = pct + "%";
-      document.getElementById("rbDone").textContent = done;
-      document.querySelector(".rb-ring").style.setProperty("--pct", pct);
+      el.pct.textContent = pct + "%"; el.done.textContent = done;
+      el.ring.style.setProperty("--pct", pct);
     }
 
-    // Restore, then bind. Restoring first means a half-typed note is never clobbered by a paint.
-    pages.forEach(function (el) {
-      var path = el.dataset.path;
-      var r = state[path];
-      if (r) {
-        el.querySelector(".rb-check").checked = !!r.done;
-        el.querySelector(".rb-state").value = r.status || "";
-        el.querySelector(".rb-note").value = r.note || "";
-        el.querySelectorAll(".rb-scheck").forEach(function (c) { c.checked = !!(r.sec || {})[c.dataset.sec]; });
-        el.querySelectorAll(".rb-snote").forEach(function (n) { n.value = (r.secNote || {})[n.dataset.sec] || ""; });
-      }
+    // ── writes ──────────────────────────────────────────────────────────────────────────────
+    var timers = {};
+    function debounce(k, fn) { clearTimeout(timers[k]); timers[k] = setTimeout(fn, 600); }
 
-      el.querySelector(".rb-check").addEventListener("change", function (e) { rec(path).done = e.target.checked; save(); });
-      el.querySelector(".rb-state").addEventListener("change", function (e) { rec(path).status = e.target.value; save(); });
-      el.querySelector(".rb-note").addEventListener("input", function (e) { rec(path).note = e.target.value; save(); });
-      el.querySelectorAll(".rb-scheck").forEach(function (c) {
-        c.addEventListener("change", function () { rec(path).sec[c.dataset.sec] = c.checked; save(); });
+    function upsertStatus(path, patch) {
+      var p = byPath[path];
+      var body = Object.assign({
+        path: path,
+        reviewed: p.querySelector(".rb-check").checked,
+        status: p.querySelector(".rb-state").value,
+        notes: p.querySelector(".rb-note").value,
+      }, patch || {});
+      say("saving…");
+      rest("page_status?on_conflict=path", { method: "POST", body: [body], prefer: "resolution=merge-duplicates,return=minimal" })
+        .then(function () { say("saved"); setTimeout(function () { say(""); }, 900); })
+        .catch(function (e) { say(e.message, true); });
+    }
+
+    pages.forEach(function (p) {
+      var path = p.dataset.path;
+      p.querySelector(".rb-check").addEventListener("change", function (e) {
+        p.classList.toggle("is-done", e.target.checked); paint(); upsertStatus(path);
       });
-      el.querySelectorAll(".rb-snote").forEach(function (n) {
-        n.addEventListener("input", function () { rec(path).secNote[n.dataset.sec] = n.value; save(); });
+      p.querySelector(".rb-state").addEventListener("change", function (e) {
+        p.setAttribute("data-status", e.target.value); upsertStatus(path);
+      });
+      p.querySelector(".rb-note").addEventListener("input", function () {
+        debounce("n" + path, function () { upsertStatus(path); });
       });
 
-      var tog = el.querySelector(".rb-toggle");
+      p.querySelectorAll(".rb-scheck").forEach(function (c) {
+        c.addEventListener("change", function () { upsertSection(p, path, c.dataset.sec); });
+      });
+      p.querySelectorAll(".rb-snote").forEach(function (n) {
+        n.addEventListener("input", function () {
+          debounce("s" + path + n.dataset.sec, function () { upsertSection(p, path, n.dataset.sec); });
+        });
+      });
+
+      var f = p.querySelector("[data-newreq]");
+      if (f) f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var title = f.querySelector("[data-title]").value.trim();
+        if (!title) return;
+        say("filing…");
+        rest("edit_requests", {
+          method: "POST",
+          body: [{
+            path: path,
+            kind: f.querySelector("[data-kind]").value,
+            priority: f.querySelector("[data-priority]").value,
+            title: title,
+            body: f.querySelector("[data-body]").value,
+            created_by: session.user.id,
+          }],
+          prefer: "return=minimal",
+        }).then(function () {
+          f.reset(); say("filed"); setTimeout(function () { say(""); }, 900); load();
+        }).catch(function (err) { say(err.message, true); });
+      });
+
+      var tog = p.querySelector(".rb-toggle");
       tog.addEventListener("click", function () {
         var open = tog.getAttribute("aria-expanded") === "true";
         tog.setAttribute("aria-expanded", String(!open));
-        el.querySelector(".rb-detail").hidden = open;
+        p.querySelector(".rb-detail").hidden = open;
       });
     });
 
-    // Filters
+    function upsertSection(p, path, idx) {
+      var c = p.querySelector('.rb-scheck[data-sec="' + idx + '"]');
+      var n = p.querySelector('.rb-snote[data-sec="' + idx + '"]');
+      var label = c.closest("li").querySelector("label span").textContent;
+      say("saving…");
+      rest("section_checks?on_conflict=path,section_index", {
+        method: "POST",
+        body: [{ path: path, section_index: +idx, section_label: label, checked: c.checked, note: n.value }],
+        prefer: "resolution=merge-duplicates,return=minimal",
+      }).then(function () { say("saved"); setTimeout(function () { say(""); }, 900); })
+        .catch(function (e) { say(e.message, true); });
+    }
+
+    // ── filters ─────────────────────────────────────────────────────────────────────────────
     var fbtns = Array.prototype.slice.call(document.querySelectorAll("[data-filter]"));
     fbtns.forEach(function (b) {
       b.addEventListener("click", function () {
         fbtns.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
         var f = b.dataset.filter;
-        pages.forEach(function (el) {
-          var r = state[el.dataset.path] || {};
+        pages.forEach(function (p) {
           var show = f === "all"
-            || (f === "open" && !r.done)
-            || (f === "noted" && el.getAttribute("data-noted") === "true")
-            || (f === "blocked" && (el.dataset.blocked === "true" || r.status === "blocked"))
-            || (f === "absorbed" && el.dataset.folds !== "0");
-          el.hidden = !show;
+            || (f === "open" && !p.classList.contains("is-done"))
+            || (f === "noted" && p.querySelector(".rb-note").value.trim() !== "")
+            || (f === "blocked" && (p.dataset.blocked === "true" || p.getAttribute("data-status") === "blocked"))
+            || (f === "absorbed" && p.dataset.folds !== "0")
+            || (f === "requests" && +(p.getAttribute("data-reqs-open") || 0) > 0);
+          p.hidden = !show;
         });
-        document.querySelectorAll(".rb-group").forEach(function (s) {
-          s.hidden = !Array.prototype.some.call(s.querySelectorAll(".rb-page"), function (p) { return !p.hidden; });
+        document.querySelectorAll(".rb-group").forEach(function (sct) {
+          sct.hidden = !Array.prototype.some.call(sct.querySelectorAll(".rb-page"), function (x) { return !x.hidden; });
         });
       });
     });
@@ -310,55 +558,14 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
     var expanded = false;
     document.getElementById("rbExpand").addEventListener("click", function (e) {
       expanded = !expanded;
-      pages.forEach(function (el) {
-        el.querySelector(".rb-toggle").setAttribute("aria-expanded", String(expanded));
-        el.querySelector(".rb-detail").hidden = !expanded;
+      pages.forEach(function (p) {
+        p.querySelector(".rb-toggle").setAttribute("aria-expanded", String(expanded));
+        p.querySelector(".rb-detail").hidden = !expanded;
       });
       e.target.textContent = expanded ? "Collapse all" : "Expand all";
     });
 
-    document.getElementById("rbExport").addEventListener("click", function () {
-      var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "coldstream-review-notes.json";
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
-
-    document.getElementById("rbImport").addEventListener("change", function (e) {
-      var f = e.target.files && e.target.files[0];
-      if (!f) return;
-      var fr = new FileReader();
-      fr.onload = function () {
-        try {
-          var incoming = JSON.parse(fr.result);
-          // MERGE, NEVER REPLACE. Someone importing a colleague's file should not lose their own
-          // afternoon; a per-page conflict keeps whichever record has a note on it.
-          Object.keys(incoming).forEach(function (p) {
-            var mine = state[p], theirs = incoming[p];
-            state[p] = (mine && mine.note && !theirs.note) ? mine : theirs;
-          });
-          save();
-          pages.forEach(function (el) {
-            var r = state[el.dataset.path]; if (!r) return;
-            el.querySelector(".rb-check").checked = !!r.done;
-            el.querySelector(".rb-state").value = r.status || "";
-            el.querySelector(".rb-note").value = r.note || "";
-            el.querySelectorAll(".rb-scheck").forEach(function (c) { c.checked = !!(r.sec || {})[c.dataset.sec]; });
-            el.querySelectorAll(".rb-snote").forEach(function (n) { n.value = (r.secNote || {})[n.dataset.sec] || ""; });
-          });
-        } catch (err) { alert("That file could not be read as review notes."); }
-      };
-      fr.readAsText(f);
-    });
-
-    document.getElementById("rbReset").addEventListener("click", function () {
-      if (!confirm("Clear every tick and note in this browser? Export first if you want to keep them.")) return;
-      state = {}; save(); location.reload();
-    });
-
-    paint();
+    if (session && session.access_token) onSignedIn();
   })();
 </script>
 
@@ -475,6 +682,53 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
   .rb-reason{font-size:.68rem;color:var(--dim);background:var(--panel2);border-radius:4px;padding:2px 6px;
     white-space:nowrap;cursor:help}
   .rb-none{margin:0 0 16px;font-size:.83rem;color:var(--dim);font-style:italic}
+
+
+  /* ── AUTH BAR + CMS CONTROLS ─────────────────────────────────────────────────────────────── */
+  .rb-auth{max-width:1400px;margin:12px auto 0}
+  .rb-signin{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .rb-auth-lead{font-size:.86rem;color:var(--dim);margin-right:4px}
+  .rb-signin input{font:inherit;font-size:.86rem;background:#0e141c;color:var(--ink);
+    border:1px solid var(--line);border-radius:7px;padding:9px 11px;min-height:38px;min-width:210px}
+  .rb-auth-msg{font-size:.82rem;color:#ffb3a7}
+  .rb-signed{display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:.86rem;color:var(--dim)}
+  .rb-signed b{color:var(--ink)}
+  .rb-sync{font-size:.8rem;color:var(--done);min-width:70px}
+  .rb-sync.is-bad{color:#ff9a8f}
+
+  /* Signed out, the interactive parts are visibly inert rather than misleadingly clickable. */
+  .rb-detail .rb-note,.rb-detail .rb-snote,.rb-newreq,.rb-check,.rb-scheck,.rb-state{opacity:.45;pointer-events:none}
+  body.rb-live .rb-detail .rb-note,body.rb-live .rb-detail .rb-snote,body.rb-live .rb-newreq,
+  body.rb-live .rb-check,body.rb-live .rb-scheck,body.rb-live .rb-state{opacity:1;pointer-events:auto}
+
+  /* ── EDIT REQUESTS ───────────────────────────────────────────────────────────────────────── */
+  .rb-open-reqs{font-size:.68rem;font-weight:700;color:#0e141c;background:var(--copy);
+    border-radius:5px;padding:3px 7px;white-space:nowrap}
+  .rb-open-reqs[hidden]{display:none}
+  .rb-reqs{display:flex;flex-direction:column;gap:7px;margin:0 0 12px}
+  .rb-req{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--wip);
+    border-radius:7px;padding:10px 12px}
+  .rb-req.is-done,.rb-req.is-wontfix{border-left-color:var(--done);opacity:.6}
+  .rb-req.is-blocked{border-left-color:var(--blocked)}
+  .rb-req-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+  .rb-req-top b{font-size:.9rem}
+  .rb-req-kind{font-size:.68rem;color:var(--dim);background:#0e141c;border-radius:4px;padding:2px 6px}
+  .rb-req-hi{font-size:.68rem;font-weight:700;color:#0e141c;background:var(--copy);border-radius:4px;padding:2px 6px}
+  .rb-req-body{margin:6px 0 0;font-size:.84rem;color:var(--dim);line-height:1.5;white-space:pre-wrap}
+  .rb-req-foot{margin-top:8px}
+  .rb-req-state{font:inherit;font-size:.76rem;background:#0e141c;color:var(--ink);
+    border:1px solid var(--line);border-radius:6px;padding:5px 7px}
+
+  .rb-newreq{display:grid;grid-template-columns:auto auto 1fr;gap:7px;align-items:start;
+    background:#0e141c;border:1px dashed var(--line);border-radius:8px;padding:11px}
+  .rb-newreq select{font:inherit;font-size:.8rem;background:var(--panel2);color:var(--ink);
+    border:1px solid var(--line);border-radius:6px;padding:7px}
+  .rb-newreq input[type=text]{grid-column:3;font:inherit;font-size:.84rem;background:var(--panel2);
+    color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+  .rb-newreq textarea{grid-column:1/-1;font:inherit;font-size:.83rem;background:var(--panel2);
+    color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 9px;resize:vertical}
+  .rb-newreq button{grid-column:1/-1;justify-self:start}
+  @media(max-width:700px){.rb-newreq{grid-template-columns:1fr}.rb-newreq input[type=text]{grid-column:1}}
 
   @media(max-width:900px){
     .rb-cols{grid-template-columns:1fr}
