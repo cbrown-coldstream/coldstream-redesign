@@ -1504,10 +1504,42 @@ a decision to state out loud, not a line to quietly edit."* Deleting `"4.8"` fro
 remove the protection that caught the original fabrication, and editing a gate so a build passes is
 the thing that must not happen quietly.
 
-**The fix, when someone decides to make it:** the check should fail on `4.8` *unless*
-`generated/reviews.json` actually carries that rating for a market — sourced becomes the exemption,
-and a typed 4.8 still fails. That is a real change to what the gate means and belongs in a round of
-its own.
+**FIXED IN ROUND 28, ON INSTRUCTION.** See below.
+
+---
+
+## 29a. Round 28 — the claims gate learned the difference between typed and sourced
+
+`"4.8"` stays on `BANNED_CLAIMS`. What changed is that **the exemption is the source, not the
+number**: a rating-shaped entry is allowed through only if `src/data/generated/reviews.json` — written
+by `pull-reviews.mjs` from the Places API and validated by `npm run contracts` — actually carries that
+value as a market's profile rating, *with* a count and a profile link. The same all-or-nothing rule
+the component and the contract already apply, so a rating with no count is still just a number.
+
+When a rating is exempted the gate says so out loud rather than passing silently:
+`no unsourced claim in any page — 4.8 allowed as a pulled Google rating`.
+
+**Proven in four states, not two:**
+
+| | |
+|---|---|
+| No `reviews.json`, clean build | passes — baseline unchanged |
+| `COLDSTREAM_FIXTURES=1`, synthetic 4.8, **no file** | **still fails** — a fixture has no source |
+| Pulled 4.8 with count and profile URL | **passes**, and names the exemption |
+| Pulled **4.9** while a typed 4.8 sits in copy | **still fails** — the case that matters most |
+
+That third row is the false positive this fixes. That fourth row is why the fix is a match rather
+than a flag: a pulled 4.9 does not license a hardcoded 4.8 elsewhere on the page.
+
+**What it deliberately does not do.** It does not exempt a rating merely because the file exists; it
+does not help a fixture build, since `COLDSTREAM_FIXTURES=1` supplies reviews from memory and writes
+no file; and it cannot stop someone hand-writing a fake `reviews.json`. Nothing here can — that is
+deliberate fabrication rather than the accident this gate catches, and `contracts.js` plus the FIXTURE
+scan are what bite there. Every other entry on the list — prices, BBB, "25+ years", the invented
+reviewer names — has no sourced form and can never be exempted.
+
+Both test artefacts were reverted: the stray `4.8` planted in `national.js` and the throwaway
+`reviews.json`. `4.8` appears in zero built pages.
 
 ---
 

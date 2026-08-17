@@ -97,12 +97,64 @@ badTel.length ? fail("tel: links to a number that is not one of the four real on
 // 5. Unsourced claims must not reach the HTML.
 const BANNED_CLAIMS = ["4.8", "$99", "$1,000", "$0 down", "BBB A+", "25+ years", "0%-interest",
                        "Sarah M.", "Dave R.", "Priya K.", "Marcus T.", "Joanne K."];
+
+// ── A RATING THE BUILD ACTUALLY PULLED IS NOT AN UNSOURCED CLAIM ─────────────────────────────
+//
+// "4.8" is on that list because it was invented prototype copy — a star rating about a real review
+// profile that no source backed. The check is a substring scan, so it could not tell that figure
+// typed into a template from the same figure read off the Google profile this build pulled. Once
+// reviews are pulled for real, a correct and sourced 4.8 failed this gate. That is a false positive,
+// and a gate that cries wolf on good data is a gate people start switching off.
+//
+// SO THE EXEMPTION IS THE SOURCE, NOT THE NUMBER. A rating-shaped banned claim is allowed through
+// only if src/data/generated/reviews.json — written by scripts/pull-reviews.mjs from the Places API
+// and validated by npm run contracts — actually carries that value as a market's profile rating.
+// Everything else on the list is untouched: prices, BBB, "25+ years" and the invented reviewer names
+// have no sourced form and can never be exempted.
+//
+// WHAT THIS DELIBERATELY DOES NOT DO:
+//   · It does not exempt a rating merely because reviews.json exists. The value has to match.
+//   · It does not exempt a rating that appears on a page while a DIFFERENT one was pulled — a
+//     hardcoded 4.8 beside a pulled 4.9 still fails, which is the case that matters most.
+//   · It does not help a fixture build. COLDSTREAM_FIXTURES=1 supplies synthetic reviews from
+//     memory and writes no file, so its 4.8 has no source and is still refused. Verified.
+//   · It cannot stop someone hand-writing a fake reviews.json. Nothing here can; that is deliberate
+//     fabrication rather than the accident this gate exists to catch, and contracts.js plus the
+//     FIXTURE scan are the checks that bite there.
+const RATING_SHAPED = /^[0-5](\.\d)?$/;
+const sourcedRatings = new Set();
+const PULLED = resolve(root, "src/data/generated/reviews.json");
+if (existsSync(PULLED)) {
+  try {
+    const pulled = JSON.parse(readFileSync(PULLED, "utf8"));
+    for (const [slug, m] of Object.entries(pulled.markets ?? {})) {
+      // Same all-or-nothing rule the component and the contract apply: a rating with no count and
+      // no profile link is not a sourced figure, it is a number.
+      if (typeof m?.rating === "number" && Number.isInteger(m?.count) && m?.profileUrl) {
+        sourcedRatings.add(String(m.rating));
+      } else if (m?.rating != null) {
+        console.log(`      note: ${slug} has a rating but no count/profileUrl — not treated as sourced`);
+      }
+    }
+  } catch (e) {
+    console.log(`      note: generated/reviews.json unreadable, no rating is exempt — ${e.message.split("\n")[0]}`);
+  }
+}
+
 const leaked = [];
 for (const p of pages)
-  for (const c of BANNED_CLAIMS)
+  for (const c of BANNED_CLAIMS) {
+    if (RATING_SHAPED.test(c) && sourcedRatings.has(c)) continue;
     if (p.html.includes(c)) leaked.push(`${p.url}: "${c}"`);
-leaked.length ? fail("an unsourced claim reached the built HTML", leaked)
-              : pass("no unsourced claim (rating, promotion, financing, testimonial) in any page");
+  }
+const exempt = BANNED_CLAIMS.filter((c) => RATING_SHAPED.test(c) && sourcedRatings.has(c));
+leaked.length
+  ? fail("an unsourced claim reached the built HTML", leaked)
+  : pass(
+      exempt.length
+        ? `no unsourced claim in any page — ${exempt.join(", ")} allowed as a pulled Google rating`
+        : "no unsourced claim (rating, promotion, financing, testimonial) in any page",
+    );
 
 // 6. Voice-spec banned words.
 const voice = JSON.parse(readFileSync(resolve(root, "brand/voice-spec.json"), "utf8"));
