@@ -1,29 +1,47 @@
-// THE PRIMARY NAV, AS DECIDED ON THE TEAM REVIEW CALL (2026-08-18).
+// THE PRIMARY NAV, AS DECIDED ON THE TEAM REVIEW CALL (2026-08-18) AND REVISED 2026-08-19.
 //
-// Top-level, in this order: Roofing · Siding · Windows · Gutters · Storm Damage · Service Areas,
+// Top-level, in this order: Roofing · Siding · Storm Damage · Windows · Gutters · Service Areas,
 // then About pushed right against the estimate CTA. Seven items.
 //
 // NOT ONE "SERVICES" DROPDOWN. That was raised and rejected on the call: top-level visibility of
 // each trade was the explicit ask. It costs horizontal room and that cost is taken deliberately —
 // see the breakpoint note in base.css for what happens when the room runs out.
 //
-// ── TWO ITEMS DO NOT MATCH THE PAGES THAT EXIST, AND ARE HANDLED HONESTLY ────────────────────
+// ── WHAT THE 2026-08-19 REVISION CHANGED, AND WHY ────────────────────────────────────────────
 //
-//   1. STORM DAMAGE is a standalone top-level item on the call's instruction — "it spans trades,
-//      which is why it sits on its own". The only page that exists is
-//      /{market}/roofing/insurance-storm-damage/, which is nested under roofing, exactly where the
-//      call said it should not sit. The NAV POSITION is standalone as asked; the URL is still
-//      nested, because moving it means a new page, a redirect rule and an inventory entry, none of
-//      which was authorised. Flagged rather than quietly resolved either way.
+// The 08-18 build left two items flagged as not matching the pages that existed. Both are now
+// resolved by BUILDING THE PAGES rather than by bending the nav around their absence:
 //
-//   2. STONE VENEER was asked for in the Siding dropdown. THERE IS NO SUCH PAGE — the siding
-//      sub-services are vinyl, James Hardie and siding replacement. Linking it would be a dead
-//      internal link, which is a gate failure and, worse, a nav item promising a service page we
-//      cannot show. It is omitted and reported. Add the page and add a line here.
+//   1. STORM DAMAGE moved from sixth to third — directly after Siding — and now points at a real
+//      standalone page, /storm-damage/, on national. It was previously a nav item in a standalone
+//      POSITION whose only destination was /{market}/roofing/insurance-storm-damage/, nested
+//      under roofing, exactly where the call said it should not sit.
 //
-// Dropdown targets are sub-service pages that exist in every market. `serviceHref` and the market
-// slug do the routing, so a national page links to the national service pages and a market page
-// links to its own.
+//      ON A MARKET PAGE IT STILL GOES TO THAT MARKET'S NESTED PAGE, deliberately. The nested page
+//      carries the market's own hail and wind history, its adjuster process and its phone number;
+//      the national page cannot. 273 redirect rules also already resolve to the nested URL, and
+//      re-pointing them to a national page would strip the local signal off every one of them.
+//      Standalone position, market-local destination. Both asks are satisfied at once.
+//
+//   2. STONE VENEER now has a page — /siding/stone-veneer/ — and is in the Siding dropdown.
+//      IT IS NATIONAL-ONLY (`nationalOnly: true`), so it resolves to the same URL from every page
+//      on the site including the market pages. There is no /{market}/siding/stone-veneer/ and
+//      linking one would be a dead internal link and a gate failure. See the note in
+//      data/national-subservices.js on why it has no market variants.
+//
+// ── THE NATIONAL SUB-SLUGS ARE NOT THE MARKET SUB-SLUGS. READ THIS BEFORE EDITING ────────────
+//
+// A dropdown child has ONE `key` but can resolve to TWO different URLs:
+//
+//     child.key = "roof-replacement"   →  /cincinnati/roofing/roof-replacement/   (market)
+//     child.national = "replacement"   →  /roofing/replacement/                   (national)
+//
+// The market spelling is load-bearing: 273 redirect rules in data/redirects.js point at
+// `roofing/roof-replacement` and `roofing/roof-repair`, and renaming those URLs would invalidate
+// every one of them. The national spelling is the one specified for the new pages. `national` is
+// therefore an override, not a rename — omit it and both contexts use `key`.
+//
+// Dropdown targets are pages that exist in every market unless marked `nationalOnly`.
 
 /** Top-level items in call order. `children` is the dropdown; absent means a plain link. */
 export const NAV = [
@@ -31,8 +49,8 @@ export const NAV = [
     key: "roofing",
     label: "Roofing",
     children: [
-      { key: "roof-replacement", label: "Roof Replacement" },
-      { key: "roof-repair", label: "Roof Repair" },
+      { key: "roof-replacement", label: "Roof Replacement", national: "replacement" },
+      { key: "roof-repair", label: "Roof Repair", national: "repair" },
     ],
   },
   {
@@ -40,16 +58,21 @@ export const NAV = [
     label: "Siding",
     children: [
       { key: "vinyl-siding", label: "Vinyl Siding" },
-      { key: "james-hardie-siding", label: "James Hardie" },
-      // { key: "stone-veneer", label: "Stone Veneer" },  ← NO PAGE. See the note above.
+      { key: "james-hardie-siding", label: "James Hardie Siding" },
+      // National-only: there is no market variant of this page. See the file header.
+      { key: "stone-veneer", label: "Stone Veneer", nationalOnly: true },
     ],
+  },
+  // Storm Damage: standalone and third, not nested under roofing and not sixth. `href` is explicit
+  // because the destination differs by context — see note 1 in the file header.
+  {
+    key: "storm-damage",
+    label: "Storm Damage",
+    href: (m) => (m?.slug ? `/${m.slug}/roofing/insurance-storm-damage/` : "/storm-damage/"),
   },
   // Windows: top-level link only. The call was explicit that it gets no dropdown.
   { key: "windows", label: "Windows" },
   { key: "gutters", label: "Gutters" },
-  // Storm Damage: standalone, not nested under roofing. `href` is set explicitly because the page
-  // it points at still lives under the roofing hub — see note 1 above.
-  { key: "storm-damage", label: "Storm Damage", href: (m) => (m?.slug ? `/${m.slug}/roofing/insurance-storm-damage/` : "/roofing/") },
   { key: "service-areas", label: "Service Areas", href: (m) => (m?.slug ? `/service-areas/#${m.slug}` : "/service-areas/") },
 ];
 
@@ -64,6 +87,14 @@ export const navHref = (item, market) => {
   return market?.slug ? `/${market.slug}/${item.key}/` : `/${item.key}/`;
 };
 
-/** Resolve a dropdown child, which always hangs off its parent hub. */
-export const childHref = (parent, child, market) =>
-  market?.slug ? `/${market.slug}/${parent.key}/${child.key}/` : `/${parent.key}/`;
+/**
+ * Resolve a dropdown child, which always hangs off its parent hub.
+ *
+ * Three cases, in order: a national-only child ignores the market entirely; a market page uses the
+ * market spelling of the slug; national uses `national` if the child overrides it, else `key`.
+ */
+export const childHref = (parent, child, market) => {
+  if (child.nationalOnly) return `/${parent.key}/${child.key}/`;
+  if (market?.slug) return `/${market.slug}/${parent.key}/${child.key}/`;
+  return `/${parent.key}/${child.national ?? child.key}/`;
+};

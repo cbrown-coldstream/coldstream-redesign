@@ -1,0 +1,159 @@
+---
+// TEMPLATE 3S — THE NATIONAL SUB-SERVICE PAGES. /roofing/replacement/, /roofing/repair/,
+// /siding/vinyl-siding/, /siding/james-hardie-siding/, /siding/stone-veneer/.
+//
+// WHY THESE EXIST. Same reason the national hubs in [service].astro exist, one level down. The
+// header renders a dropdown under Roofing and Siding on every page. On a market page each child
+// went to that market's sub-service page; on a national page `childHref` had no market to work
+// with and returned the parent hub — so every child in both dropdowns pointed at the page you
+// were already standing on. Five nav items, two destinations, no pages.
+//
+// THEY ARE NOT A FOURTH COPY OF THE MARKET SUB-SERVICE PAGE. The market page answers "vinyl siding
+// in Columbus" and carries that market's climate, crew, phone and served areas. This answers "what
+// is vinyl siding and how does it fail", which is the same question in all three metros. NO CITY
+// APPEARS ON THESE PAGES — the market chooser is how a reader gets from here to the local page,
+// and it deep-links to that market's version of THIS sub-service rather than to the market landing.
+// See the header of data/national-subservices.js for the full split and for the slug mapping.
+//
+// SEO. Self-canonical and indexable, and the breadcrumb runs Home › Hub › This page so the hub
+// above stays the stronger URL. `npm run similarity` is the check that these did not drift into
+// being the market pages with the city removed; the market sub-service pairs are already reported
+// there and these join them.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import Hero from "../../components/Hero.astro";
+import BadgeRow from "../../components/BadgeRow.astro";
+import ServiceDetail from "../../components/ServiceDetail.astro";
+import MarketDepth from "../../components/MarketDepth.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import MarketChooser from "../../components/MarketChooser.astro";
+import WhyTrust from "../../components/WhyTrust.astro";
+import PartnerStrip from "../../components/PartnerStrip.astro";
+import FAQ from "../../components/FAQ.astro";
+import CTABand from "../../components/CTABand.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { NATIONAL, MARKET_LIST, offers, serviceFor } from "../../data/markets.js";
+import { NATIONAL_SUBSERVICES, nationalSubservicePaths } from "../../data/national-subservices.js";
+
+export function getStaticPaths() {
+  return nationalSubservicePaths().map(({ hub, sub }) => ({ params: { hub, sub } }));
+}
+
+const { hub, sub } = Astro.params;
+const svc = NATIONAL_SUBSERVICES[hub][sub];
+const market = NATIONAL;
+const parent = serviceFor(hub);
+
+// Only markets that actually run the parent hub. A chooser offering a market that cannot do the
+// job is worse than one that lists fewer — the same rule MarketChooser documents.
+const markets = MARKET_LIST.filter((m) => offers(m, hub));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: svc.label,
+  name: svc.h1,
+  description: svc.lead,
+  url: `https://coldstreamexteriors.com/${hub}/${sub}/`,
+  // Organization rather than a LocalBusiness ref: this page speaks for the company across three
+  // metros, so pinning it to one office's @id would be wrong. No address is emitted here — the
+  // three real ones live on the market landings and nowhere else.
+  provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+  isPartOf: { "@type": "WebPage", "@id": `https://coldstreamexteriors.com/${hub}/` },
+};
+---
+<BaseLayout
+  title={svc.title}
+  description={svc.description}
+  canonical={`/${hub}/${sub}/`}
+  market={market}
+  breadcrumbs={[
+    { name: "Home", href: "/" },
+    { name: parent.label, href: `/${hub}/` },
+    { name: svc.label, href: `/${hub}/${sub}/` },
+  ]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow={`${parent.label} · ${svc.label}`}
+    headline={svc.h1}
+    sub={svc.lead}
+  />
+
+  <BadgeRow market={market} aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <p style="font-size:1.06rem;line-height:1.7;color:var(--cs-text-muted)">{svc.intro}</p>
+    </div>
+  </section>
+
+  <ServiceDetail
+    id={sub}
+    market={market}
+    eyebrow="What the work involves"
+    heading={`What a ${svc.label.toLowerCase()} job covers`}
+    cards={svc.sections}
+  />
+
+  {/* The material argument, straight after the summary cards and before any shared trust copy —
+      a reader choosing between products should reach it before the boilerplate. The market shim
+      only supplies a stable heading id; NATIONAL.slug is null and would render `mdepth-null` on
+      every one of these pages. Nothing else in the component reads the market. */}
+  <MarketDepth market={{ ...market, slug: `${hub}-${sub}` }} depth={svc.depth} />
+
+  <HowItWorks
+    eyebrow="What happens next"
+    heading={`How a ${svc.label.toLowerCase()} job runs`}
+    steps={svc.process}
+  />
+
+  {/* Deep-linked to this market's version of THIS sub-service, not to the market landing — someone
+      reading the national vinyl page wants Columbus vinyl rather than Columbus. Stone veneer has
+      no market page, so `marketService` sends it to the siding hub and `marketNote` says why. */}
+  <MarketChooser
+    heading="Who does this where you are"
+    intro="Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover."
+    markets={markets}
+    service={svc.marketService}
+    note={svc.marketNote ?? (markets.length < MARKET_LIST.length
+      ? "Not offered in every market — the ones listed are the ones that run this service line."
+      : null)}
+  />
+
+  <WhyTrust
+    heading="Straightforward from quote to cleanup"
+    cards={[
+      { title: "Honest, upfront pricing", body: "A clear written quote after a free inspection — no surprises and no pressure afterwards." },
+      { title: "Our own crews, start to finish", body: "The people who quote the job are the people who do it. No subcontractor gets handed the keys to your house." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully licensed and insured, and factory-certified installers." },
+    ]}
+  />
+
+  <PartnerStrip
+    eyebrow="What we install"
+    heading="Materials from manufacturers who stand behind them"
+    intro="We install products with real manufacturer warranties and training behind the installation, because a warranty is only as good as the crew that fits the material."
+  />
+
+  <FAQ items={svc.faq} />
+
+  <CTABand
+    market={market}
+    heading="Ready for a free, no-pressure estimate?"
+    body={`Tell us what you need and we will take a look. Call ${market.phone} or send the form.`}
+  />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

@@ -1,0 +1,190 @@
+---
+// TEMPLATE 3D — /storm-damage/. THE NATIONAL STORM DAMAGE PAGE.
+//
+// WHY IT IS TOP-LEVEL AND NOT UNDER ROOFING. The 2026-08-18 call put Storm Damage in the nav as a
+// standalone item — "it spans trades, which is why it sits on its own" — and the 08-19 revision
+// moved it to third, directly after Siding. Until now the item had no page of its own: it pointed
+// at /{market}/roofing/insurance-storm-damage/, nested under roofing, exactly where the call said
+// it should not sit. This is the destination that makes the nav position honest.
+//
+// AND THE REASON HOLDS UP. Hail and wind do not respect a service list. One storm bruises the
+// roof, dents the gutters and the soft metal on the elevations, cracks vinyl on the windward wall
+// and breaks seals in windows — and it is all one insurance claim rather than four jobs. A page
+// nested under roofing describes a quarter of that.
+//
+// A STATIC ROUTE, DELIBERATELY. /storm-damage/ is a single segment and would otherwise be caught
+// by [service].astro's dynamic `[service]` param. Astro gives static routes priority, so this file
+// wins; naming it explicitly is also the readable version of that decision. It is NOT added to
+// SERVICE_CONTENT, because storm damage is not a service line in markets.js — no market lists it
+// in `services`, and adding it there would put it in the footer, the services grid and the market
+// hubs' own navigation as though it were a trade alongside roofing and siding.
+//
+// THE MARKET PAGES ARE STILL THE LOCAL ANSWER. The three /{market}/roofing/insurance-storm-damage/
+// pages carry each market's own storm history, its adjuster process and its phone number, and 273
+// redirect rules resolve to them. Nothing here replaces them and no rule was re-pointed — the
+// chooser below deep-links to them, and on a market page the nav item still goes straight there.
+//
+// CLAIMS DISCIPLINE. Nothing on this page promises a claim outcome, a payout, a timeframe or any
+// handling of a deductible. Those are the four things storm-chasing contractors promise and none
+// of them is ours to promise. What is described is what we actually do: inspect, document, and
+// talk to the adjuster.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import BadgeRow from "../components/BadgeRow.astro";
+import ServiceDetail from "../components/ServiceDetail.astro";
+import MarketDepth from "../components/MarketDepth.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import MarketChooser from "../components/MarketChooser.astro";
+import WhyTrust from "../components/WhyTrust.astro";
+import FAQ from "../components/FAQ.astro";
+import CTABand from "../components/CTABand.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+import { NATIONAL, MARKET_LIST } from "../data/markets.js";
+
+const market = NATIONAL;
+
+// Every market runs roofing, so the chooser lists all three and deep-links each to its own nested
+// storm page rather than to its landing.
+const markets = MARKET_LIST;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Storm Damage Repair",
+  name: "Storm damage inspection, documentation and repair",
+  description: "Hail and wind damage inspected and documented for an insurance claim, then repaired across roofing, siding and gutters.",
+  url: "https://coldstreamexteriors.com/storm-damage/",
+  provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+};
+
+const DAMAGE = [
+  { title: "It is often invisible from the ground", body: "Hail takes the granules off a shingle without breaking it. The roof looks intact from the driveway while its remaining life has been cut short, and the leak arrives a year or two later." },
+  { title: "Wind breaks the seal, not the shingle", body: "A gust can lift a shingle and lay it back down with the seal strip broken underneath. It looks untouched and it is no longer sealed to the course below it." },
+  { title: "One storm, several trades", body: "The same hail that bruises a roof dents gutters and soft metal, cracks vinyl on the windward wall and can break a window seal. It is one claim, not four separate jobs." },
+  { title: "Emergency cover comes first", body: "If the house is open to the weather, protecting the inside of it happens before any paperwork does." },
+];
+
+const CLAIM = {
+  eyebrow: "About insurance claims",
+  heading: "What we can do about a claim, and what nobody can",
+  intro: "Storm work attracts contractors who promise things they do not control. Here is the honest division between the part we handle and the part your insurer decides.",
+  blocks: [
+    { h: "Documentation is the part that matters",
+      p: ["A claim is decided on evidence. Every affected slope and elevation photographed, damage marked and measured, and a written scope that describes the work in the terms an adjuster reads — that is the part a contractor genuinely influences, and it is the part that is rushed when somebody is knocking doors after a storm.",
+          "We do that inspection free and give you the documentation whether or not you file, and whether or not you use us for the repair."] },
+    { h: "We talk to your adjuster directly",
+      p: ["Where we can, we meet them at the property. A roofer and an adjuster standing on the same roof is a much shorter conversation than one conducted through the homeowner, and it settles disagreements about scope while both parties can see what they are discussing.",
+          "You should not have to relay technical points between two people who both do this for a living."] },
+    { h: "What we will not tell you",
+      p: ["We will not tell you your claim will be approved, what it will pay, or how long the insurer will take. Those are not ours to decide and any contractor stating them confidently is guessing.",
+          "We also will not do anything creative with your deductible. It is part of your policy, it is yours to pay, and an offer to absorb it should end the conversation with whoever made it."] },
+    { h: "Sometimes the honest answer is not to file",
+      p: ["Insurers cover sudden storm damage. They generally do not cover age and wear, and the difference is visible to someone who looks at roofs every day.",
+          "If what we find is a roof at the end of its life rather than a storm event, we will say so before you file, because a denied claim can still sit on your record. You would be choosing between repair and replacement on your own terms instead, which is a better position to be in."] },
+  ],
+};
+
+const STEPS = [
+  { title: "Free inspection", body: "We walk the roof and the elevations after the storm and photograph what we find, whether or not there turns out to be a claim in it." },
+  { title: "Documented scope", body: "Damage marked, measured and written up in the form an adjuster works from, and a copy for you either way." },
+  { title: "Adjuster meeting", body: "We meet them on site where scheduling allows and deal with them directly on scope afterwards." },
+  { title: "Repair and walkthrough", body: "Our own crews across roofing, siding and gutters, then a magnet run for nails and a walk of the finished work with you." },
+];
+
+const FAQS = [
+  { q: "How soon after a storm should I have it looked at?", a: "Sooner is better. Damage is easier to attribute to a specific storm while it is recent, and policies carry time limits on filing. The inspection is free, so an early look costs you nothing if it turns out to be nothing." },
+  { q: "My roof looks fine from the ground. Is it worth checking?", a: "Usually yes, after significant hail. Bruising that removes the granule layer without cracking the shingle is invisible from below and is the most common storm damage we document." },
+  { q: "Do you meet the adjuster?", a: "Where we can, yes. It is a much shorter conversation when the roofer and the adjuster are on the roof at the same time." },
+  { q: "Will you tell me whether to file?", a: "We will give you our honest read of what we found first. If it looks like wear rather than a storm event, we will say so, because a claim that goes nowhere can still sit on your record." },
+  { q: "Do you handle siding and gutters as well as the roof?", a: "Yes. One storm usually damages more than one part of a house, and it is one claim and one set of crews rather than several." },
+  { q: "What if the house is open to the weather right now?", a: "Call your nearest office and say that. Covering it comes before the inspection, the paperwork and the quote." },
+  { q: "Is the inspection really free?", a: "Yes. The inspection, the documentation and the written quote are free and carry no obligation, and nobody will lean on you afterwards." },
+];
+---
+<BaseLayout
+  title="Storm Damage Repair & Insurance Claims | Coldstream Exteriors"
+  description="Hail and wind damage inspected and documented the way an adjuster needs it, then repaired across roofing, siding and gutters by our own crews. Free inspection."
+  canonical="/storm-damage/"
+  market={market}
+  breadcrumbs={[{ name: "Home", href: "/" }, { name: "Storm Damage", href: "/storm-damage/" }]}
+  schema={[schema]}
+>
+  <Fragment slot="chrome-top">
+    <UtilityBar market={market} resolvedFrom="default" />
+    <SiteHeader market={market} />
+  </Fragment>
+
+  <Hero
+    market={market}
+    eyebrow="Storm damage — all three metros"
+    headline="Storm damage, documented before it is argued about"
+    sub="Hail and wind damage inspected and photographed the way an adjuster needs it, then repaired by our own crews."
+  />
+
+  <BadgeRow market={market} aboveTheFold={true} />
+
+  <section>
+    <div class="wrap" style="max-width:780px">
+      <p style="font-size:1.06rem;line-height:1.7;color:var(--cs-text-muted)">
+        Storm damage is a documentation problem before it is a repair problem. The damage that
+        costs the most is usually the damage nobody can see from the ground, and by the time it
+        announces itself as a leak the storm that caused it is a year in the past and much harder
+        to claim against. So the useful thing to do after a storm is have someone look, write down
+        what is there, and tell you plainly whether it amounts to anything. That inspection is
+        free, the documentation is yours either way, and it costs nothing if the answer is that
+        your house is fine.
+      </p>
+    </div>
+  </section>
+
+  <ServiceDetail
+    id="storm-damage"
+    market={market}
+    eyebrow="What to look for"
+    heading="What storm damage actually looks like"
+    cards={DAMAGE}
+  />
+
+  {/* The claims argument sits before any trust copy: someone who has just had a storm is deciding
+      whether to trust the next contractor who knocks, and this is the section that answers it.
+      The market shim only supplies a stable heading id — NATIONAL.slug is null. */}
+  <MarketDepth market={{ ...market, slug: "storm-damage" }} depth={CLAIM} />
+
+  <HowItWorks
+    eyebrow="What happens next"
+    heading="How a storm claim runs with us"
+    steps={STEPS}
+  />
+
+  <MarketChooser
+    heading="Who does this where you are"
+    intro="Each metro is its own office, crew and number, and each one carries its own storm history — the hail, the wind, and how the local adjusters work."
+    markets={markets}
+    service="roofing/insurance-storm-damage"
+  />
+
+  <WhyTrust
+    heading="Straightforward from inspection to cleanup"
+    cards={[
+      { title: "Free, no-obligation inspection", body: "We look, we photograph it, and we tell you what we found. No claim, no repair and no obligation required." },
+      { title: "Our own crews, start to finish", body: "The people who document the damage are the people who repair it. No subcontractor gets handed the keys to your house." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty on the repair, fully licensed and insured in every market we work in." },
+    ]}
+  />
+
+  <FAQ items={FAQS} />
+
+  <CTABand
+    market={market}
+    heading="Had a storm? Get it looked at while it is recent."
+    body={`A free inspection and written documentation, whether or not there is a claim in it. Call ${market.phone} or send the form.`}
+  />
+
+  <Fragment slot="chrome-bottom">
+    <SiteFooter market={market} />
+  </Fragment>
+</BaseLayout>

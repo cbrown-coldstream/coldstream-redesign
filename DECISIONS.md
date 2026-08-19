@@ -1787,17 +1787,141 @@ was unchanged from before the copy was written, which is the only reason it was 
 
 ---
 
-## 34. Checks
+## 34. Round 33 — the nav dropdowns got destinations
+
+The nav structure requested here was, with two exceptions, the structure round 31 already built on
+the 2026-08-18 call. `data/nav.js` had flagged both exceptions in its own header rather than
+resolving them quietly. **Both are now resolved by building the pages, not by bending the nav.**
+
+### 1 · What actually changed in the nav
+
+**Storm Damage moved from sixth to third**, directly after Siding, as asked. Item count is
+unchanged at seven, so the header takes no new horizontal pressure and the 1040px breakpoint
+behaviour is untouched.
+
+**Stone Veneer joined the Siding dropdown**, which round 31 had left commented out with "NO PAGE —
+linking it would be a dead internal link". It now has one.
+
+Everything else was already correct: Roofing → Roof Replacement · Roof Repair, Siding → Vinyl ·
+James Hardie, Windows and Gutters as plain links, Service Areas, About pushed right. The only label
+change is "James Hardie" → "James Hardie Siding".
+
+### 2 · Six new pages, because a dropdown child had nowhere to go
+
+On a market page every dropdown child resolved to that market's sub-service page. **On a national
+page `childHref` had no market and returned the parent hub** — so five nav items pointed at the two
+pages you were already standing on. That is the same fault that produced the national hubs in round
+12, one level down, and it has the same fix.
+
+```
+/roofing/replacement/   /roofing/repair/
+/siding/vinyl-siding/   /siding/james-hardie-siding/   /siding/stone-veneer/
+/storm-damage/
+```
+
+**They are not a fourth copy of the market page.** The split is the one `[service].astro` already
+documents: a market page answers "vinyl siding in Columbus" and carries local climate, crew, phone
+and served areas; a national page answers "what is vinyl siding and how does it fail", which has
+the same answer in all three metros. **No city name appears on any of the six.**
+
+**Measured rather than asserted.** The similarity script compares market against market, so it
+cannot see this pairing; the same 5-word-shingle method run national-against-market gives a **worst
+pair of 24.1%** (vinyl and Hardie, which share the trust cards), with roof replacement at 14.6% and
+storm damage at 8.7%. For scale, the three market landings sit at 28.8% against each other. The six
+pages run 2328–2596 words.
+
+### 3 · The national sub-slugs are not the market sub-slugs, deliberately
+
+```
+/roofing/replacement/  ←→  /{market}/roofing/roof-replacement/
+/roofing/repair/       ←→  /{market}/roofing/roof-repair/
+```
+
+The national spelling is the one specified in the request. **The market spelling was not touched
+and must not be**: 273 redirect rules resolve to `roofing/roof-replacement` and `roofing/roof-repair`,
+and renaming those URLs would point every one of them at a 404. `childHref` takes a `national`
+override per child so one nav entry serves both, and `marketService` carries the market path so the
+chooser deep-links correctly. **No redirect rule was added, removed or re-pointed this round.**
+
+### 4 · Storm Damage: standalone position, market-local destination
+
+The call's reasoning holds up — one hail event bruises the roof, dents the gutters, cracks vinyl on
+the windward wall and breaks window seals, and it is **one insurance claim rather than four jobs**.
+A page nested under roofing describes a quarter of that.
+
+So `/storm-damage/` exists and is where the item points nationally. **On a market page it still
+goes to `/{market}/roofing/insurance-storm-damage/`**, because that page carries the market's own
+storm history, its adjuster process and its phone number, and because 273 rules already land there.
+Standalone position and local destination at the same time.
+
+It is a **static route**, not an entry in `SERVICE_CONTENT`. Adding it to a market's `services`
+array would have put it in the footer, the services grid and every market hub's navigation as
+though it were a trade alongside roofing and siding.
+
+**Nothing on that page promises a claim outcome, a payout, a timeframe or anything creative with a
+deductible** — the four things storm-chasing contractors promise and none of them ours to promise.
+It says so on the page, which is the part that is actually persuasive.
+
+### 5 · ⚠ Stone Veneer is built and the offering is UNCONFIRMED
+
+**Stone veneer appears nowhere in the ~150k words of live WordPress copy, and in no market's
+`services` array.** The page was requested, and that request is taken as the answer to "do we offer
+this" — but it is an assumption, not a source, and it is the one thing in this round that needs a
+human yes.
+
+What the copy therefore does **not** claim: no manufacturer certification, no completed project
+count, no per-market availability. What it does carry is the work itself — that adhered veneer is a
+facing rather than a wall, that the drainage plane behind it is the whole job, and that stone run
+down into the soil is the failure we would be called to look at. All of that is true of the material
+regardless of who installs it.
+
+**It is national-only.** There is no `/{market}/siding/stone-veneer/`, because three of them would
+be this page with a city dropped into it — the exact pattern the consolidation exists to remove —
+and there is no local stone content to carry. `nationalOnly` in `nav.js` links the one page from
+every market.
+
+**If the answer is that we do not install it, delete the entry and the nav line.** Both are one
+block each and nothing else references them.
+
+### 6 · Two gates caught this round, and neither was relaxed
+
+`\bcheap\b` fired on two sentences — "quick, cheap and the reason", "They are cheap" — where the
+word was meant descriptively rather than as a value claim. **Rewritten, not exempted.** ("cheaper"
+passes the word boundary and was already in use on an existing page.)
+
+The sitemap gate then caught all six pages as indexable-but-unlisted. `sitemap.js` now derives the
+five sub-pages from `nationalSubservicePaths()` — the same export the template's `getStaticPaths`
+uses — rather than repeating them in a hand-kept list, which is the failure mode that file's own
+header warns about. Storm damage is named explicitly, since nothing derives it.
+
+### 7 · What was deliberately not done
+
+- **No market stone veneer pages.** See §5.
+- **No redirect changes.** The market sub-service URLs are unchanged, so the 301 map is untouched.
+  `/roofing/roof-replacement/` and `/roofing/roof-repair/` are not aliased to the national spelling;
+  no live URL points there and nothing internal links it. Worth doing if the mismatch ever bites.
+- **The 390px header overflow is still there.** It is pre-existing, it is inherited from the
+  prototype, and it now affects 75 pages instead of 69. The new H1s are no longer than existing
+  ones, so nothing was made worse — but nothing was fixed either, and it remains the open UI bug.
+- **The sub-service depth port stayed queued.** Four market sub-services still have no `depth`
+  block; that is unrelated work and was left where it was.
+
+---
+
+## 35. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
 ✓ no dead internal links                  ✓ no redirect chains
 ✓ no href="#" links                       ✓ no redirect into a noindex-for-content page
 ✓ only the 3 real office addresses        ✓ 273 redirect rules, all targets real
-✓ only the 4 real phone numbers           ✓ exactly one h1 on each of 62 pages
+✓ only the 4 real phone numbers           ✓ exactly one h1 on each of 75 pages
 ✓ no unsourced claim in any page          ✓ every page self-canonicals
-✓ no voice-spec banned term               ✓ sitemap lists 49, none noindexed
+✓ no voice-spec banned term               ✓ sitemap lists 61, none noindexed
 ✓ blog block PENDING by decision          ✓ hero copy clears AA on the CSS ground
+✓ no orphan pages                         ✓ every indexable page is in the sitemap
+✓ no fixture content in dist/             ✓ gate tests pass in both directions
 ```
 
-The blog block is the only `PENDING` in the 301 map, which is what §6 allows.
+75 pages verified: 58 inventory + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,
+which is what §6 allows.

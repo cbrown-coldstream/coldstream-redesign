@@ -10,6 +10,7 @@ import { SERVICE_CONTENT } from "./services.js";
 import { publishedLocations, marketsWithGallery, marketsWithPhotos, metroLocations } from "./locations.js";
 import { marketsWithReviews, marketsWithSourcedReviews } from "./claims.js";
 import { SUBSERVICES } from "./subservices.js";
+import { nationalSubservicePaths } from "./national-subservices.js";
 import { GLOBAL_PENDING } from "./pages/global.js";
 
 const SITE = "https://coldstreamexteriors.com";
@@ -37,6 +38,14 @@ export const urls = () => {
     ...servicesFor(NATIONAL)
       .filter((s) => MARKET_LIST.filter((m) => offers(m, s.key)).length > 1)
       .map((s) => ({ path: `/${s.key}/`, index: true, priority: "0.8" })),
+    // Round 35. The national sub-service pages behind the Roofing and Siding dropdowns, derived
+    // from the same export the template's getStaticPaths uses — for exactly the reason stated
+    // above, that a second hand-kept list is how a built page ends up missing from the sitemap.
+    ...nationalSubservicePaths()
+      .map(({ hub, sub }) => ({ path: `/${hub}/${sub}/`, index: true, priority: "0.7" })),
+    // Storm damage is a standalone page rather than a service line — no market lists it in
+    // `services`, so nothing above derives it and it is named here. See pages/storm-damage.astro.
+    { path: "/storm-damage/", index: true, priority: "0.8" },
   ];
 
   // Build order round 6: every page in the inventory is built and, unless it is genuinely empty,

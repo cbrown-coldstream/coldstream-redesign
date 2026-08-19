@@ -54,6 +54,19 @@ const KEPT_BEYOND_INVENTORY = {
   "/terms/": "Warranty, payment and dispute terms. Linked site-wide from the footer alongside the privacy policy.",
   "/financing/": "Linked from the footer and referenced by the offer band. Its figures are gated in claims.js and the page is noindex until a lender is confirmed.",
   "/sitemap/": "The human sitemap. The footer has linked \"Sitemap\" since this site was built and it pointed at raw XML; this is the page it should have gone to. Derived from data/sitemap.js, so it cannot drift from what is actually crawlable.",
+
+  // Round 35 (2026-08-19). Same problem as the national hubs above, one level down: the Roofing
+  // and Siding dropdowns render on every page, and nationally every child resolved to its parent
+  // hub — five nav items, two destinations, no pages. These are those pages. They carry the
+  // material and process argument, which is identical in all three metros, and no city term
+  // appears on any of them; the market chooser deep-links to the local version of the same
+  // sub-service. See data/national-subservices.js for the split and the slug mapping.
+  "/roofing/replacement/": "National sub-service page behind the Roofing dropdown. Nationally the dropdown child resolved to /roofing/ itself. Market equivalent is /{market}/roofing/roof-replacement/, whose slug is unchanged because 273 redirect rules resolve to it.",
+  "/roofing/repair/": "National sub-service page behind the Roofing dropdown. Same reason as /roofing/replacement/.",
+  "/siding/vinyl-siding/": "National sub-service page behind the Siding dropdown. Same reason as /roofing/replacement/.",
+  "/siding/james-hardie-siding/": "National sub-service page behind the Siding dropdown. Same reason as /roofing/replacement/.",
+  "/siding/stone-veneer/": "National sub-service page behind the Siding dropdown, requested 2026-08-19. NATIONAL-ONLY — there is no market variant, because three would be this page with a city dropped into it and there is no local stone veneer content to carry. ⚠ The offering itself is unconfirmed: stone veneer appears in no live-copy page and in no market's services array. See the flag in data/national-subservices.js.",
+  "/storm-damage/": "Standalone national storm damage page. The nav has carried a standalone Storm Damage item since the 2026-08-18 call — \"it spans trades, which is why it sits on its own\" — with no page of its own to point at; it resolved to /{market}/roofing/insurance-storm-damage/, nested under roofing, exactly where the call said it should not sit. The three market pages are unchanged and no redirect rule was re-pointed.",
 };
 
 // ── what was built ───────────────────────────────────────────────────────────────────────────
