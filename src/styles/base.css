@@ -82,135 +82,228 @@ img{max-width:100%;display:block}
   color:var(--cs-accent);
 }
 
-/* ── utility bar — the only place the phone appears above the header ─────────────────── */
-.util{background:var(--cs-primary);color:var(--cs-paper);font-size:.9rem}
-.util .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:46px;flex-wrap:wrap}
+/* ── UTILITY BAR — SECONDARY CHROME ──────────────────────────────────────────────────────
+   Three things: market selector, phone, Service Areas. The estimate button that used to sit here
+   is gone — see UtilityBar.astro for why this one and not the header's.
+
+   THE GROUND IS DEEPER THAN --cs-primary, AND THAT IS AN ACCESSIBILITY FIX RATHER THAN A TINT.
+   The brief asked for lower-contrast text so the bar recedes. Measured first: white on
+   --cs-primary (#3A89C7) is 3.76:1, which ALREADY FAILS WCAG AA for 0.9rem text — pulling the
+   text back further would have deepened a live bug. --cs-primary-deep (#2A6699) carries white at
+   6.07:1, which leaves room to sit the text at 86% and still measure 4.98:1. The bar reads quieter
+   than the white nav below it AND passes, which it did not before. verify-build measures hero copy
+   only, so nothing catches a regression here — keep the numbers if you change the colour.
+
+   THE 44px FLOOR IS THE PHONE'S TOUCH TARGET, NOT A STYLE CHOICE. Height came down 46 -> 44 and no
+   further; the recession is carried by type size, weight and colour instead. */
+.util{background:var(--cs-primary-deep);color:color-mix(in srgb, var(--cs-paper) 86%, transparent);
+  font-family:var(--cs-web-body);font-size:.82rem;line-height:1.3}
+.util .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px 18px;
+  min-height:44px;flex-wrap:wrap;padding-top:3px;padding-bottom:3px}
 .util .left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-/* THE MARKET SELECT, MADE VISIBLE.
-   It was a 5px-padded control at 16% white on a blue bar — the same weight as the label beside it,
-   which is why nobody found it. It is the site's market router and the only control that follows a
-   visitor onto every page, so it now reads as a control: a solid paper ground, its own caret, a
-   touch-sized target, and a border that is actually there. */
-.util .left{gap:12px}
-.util label[for="mkt"]{font-weight:700;color:var(--cs-paper);white-space:nowrap}
+.util .right{display:flex;align-items:center;gap:6px 18px;flex-wrap:wrap}
+.util label[for="mkt"]{font-weight:600;color:inherit;white-space:nowrap;letter-spacing:.01em}
+
+/* THE MARKET SELECT. It is the site's router and the only control that follows a visitor onto
+   every page, so it has to read as a control rather than as a disabled field: solid paper ground,
+   its own chevron, a touch-sized target, a real border, and a HOVER AND FOCUS STATE.
+
+   `.is-chosen` is the state that was missing. Defaulted ("Other / not sure") and chosen looked
+   identical, so a visitor could not tell whether the site knew where they were. Chosen gets the
+   accent rule — set server-side from market.slug and maintained by the component's change
+   handler, so it survives a page load rather than only reacting to a click. */
 .util select{
-  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.95rem;
+  font-family:var(--cs-web-body);font-weight:600;font-size:.84rem;
   background:var(--cs-paper);color:var(--cs-primary-deep);
-  border:2px solid var(--cs-paper);border-radius:9px;
-  padding:9px 34px 9px 13px;min-height:44px;cursor:pointer;
-  /* The native caret is nearly invisible against a white control on some platforms, so it is
-     drawn here — a data: URI, because an external asset for a triangle is not worth a request. */
+  border:2px solid var(--cs-paper);border-radius:8px;
+  padding:7px 30px 7px 11px;min-height:36px;cursor:pointer;
   -webkit-appearance:none;appearance:none;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%232A6699' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;background-size:11px;
-  box-shadow:0 2px 8px rgba(0,0,0,.16);
-  transition:box-shadow .18s ease-out,transform .18s ease-out}
-.util select:hover{box-shadow:0 4px 14px rgba(0,0,0,.24);transform:translateY(-1px)}
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%232A6699' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M1 1.6l5 4.8 5-4.8'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:11px;
+  box-shadow:0 1px 4px rgba(0,0,0,.18);
+  transition:box-shadow .18s ease-out,border-color .18s ease-out}
+.util select:hover{box-shadow:0 3px 10px rgba(0,0,0,.26)}
 .util select:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
+.util select.is-chosen{border-color:var(--cs-accent)}
 .util select option{color:var(--cs-text)}
-.util a{color:var(--cs-paper);text-decoration:none;font-weight:600}
-.util a:hover{text-decoration:underline}
-.util .right{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.util .ph{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);font-size:1.02rem}
-.util .iq{background:var(--cs-paper);color:var(--cs-primary-deep);border-radius:8px;padding:7px 15px;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);font-size:.9rem}
-.util .iq:hover{background:var(--cs-surface);text-decoration:none}
+
+/* THE PHONE IS THE ACTION ON THIS BAR. It was an <a> already but read as a statement of fact —
+   no glyph, no hover, no focus ring, target under 44px. The label in front of it ("Call", or the
+   market name once one is chosen) is what turns a number into an instruction. */
+.util a{color:inherit;text-decoration:none}
+.util .ph{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:4px 2px;
+  color:var(--cs-paper);font-weight:600;border-radius:8px;
+  transition:color .16s ease-out,opacity .16s ease-out}
+.util .ph-ic{width:14px;height:14px;flex:none;opacity:.85}
+.util .ph-label{font-size:.78rem;font-weight:600;opacity:.78;letter-spacing:.02em}
+.util .ph-num{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.95rem;
+  letter-spacing:.01em}
+.util .ph:hover{text-decoration:underline;text-underline-offset:3px}
+.util .ph:hover .ph-ic{opacity:1}
+.util .ph:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
+.util .areas{font-weight:600;min-height:44px;display:inline-flex;align-items:center;
+  border-bottom:1px solid transparent;transition:border-color .16s ease-out,color .16s ease-out}
+.util .areas:hover{color:var(--cs-paper);border-color:color-mix(in srgb, var(--cs-paper) 60%, transparent)}
+.util .areas:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
 
 /* ── header ─────────────────────────────────────────────────────────────────────────── */
-header.site{position:sticky;top:0;z-index:50;background:var(--cs-paper);border-bottom:1px solid var(--cs-line);box-shadow:0 1px 8px color-mix(in srgb, var(--cs-text) 4%, transparent)}
-header.site .wrap{display:flex;align-items:center;gap:22px;min-height:78px}
-.brand img{height:44px;width:auto}
-/* ── PRIMARY NAV — 7 items after the team call, with a real mobile menu ──────────────────────
-   THE BREAKPOINTS, MEASURED RATHER THAN GUESSED (see the report in DECISIONS.md):
-     ≥1180px  all six trade items + About + CTA sit on one line with room to spare
-     1024px   the row is tight; gap tightens and font drops a step, still one line
-     <960px   the horizontal nav is REPLACED by the Menu disclosure, not hidden
-   The old rule was `@media(max-width:1040px){nav.main{display:none}}` — at four items that was
-   survivable, at seven it meant 85% of visitors had no way to reach a service page from the
-   header. The panel below is the answer. */
-nav.main{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.navpanel{display:flex;align-items:center;gap:22px;flex:1;min-width:0}
+header.site{position:sticky;top:0;z-index:50;background:var(--cs-paper);
+  border-bottom:1px solid transparent;
+  box-shadow:0 1px 8px color-mix(in srgb, var(--cs-text) 4%, transparent);
+  transition:border-color .2s ease-out,box-shadow .2s ease-out}
+/* Slightly taller than the 78px it was: the white row was tighter than the blue bar above it,
+   which read as unbalanced with the heavier element on top. */
+header.site .wrap{display:flex;align-items:center;gap:24px;min-height:84px;
+  transition:min-height .2s ease-out}
+/* 44 -> 40px so the logo stops setting the row height on its own. */
+.brand img{height:40px;width:auto;display:block;transition:height .2s ease-out}
+
+/* ── STICKY CONDENSE ────────────────────────────────────────────────────────────────────
+   Past 120px the row tightens and a border appears; under 90px it returns. The gap between the
+   two thresholds is deliberate — a single one flickers when a reader rests exactly on the line.
+   The utility bar needs no rule here: it is not sticky, so it scrolls away on its own.
+
+   HEIGHT IS TRANSITIONED DIRECTLY AND THAT IS A CONSIDERED DEVIATION from transform-and-opacity-
+   only. A row that condenses has to actually change height; expressing that as a transform would
+   scale the logo and the text with it. This is one sticky element with a fixed child count, not a
+   per-frame reflow of the page, and the rest of the change is a border and a shadow. */
+.cs-condensed header.site .wrap{min-height:60px}
+.cs-condensed .brand img{height:32px}
+.cs-condensed header.site{border-bottom-color:var(--cs-line);
+  box-shadow:0 2px 14px color-mix(in srgb, var(--cs-text) 8%, transparent)}
+
+/* ── PRIMARY NAV — 7 items, real mobile drawer ──────────────────────────────────────────
+   BREAKPOINTS, MEASURED RATHER THAN GUESSED:
+     >=1180px  all six trade items + About + CTA on one line with room to spare
+     1024px    the row is tight; gap tightens a step, still one line
+     <=960px   the horizontal nav is REPLACED by the drawer, never hidden with nothing behind it
+
+   NAV LINKS ARE INTER 600, NOT MONTSERRAT AT DISPLAY WEIGHT. They used to share a voice with the
+   logo and the CTA, so three things competed for first read and the row had no focal point.
+   Montserrat is still the display face everywhere it belongs; a nav link is not a headline. */
+nav.main{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.navpanel{display:flex;align-items:center;gap:28px;flex:1;min-width:0}
 .main-right{margin-left:auto}
 .navitem{position:relative}
-nav.main a{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;color:var(--cs-text);text-decoration:none;padding:6px 0;border-bottom:3px solid transparent;display:inline-flex;align-items:center;gap:5px}
+nav.main a{font-family:var(--cs-web-body);font-weight:600;font-size:.9rem;letter-spacing:.005em;
+  color:var(--cs-text);text-decoration:none;padding:7px 0;border-bottom:2px solid transparent;
+  display:inline-flex;align-items:center;gap:6px;
+  transition:color .16s ease-out,border-color .16s ease-out}
 nav.main a:hover{color:var(--cs-primary);border-color:var(--cs-accent)}
-.caret{font-size:.7em;opacity:.7}
+nav.main a:focus-visible{outline:3px solid var(--cs-accent);outline-offset:3px;border-radius:3px}
+/* PERSISTENT ACTIVE SECTION. A visitor three levels into a service tree had nothing in the header
+   telling them where they were. Resolved in SiteHeader.astro — storm damage is the awkward case,
+   because on a market page it is nested under the roofing hub. */
+.navitem.is-active > a{color:var(--cs-primary-deep);border-color:var(--cs-primary)}
+.navitem.is-active > a:hover{border-color:var(--cs-accent)}
+
+/* Chevrons: smaller, muted, and they turn over when the menu is open — so the control reports its
+   own state instead of leaving the reader to infer it from the panel appearing. */
+.caret{width:9px;height:6px;flex:none;color:var(--cs-text-muted);
+  transition:transform .18s ease-out,color .16s ease-out}
+.has-sub:hover > a .caret,.has-sub:focus-within > a .caret{transform:rotate(180deg);color:var(--cs-primary)}
 
 /* Dropdowns open on hover AND focus-within — a hover-only submenu cannot be reached by keyboard. */
-.subnav{position:absolute;top:100%;left:-14px;min-width:210px;margin:0;padding:8px;list-style:none;
+.subnav{position:absolute;top:100%;left:-14px;min-width:214px;margin:0;padding:8px;list-style:none;
   background:var(--cs-paper);border:1px solid var(--cs-line);border-radius:11px;
   box-shadow:0 18px 40px color-mix(in srgb, var(--cs-text) 14%, transparent);
   opacity:0;visibility:hidden;transform:translateY(-6px);
   transition:opacity .16s ease-out,transform .16s ease-out,visibility .16s;z-index:60}
 .has-sub:hover .subnav,.has-sub:focus-within .subnav{opacity:1;visibility:visible;transform:none}
-.subnav a{display:block;padding:9px 12px;border-radius:7px;border-bottom:none;font-size:.92rem;min-height:44px}
+.subnav a{display:block;padding:10px 12px;border-radius:7px;border-bottom:none;font-size:.88rem;
+  min-height:44px;font-weight:500;color:var(--cs-text-muted)}
 .subnav a:hover,.subnav a:focus-visible{background:var(--cs-surface);color:var(--cs-primary-deep);border-bottom:none}
 
 .navtoggle{display:none;align-items:center;gap:9px;background:var(--cs-surface);border:1px solid var(--cs-line);
-  border-radius:9px;padding:9px 14px;min-height:44px;cursor:pointer;font-family:var(--cs-web-display);
-  font-weight:var(--cs-web-display-weight);font-size:.94rem;color:var(--cs-text);margin-left:auto}
+  border-radius:9px;padding:9px 14px;min-height:44px;min-width:44px;cursor:pointer;
+  font-family:var(--cs-web-body);font-weight:600;font-size:.9rem;color:var(--cs-text);margin-left:auto}
+.navtoggle:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
 .navtoggle-bars{display:grid;gap:4px}
 .navtoggle-bars span{display:block;width:18px;height:2px;background:var(--cs-text);border-radius:2px;transition:transform .18s ease-out,opacity .18s}
 .navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(1){transform:translateY(6px) rotate(45deg)}
 .navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(2){opacity:0}
 .navtoggle[aria-expanded="true"] .navtoggle-bars span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 .navcta{white-space:nowrap}
+/* The drawer's own phone. Hidden at desktop because UtilityBar already carries it and two in one
+   viewport is the duplication this round removed elsewhere. */
+.navphone{display:none}
 
 @media(max-width:1180px){
-  .navpanel{gap:16px}
-  nav.main{gap:14px}
-  nav.main a{font-size:.9rem}
+  .navpanel{gap:20px}
+  nav.main{gap:20px}
+  nav.main a{font-size:.87rem}
 }
+
+/* ── THE DRAWER ─────────────────────────────────────────────────────────────────────────
+   85% of traffic is mobile. The old rule here was `nav.main{display:none}` — the whole nav gone
+   below 1040px with nothing behind it, so no service page was reachable from the header at all.
+
+   TRANSFORM-ONLY SLIDE. It moves on translateX and nothing else; `visibility` is stepped at the
+   end of the transition so a closed drawer is not a tab stop. Width is capped so the page behind
+   stays visible — a drawer that covers everything is a page change, and this is a menu. */
 @media(max-width:960px){
   .navtoggle{display:inline-flex}
-  /* Closed only once the script has confirmed it can open it again. */
-  .cs-nav-js .navpanel{position:absolute;top:100%;left:0;right:0;display:none;
-    flex-direction:column;align-items:stretch;gap:0;
-    background:var(--cs-paper);border-top:1px solid var(--cs-line);
-    box-shadow:0 22px 44px color-mix(in srgb, var(--cs-text) 16%, transparent);
-    padding:10px 22px 18px;max-height:calc(100vh - 78px);overflow:auto}
-  .cs-nav-js .navpanel.is-open{display:flex}
-  header.site .wrap{position:relative;flex-wrap:wrap}
+  .cs-nav-js .navpanel{
+    position:fixed;top:0;right:0;bottom:0;left:auto;
+    width:min(88vw,360px);z-index:70;
+    display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;
+    background:var(--cs-paper);border-left:1px solid var(--cs-line);
+    box-shadow:-18px 0 44px color-mix(in srgb, var(--cs-text) 22%, transparent);
+    padding:78px 22px 26px;overflow-y:auto;overscroll-behavior:contain;
+    transform:translateX(100%);visibility:hidden;
+    transition:transform .24s ease-out,visibility 0s linear .24s}
+  .cs-nav-js .navpanel.is-open{transform:translateX(0);visibility:visible;transition:transform .24s ease-out}
+  header.site .wrap{position:relative}
   nav.main{flex-direction:column;align-items:stretch;gap:0;width:100%}
   .navitem{border-bottom:1px solid var(--cs-line)}
-  nav.main a{padding:14px 2px;min-height:48px;font-size:1rem;border-bottom:none}
+  nav.main a{padding:14px 2px;min-height:48px;font-size:1rem;border-bottom:none;font-weight:600}
+  .navitem.is-active > a{color:var(--cs-primary-deep);border-bottom:none;
+    box-shadow:inset 3px 0 0 var(--cs-primary);padding-left:12px}
   .main-right{margin-left:0}
-  /* Submenus are plain nested lists on touch — there is no hover to open them with. */
+  /* Submenus are plain nested lists on touch — there is no hover to open them with, so every
+     sub-item is present and reachable rather than hidden behind an interaction that does not
+     exist on the device. */
   .subnav{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;
     background:transparent;padding:0 0 8px 14px;min-width:0}
-  .subnav a{padding:11px 2px;font-size:.94rem;color:var(--cs-text-muted)}
+  .subnav a{padding:11px 2px;font-size:.94rem;color:var(--cs-text-muted);min-height:44px}
   .caret{display:none}
-  .navcta{margin-top:14px;width:100%;justify-content:center}
+  /* Phone and CTA sit together at the foot of the drawer — the two things somebody who opened a
+     menu on a phone is most likely to be looking for. */
+  .navphone{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    margin-top:18px;min-height:48px;border-radius:10px;
+    border:1.5px solid var(--cs-primary);color:var(--cs-primary-deep);
+    font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:1rem;
+    text-decoration:none}
+  .navphone .ph-ic{width:16px;height:16px}
+  .navphone:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
+  .navcta{margin-top:10px;width:100%;justify-content:center;text-align:center}
 }
 body.cs-nav-locked{overflow:hidden}
+
 @media (prefers-reduced-motion:reduce){
-  .subnav{transition:none!important}
-  .navtoggle-bars span{transition:none!important}
+  /* The condensed state still APPLIES — it just arrives without a transition. */
+  .subnav,.navtoggle-bars span,.caret,header.site,header.site .wrap,.brand img,
+  .cs-nav-js .navpanel,.cs-nav-js .navpanel.is-open{transition:none!important}
 }
 
 /* MOBILE HEADER OVERFLOW — the "H1 runs off the right edge at 390px" bug, and the H1 was never
    the cause.
 
-   DIAGNOSIS. Below 1040px the nav is hidden, which leaves .wrap as a flex row of three things:
-   the logo (a 240x70 file at height:44px, so ~151px wide), the spacer, and the estimate CTA
-   (~200px). Add the 22px gap and the wrap's 44px of horizontal padding and the row's minimum
-   content is ~417px. The row had no flex-wrap, so at 390px it could not break — it just got
-   wider than the viewport and widened the document with it. Every section then sat in a
-   scrollable canvas wider than the screen, and the hero H1, being the widest text on the page,
-   was the place you noticed it. Nothing was wrong with the H1 or the hero.
+   DIAGNOSIS. With the nav in a drawer, .wrap is a flex row of three things: the logo (a 240x70
+   file at height:40px, so ~137px wide), the spacer, and the Menu toggle. That fits. It did not
+   when the CTA sat in the row at ~200px: the row's minimum content came to ~417px against a
+   390px viewport, it had no flex-wrap, so it could not break — it just got wider than the screen
+   and widened the document with it. Every section then sat in a canvas wider than the viewport,
+   and the hero H1, being the widest text on the page, was where you noticed it.
 
-   THE FIX IS TO LET THE ROW BREAK, and to take the width out of the logo, which is decoration
-   at this size and scales without losing anything.
-
-   THE CTA WAS NOT THE LEVER, though it is the widest item. It is the primary conversion action
-   on every page, and the one element on a phone most likely to be tapped by a thumb — shrinking
-   it below the 44px minimum target to save horizontal space trades an accessibility floor for a
-   layout problem that wrapping already solves. It keeps its size; the row wraps around it. */
+   THE CTA MOVED INTO THE DRAWER, which removes the widest item from the row entirely rather than
+   shrinking it below the 44px touch minimum. The wrap keeps flex-wrap as a floor under it. */
 @media(max-width:430px){
-  header.site .wrap{flex-wrap:wrap;gap:12px 16px;padding-top:12px;padding-bottom:12px}
-  .brand img{height:38px;max-width:100%;object-fit:contain}
-  /* Explicit rather than inherited: the wrap now has a second line to give, so the button is
-     free to sit at a comfortable target size instead of being squeezed by the first. */
-  header.site .btn{min-height:44px}
+  header.site .wrap{flex-wrap:wrap;gap:10px 14px}
+  .brand img{height:34px;max-width:100%;object-fit:contain}
+  .cs-condensed .brand img{height:30px}
+  .util .wrap{gap:8px 14px}
+  .util .ph-label{display:none}
 }
 
 /* ── hero ───────────────────────────────────────────────────────────────────────────────

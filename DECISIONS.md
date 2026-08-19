@@ -1997,7 +1997,111 @@ artwork has to come back first; it is not recoverable from `public/`.
 
 ---
 
-## 36. Checks
+## 36. Round 35 — header spacing and hierarchy
+
+### 1 · The duplicate CTA
+
+Two near-identical buttons about 60px apart: "Get a Free Estimate" in the utility bar and "Get
+Free Estimate" in the nav. **The utility bar's was removed, and the reason it was that one is
+scroll** — the header is sticky and the bar is not, so past the fold the nav button is still on
+screen and the other never was. /free-estimate/ is still linked from the header on every page;
+the no-orphan-pages gate confirms nothing became unreachable.
+
+The bar now carries exactly three things: market selector, phone, Service Areas.
+
+### 2 · ⚠ THE UTILITY BAR WAS FAILING WCAG AA, AND THE BRIEF WOULD HAVE MADE IT WORSE
+
+The brief asked for lower-contrast text so the bar reads as secondary. **Measured before writing
+any of it: white on `--cs-primary` (#3A89C7) is 3.76:1, against the 4.5:1 that 0.9rem text needs.**
+It was already failing, on every page, and pulling the text back further was the one change
+guaranteed to deepen it.
+
+So the recession comes from the **ground** instead. `--cs-primary-deep` (#2A6699) carries white at
+6.07:1, which leaves room to sit the text at 86% and still measure **4.98:1**. The bar reads
+quieter than the white nav AND passes, which it did not before. Type dropped to 0.82rem.
+
+**Nothing in verify-build catches this** — the contrast gate measures hero copy only. The numbers
+are recorded in base.css and UtilityBar.astro so the next person changing the colour has them.
+
+Height came 46 → 44px and no further: **44px is the phone's touch target, not a style choice.**
+
+### 3 · The phone and the market selector
+
+The phone was already an `<a href="tel:">` — the brief said plain text — but it read as a statement
+of fact: no glyph, no hover, no focus ring, target under 44px. It now has all four, plus a label in
+front of it that swaps with the number: **"Call" nationally, the market name once one is chosen.**
+The label joins `phone`/`telHref` as a third member of the same swap set, so "Cincinnati" can never
+sit beside the Columbus number.
+
+The selector gets a drawn chevron, hover and focus states, and an **`is-chosen`** state — set
+server-side from `market.slug`, so it survives a page load rather than only reacting to a click.
+Defaulted and chosen looked identical before.
+
+### 4 · Nav hierarchy
+
+Even **28px** gaps. Links moved from Montserrat at display weight to **Inter 600 / 0.9rem** — they
+had shared a voice with the logo and the CTA, so three things competed for first read. Logo 44 →
+40px so it stops setting the row height. Row min-height 78 → 84px, because the white row was
+tighter than the blue bar above it. Carets are now SVG, smaller, `--cs-text-muted`, and rotate 180°
+on open.
+
+**Persistent active section**, resolved in SiteHeader from the URL with the market slug stripped.
+**Storm damage is the case that makes it fiddly** — on a market page it lives under the roofing hub,
+so a naive path test lights up Roofing on a storm page. It resolves first and is excluded from
+roofing. All 13 URL cases verified, including both About variants.
+
+### 5 · Sticky condense
+
+Past 120px the row goes 84 → 60px, logo 40 → 32px, and a border appears; it releases below 90px.
+**The two thresholds are deliberate** — a single one flickers when a reader rests exactly on it.
+
+**One considered deviation from "transform and opacity only": height is transitioned directly.** A
+row that condenses has to change height, and expressing that as a transform would scale the logo
+and the type with it. This is one sticky element with a fixed child count, not a per-frame reflow.
+
+### 6 · The drawer, and what the brief got wrong about it
+
+**The brief says base.css still has `@media(max-width:1040px){nav.main{display:none}}`. It does
+not — that was replaced in an earlier round and survives only as a comment recording it.** A
+disclosure panel with aria-expanded, aria-controls, Escape and body-scroll-lock already existed.
+
+What was genuinely missing, and is now built: a real **focus trap** (the toggle is part of the ring,
+since it is how you get back out), the **phone inside the panel** (it lives in the utility bar,
+which is gone the moment you scroll on a phone), a **transform-only slide** in place of a
+display swap, and **aria-hidden management** so a closed drawer is not reachable by screen reader
+while invisible — plus a breakpoint-change handler, because crossing 960px with it open would
+otherwise strand a locked body and a stale aria-hidden.
+
+### 7 · The 390px overflow bug is fixed, as a side effect
+
+CLAUDE.md has carried "mobile overflow at 390px" as an open bug since the prototype. **It is gone:
+measured scrollWidth 390 against clientWidth 390.** The cause was never the H1 — it was the CTA
+sitting in the header row at ~200px, making the row's minimum content ~417px with no flex-wrap, so
+the document grew wider than the viewport and every section inherited the overflow. Moving the CTA
+into the drawer removed the widest item rather than shrinking it below the touch minimum.
+
+### 8 · How this was checked, and the one thing that could not be
+
+No browser tooling in this repo, so verification ran through **headless Chrome** (already installed)
+against a local server, with the page in a **390px iframe** — Chrome clamps its own window to 500px
+on macOS, so `--window-size=390` does not give a 390px viewport and the first screenshots were
+misleading.
+
+Verified: no horizontal overflow at 390 / 768 / 1200 · drawer closed sits at `translateX(343px)`
+and `visibility:hidden` · click opens, focus moves to the first link · Escape closes and returns
+focus to the toggle · Tab from the last item wraps to the toggle and Shift+Tab back · body lock
+on and off · condense applies at y=300 and gives 60px/32px/border.
+
+**Three "failures" during that pass were harness artifacts, not bugs, and each was chased down
+rather than assumed:** headless freezes the animation clock, so `getComputedStyle` returns the
+start value of any transitioned property forever; `window.scrollY` never changes under
+`--virtual-time-budget`; and rAF stops firing after nested timers, which latches the scroll
+handler's `ticking` flag. The condense threshold was finally proven by stubbing `scrollY` and
+dispatching on the **first** frame, while one rAF slot still worked.
+
+---
+
+## 37. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

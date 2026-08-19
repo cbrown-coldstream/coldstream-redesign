@@ -1,30 +1,72 @@
 ---
-// Logo + primary nav + estimate button. No phone — see UtilityBar.
+// Logo + primary nav + estimate button. The ONE primary CTA on the page chrome.
 //
-// NAV RESTRUCTURED ON THE TEAM CALL (2026-08-18): six trade/area items left, About pushed right
-// against the CTA. See data/nav.js for the order, the two dropdowns, and the two items whose
-// pages do not match what was asked for.
+// NAV RESTRUCTURED ON THE TEAM CALL (2026-08-18), reordered 2026-08-19, spacing and hierarchy
+// reworked 2026-08-19. See data/nav.js for the order and the two dropdowns.
 //
-// ── THE MOBILE NAV IS THE REAL NAV ────────────────────────────────────────────────────────────
+// ── THE CTA IS SINGULAR NOW ──────────────────────────────────────────────────────────────────
 //
-// 85% of traffic is mobile, and the old behaviour below 1040px was `display:none` — the entire
-// primary nav simply vanished, leaving a logo and one button. That was survivable at four items
-// and is indefensible at seven: on the majority of visits there was no way to reach a service page
-// from the header at all.
+// UtilityBar used to carry a second, near-identically worded estimate button about 60px above
+// this one. It was removed rather than this one, because this header is sticky and that bar is
+// not: past the fold this button is still on screen and that one never was.
 //
-// So there is now a real disclosure menu. It is a <button aria-expanded> and a panel, not a
-// checkbox hack and not a link to an anchor: the button reports its own state to assistive tech,
-// Escape closes it, and focus is sent into the panel on open and back to the button on close.
-// With JavaScript off the panel is simply visible — the details/summary fallback is not needed
-// because the panel is not hidden by default in the markup, only by CSS that the script overrides.
+// ── HIERARCHY: THE NAV STOPPED SHOUTING ──────────────────────────────────────────────────────
 //
-// DROPDOWNS OPEN ON HOVER *AND* FOCUS-WITHIN on desktop, and are plain nested lists on mobile —
-// a hover-only submenu is unreachable by keyboard and meaningless on a touch screen.
-import { homeownerServicesFor, serviceHref, estimateHref, aboutHref, areasHref } from "../data/markets.js";
+// Nav links were Montserrat at display weight — the same voice as the logo and the CTA, so three
+// things competed for first read and the row had no focal point. They are Inter 600 at 0.9rem
+// now. Montserrat is still the display face everywhere it belongs; a nav link is not a headline.
+// The logo dropped 44px -> 40px so it stops setting the row height on its own.
+//
+// ── THE ACTIVE SECTION IS PERSISTENT, NOT A HOVER ────────────────────────────────────────────
+//
+// A visitor three levels into /cincinnati/roofing/roof-repair/ had nothing in the header telling
+// them where they were. `activeKey` resolves the current URL to one nav item and the underline
+// stays put. STORM DAMAGE IS THE CASE THAT MAKES THIS FIDDLY: on a market page it lives at
+// /{market}/roofing/insurance-storm-damage/, nested under roofing, so a naive "does the path
+// contain roofing" test would light up Roofing on a storm page. It is resolved before roofing and
+// excluded from it.
+//
+// ── THE MOBILE NAV IS THE REAL NAV ───────────────────────────────────────────────────────────
+//
+// 85% of traffic is mobile. The old behaviour below 1040px was `display:none` — the entire nav
+// vanished, leaving a logo and one button. That was replaced earlier by this disclosure panel and
+// the rule is long gone; what this round adds is the four things it was still missing: a real
+// FOCUS TRAP, the PHONE inside the panel (it lives in the utility bar, which is off-screen the
+// moment you scroll), a TRANSFORM-ONLY slide instead of a display swap, and aria-hidden management
+// so the closed panel is not reachable by a screen reader while invisible.
+//
+// It is a <button aria-expanded aria-controls> and a panel, not a checkbox hack: the button
+// reports its own state, Escape closes it, focus moves in on open and back to the button on close.
+// With JavaScript off the panel is simply visible — no fallback markup needed, because the panel
+// is not hidden in the markup, only by CSS the script switches on.
+//
+// DROPDOWNS OPEN ON HOVER *AND* FOCUS-WITHIN on desktop, and are plain nested lists on mobile — a
+// hover-only submenu is unreachable by keyboard and meaningless on a touch screen.
+import { estimateHref } from "../data/markets.js";
+import { MARKET_LIST } from "../data/markets.js";
 import { NAV, NAV_RIGHT, navHref, childHref } from "../data/nav.js";
 const { market } = Astro.props;
+
+// ── Which nav item owns the current URL ──────────────────────────────────────────────────────
+// Strip the market slug first so /cincinnati/roofing/ and /roofing/ resolve identically — the nav
+// is the same seven items in both contexts and the highlight should not care which one you are in.
+const parts = Astro.url.pathname.split("/").filter(Boolean);
+const MARKET_SLUGS = MARKET_LIST.map((m) => m.slug);
+const rest = MARKET_SLUGS.includes(parts[0]) ? parts.slice(1) : parts;
+const section = rest[0] ?? "";
+const sub = rest[1] ?? "";
+
+const activeKey = (() => {
+  // Storm damage first, and excluded from roofing below — on a market page it is nested under the
+  // roofing hub, which is exactly the collision this ordering exists to resolve.
+  if (section === "storm-damage" || (section === "roofing" && sub === "insurance-storm-damage")) return "storm-damage";
+  if (section === "service-areas") return "service-areas";
+  if (section === "about" || section === "about-us") return "about";
+  if (section) return section;
+  return null;
+})();
 ---
-<header class="site">
+<header class="site" id="siteHeader">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Coldstream Exteriors home">
       <img src="/logo-coldstream-exteriors.jpg" alt="Coldstream Exteriors" width="240" height="70" />
@@ -39,8 +81,15 @@ const { market } = Astro.props;
       <nav class="main" aria-label="Primary">
         {NAV.map((item) => (
           item.children?.length ? (
-            <div class="navitem has-sub">
-              <a href={navHref(item, market)} aria-haspopup="true">{item.label}<span class="caret" aria-hidden="true">▾</span></a>
+            <div class:list={["navitem", "has-sub", activeKey === item.key && "is-active"]}>
+              <a href={navHref(item, market)} aria-haspopup="true"
+                 aria-current={activeKey === item.key ? "true" : null}>
+                {item.label}
+                <svg class="caret" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
+                  <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round" d="M1 1.4 5 5 9 1.4" />
+                </svg>
+              </a>
               <ul class="subnav">
                 {item.children.map((c) => (
                   <li><a href={childHref(item, c, market)}>{c.label}</a></li>
@@ -48,18 +97,34 @@ const { market } = Astro.props;
               </ul>
             </div>
           ) : (
-            <div class="navitem"><a href={navHref(item, market)}>{item.label}</a></div>
+            <div class:list={["navitem", activeKey === item.key && "is-active"]}>
+              <a href={navHref(item, market)} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
+            </div>
           )
         ))}
       </nav>
 
       {/* Pushed right, adjacent to the CTA — the call's wording. On mobile it falls to the bottom
-          of the panel, where the CTA also sits, so the pairing survives the layout change. */}
+          of the panel, where the phone and the CTA also sit, so the pairing survives. */}
       <nav class="main main-right" aria-label="Secondary">
         {NAV_RIGHT.map((item) => (
-          <div class="navitem"><a href={navHref(item, market)}>{item.label}</a></div>
+          <div class:list={["navitem", activeKey === item.key && "is-active"]}>
+            <a href={navHref(item, market)} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
+          </div>
         ))}
       </nav>
+
+      {/* THE PHONE, PANEL-ONLY. It is hidden at desktop because UtilityBar already carries it and
+          two of them in one viewport is the duplication this round removed elsewhere. On a phone
+          the utility bar is gone the moment you scroll, so the drawer has to carry its own. Same
+          markets.js pair as everywhere else — never hardcoded, and `data-cs-phone` opts it into
+          the same swap the market selector drives. */}
+      <a class="navphone" href={market.telHref} data-cs-phone>
+        <svg class="ph-ic" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M6.6 2.3a1.3 1.3 0 0 1 1.7.5l1.2 2.1a1.3 1.3 0 0 1-.25 1.6l-.9.8a8.6 8.6 0 0 0 3.85 3.85l.8-.9a1.3 1.3 0 0 1 1.6-.25l2.1 1.2a1.3 1.3 0 0 1 .5 1.7l-.7 1.4a2 2 0 0 1-2.2 1.05C10.4 16.2 3.8 9.6 2.85 4.7A2 2 0 0 1 3.9 2.5z"/>
+        </svg>
+        <span data-cs-phone-text>{market.phone}</span>
+      </a>
 
       <a class="btn navcta" href={estimateHref(market)}>Get Free Estimate</a>
     </div>
@@ -69,29 +134,94 @@ const { market } = Astro.props;
   (function () {
     var btn = document.getElementById("navToggle");
     var panel = document.getElementById("navPanel");
+    var header = document.getElementById("siteHeader");
+    var root = document.documentElement;
+
+    // ── CONDENSE ON SCROLL ────────────────────────────────────────────────────────────────
+    // The utility bar is not sticky, so it scrolls away on its own; this only has to shrink the
+    // row that stays. rAF-throttled and reading scrollY once per frame, because a scroll handler
+    // that measures layout on every event is how a sticky header starts to stutter.
+    //
+    // 120px on, 90px off — the gap is deliberate. A single threshold flickers when a user rests
+    // mid-scroll exactly on the line and the class toggles on every pixel of overscroll.
+    if (header) {
+      var condensed = false, ticking = false;
+      var apply = function () {
+        var y = window.scrollY || window.pageYOffset || 0;
+        if (!condensed && y > 120) { condensed = true; root.classList.add("cs-condensed"); }
+        else if (condensed && y < 90) { condensed = false; root.classList.remove("cs-condensed"); }
+        ticking = false;
+      };
+      window.addEventListener("scroll", function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(apply);
+      }, { passive: true });
+      apply();
+    }
+
     if (!btn || !panel) return;
 
     // The panel is open in the markup and closed here, so a visitor with no JavaScript keeps a
     // usable nav rather than one that can never be opened.
-    document.documentElement.classList.add("cs-nav-js");
+    root.classList.add("cs-nav-js");
+
+    var FOCUSABLE = 'a[href],button:not([disabled]),select,[tabindex]:not([tabindex="-1"])';
+    var isDrawer = function () { return window.matchMedia("(max-width: 960px)").matches; };
 
     function set(open) {
       btn.setAttribute("aria-expanded", String(open));
       panel.classList.toggle("is-open", open);
       document.body.classList.toggle("cs-nav-locked", open);
+      // Only meaningful in drawer mode. At desktop the panel is the nav itself and must never be
+      // hidden from assistive tech.
+      if (isDrawer()) {
+        if (open) panel.removeAttribute("aria-hidden");
+        else panel.setAttribute("aria-hidden", "true");
+      } else {
+        panel.removeAttribute("aria-hidden");
+      }
     }
+
     btn.addEventListener("click", function () {
       var open = btn.getAttribute("aria-expanded") === "true";
       set(!open);
-      if (!open) { var f = panel.querySelector("a"); if (f) f.focus(); }
+      if (!open) { var f = panel.querySelector(FOCUSABLE); if (f) f.focus(); }
     });
+
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
+      var open = btn.getAttribute("aria-expanded") === "true";
+      if (!open) return;
+
+      if (e.key === "Escape") { set(false); btn.focus(); return; }
+
+      // FOCUS TRAP. Only while the drawer is the nav — trapping focus in a desktop nav bar would
+      // strand a keyboard user in the header with no way into the page.
+      if (e.key !== "Tab" || !isDrawer()) return;
+      var items = Array.prototype.filter.call(panel.querySelectorAll(FOCUSABLE), function (el) {
+        return el.offsetParent !== null;
+      });
+      if (!items.length) return;
+      // The toggle sits outside the panel but is part of the dialog for focus purposes — it is how
+      // you get back out, so it is the first stop in the cycle rather than a hole in the trap.
+      var ring = [btn].concat(items);
+      var first = ring[0], last = ring[ring.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
+
     // A tap outside closes it. Inside is left alone so a submenu tap does not dismiss the panel.
     document.addEventListener("click", function (e) {
       if (btn.getAttribute("aria-expanded") !== "true") return;
       if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) set(false);
     });
+
+    // Crossing the breakpoint with the drawer open would otherwise leave the desktop nav with a
+    // stale aria-hidden and a locked body.
+    window.matchMedia("(max-width: 960px)").addEventListener("change", function () {
+      set(false);
+    });
+
+    set(false);
   })();
 </script>

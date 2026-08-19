@@ -94,8 +94,11 @@ and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
    (photos with consent) and the Google Business Profile review pull. `src/data/contracts.js` has
    the shapes both must satisfy. Nothing is invented in the meantime and nothing should be.
 3. **Layout and motion pass** — a gallery lightbox is the obvious missing modal.
-4. **Mobile overflow at 390px.** The header row does not wrap, so the H1 runs off the right edge.
-   Pre-existing and inherited from the prototype; it is a real bug and it is not fixed.
+4. ~~**Mobile overflow at 390px.**~~ **FIXED (round 35, 2026-08-19)** — measured scrollWidth 390
+   against clientWidth 390 in headless Chrome at a true 390px viewport. The H1 was never the cause:
+   the estimate CTA sat in the header row at ~200px, putting the row's minimum content at ~417px
+   with no flex-wrap, so the document grew wider than the viewport and every section inherited it.
+   The CTA moved into the mobile drawer. See DECISIONS §36.
 5. **Open questions:** the Cincinnati number reads (513) 717-5462 in the prototype and
    (513) 258-0450 in the data — unconfirmed. The GAF certification tier has three conflicting
    sources. The hero video button was added but never formally approved.
