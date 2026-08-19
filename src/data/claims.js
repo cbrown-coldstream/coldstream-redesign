@@ -78,12 +78,15 @@ export const CLAIMS = {
    * The business confirmed Coldstream IS BBB accredited, which is what this field gates, and the
    * badge row's BBB slot now renders.
    *
-   * `rating` IS DELIBERATELY STILL NULL. "Accredited" and "A+" are two different claims: the first
-   * is a yes/no status, the second is a letter grade BBB assigns, publishes and revises. Only the
-   * status was confirmed, so only the status is printed — the badge reads "BBB Accredited
-   * Business", not "BBB A+". Set `rating: "A+"` once the profile is checked and both the badge and
-   * the hero line pick it up with no other change; verify-build already has the source-based
-   * exemption that lets a sourced "BBB A+" through (see its BBB block).
+   * `rating` CONFIRMED "A+" 2026-08-19, separately from the accreditation status and after it. The
+   * two were asked and answered as two questions on purpose: "accredited" is a yes/no status,
+   * "A+" is a letter grade BBB assigns, publishes and REVISES. The badge now reads "BBB A+
+   * Accredited Business".
+   *
+   * BECAUSE THE GRADE CAN CHANGE, THIS IS THE FIELD TO RE-CHECK, not a value to set and forget. If
+   * BBB ever moves it, change it here and the badge, the hero line and verify's exemption all
+   * follow — the string "BBB A+" is on verify-build's BANNED_CLAIMS and is released ONLY for the
+   * exact grade this field records, so a stale grade fails the build rather than shipping quietly.
    *
    * `profileUrl` still null — set it and the badge becomes a link to the accreditation record,
    * which is the single strongest form this claim can take.
@@ -94,9 +97,9 @@ export const CLAIMS = {
    */
   bbb: {
     accredited: true,
-    rating: null,
+    rating: "A+",
     profileUrl: null,
-    source: "confirmed by the business, 2026-08-19",
+    source: "accreditation and A+ grade both confirmed by the business, 2026-08-19",
   },
 };
 

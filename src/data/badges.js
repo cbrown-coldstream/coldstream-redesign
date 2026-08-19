@@ -139,12 +139,13 @@ export const BADGES = [
   },
   {
     key: "bbb",
-    // ── ACCREDITATION CONFIRMED 2026-08-19, LETTER GRADE NOT ────────────────────────────────
+    // ── ACCREDITATION AND A+ GRADE BOTH CONFIRMED 2026-08-19 ────────────────────────────────
     //
-    // ALT AND LABEL ARE COMPUTED IN BadgeRow, not fixed here, because they depend on whether a
-    // letter grade has been sourced. "BBB Accredited Business" and "BBB A+ Accredited Business"
-    // are TWO DIFFERENT CLAIMS — the first is a yes/no status, the second adds a rating BBB
-    // assigns and can change. Only the first is confirmed, so only the first is printed.
+    // ALT AND LABEL ARE COMPUTED IN BadgeRow, not fixed here, because they depend on the grade in
+    // claims.js rather than on anything in this file. "BBB Accredited Business" and "BBB A+
+    // Accredited Business" are TWO DIFFERENT CLAIMS — the second adds a grade BBB assigns and can
+    // revise — and both were confirmed, so the badge prints the grade. Clear CLAIMS.bbb.rating and
+    // the wording drops back to the status alone with no change here.
     //
     // STILL NO SEAL ASSET. BBB's programme requires their own hosted, linked seal, so it has to
     // come from the accreditation account and cannot be recreated. Until it lands this renders as

@@ -1933,6 +1933,17 @@ WordPress behaviour this repo exists to stop, and it would have been the easy th
 Setting `rating: "A+"` is now genuinely one line: **tested by setting it, building, and confirming
 the badge reads "BBB A+ Accredited Business" with the build still green**, then reverting.
 
+**FOLLOW-UP, SAME DAY — THE GRADE WAS CONFIRMED AND IS NOW SET.** Asked as a second question and
+answered separately, which is why it was worth asking: `CLAIMS.bbb.rating` is `"A+"` and the badge
+reads **"BBB A+ Accredited Business"** on all 75 pages. The gate exemption written above is what is
+holding it, and it reports itself — verify now prints *"BBB A+ allowed as sourced"* rather than
+passing silently, so the exemption is visible on every run instead of being a quiet hole in the list.
+
+**This is the field to re-check rather than set and forget.** A letter grade is not a fact about the
+company, it is BBB's current assessment, and BBB revises it. Because the exemption releases only the
+exact grade `claims.js` records, a stale value **fails the build** rather than shipping quietly —
+which is the behaviour worth having and the reason the string stayed on the banned list.
+
 ### 3 · A gate was changed, and here is the change stated out loud
 
 `"BBB A+"` is on verify's `BANNED_CLAIMS`. Left alone, sourcing the grade later would have **failed

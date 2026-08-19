@@ -19,18 +19,18 @@ const wanted = market?.credentials ?? NATIONAL.credentials;
 // because BBB is an ACCREDITATION CLAIM and the words assert it just as loudly as a seal would —
 // null CLAIMS.bbb and the slot disappears entirely, exactly as before.
 //
-// ── BBB: ACCREDITED YES, LETTER GRADE NO (2026-08-19) ────────────────────────────────────────
+// ── BBB: ACCREDITED AND A+, BOTH CONFIRMED (2026-08-19) ──────────────────────────────────────
 //
-// CLAIMS.bbb is now set, so the slot renders. WHAT IT SAYS DEPENDS ON WHAT WAS SOURCED, and the
+// CLAIMS.bbb is set, so the slot renders. WHAT IT SAYS STILL DEPENDS ON WHAT IS SOURCED, and the
 // two are not the same claim:
 //
 //     { accredited: true, rating: null }  →  "BBB Accredited Business"
-//     { accredited: true, rating: "A+" }  →  "BBB A+ Accredited Business"
+//     { accredited: true, rating: "A+" }  →  "BBB A+ Accredited Business"   ← current
 //
-// Only the status was confirmed, so the grade is not printed. This is also what keeps the build
-// green without touching a gate: "BBB A+" is on verify-build's unsourced-claim list and the string
-// simply never reaches the HTML while `rating` is null. Set the grade and verify's source-based
-// exemption lets it through — see the BBB block in verify-build.mjs.
+// The grade was confirmed separately from the status and later, which is why the wording is
+// computed rather than written out. "BBB A+" is on verify-build's unsourced-claim list and is
+// released only for the exact grade claims.js records — so if BBB ever moves the grade, a stale
+// value here fails the build instead of shipping quietly. See the BBB block in verify-build.mjs.
 //
 // IT RENDERS AS A TYPOGRAPHIC BADGE, NOT THE DASHED "PENDING" BOX. The accreditation is real; a
 // slot that looks like unfinished work misrepresents it in the other direction. The dashed style
