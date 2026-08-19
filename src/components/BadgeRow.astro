@@ -13,29 +13,56 @@ import { NATIONAL } from "../data/markets.js";
 // company-wide set. Manufacturer programmes differ by market, so a per-market set later is a data
 // edit in markets.js rather than a change here.
 const { aboveTheFold = false, market = NATIONAL } = Astro.props;
-const wanted = market?.credentials ?? ["gaf", "james-hardie", "homeadvisor", "bbb"];
+const wanted = market?.credentials ?? NATIONAL.credentials;
 
-// A badge with no asset renders a text placeholder, which is fine for a logo we own and are
-// waiting on — but BBB is an ACCREDITATION CLAIM, and "BBB A+" printed as a placeholder asserts
-// it just as loudly as the seal would. It is gated with the other unsourced claims.
+// A badge with no asset renders as text rather than as an image. That is still gated for BBB,
+// because BBB is an ACCREDITATION CLAIM and the words assert it just as loudly as a seal would —
+// null CLAIMS.bbb and the slot disappears entirely, exactly as before.
 //
-// ⚠ THE CALL ASKED FOR "BBB A+" TO BE ADDED AND IT IS NOT RENDERING YET. Nothing sources it:
-// CLAIMS.bbb is null, and verify-build lists "BBB A+" among the unsourced claims that must not
-// reach built HTML — the live WordPress site prints it with no accreditation record behind it.
-// The slot is wired and ordered; fill CLAIMS.bbb with the record and the rating and it appears
-// with no further change. See claims.js for exactly what unlocks it.
+// ── BBB: ACCREDITED YES, LETTER GRADE NO (2026-08-19) ────────────────────────────────────────
+//
+// CLAIMS.bbb is now set, so the slot renders. WHAT IT SAYS DEPENDS ON WHAT WAS SOURCED, and the
+// two are not the same claim:
+//
+//     { accredited: true, rating: null }  →  "BBB Accredited Business"
+//     { accredited: true, rating: "A+" }  →  "BBB A+ Accredited Business"
+//
+// Only the status was confirmed, so the grade is not printed. This is also what keeps the build
+// green without touching a gate: "BBB A+" is on verify-build's unsourced-claim list and the string
+// simply never reaches the HTML while `rating` is null. Set the grade and verify's source-based
+// exemption lets it through — see the BBB block in verify-build.mjs.
+//
+// IT RENDERS AS A TYPOGRAPHIC BADGE, NOT THE DASHED "PENDING" BOX. The accreditation is real; a
+// slot that looks like unfinished work misrepresents it in the other direction. The dashed style
+// still exists for genuinely pending artwork. Drop BBB's hosted seal into badges.js and this
+// becomes an image with no change here.
 const byKey = Object.fromEntries(BADGES.map((b) => [b.key, b]));
 const badges = wanted
   .map((k) => byKey[k])
   .filter(Boolean)
   .filter((b) => b.key !== "bbb" || CLAIMS.bbb);
+
+// BBB's own wording, assembled from what is actually sourced. Kept here rather than in badges.js
+// because it depends on the claim, and badges.js is artwork.
+const bbbLabel = CLAIMS.bbb?.rating
+  ? `BBB ${CLAIMS.bbb.rating} Accredited Business`
+  : "BBB Accredited Business";
+const labelFor = (b) => (b.key === "bbb" ? bbbLabel : b.pendingLabel);
+const altFor = (b) => b.alt ?? labelFor(b);
+const hrefFor = (b) => b.href ?? (b.key === "bbb" ? CLAIMS.bbb?.profileUrl ?? null : null);
 ---
 <div class="logos" aria-label="Ratings and certifications">
   <div class="wrap">
     {badges.map((b) => {
-      if (!b.file) return (
-        <div class="badge-pending" role="img" aria-label={b.alt}>{b.pendingLabel}</div>
-      );
+      if (!b.file) {
+        const text = (
+          <div class={b.key === "bbb" ? "badge-text" : "badge-pending"} role="img" aria-label={altFor(b)}>
+            {labelFor(b)}
+          </div>
+        );
+        const to = hrefFor(b);
+        return to ? <a class="badge" href={to} target="_blank" rel="noopener">{text}</a> : text;
+      }
       const img = (
         <picture>
           <source srcset={b.file} type="image/webp" />
@@ -43,8 +70,9 @@ const badges = wanted
                loading={aboveTheFold ? "eager" : "lazy"} decoding="async" />
         </picture>
       );
-      return b.href
-        ? <a class="badge" href={b.href} target="_blank" rel="noopener">{img}</a>
+      const to = hrefFor(b);
+      return to
+        ? <a class="badge" href={to} target="_blank" rel="noopener">{img}</a>
         : <div class="badge">{img}</div>;
     })}
   </div>

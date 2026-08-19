@@ -73,9 +73,31 @@ export const CLAIMS = {
    *   2. the seal image, which BBB's programme requires be their hosted, linked seal — it has to
    *      come from the accreditation account, so it cannot be recreated. badges.js keeps a slot.
    *
-   * Fill this in and the badge row's BBB slot and the hero's rating line both appear on their own.
+   * ── CONFIRMED 2026-08-19 ──────────────────────────────────────────────────────────────────
+   *
+   * The business confirmed Coldstream IS BBB accredited, which is what this field gates, and the
+   * badge row's BBB slot now renders.
+   *
+   * `rating` IS DELIBERATELY STILL NULL. "Accredited" and "A+" are two different claims: the first
+   * is a yes/no status, the second is a letter grade BBB assigns, publishes and revises. Only the
+   * status was confirmed, so only the status is printed — the badge reads "BBB Accredited
+   * Business", not "BBB A+". Set `rating: "A+"` once the profile is checked and both the badge and
+   * the hero line pick it up with no other change; verify-build already has the source-based
+   * exemption that lets a sourced "BBB A+" through (see its BBB block).
+   *
+   * `profileUrl` still null — set it and the badge becomes a link to the accreditation record,
+   * which is the single strongest form this claim can take.
+   *
+   * The seal image is a SEPARATE outstanding item and this field does not release it: BBB's
+   * programme requires their hosted, linked seal, so it has to come from the accreditation
+   * account. badges.js renders a typographic badge until it lands.
    */
-  bbb: null,
+  bbb: {
+    accredited: true,
+    rating: null,
+    profileUrl: null,
+    source: "confirmed by the business, 2026-08-19",
+  },
 };
 
 /**

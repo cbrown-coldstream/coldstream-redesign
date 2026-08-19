@@ -17,6 +17,7 @@ import { dirname, resolve, join, relative, sep } from "node:path";
 import { MARKETS, NATIONAL_PHONE, MARKET_LIST } from "../src/data/markets.js";
 import { BLOG } from "../src/data/redirects.js";
 import { urls } from "../src/data/sitemap.js";
+import { CLAIMS } from "../src/data/claims.js";
 import { measureHero, measureHeroGround } from "./lib/contrast.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -141,18 +142,34 @@ if (existsSync(PULLED)) {
   }
 }
 
+// ── A BBB GRADE THE CLAIMS FILE CARRIES IS NOT AN UNSOURCED CLAIM ────────────────────────────
+//
+// Same shape of false positive the pulled-rating exemption above fixes, and the same fix. "BBB A+"
+// is on the list because the live WordPress site prints it with no accreditation record behind it.
+// Once a record exists, a correct "BBB A+" would still fail this gate — and a gate that refuses
+// the sourced version of the thing it was protecting is one people switch off.
+//
+// THE EXEMPTION IS THE SOURCE, NOT THE STRING. It is released only when claims.js carries an
+// accredited record AND a letter grade, and only for the exact grade recorded: `rating: "A+"`
+// exempts "BBB A+" and nothing else. Accreditation confirmed WITHOUT a grade — the state as of
+// 2026-08-19 — exempts nothing, which is correct, because the badge then prints "BBB Accredited
+// Business" and the banned string never reaches the HTML in the first place.
+const bbbGrade = CLAIMS.bbb?.accredited && CLAIMS.bbb?.rating ? `BBB ${CLAIMS.bbb.rating}` : null;
+const isSourced = (c) =>
+  (RATING_SHAPED.test(c) && sourcedRatings.has(c)) || (bbbGrade !== null && c === bbbGrade);
+
 const leaked = [];
 for (const p of pages)
   for (const c of BANNED_CLAIMS) {
-    if (RATING_SHAPED.test(c) && sourcedRatings.has(c)) continue;
+    if (isSourced(c)) continue;
     if (p.html.includes(c)) leaked.push(`${p.url}: "${c}"`);
   }
-const exempt = BANNED_CLAIMS.filter((c) => RATING_SHAPED.test(c) && sourcedRatings.has(c));
+const exempt = BANNED_CLAIMS.filter(isSourced);
 leaked.length
   ? fail("an unsourced claim reached the built HTML", leaked)
   : pass(
       exempt.length
-        ? `no unsourced claim in any page — ${exempt.join(", ")} allowed as a pulled Google rating`
+        ? `no unsourced claim in any page — ${exempt.join(", ")} allowed as sourced (pulled rating / recorded BBB grade)`
         : "no unsourced claim (rating, promotion, financing, testimonial) in any page",
     );
 

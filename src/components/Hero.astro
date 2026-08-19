@@ -127,7 +127,7 @@ const last = words[words.length - 1];
           <span class="stars" aria-hidden="true">★★★★★</span>
           {/* BBB is a separate claim with a separate source — it does not ride along on the
               review figures. Gated, so it cannot reappear the moment the rating lands. */}
-          <span>{reviews.rating} · {reviews.count}+ reviews{bbb && ` · BBB ${bbb.rating} rating`}</span>
+          <span>{reviews.rating} · {reviews.count}+ reviews{bbb?.rating && ` · BBB ${bbb.rating} rating`}</span>
         </div>
       )}
       <span class="eyebrow">{eyebrow}</span>

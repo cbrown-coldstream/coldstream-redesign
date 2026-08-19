@@ -1908,7 +1908,85 @@ header warns about. Storm damage is named explicitly, since nothing derives it.
 
 ---
 
-## 35. Checks
+## 35. Round 34 — the badge row reversed, and BBB unblocked
+
+**This is a reversal of §32.4 and it is written down as one.** That round trimmed the hero badge
+row to credentials only, on the 08-18 call's instruction. The instruction here is the opposite:
+put the review logos back and stop gating BBB. The old reasoning is left in `badges.js` rather
+than deleted, because a reversal is only readable next to what it reversed.
+
+### 1 · Why the row said 3
+
+Nobody broke it. Every market asked for **four** — `["gaf", "james-hardie", "homeadvisor", "bbb"]`
+— and `BadgeRow` dropped BBB on `CLAIMS.bbb` being null, leaving three. It was three on pages
+nobody had touched in weeks, which is how it was established that round 33 had nothing to do with it.
+
+### 2 · BBB: accredited yes, letter grade no
+
+The business confirmed the accreditation, so `CLAIMS.bbb` is set and the slot renders.
+
+**`rating` is deliberately still null, and the badge says "BBB Accredited Business".** "Accredited"
+is a yes/no status; **"A+" is a separate claim** — a letter grade BBB assigns, publishes and
+revises — and only the first was confirmed. Printing a grade nobody sourced is precisely the live
+WordPress behaviour this repo exists to stop, and it would have been the easy thing to do here.
+
+Setting `rating: "A+"` is now genuinely one line: **tested by setting it, building, and confirming
+the badge reads "BBB A+ Accredited Business" with the build still green**, then reverting.
+
+### 3 · A gate was changed, and here is the change stated out loud
+
+`"BBB A+"` is on verify's `BANNED_CLAIMS`. Left alone, sourcing the grade later would have **failed
+the build on all 75 pages** — the gate refusing the sourced version of the thing it was protecting,
+which is how a gate gets switched off by someone in a hurry. That was demonstrated before it was
+fixed, not assumed.
+
+The exemption is the same shape as §29a's pulled-rating one and **the exemption is the source, not
+the string**: released only when `claims.js` carries an accredited record *and* a grade, and only
+for the exact grade recorded. Accreditation without a grade — today's state — exempts nothing,
+because the banned string never reaches the HTML anyway.
+
+### 4 · Google, Yelp and Angi restored
+
+Entries came back from git history; the artwork was still in `public/badges/`. Seven badges now:
+GAF · James Hardie · BBB · Google · Yelp · Angi · HomeAdvisor, grouped by what each one argues —
+manufacturer certifications, then the accreditation, then the review platforms.
+
+**The national pages were showing four while every market page showed seven**, because `NATIONAL`
+had no `credentials` key and `BadgeRow` carried its own hardcoded fallback. `NATIONAL.credentials`
+is now explicit and the component's fallback derives from it, so the two cannot drift again.
+
+### 5 · ⚠ The three review assets depict five filled stars
+
+Not a footnote. **All three are five-star lockups**, which is a rating claim made in artwork, and
+**no rating is sourced**: `TESTIMONIALS` is empty, every `REVIEW_PROFILES` entry is null, and the
+market reviews pages are `noindex` for "no sourced reviews yet".
+
+**No gate can hold this.** verify-build's unsourced-claim scan reads text and cannot see inside a
+PNG, so the build will stay green whatever those images assert. `npm run reviews:pull` fills in the
+real Google figures — and **if a pulled rating comes back below 5.0, the badge row and the reviews
+section on the same page will contradict each other.** Recorded here and in `badges.js` because it
+is the one part of this round that the tooling cannot protect.
+
+### 6 · Owens Corning was NOT restored
+
+It was removed on the 08-18 call for a different reason from the review logos — **"we do not run
+that line"**, a credential we do not hold — and its artwork was deleted rather than kept. "Partner
+logos as before" was read as the three review platforms, not as that. If we do run the line, the
+artwork has to come back first; it is not recoverable from `public/`.
+
+### 7 · Also not done
+
+- **No seal image.** BBB's programme requires their own hosted, linked seal from the accreditation
+  account, so it cannot be recreated. The slot renders as a typographic badge — solid rule, brand
+  navy, `.badge-text` — rather than the dashed "asset pending" box, because the accreditation is
+  real and a pending-looking slot misrepresents it in the other direction.
+- **No profile URLs.** `href` is still null on all four review/accreditation badges. Setting
+  `CLAIMS.bbb.profileUrl` now links the BBB badge to the record on its own; the other three take a
+  URL in `badges.js`.
+
+---
+
+## 36. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

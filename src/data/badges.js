@@ -1,6 +1,20 @@
 // CREDENTIAL badges for the hero row.
 //
-// ── CREDENTIALS ONLY, AND PER MARKET (team call, 2026-08-18) ─────────────────────────────────
+// ── REVIEW LOGOS RESTORED 2026-08-19, REVERSING THE TRIM BELOW ──────────────────────────────
+//
+// The 08-18 trim described in the next block was REVERSED on instruction: Google, Yelp and Angi
+// are back in the row alongside the accreditations, and BBB is unblocked. The reasoning that
+// removed them is left below rather than deleted, because a reversal is only readable next to what
+// it reversed.
+//
+// ⚠ ONE THING TO KNOW ABOUT THE THREE REVIEW ASSETS. All three depict FIVE FILLED STARS. That is a
+// rating claim made in artwork, and no rating is sourced yet — TESTIMONIALS is empty, every entry
+// in REVIEW_PROFILES is null, and the market reviews pages are noindex "no sourced reviews yet".
+// verify-build's unsourced-claim scan reads TEXT and cannot see inside a PNG, so this is NOT a
+// gate the build can hold for you. `npm run reviews:pull` fills in the real Google figures; if a
+// pulled rating comes back below 5.0, these three assets and the row disagree with it.
+//
+// ── CREDENTIALS ONLY, AND PER MARKET (team call, 2026-08-18) — REVERSED, SEE ABOVE ───────────
 //
 // The row used to mix two different kinds of thing: accreditations we hold (GAF, James Hardie,
 // BBB, HomeAdvisor) and review-platform logos (Google, Yelp, Angi). They argue differently — a
@@ -73,6 +87,38 @@ export const BADGES = [
     source: "supplied artwork, 2026-08-14",
   },
   {
+    key: "google",
+    // FEWER PIXELS THAN THE FILE IT REPLACED (184x189 against 450x228) AND STILL THE RIGHT SWAP.
+    // The row caps by height, so what matters is how much of the frame is logo rather than the raw
+    // count: the old upload carried a wide margin of empty white, this one is cropped to the mark,
+    // and at the same cap it reads larger. It is also the smallest asset in the row, so it is the
+    // one that limits how far the height cap can go — see .badge img in base.css.
+    alt: "Google Reviews",
+    file: "/badges/google-five-star.webp",
+    fallback: "/badges/google-five-star.png",
+    w: 184, h: 189,
+    href: null,            // PENDING — Google Business Profile review URL
+    source: "supplied artwork, 2026-08-14",
+  },
+  {
+    key: "yelp",
+    alt: "Yelp Reviews",
+    file: "/badges/yelp-five-star.webp",
+    fallback: "/badges/yelp-five-star.png",
+    w: 451, h: 334,
+    href: null,            // PENDING — Yelp profile URL
+    source: "supplied artwork, 2026-08-14",
+  },
+  {
+    key: "angi",
+    alt: "Angi Reviews",
+    file: "/badges/angi-five-star.webp",
+    fallback: "/badges/angi-five-star.png",
+    w: 310, h: 221,
+    href: null,            // PENDING — Angi profile URL
+    source: "supplied artwork, 2026-08-14",
+  },
+  {
     key: "james-hardie",
     alt: "James Hardie Alliance Elite Contractor",
     file: "/badges/james-hardie-elite.webp",
@@ -93,11 +139,23 @@ export const BADGES = [
   },
   {
     key: "bbb",
-    alt: "BBB A+ Accredited Business",
-    file: null,                 // PENDING — no asset exists; renders a labelled placeholder
-    pendingLabel: "BBB A+ · asset pending",
+    // ── ACCREDITATION CONFIRMED 2026-08-19, LETTER GRADE NOT ────────────────────────────────
+    //
+    // ALT AND LABEL ARE COMPUTED IN BadgeRow, not fixed here, because they depend on whether a
+    // letter grade has been sourced. "BBB Accredited Business" and "BBB A+ Accredited Business"
+    // are TWO DIFFERENT CLAIMS — the first is a yes/no status, the second adds a rating BBB
+    // assigns and can change. Only the first is confirmed, so only the first is printed.
+    //
+    // STILL NO SEAL ASSET. BBB's programme requires their own hosted, linked seal, so it has to
+    // come from the accreditation account and cannot be recreated. Until it lands this renders as
+    // a typographic badge rather than a dashed "pending" box — the accreditation is real now, so
+    // the slot should not look like unfinished work. Drop the seal in, set `file`/`fallback`/`w`/
+    // `h`, and it becomes an image with no other change.
+    alt: null,
+    file: null,
     w: null, h: null,
-    href: null,
+    href: null,             // PENDING — BBB business profile URL. Set it and the badge links.
+    source: "accreditation confirmed by the business, 2026-08-19",
   },
 ];
 

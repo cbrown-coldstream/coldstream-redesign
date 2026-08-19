@@ -66,7 +66,7 @@ export const MARKETS = {
     // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
-    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
+    credentials: ["gaf", "james-hardie", "bbb", "google", "yelp", "angi", "homeadvisor"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING — see REVIEWS note above
     // Replaces ~117 thin neighbourhood pages. These link to the surviving location pages, which
@@ -98,7 +98,7 @@ export const MARKETS = {
     // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
-    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
+    credentials: ["gaf", "james-hardie", "bbb", "google", "yelp", "angi", "homeadvisor"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [
@@ -138,7 +138,7 @@ export const MARKETS = {
     // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
-    credentials: ["gaf", "james-hardie", "homeadvisor", "bbb"],
+    credentials: ["gaf", "james-hardie", "bbb", "google", "yelp", "angi", "homeadvisor"],
     services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [
@@ -166,6 +166,10 @@ export const NATIONAL = {
   // qualification, and there are no national service pages for it to link at, so this only
   // affects copy and the footer, both of which route to the market chooser.
   services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+  // The company-wide credential set. Stated here rather than left to BadgeRow's fallback, because
+  // a default living in the component is how the national pages ended up showing four badges while
+  // every market page showed seven — the row is market data, and national is a market here.
+  credentials: ["gaf", "james-hardie", "bbb", "google", "yelp", "angi", "homeadvisor"],
   servedAreas: [],
 };
 
