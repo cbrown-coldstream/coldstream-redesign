@@ -2101,7 +2101,57 @@ dispatching on the **first** frame, while one rAF slot still worked.
 
 ---
 
-## 37. Checks
+## 37. Round 36 — Owens Corning restored
+
+**A second reversal of §32.3, and it is written down as one.** The 08-18 call removed Owens
+Corning as **"a line we do not run"** — a credential we do not hold is worse than a missing one —
+and §35 declined to bring it back with the review logos because that was a different reason.
+It is back on instruction.
+
+**I was wrong about one thing and it is worth correcting: the artwork was recoverable.** §35 said
+it was not, which was true of `public/` — the three files were deleted rather than kept — but git
+had them the whole time. All three came back byte-for-byte from `94a1981^`:
+`owens-corning-preferred.{png,webp}` and `owens-corning-mark.png`.
+
+Restored in five places, matching what §32.3 recorded removing: the badge, the `MANUFACTURERS`
+entry, the partner-strip entry, the three artwork files, and the CSS comment that had been edited
+to drop the second wordmark from its measurements.
+
+### ⚠ The tier is a specific claim and it is the artwork's own wording
+
+The badge says **"Owens Corning Preferred Contractor"**, which is what the supplied asset reads.
+Owens Corning runs Preferred and Platinum and the two are not interchangeable. **A misstated
+manufacturer certification is a compliance problem rather than a copy nit** — the same reasoning
+that kept the GAF tier withheld until the artwork itself settled it — so nothing here claims
+beyond what the asset carries. Worth a look at the OC contractor portal to confirm the tier is
+current, since a programme level can lapse in a way a PNG on disk cannot.
+
+### The eighth badge broke the row, and the fix was measured
+
+Eight badges came to **1206px against 1136px** of usable width (`--cs-wrap` 1180 less 44px of
+padding). That dropped HomeAdvisor onto a second row **on its own** — the exact failure the
+width-cap note in base.css records for GAF, and an orphan reads as a mistake rather than as a wrap.
+
+Trimming the gap alone was **twelve pixels short**, so the height cap moved too: **gap 52 → 40px,
+height cap 68 → 62px, width cap 168 → 152px**, and the BBB text badge's max-width with them. The
+height is the lever that matters, because every logo resolves by height and lowering it shrinks all
+eight proportionally. The row now measures **1096px and holds one line**, verified in headless
+Chrome at 1024, 1200 and 1400px — the row's own height stays at 138px, which is what one row is.
+Below the drawer breakpoint it wraps, which is correct.
+
+The three widest items — GAF, Owens Corning and the BBB text badge — all sit **at** the width cap,
+so they are what a ninth badge would have to be measured against.
+
+### Not restored
+
+**The five references inside `src/data/live-copy/`.** That archive is the pulled WordPress source
+for the copy port, and §32.3 stripped them so the name could not come back in through a port. The
+name is now legitimate, but the archive is a record of what the live site said rather than a place
+to edit — re-pulling with `npm run live:pull` would restore them from source if they are wanted.
+
+---
+
+## 38. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

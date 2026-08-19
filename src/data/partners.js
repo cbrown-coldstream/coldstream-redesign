@@ -36,6 +36,11 @@ export const PARTNERS = [
     alt: "GAF", tint: "#B8232F",
     file: null, w: null, h: null },   // see the GAF note above — wordmark until a plain mark exists
 
+  { key: "owens-corning", name: "Owens Corning", tag: "Roofing",
+    alt: "Owens Corning", tint: "#E5007D",
+    file: "/partners/owens-corning-mark.png", w: 272, h: 313,
+    source: "cropped from https://coldstreamexteriors.com/wp-content/uploads/2025/11/owens-corning-logo-1.webp — restored from git 2026-08-19" },
+
   { key: "certainteed", name: "CertainTeed", tag: "Roofing & siding",
     alt: "CertainTeed", tint: "#00539B",
     file: "/partners/certainteed.webp", w: 768, h: 218,

@@ -381,13 +381,25 @@ body.cs-nav-locked{overflow:hidden}
    92 means resupplying that file first — check the smallest `w`/`h` in badges.js before touching
    the numbers below. */
 .logos{background:var(--cs-paper);border-bottom:1px solid var(--cs-line)}
-.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 52px;padding:34px 22px}
+.logos .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 40px;padding:34px 22px}
+/* RESIZED WHEN OWENS CORNING WAS RESTORED — EIGHT BADGES, 2026-08-19.
+   Gap 52 -> 40px, height cap 68 -> 62px, width cap 168 -> 152px.
+
+   MEASURED, NOT GUESSED. At the old sizes eight badges came to 1206px against 1136px of usable
+   width (--cs-wrap 1180 less 44px of padding), which dropped HomeAdvisor onto a second row ON ITS
+   OWN — the exact failure the note above records for GAF, and an orphaned badge reads as a mistake
+   rather than as a wrap. The HEIGHT cap is the lever that matters: every logo resolves by height,
+   so lowering it shrinks all eight proportionally, where trimming the gap alone was twelve pixels
+   short. At the sizes above the row measures 1096px and holds one line.
+
+   The three widest items — GAF, Owens Corning and the BBB text badge — all sit AT the width cap,
+   so they are what a ninth badge would have to be measured against. Re-measure if one is added. */
 .badge{display:flex;align-items:center;justify-content:center;min-height:70px}
 /* The width cap is what keeps the row from breaking badly — the wide lockups are the whole budget,
    and letting them run unchecked pushed GAF onto a second row by itself. Raised in step with the
-   height so the wide wordmarks (GAF at 710x182) still resolve by height
+   height so the two wordmarks (GAF at 710x182, Owens Corning at 798x248) still resolve by height
    rather than being clipped to the width first. */
-.badge img{max-height:clamp(48px,5vw,68px);max-width:clamp(118px,12vw,168px);
+.badge img{max-height:clamp(46px,4.8vw,62px);max-width:clamp(112px,11.5vw,152px);
   width:auto;height:auto;object-fit:contain}
 /* A CREDENTIAL WITH NO ARTWORK, STATED IN TYPE. Distinct from .badge-pending on purpose: dashed
    reads as unfinished, and BBB accreditation is confirmed — it is the SEAL that is outstanding, not
@@ -396,7 +408,7 @@ body.cs-nav-locked{overflow:hidden}
 .badge-text{display:grid;place-items:center;min-height:56px;min-width:120px;
   border:1.5px solid var(--cs-primary);border-radius:10px;padding:9px 15px;color:var(--cs-primary);
   font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.76rem;
-  letter-spacing:.05em;text-transform:uppercase;text-align:center;line-height:1.25;max-width:168px}
+  letter-spacing:.05em;text-transform:uppercase;text-align:center;line-height:1.25;max-width:152px}
 a.badge:hover .badge-text{border-color:var(--cs-accent);color:var(--cs-accent)}
 .badge-pending{display:grid;place-items:center;min-height:56px;min-width:120px;border:1.5px dashed var(--cs-line);border-radius:10px;padding:8px 14px;color:var(--cs-text-muted);font-family:var(--cs-web-body);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;text-align:center}
 @media(max-width:720px){.logos .wrap{gap:20px 30px}.badge{min-height:48px}}

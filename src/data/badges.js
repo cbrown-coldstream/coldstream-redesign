@@ -119,6 +119,25 @@ export const BADGES = [
     source: "supplied artwork, 2026-08-14",
   },
   {
+    // ── RESTORED 2026-08-19, REVERSING THE 08-18 REMOVAL ────────────────────────────────────
+    // Taken out on the team call as "a line we do not run" — a credential we do not hold is worse
+    // than a missing one — and put back on instruction. Artwork recovered from git (94a1981^);
+    // it was deleted rather than kept, so `public/` could not supply it.
+    //
+    // ⚠ "PREFERRED CONTRACTOR" IS A SPECIFIC TIER, and it is the wording the supplied artwork
+    // carries. Owens Corning runs Preferred and Platinum; the two are not interchangeable and a
+    // misstated manufacturer certification is a compliance problem rather than a copy nit — the
+    // same reasoning that kept the GAF tier withheld until the artwork itself settled it. This
+    // says exactly what the asset says and claims nothing beyond it.
+    key: "owens-corning",
+    alt: "Owens Corning Preferred Contractor",
+    file: "/badges/owens-corning-preferred.webp",
+    fallback: "/badges/owens-corning-preferred.png",
+    w: 798, h: 248,
+    href: null,
+    source: "supplied artwork, 2026-08-14 — restored from git 2026-08-19",
+  },
+  {
     key: "james-hardie",
     alt: "James Hardie Alliance Elite Contractor",
     file: "/badges/james-hardie-elite.webp",
@@ -164,5 +183,5 @@ export const BADGES = [
 // from the accreditation badges above.
 export const MANUFACTURERS = [
   "James Hardie", "James Hardie Elite", "ProVia", "Royal",
-  "Norandex", "CertainTeed", "WinCore",
+  "Norandex", "CertainTeed", "WinCore", "Owens Corning",
 ];
