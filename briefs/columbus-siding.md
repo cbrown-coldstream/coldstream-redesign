@@ -9,7 +9,7 @@ Market: **Columbus** (Central Ohio) · phone (614) 812-0811 · office 5825 Field
 - **H1** — `Siding in Columbus`. Written, unique across markets, do not rewrite.
 - **Shared lead** — James Hardie fiber cement and vinyl siding, installed and repaired by our own crews.
 - **4 service sections** — James Hardie Fiber Cement · Vinyl Siding · Siding Repair · Soffit and Fascia
-- **2 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

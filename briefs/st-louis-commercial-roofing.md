@@ -9,7 +9,7 @@ Market: **St. Louis** (Greater St. Louis) · phone (314) 380-8111 · office 3636
 - **H1** — `Commercial Roofing in St. Louis`. Written, unique across markets, do not rewrite.
 - **Shared lead** — Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by our own crews.
 - **4 service sections** — Flat and Low-Slope Systems · Roof Coatings and Restoration · Multi-Family and HOA · Repair and Maintenance
-- **3 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

@@ -9,7 +9,7 @@ Market: **Cincinnati** (Southwest Ohio) · phone (513) 258-0450 · office 1308 U
 - **H1** — `Siding in Cincinnati`. Written, unique across markets, do not rewrite.
 - **Shared lead** — James Hardie fiber cement and vinyl siding, installed and repaired by our own crews.
 - **4 service sections** — James Hardie Fiber Cement · Vinyl Siding · Siding Repair · Soffit and Fascia
-- **2 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

@@ -9,7 +9,7 @@ Market: **Cincinnati** (Southwest Ohio) · phone (513) 258-0450 · office 1308 U
 - **H1** — `Roofing in Cincinnati`. Written, unique across markets, do not rewrite.
 - **Shared lead** — Replacement, repair, and storm work — residential and commercial. Asphalt, metal and flat systems, quoted after a free inspection.
 - **4 service sections** — Roof Replacement · Roof Repair · Storm and Insurance Claims · Commercial and Multi-Family
-- **2 shared FAQ answers** — these stay; the local ones go above them.
+- **7 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

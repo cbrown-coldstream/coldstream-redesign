@@ -9,7 +9,7 @@ Market: **Columbus** (Central Ohio) · phone (614) 812-0811 · office 5825 Field
 - **H1** — `Commercial Roofing in Columbus`. Written, unique across markets, do not rewrite.
 - **Shared lead** — Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by our own crews.
 - **4 service sections** — Flat and Low-Slope Systems · Roof Coatings and Restoration · Multi-Family and HOA · Repair and Maintenance
-- **3 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

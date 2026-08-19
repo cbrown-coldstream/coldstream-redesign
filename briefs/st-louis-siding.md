@@ -9,7 +9,7 @@ Market: **St. Louis** (Greater St. Louis) · phone (314) 380-8111 · office 3636
 - **H1** — `Siding in St. Louis`. Written, unique across markets, do not rewrite.
 - **Shared lead** — James Hardie fiber cement and vinyl siding, installed and repaired by our own crews.
 - **4 service sections** — James Hardie Fiber Cement · Vinyl Siding · Siding Repair · Soffit and Fascia
-- **2 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

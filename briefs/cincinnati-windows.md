@@ -9,7 +9,7 @@ Market: **Cincinnati** (Southwest Ohio) · phone (513) 258-0450 · office 1308 U
 - **H1** — `Replacement Windows in Cincinnati`. Written, unique across markets, do not rewrite.
 - **Shared lead** — Energy-efficient replacement windows, measured and installed by our own crews.
 - **3 service sections** — Full-Frame Replacement · Insert Replacement · Styles
-- **1 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 

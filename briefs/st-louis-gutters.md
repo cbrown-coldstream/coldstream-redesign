@@ -9,7 +9,7 @@ Market: **St. Louis** (Greater St. Louis) · phone (314) 380-8111 · office 3636
 - **H1** — `Gutters in St. Louis`. Written, unique across markets, do not rewrite.
 - **Shared lead** — Seamless gutters, guards and downspouts, sized to the roof they are draining.
 - **3 service sections** — Seamless Gutters · Gutter Guards · Downspouts and Drainage
-- **1 shared FAQ answers** — these stay; the local ones go above them.
+- **6 shared FAQ answers** — these stay; the local ones go above them.
 
 ## What has to be written
 
