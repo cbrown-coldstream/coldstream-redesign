@@ -2151,7 +2151,64 @@ to edit — re-pulling with `npm run live:pull` would restore them from source i
 
 ---
 
-## 38. Checks
+## 38. Round 37 — St. Louis names its own manufacturers
+
+### The section did not exist
+
+"Update St. Louis to show these only" had nowhere to land: **the partner strip renders on national
+pages only — the home page, the five national hubs and the five national sub-service pages. Zero
+market pages carried one**, and `MANUFACTURERS` in badges.js is exported and used nowhere. The only
+brand section on a St. Louis page was the credential badge row, which is a different argument.
+
+So the strip is now market-scoped, the same shape `credentials` already uses: a market names keys
+in its own `partners` array and **a market with no array renders no section at all.** That is why
+Cincinnati and Columbus are untouched — they have never had one, and inventing a product list for a
+market nobody has confirmed one for is what the gates exist to stop.
+
+St. Louis: **Malarkey · ProVia · Royal Building Products · Owens Corning · CertainTeed · GAF.**
+
+**James Hardie stays in St. Louis's `credentials`** while being absent from its product strip. An
+Alliance Elite certification and a line we stock are different claims and the two rows argue
+differently — that separation is the whole reason the 08-18 call split them.
+
+### Two logos did not exist, and one still effectively does not
+
+Four of the six were already self-hosted. The other two were hunted rather than assumed:
+
+**Malarkey — solved properly.** Coldstream's own WordPress has nothing (`?search=malarkey` returns
+zero). Malarkey's own site serves its horizontal full-colour mark directly, so that is what is in
+`/public/partners/malarkey.svg`. Manufacturer's own artwork, source recorded.
+
+**⚠ GAF — solved badly, and it is flagged rather than quietly shipped.** gaf.com returns **403 to
+everything**: curl, a real headless Chrome, and a fetch tool. Coldstream's own library has exactly
+one GAF asset and it is the "GoldElite™ Commercial Contractor" lockup, which asserts a tier and
+duplicates the badge row on the same page. **Cropping it the way Owens Corning was cropped does not
+work** — OC's lockup contains OC's own brand mark, whereas GAF's contains the GoldElite device, so
+a crop stays a tier claim.
+
+What shipped is `commons.wikimedia.org/wiki/File:GAF_logo.svg` — visually the correct red GAF
+square, but **a contributor's redraw ("HapHaxion", own work) under CC BY-SA 4.0**. Two things wrong
+with that and both are recorded in partners.js: it is not authoritative artwork, and CC BY-SA
+nominally wants attribution and share-alike that a commercial marketing page does not give it.
+**Replace it with the file from GAF's contractor portal** — drop it in, update three fields, done.
+
+### `marketOnly`, and the bug it fixes
+
+Appending Malarkey to `PARTNERS` put it on the **national** strip too — a line one office runs,
+shown as though the company ran it in three metros. Caught by reading the built output rather than
+by any gate. `marketOnly: true` keeps an entry out of the national default; a market that wants it
+names it. National is back to eight.
+
+### Two changes beyond St. Louis, stated rather than buried
+
+- **GAF now renders as a logo on the national strip**, where it was a typographic wordmark. That
+  follows from giving the entry a `file` and it applies everywhere the strip appears.
+- **`Royal` is now `Royal Building Products`** in its display name, per the wording used in the
+  request. Its `alt` already said so.
+
+---
+
+## 39. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

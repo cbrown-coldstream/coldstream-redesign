@@ -139,7 +139,19 @@ export const MARKETS = {
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
     credentials: ["gaf", "james-hardie", "owens-corning", "bbb", "google", "yelp", "angi", "homeadvisor"],
-    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+
+    // ── THE MANUFACTURERS THIS MARKET INSTALLS (named 2026-08-19) ──────────────────────────
+    //
+    // OPTIONAL AND ST. LOUIS-ONLY TODAY. A market with no `partners` array renders no strip at
+    // all, which is why Cincinnati and Columbus are unchanged — they have never carried one and
+    // this does not invent a list for them. Give either market an array and its strip appears.
+    //
+    // NOT THE SAME SET AS THE NATIONAL STRIP, deliberately. Malarkey is this market's roofing
+    // line and appears nowhere else; James Hardie, Norandex and WinCore are not in this list.
+    // Note that James Hardie stays in this market's `credentials` above — an Alliance Elite
+    // CERTIFICATION and a product line we stock are different claims, and only the second one
+    // is what this strip is about.
+    partners: ["malarkey", "provia", "royal", "owens-corning", "certainteed", "gaf"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [
       "Affton", "Arnold", "Berkeley", "Chesterfield", "Clayton", "Concord", "Crestwood",

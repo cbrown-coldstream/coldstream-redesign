@@ -18,15 +18,15 @@ change to every page in it.
 |---:|---|---|---|---:|---:|
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1007 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1182 |
-| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1216 |
+| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1212 |
 | 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1298 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 547 |
-| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1290 |
+| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1302 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1020 |
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 742 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 586 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 549 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1323 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1319 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 696 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 703 |
 
@@ -36,27 +36,27 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1323 | — | index |
+| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1319 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 956 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 412 | — | noindex |
-| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 935 | — | index |
+| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 931 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 811 | — | noindex |
 | `/free-estimate/` | Standalone | Tell us what you need. We'll take a look. | 400 | 11 | index |
-| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 1020 | — | index |
+| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 1016 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 399 | — | noindex |
-| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1113 | — | index |
-| `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1411 | — | index |
-| `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1443 | — | index |
+| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1109 | — | index |
+| `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1407 | — | index |
+| `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1439 | — | index |
 | `/service-areas/` | Service areas | Cities we service | 703 | — | index |
-| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1031 | — | index |
-| `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1367 | — | index |
-| `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1577 | — | index |
-| `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1397 | — | index |
+| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1027 | — | index |
+| `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1363 | — | index |
+| `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1573 | — | index |
+| `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1393 | — | index |
 | `/sitemap/` | Standalone | Page review board | 6319 | — | noindex |
 | `/storm-damage/` | Standalone | Storm damage, documented before it is argued about | 1394 | — | index |
 | `/terms/` | Standalone | Terms of use | 354 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 635 | 9 | noindex |
-| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 868 | — | index |
+| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 864 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
@@ -107,7 +107,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 1364 | 11 | index |
+| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 1399 | 11 | index |
 | `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 1054 | — | index |
 | `/st-louis/commercial-roofing/` | Service hub | Commercial Roofing in St. Louis | 1080 | 2 | index |
 | `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 774 | — | index |

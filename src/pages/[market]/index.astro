@@ -21,6 +21,7 @@ import ServiceDetail from "../../components/ServiceDetail.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
 import TeamPhoto from "../../components/TeamPhoto.astro";
 import MarketDepth from "../../components/MarketDepth.astro";
+import PartnerStrip from "../../components/PartnerStrip.astro";
 import Reviews from "../../components/Reviews.astro";
 import OfferBand from "../../components/OfferBand.astro";
 import FAQ from "../../components/FAQ.astro";
@@ -108,6 +109,24 @@ const localBusiness = {
   {/* Team photo sits after the areas list and before reviews: the page has just said where we
       work, and this says who turns up. Placeholder — see TeamPhoto.astro. */}
   <TeamPhoto market={market} />
+
+  {/* WHAT WE INSTALL — MARKET-SCOPED, AND IT RENDERS ONLY WHERE THE DATA EXISTS.
+      Named per market in markets.js; a market with no `partners` array gets no section at all,
+      which is why this is St. Louis-only today. That is deliberate rather than unfinished: the
+      national strip speaks for the company, and inventing a product list for a market nobody has
+      confirmed one for is the kind of thing this repo's gates exist to stop. Give Cincinnati or
+      Columbus an array and their strip appears with no change here.
+
+      It sits after the local depth copy and before the served areas — the material a homeowner
+      would be choosing between, then where we bring it. */}
+  {market.partners?.length && (
+    <PartnerStrip
+      market={market}
+      eyebrow="What we install"
+      heading={`The brands we fit across ${market.region}`}
+      intro="Products with real manufacturer warranties and training behind the installation, because a warranty is only as good as the crew that fits the material."
+    />
+  )}
 
   <ServedAreas market={market} heading={page.areas.heading} />
   <Reviews heading={page.reviews.heading} intro={page.reviews.intro} reviews={TESTIMONIALS[slug]} />

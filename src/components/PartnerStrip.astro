@@ -24,7 +24,20 @@
 // height alone — 104px tall makes James Hardie 543px wide. Each mark is fitted to a box instead,
 // so wide wordmarks cap on width, square marks cap on height, and the row reads as one set.
 import { PARTNERS } from "../data/partners.js";
-const { eyebrow, heading, intro } = Astro.props;
+const { eyebrow, heading, intro, market = null } = Astro.props;
+
+// THE SET COMES FROM THE MARKET WHERE ONE IS GIVEN (2026-08-19), the same shape the badge row
+// already uses for `credentials`. A market's `partners` array names keys and orders them; with no
+// market, or a market that has no array, the national set renders unchanged.
+//
+// A key that matches nothing is dropped rather than rendering an empty slot — a typo in a data
+// file should not put a hole in a logo row.
+const byKey = Object.fromEntries(PARTNERS.map((p) => [p.key, p]));
+const SHOWN = market?.partners?.length
+  ? market.partners.map((k) => byKey[k]).filter(Boolean)
+  // `marketOnly` entries are named by a market or not shown: a line one office runs has no place
+  // on a strip that speaks for three metros.
+  : PARTNERS.filter((p) => !p.marketOnly);
 
 // Two copies of the same track. The loop is here rather than the markup written twice, so the
 // two can never drift apart — a seam only reads as seamless while both halves are identical.
@@ -46,7 +59,7 @@ const TRACKS = [0, 1];
       <ul class="ptrack"
           aria-label={copy === 0 ? "Manufacturers we install" : undefined}
           aria-hidden={copy === 1 ? "true" : undefined}>
-        {PARTNERS.map((p) => (
+        {SHOWN.map((p) => (
           <li class="pitem">
             {p.file
               ? <img src={p.file} alt={copy === 0 ? p.alt : ""} width={p.w} height={p.h}

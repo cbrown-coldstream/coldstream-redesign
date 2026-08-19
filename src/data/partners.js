@@ -32,9 +32,26 @@ export const PARTNERS = [
     file: "/partners/james-hardie.webp", w: 768, h: 147,
     source: "https://coldstreamexteriors.com/wp-content/uploads/2025/11/hardie-1-768x147-6917138b6fe77-1.webp" },
 
+  // ⚠ GAF'S MARK IS A THIRD-PARTY REDRAW, NOT GAF'S OWN FILE. Read this before trusting it.
+  //
+  // GAF publishes no reachable asset: gaf.com returns 403 to everything — curl, a real headless
+  // browser and a fetch tool alike — and the ONLY GAF artwork on Coldstream's own WordPress is the
+  // "GoldElite™ Commercial Contractor" lockup, which asserts a certification tier and duplicates
+  // the badge row on the same page. Cropping it the way Owens Corning was cropped does not help:
+  // OC's lockup contains OC's actual brand mark, whereas GAF's contains the GOLDELITE device, so a
+  // crop would still be a tier claim rather than a brand mark.
+  //
+  // So this is commons.wikimedia.org's File:GAF_logo.svg — visually the correct red GAF square,
+  // but drawn by a contributor ("HapHaxion", own work) and licensed CC BY-SA 4.0. TWO CONSEQUENCES
+  // worth someone's attention: it is not authoritative artwork, and CC BY-SA nominally wants
+  // attribution and share-alike, which a commercial marketing page does not give it.
+  //
+  // REPLACE IT with the file from GAF's contractor portal when someone with a login can pull it.
+  // Drop it in /public/partners/, update `file`/`w`/`h` here, and nothing else changes.
   { key: "gaf", name: "GAF", tag: "Roofing",
     alt: "GAF", tint: "#B8232F",
-    file: null, w: null, h: null },   // see the GAF note above — wordmark until a plain mark exists
+    file: "/partners/gaf.svg", w: 503, h: 503,
+    source: "https://commons.wikimedia.org/wiki/File:GAF_logo.svg — CC BY-SA 4.0, contributor redraw, NOT GAF's own asset. See the note above." },
 
   { key: "owens-corning", name: "Owens Corning", tag: "Roofing",
     alt: "Owens Corning", tint: "#E5007D",
@@ -51,10 +68,24 @@ export const PARTNERS = [
     file: "/partners/provia.webp", w: 768, h: 205,
     source: "https://coldstreamexteriors.com/wp-content/uploads/2025/11/logo-provia-1-768x205-6917139239f7d-1.webp" },
 
-  { key: "royal", name: "Royal", tag: "Siding",
+  { key: "royal", name: "Royal Building Products", tag: "Siding",
     alt: "Royal Building Products", tint: "#005EB8",
     file: "/partners/royal.webp", w: 350, h: 350,
     source: "https://coldstreamexteriors.com/wp-content/uploads/2025/11/logo-royal-1-69171396217e4-1.webp" },
+
+  // MALARKEY IS ST. LOUIS'S ROOFING LINE and appears in no other market's set. badges.js has
+  // carried it as "St. Louis-only, unconfirmed and therefore absent" since the 08-18 call; it was
+  // named for that market's strip on 2026-08-19, which is the confirmation that was missing.
+  //
+  // This one IS the manufacturer's own artwork — Malarkey's site serves it directly, unlike GAF.
+  // `marketOnly` KEEPS IT OUT OF THE NATIONAL SET. Without it, appending this entry to PARTNERS
+  // put Malarkey on the national strip too — a line one office runs, shown as though the company
+  // ran it everywhere. A market names it explicitly in its own `partners` array; the national
+  // default skips anything flagged here.
+  { key: "malarkey", name: "Malarkey Roofing Products", tag: "Roofing", marketOnly: true,
+    alt: "Malarkey Roofing Products", tint: "#00A651",
+    file: "/partners/malarkey.svg", w: 209, h: 44,
+    source: "https://www.malarkeyroofing.com/app/themes/malarkey-roofing/src/images/logo-horizontal-full-color.svg — the manufacturer's own horizontal full-colour mark" },
 
   { key: "norandex", name: "Norandex", tag: "Siding",
     alt: "Norandex", tint: "#0B5D3B",
