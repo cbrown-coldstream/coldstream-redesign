@@ -32,9 +32,30 @@
 # the deliverable untouched. Netlify already sends this on Deploy Previews; this makes it
 # unconditional, so a named branch deploy cannot be shared without it.
 #
-# ⚠ IF THIS SITE IS EVER PROMOTED TO PRODUCTION, DELETE THIS BLOCK FIRST. Left in place it would
-#    silently noindex the entire site, and nothing in the HTML would show it.
+# ⚠ IF THIS SITE IS EVER PROMOTED TO PRODUCTION, DELETE **BOTH** BLOCKS BELOW FIRST — the header
+#    and the robots.txt rewrite under it. Left in place the header silently noindexes the entire
+#    site and the rewrite tells every crawler to stay out, and NOTHING IN THE HTML WOULD SHOW
+#    EITHER. Production is the WordPress host, not this one, so this should never arise — but it
+#    is the failure that leaves no trace in the deliverable, which is why it is written twice.
 [[headers]]
   for = "/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# ── AND A SECOND LAYER, BECAUSE THE HEADER ONLY STOPS HALF OF IT ─────────────────────────────
+#
+# X-Robots-Tag stops Google and Bing INDEXING this build. It does not stop an AI crawler READING
+# it: GPTBot, ClaudeBot, PerplexityBot and the rest take their instruction from robots.txt, and
+# round 44 named fifteen of them in public/robots.txt and allowed them all. That is right for
+# production and wrong for a host whose entire purpose is unreviewed work in progress — the HTML
+# says "staging" nowhere, so anything ingested here reads as the real site.
+#
+# The swap below serves public/robots-staging.txt — `Disallow: /`, everyone — at /robots.txt on
+# this host only. `force = true` is required: /robots.txt exists as a real file and would win
+# otherwise. The deliverable file is untouched, which is the same principle as the header above:
+# the artifact under review has to be the artifact handed over.
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots-staging.txt"
+  status = 200
+  force = true

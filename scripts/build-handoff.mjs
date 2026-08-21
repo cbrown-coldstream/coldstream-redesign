@@ -362,8 +362,25 @@ const wpBody = `
     <li>
       <h3>Upload the build, but do not point anything at it yet</h3>
       <p>Directory-per-URL: <code>/cincinnati/</code> is <code>cincinnati/index.html</code>. <code>DirectoryIndex index.html</code>
-      must be on. Everything is relative to the web root — the ${stats.pages} pages, <code>/badges/</code>,
-      <code>/partners/</code>, <code>/fonts/</code>, <code>/video/</code>, <code>robots.txt</code> and <code>sitemap.xml</code>.</p>
+      must be on. <b>Upload the whole of <code>dist/</code> to the web root</b> — the ${stats.pages} pages plus every
+      directory and loose file beside them. Nothing in it is optional and nothing is generated on your side.</p>
+      <p>The loose files at the root, and why each one is there:</p>
+      <table class="t"><thead><tr><th>File</th><th>What breaks without it</th></tr></thead><tbody>
+        <tr><td><code>sitemap.xml</code></td><td>Search Console has nothing to submit. Lists only the ${stats.indexable} indexable URLs, each with a real last-modified date.</td></tr>
+        <tr><td><code>robots.txt</code></td><td>Crawlers get no instruction and no pointer to the sitemap. <b>It must be the permissive one</b> — see the warning below.</td></tr>
+        <tr><td><code>llms.txt</code></td><td>AI assistants asked about Coldstream have to assemble an answer from directory listings instead of one authoritative fetch.</td></tr>
+        <tr><td><code>og-default.jpg</code></td><td>Every link shared to Facebook, LinkedIn, Slack or a text message renders as a bare grey URL. Referenced by all ${stats.pages} pages.</td></tr>
+        <tr><td><code>favicon.ico</code> · <code>favicon-96.png</code><br><code>favicon-192.png</code> · <code>apple-touch-icon.png</code></td><td>Google shows a generic globe beside the listing on mobile search instead of the Coldstream mark.</td></tr>
+        <tr><td><code>logo-coldstream-exteriors.jpg</code><br><code>logo-coldstream-ondark.png</code></td><td>The header and footer logo, and the logo in the machine-readable business record.</td></tr>
+        <tr><td><code>_redirects</code></td><td>Nothing — it is Netlify's format, for the review host. <b>The Apache fragment is what you use</b>; see the redirects page.</td></tr>
+        <tr><td><code>robots-staging.txt</code></td><td>Nothing. <b>DO NOT UPLOAD THIS ONE.</b> It blocks all crawling and exists only for the Netlify review host. It is the one file in <code>dist/</code> that is not part of the deliverable.</td></tr>
+      </tbody></table>
+      <div class="note stop"><p><b>Check <code>robots.txt</code> after uploading.</b> Fetch
+      <code>https://coldstreamexteriors.com/robots.txt</code> and confirm it reads <code>Allow: /</code> and names the
+      sitemap. If it reads <code>Disallow: /</code> the staging file went up by mistake and the entire site is invisible to
+      every search engine — with every page still loading perfectly, which is why this failure runs for weeks before anyone
+      notices. It is also self-concealing: a blocked site cannot be re-read, so Google will not see the corrected file
+      either until it next checks robots.txt.</p></div>
     </li>
     <li>
       <h3>Put the 301 fragment ABOVE the WordPress rewrite block</h3>
@@ -522,8 +539,60 @@ const wpBody = `
     <li>The form submits and lands on <code>/thank-you/</code>.</li>
     <li>Nothing on the site prints a star rating, a review count, a BBB claim, a financing figure or a promotion. All of
     it is gated until sourced, and it should still be gated after the migration.</li>
+    <li><code>robots.txt</code> reads <code>Allow: /</code> and names the sitemap. If it reads <code>Disallow: /</code>,
+    the staging file was uploaded — stop and fix it before anything else on this list matters.</li>
+    <li><code>/og-default.jpg</code>, the four icon files and <code>/llms.txt</code> all return 200. Paste the home page URL
+    into Slack: if a branded card appears, the first two are right.</li>
     <li>Search Console: submit <code>/sitemap.xml</code>, then watch Coverage and the 404 report for two weeks.</li>
   </ul>
+</section>
+
+<section class="card">
+  <h2>8 — The search and AI layer, and what it needs from the business</h2>
+  <p>Three rounds in August 2026 rebuilt everything a search engine and an AI assistant read before they read the copy.
+  Almost none of it is visible on screen, which is exactly why it is written down here — <b>it is also the part most easily
+  destroyed by a well-meaning WordPress SEO plugin.</b></p>
+
+  <div class="note stop"><p><b>If route 2 is taken, do not let Yoast, RankMath or All-in-One re-derive any of this.</b>
+  Every title and description on this site is written per page, measured, and checked for length and uniqueness on every
+  build. A plugin generating them from a template will reintroduce the exact defect this work removed — nine pages sharing
+  one description across the three cities. Turn the plugin's title, description, schema and sitemap generation OFF, or do
+  not install it.</p></div>
+
+  <h3>What each page carries</h3>
+  <ul>
+    <li><b>A written title and description</b> — every title inside 60 characters, every description inside 160, measured
+    after decoding HTML entities, and no two indexable pages share either. Enforced by <code>npm run verify</code>.</li>
+    <li><b>One connected block of machine-readable data</b> (JSON-LD, a single <code>@graph</code>): the page, the website,
+    the company, the breadcrumb trail, the service, and the FAQ. Every internal reference in it resolves on that same page —
+    also enforced. Do not split it back into separate blocks.</li>
+    <li><b>A last-modified date</b> computed from version control, from that page's content sources only. It is in the
+    sitemap and on the page. <b>Do not replace it with the WordPress post-modified date</b>, which moves whenever anyone
+    opens and saves a page.</li>
+    <li><b>Open Graph and Twitter tags in full</b>, including image dimensions, pointing at <code>/og-default.jpg</code>.</li>
+    <li><b>Served towns as identified places</b> — the three metros and both states carry Wikidata IDs so a machine knows
+    which Columbus. The 77 towns deliberately do not; a wrong ID asserts the wrong place.</li>
+  </ul>
+
+  <h3>Still outstanding — these need the business, not the developer</h3>
+  <table class="t"><thead><tr><th>Missing</th><th>What it unlocks</th><th>Where it goes</th></tr></thead><tbody>
+    <tr><td><b>Google Business Profile URL</b>, one per office</td><td>The link between this site and the map pack. Also the
+    star ratings and the three review pages, which are built and deliberately empty.</td><td><code>PROFILES</code> in
+    <code>src/data/claims.js</code></td></tr>
+    <tr><td><b>Opening hours</b>, per office</td><td>The "Open now" line beside a local result.</td><td><code>HOURS</code> in
+    <code>src/data/claims.js</code> — currently <code>null</code>, deliberately</td></tr>
+    <tr><td><b>Confirmation the Facebook, Instagram and LinkedIn pages are Coldstream's</b></td><td>They are already declared.
+    A wrong one merges the company with a different business in Google's records.</td><td><code>PROFILES</code>, each entry
+    flagged <code>CONFIRM OWNERSHIP</code></td></tr>
+    <tr><td><b>Founding year, ownership, crew size</b></td><td><code>/about-us/</code> comes out of noindex, and "25+ years"
+    stops being gated.</td><td><code>CLAIMS.experience</code> in <code>src/data/claims.js</code></td></tr>
+    <tr><td><b>Job photographs with consent</b></td><td>Three gallery pages and the location pages behind them.</td>
+    <td>Contractors Cloud pull → <code>src/data/locations.js</code>; shape in <code>contracts.js</code></td></tr>
+    <tr><td><b>Lender's own advertised terms</b></td><td><code>/financing/</code> comes out of noindex.</td>
+    <td><code>CLAIMS.financing</code> — regulated content, see the note in that file</td></tr>
+  </tbody></table>
+  <p>Every one of these is <b>gated, not missing</b>: fill the value in one place and it appears everywhere it belongs, on
+  the next build. Until then the build names each gap on every run. Nothing invents a placeholder.</p>
 </section>`;
 
 // ── page 4: redirects ────────────────────────────────────────────────────────────────────────

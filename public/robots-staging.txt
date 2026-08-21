@@ -1,0 +1,25 @@
+# STAGING ONLY. THIS FILE IS NOT PART OF THE DELIVERABLE.
+#
+# netlify.toml rewrites /robots.txt to this file on the staging host, so the real
+# public/robots.txt — the one Rambow uploads to production — ships untouched and is
+# reviewable exactly as it will go live.
+#
+# WHY A SECOND FILE RATHER THAN A HEADER. Staging already sends
+# `X-Robots-Tag: noindex, nofollow` on every response, and that is what stops Google and
+# Bing INDEXING the review build. It is not what stops an AI crawler READING it.
+#
+# GPTBot, ClaudeBot, PerplexityBot and the rest take their instruction from robots.txt.
+# Round 44 named all fifteen of them in the production file and allowed them — correct for
+# production, wrong for a host whose whole purpose is unreviewed work in progress. Without
+# this swap the next staging deploy would have invited every one of them to read a build
+# that says "staging" nowhere in its HTML.
+#
+# ⚠ NOTHING HERE IS A LOCK. It is an instruction, honoured by convention. If the review
+#   build ever needs to be genuinely private, put Netlify password protection on the site;
+#   that is the only mechanism that actually withholds the bytes.
+
+User-agent: *
+Disallow: /
+
+# No Sitemap: line, deliberately. The production sitemap lists coldstreamexteriors.com URLs
+# and advertising it from the staging host points a crawler at the live WordPress site.

@@ -609,5 +609,34 @@ dated === 0
     ? pass(`every one of the ${totalUrls} sitemap URLs carries a content date`)
     : fail(`${totalUrls - dated} of ${totalUrls} sitemap URLs have no <lastmod> while the rest do`);
 
+
+// 19. THE ROBOTS FILE IN THE BUILD IS THE PRODUCTION ONE.
+//
+//     There are two. public/robots.txt is the deliverable and permits crawling; public/robots-
+//     staging.txt blocks everything and is served ONLY on the Netlify review host, by a rewrite in
+//     netlify.toml. Both ship inside dist/ because Netlify needs the second one to be a real file.
+//
+//     THE FAILURE THIS GUARDS IS UPLOADING THE WRONG ONE. A production robots.txt reading
+//     `Disallow: /` takes the entire site out of every search engine, and — this is the part that
+//     makes it dangerous — it does so INVISIBLY. Every page still loads, every check about page
+//     content still passes, and traffic goes to nothing over a few weeks while the site looks
+//     perfect from the inside. It is also self-concealing: blocking a URL stops Google reading it
+//     at all, so it cannot see a corrected file either.
+const robotsFile = resolve(dist, "robots.txt");
+if (!existsSync(robotsFile)) {
+  fail("robots.txt is missing from the build");
+} else {
+  const robots = readFileSync(robotsFile, "utf8");
+  const active = robots.split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
+  const blanketBlock = active.some((l) => /^Disallow:\s*\/\s*$/i.test(l));
+  const hasSitemap = active.some((l) => /^Sitemap:\s*https:\/\/coldstreamexteriors\.com/i.test(l));
+  blanketBlock
+    ? fail("dist/robots.txt blocks the whole site — this is the STAGING file, not the deliverable",
+           ["public/robots-staging.txt is for the Netlify review host only; netlify.toml swaps it in there"])
+    : !hasSitemap
+      ? fail("dist/robots.txt names no sitemap")
+      : pass("robots.txt is the production file — crawlable, and it names the sitemap");
+}
+
 console.log(`\n  ${failed ? `✗ ${failed} CHECKS FAILED` : `✓ all checks passed across ${pages.length} pages`}\n`);
 process.exit(failed ? 1 : 0);
