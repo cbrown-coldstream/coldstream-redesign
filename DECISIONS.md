@@ -2640,7 +2640,161 @@ image and better than nothing; it becomes a real one when the Contractors Cloud 
 site, and the same three sets whose descriptions were duplicated before round 41. That is a copy
 round, not a metadata one.
 
-## 47. Checks
+## 48. Round 44 — the pages have to be readable by machines that are not Google
+
+The ask was to optimise every page for AI. That phrase covers a lot of nonsense, so this round
+worked from what is actually true about how answer engines read a page, and refused the rest.
+
+**What is true:** ChatGPT Search, Perplexity, Google AI Overviews and Claude all read ordinary HTML
+and lean much harder on structured data than a classical crawler does, because they are trying to
+answer rather than to rank. They mostly do not execute JavaScript. They reward a page that states
+its facts unambiguously and can be fetched in one request.
+
+**Where this site already had an advantage worth writing down:** it is static HTML with no client
+framework. Everything an answer engine needs is in the first response — no hydration, no
+client-rendered content, nothing behind a bundle. That was decided for other reasons in round 1
+and it happens to be the single largest factor here.
+
+### One @graph per page, instead of three unrelated facts
+
+A page used to emit its breadcrumb, its business or service node, and its FAQ as three separate
+`<script>` blocks. Every one of them was valid. **Nothing said they described the same page**, and
+nothing tied any of them to that page's URL, title, publisher or language. A reader — a crawler, an
+answer engine, a model asked "what does this company do in Columbus" — got three unlabelled facts
+and had to infer the join.
+
+```
+before                              after
+<script> BreadcrumbList             <script> @graph [
+<script> RoofingContractor            WebSite
+<script> FAQPage                      WebPage  ── isPartOf ─→ WebSite
+                                               ── about ────→ Organization
+                                               ── breadcrumb → BreadcrumbList
+                                      Organization (lean)
+                                      BreadcrumbList
+                                      RoofingContractor ── parentOrganization → Organization
+                                    ]
+                                    <script> FAQPage ── mainEntityOfPage → WebPage   (joined by @id)
+```
+
+**The lean Organization is the part that was actually broken.** `about` and `publisher` both point
+at the Organization's `@id`, and that node was written out in full on `/` and `/about-us/` and
+nowhere else — so on **73 of 75 pages those references pointed at nothing a reader of that page
+could resolve**. A crawler is not obliged to fetch another URL to resolve an `@id`. Every page now
+carries the organisation, but a lean version: identity, name, URL, logo. **Not the addresses** —
+three `PostalAddress` nodes on all 75 pages would restate the NAP everywhere, which is exactly what
+the location-page ruling forbids and what verify-build §3 gates.
+
+The FAQ stays in its own block because the component owns it and the layout cannot see the items.
+It joins the graph by `@id` instead, which is how JSON-LD merges nodes across blocks on one page.
+
+### Places are entities now, not strings
+
+`{ "@type": "City", "name": "Columbus" }` is a string in a box. There are Columbuses in Ohio,
+Georgia, Indiana, Mississippi and Nebraska — and **the site's own geo-detection code already
+carries a comment about exactly that ambiguity**, refusing to route a Columbus, Georgia visitor to
+a Central Ohio roofing page. The schema was making the mistake the JavaScript was careful about.
+
+The three metros and two states now carry Wikidata identifiers, **verified against Wikidata by
+label and description on 2026-08-21 rather than recalled**:
+
+```
+Q43196  Cincinnati  "city in and seat of Hamilton County, Ohio, United States"
+Q16567  Columbus    "capital city of the U.S. state of Ohio and seat of Franklin County"
+Q38022  St. Louis   "independent city in Missouri, United States"
+Q1397   Ohio        Q1581  Missouri
+```
+
+**The 77 towns do not, and must not be guessed at in bulk.** "Milford" alone is a town in Ohio,
+Connecticut, Delaware, Massachusetts, Michigan, Nebraska, New Hampshire and Pennsylvania, and a
+wrong Wikidata ID is worse than none — it actively asserts the wrong place. Adding one means
+looking it up, the way these five were.
+
+While fixing this, a related gap: **`areaServed` on the Cincinnati business named 24 suburbs and
+not Cincinnati.** `servedAreas` is the ring of towns, and nothing added the metro itself. It does
+now, deduped, first in the list.
+
+### `<lastmod>` — refused in round 42, refused in round 43, done in round 44
+
+Both earlier rounds wrote down the same objection and both were right at the time: stamping the
+build date on all 61 URLs tells a crawler that every page changed every time anyone ran
+`npm run build`, and Google uses `lastmod` only while it stays accurate. Both concluded it was
+worth doing properly or not at all.
+
+`scripts/build-lastmod.mjs` does it properly. Per URL, the date is the newest commit touching the
+**content sources** that page is built from — its route template plus every module under
+`src/data/` it imports, transitively.
+
+**What is excluded is the design of the thing.** Components, layouts and stylesheets are not
+counted: editing `BaseLayout` changes the bytes of all 75 pages without changing what any of them
+*says*, and a sitemap reporting 61 modifications because a font preload moved is the same lie in a
+more expensive wrapper. Shared *data* is counted, and that is not the same mistake — if
+`markets.js` changes, the copy on every page reading it really can change.
+
+**⚠ ONE SUBTLETY THAT WOULD HAVE RECREATED THE BUG IT WAS BUILT TO AVOID.** The generated map lives
+in `src/data/generated/`, and `seo.js` imports it. Following that import would make every page
+depend on the date map — so committing a new map would bump every page's date, on every build,
+forever. The walker skips `src/data/generated/` for exactly that reason, and the map is now
+verified stable across consecutive runs.
+
+No git, or a file with no commits: the entry is omitted and both consumers drop the field.
+verify-build §18 requires the sitemap to be all-dated or none-dated, because a sitemap where *some*
+URLs carry a date is the state that misleads — the undated ones read as never having changed.
+
+### robots.txt names the AI crawlers and allows them
+
+`User-agent: *` already permitted every one of them, so **none of the new lines changes what any
+crawler may do.** They are there because a named directive is a stated position, and this is a
+position worth stating rather than leaving to a wildcard somebody later narrows without thinking
+about the consequence.
+
+The reasoning, recorded in the file itself: a roofing customer increasingly starts at an assistant
+rather than a search box, and a blocked crawler cannot cite you — it can still describe you, from
+directory listings and reviews rather than your own words. This site is a careful, sourced account
+of what Coldstream does. It is the version worth having quoted.
+
+**The one that is worth understanding before anyone ever changes it:** `Google-Extended` controls
+*only* Gemini and AI Overviews grounding. It does **not** affect ordinary Google Search ranking,
+and disallowing it does not remove the site from Search — a confusion that costs sites their AI
+visibility for nothing in return. `Applebot-Extended` is Apple Intelligence; `Applebot` itself
+(Siri, Spotlight) is a separate agent.
+
+To reverse any of it, change `Allow` to `Disallow` on that agent alone. Never on the wildcard.
+
+### llms.txt, with an honest label on it
+
+`llms.txt` is a **convention, not a standard**. It was proposed in September 2024 and no AI provider
+has published a commitment to read it. It is here because the cost is one generated file and the
+downside is a 404 nobody requested, while the upside — an assistant asked about Coldstream fetching
+one URL and getting a correct, sourced answer instead of assembling one from directory listings —
+is the whole reason for the round.
+
+**It is generated, and that is the part that matters.** Hand-written, it becomes a second, stale
+description of the company sitting beside the real one, which is the failure mode this entire repo
+exists to prevent. Every fact in it comes from the modules the pages render from — so **the claims
+gate applies to it automatically**: an unsourced rating is null in `claims.js` and prints as nothing
+there for the same reason it renders as nothing on a page.
+
+It carries a section headed "Notes for anyone quoting this site", naming the three things a
+summariser most easily gets wrong: each metro has its own number, there are exactly three offices,
+and the warranty is 25-year **workmanship** — not lifetime and not materials.
+
+### What was refused
+
+**`priceRange`, still.** Named again here because it is the property an answer engine would most
+like to have. Nobody has stated what Coldstream charges.
+
+**Invented FAQ padding.** The temptation with "optimise for AI" is to bolt a question-and-answer
+block onto every page because answer engines like extractable Q&A. The FAQs on this site are
+written per page and per market and are already 64 pages deep; adding generic ones would raise the
+cross-market similarity the site has spent four rounds lowering.
+
+**`speakable`.** Google restricts it to news publishers. It would be decoration.
+
+**Geo coordinates on the three offices.** Real and useful, and not derivable without a geocoding
+service. Guessing a latitude is the same class of error as guessing a Wikidata ID.
+
+## 49. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
@@ -2657,6 +2811,8 @@ round, not a metadata one.
 ✓ titles ≤ 60, descriptions ≤ 160         ✓ every og:image resolves to a real file
 ✓ every favicon link resolves             ✓ no heading level skipped on any page
 ✓ no empty value in any schema node       ✓ every indexable page ≥ 3 inbound internal links
+✓ every @id reference resolves locally    ✓ llms.txt links only at pages that exist
+✓ sitemap dates all present or all absent ✓ 32 checks green across 75 pages
 ```
 
 75 pages verified: 58 inventory + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,

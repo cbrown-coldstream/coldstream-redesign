@@ -47,13 +47,19 @@ These are enforced by `npm run verify`, which fails the build. Do not work aroun
    indexable pages. Since round 42 the same gate holds the SEO metadata too: every page has a title
    and a description, titles are ≤ 60 and descriptions ≤ 160 **measured after decoding HTML
    entities**, no two indexable pages share either, and every `og:image` resolves to a real file.
-   13 pages are deliberately `noindex` — they are waiting on data, and a thin page that ranks is
+   14 pages are deliberately `noindex` — they are waiting on data, and a thin page that ranks is
    worse than a page that waits.
+6. **Every page's schema is one `@graph`, and every `@id` in it resolves on that same page.** A
+   reference a crawler would have to fetch another URL to resolve is a dangling reference. See
+   `src/data/seo.js` — it owns every site-wide signal, and `npm run verify` gates all of it.
+   `<lastmod>` and `dateModified` come from **git**, per page, from content sources only — never
+   from the build clock. `scripts/build-lastmod.mjs` explains what is counted and what is not.
 
 ## Architecture
 
 ```
 src/data/          the content. Markets, services, sub-services, locations, claims, partners.
+                   seo.js owns the site-wide search signals; generated/ is written by scripts.
 src/pages/         13 templates. Three markets are data, not three sites.
 src/components/    shared sections. Hero, badge row, FAQ, CTA band, partner carousel…
 src/styles/        tokens.css + ui-tokens.css are GENERATED (npm run tokens). base.css is not.
@@ -74,7 +80,8 @@ If the two disagree, that is not a bug.
 
 ```
 npm run dev          # local
-npm run build        # build + redirects + tokens + og card; postbuild writes pagemap, /handoff/ and PAGES.md
+npm run build        # tokens + redirects + og card + icons + lastmod + llms.txt, then astro;
+                     #   postbuild writes pagemap, /handoff/ and PAGES.md
 npm run verify       # THE GATES. Run after every build. Green or it is not done.
 npm run test:gates   # proves the gates fail when they should
 npm run inventory    # 58 planned pages vs what built; extras must be named
@@ -82,6 +89,9 @@ npm run contracts    # data-shape checks for the Contractors Cloud / GBP pulls
 npm run live:pull    # re-read the live WordPress copy into src/data/live-copy/
 npm run brand:publish # push brand/ out to coldstream-os (this repo owns it)
 npm run og           # regenerate public/og-default.jpg from the brand tokens (headless Chrome)
+npm run icons        # regenerate the favicon set from the logo mark (headless Chrome)
+npm run lastmod      # recompute per-page content dates from git → src/data/generated/lastmod.json
+npm run llms         # regenerate public/llms.txt from markets/claims/sitemap
 ```
 
 ## What is done, and what is not

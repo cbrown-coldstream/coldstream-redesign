@@ -123,5 +123,5 @@ Company-wide number: (844) 426-8222
 - The gallery and review pages are intentionally empty pending verified photographs and
   reviews. An empty page here means no data, not a failed fetch.
 
-Last content change: 2026-08-21T14:21:50-04:00
+Last content change: 2026-08-21T16:33:56-04:00
 Sitemap: https://coldstreamexteriors.com/sitemap.xml
