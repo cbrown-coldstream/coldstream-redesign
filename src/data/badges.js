@@ -166,16 +166,20 @@ export const BADGES = [
     // revise — and both were confirmed, so the badge prints the grade. Clear CLAIMS.bbb.rating and
     // the wording drops back to the status alone with no change here.
     //
-    // STILL NO SEAL ASSET. BBB's programme requires their own hosted, linked seal, so it has to
-    // come from the accreditation account and cannot be recreated. Until it lands this renders as
-    // a typographic badge rather than a dashed "pending" box — the accreditation is real now, so
-    // the slot should not look like unfinished work. Drop the seal in, set `file`/`fallback`/`w`/
-    // `h`, and it becomes an image with no other change.
+    // ── THE REAL SEAL, 2026-08-21 ────────────────────────────────────────────────────────────
+    // BBB's OWN artwork, served from m.bbb.org and the same asset their profile page uses, rather
+    // than anything recreated. It is the "NoRating" seal, so the mark says ACCREDITED BUSINESS and
+    // prints no grade — the A+ is carried in the alt text, and more usefully the badge now LINKS TO
+    // THE ACCREDITATION RECORD, which is the strongest form this claim can take: a reader can check
+    // it instead of taking our word for it.
+    //
+    // The href resolves from CLAIMS.bbb.profileUrl rather than sitting here, because the URL is the
+    // evidence for the claim and evidence belongs with the claim. See BadgeRow's hrefFor.
     alt: null,
-    file: null,
-    w: null, h: null,
-    href: null,             // PENDING — BBB business profile URL. Set it and the badge links.
-    source: "accreditation confirmed by the business, 2026-08-19",
+    file: "/badges/bbb-accredited-seal.svg",
+    w: 962, h: 369,
+    href: null,             // resolved from CLAIMS.bbb.profileUrl — see BadgeRow
+    source: "https://m.bbb.org/brand/seals/Accredited_Business_Seal_NoRating_RGB.svg — BBB's own seal artwork",
   },
 ];
 

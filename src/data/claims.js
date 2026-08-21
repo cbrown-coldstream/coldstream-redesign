@@ -98,8 +98,9 @@ export const CLAIMS = {
   bbb: {
     accredited: true,
     rating: "A+",
-    profileUrl: null,
-    source: "accreditation and A+ grade both confirmed by the business, 2026-08-19",
+    accreditedSince: "2017-03-27",
+    profileUrl: "https://www.bbb.org/us/oh/cincinnati/profile/roofing-contractors/coldstream-exteriors-0292-90017698",
+    source: "VERIFIED AGAINST BBB, 2026-08-21 — that profile states A+ and \"BBB Accredited Since: 3/27/2017\". Confirmed by the business 2026-08-19 and now checked against the record itself.",
   },
 };
 

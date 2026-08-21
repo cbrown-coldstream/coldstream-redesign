@@ -29,6 +29,7 @@ import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, homeownerServicesFor, estimateHref } from "../data/markets.js";
+import { areaForTown } from "../data/locations.js";
 import { metroLocations, publishedLocations } from "../data/locations.js";
 
 const market = NATIONAL;
@@ -37,6 +38,20 @@ const totalTowns = MARKET_LIST.reduce((n, m) => n + m.servedAreas.length, 0);
 // A market's towns link to a location page only where one actually exists. Location pages are
 // gated on real job proof, so most markets have none yet and a link would 404.
 const metros = new Set(metroLocations().map((l) => l.market));
+
+// TOWNS LINK THE SAME WAY THEY DO ON A MARKET PAGE (2026-08-21). This list was 77 plain <li>
+// items while the identical towns on /{market}/ were links — the same names behaving differently
+// on two pages, which reads as one of them being broken.
+//
+// THE RULE IS IMPORTED, NOT REWRITTEN. `areaForTown` returns a location slug, "" for a market whose
+// locations live on one metro page, or null for a town with nowhere to point. "" IS FALSY, so it
+// has to be compared against null — getting that wrong silently unlinked all 26 Columbus towns
+// once already, which is why ServedAreas.astro carries the same warning. A second copy of this
+// logic is how the two pages start disagreeing.
+const townHref = (marketSlug, town) => {
+  const area = areaForTown(marketSlug, town);
+  return area === null ? null : `/${marketSlug}/locations/${area}${area ? "/" : ""}`;
+};
 const areaPages = publishedLocations();
 const areaFor = (slug) => areaPages.filter((a) => a.market === slug);
 
@@ -117,7 +132,10 @@ const schema = {
 
         <h3 class="sa-townhead">Communities we serve in {m.name}</h3>
         <ul class="sa-towns">
-          {m.servedAreas.map((t) => <li>{t}</li>)}
+          {m.servedAreas.map((t) => {
+            const href = townHref(m.slug, t);
+            return <li>{href ? <a href={href}>{t}</a> : <span>{t}</span>}</li>;
+          })}
         </ul>
 
         {(metros.has(m.slug) || areaFor(m.slug).length > 0) && (

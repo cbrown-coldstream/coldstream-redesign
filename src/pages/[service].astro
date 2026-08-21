@@ -113,7 +113,8 @@ const schema = {
 const PROCESS_MEDIA = {
   roofing: { poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" },
   siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
-  gutters: { poster: "/video/gutters-build-poster.jpg", mp4: "/video/gutters-build-scrub.mp4" },
+  // GUTTERS HAS NO CLIP (removed 2026-08-21, on instruction). ProcessScrub renders nothing
+  // without a poster and a source, so the gutters pages simply carry no scrub section.
 };
 const scrubMedia = PROCESS_MEDIA[service] ?? null;
 const scrubSteps = PROCESS[service] ?? [];

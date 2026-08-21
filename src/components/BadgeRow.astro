@@ -63,10 +63,28 @@ const hrefFor = (b) => b.href ?? (b.key === "bbb" ? CLAIMS.bbb?.profileUrl ?? nu
         const to = hrefFor(b);
         return to ? <a class="badge" href={to} target="_blank" rel="noopener">{text}</a> : text;
       }
-      const img = (
+      // A <picture> ONLY WHERE THERE ARE TWO FORMATS TO CHOOSE BETWEEN. The webp/png pairs get one;
+      // a single-file badge does not, and BBB's seal is the case that proved it — an SVG announced
+      // as type="image/webp" inside a <picture> whose <img> had no `fallback` rendered a sized,
+      // sourceless image. One format, one <img>.
+      // ONE FORMAT STILL GETS A <picture>, purely so every badge has the same DOM shape — it is
+      // tidiness, not a fix, and saying so matters because it was tried as a fix and did nothing.
+      //
+      // THE 0x0 BUG WAS IN THE ASSET. BBB's seal arrived with a viewBox and no width/height, so it
+      // had no intrinsic size; `.badge img` sets width:auto/height:auto, which then resolved to
+      // zero and left a gap in the row while the image had loaded perfectly. Fixed on the file by
+      // adding width/height, because an SVG with no intrinsic size will do this anywhere it is
+      // used, not just here. Any future single-file badge wants the same check.
+      const single = !b.fallback || b.file === b.fallback;
+      const img = single ? (
+        <picture>
+          <img src={b.file} alt={altFor(b)} width={b.w} height={b.h}
+               loading={aboveTheFold ? "eager" : "lazy"} decoding="async" />
+        </picture>
+      ) : (
         <picture>
           <source srcset={b.file} type="image/webp" />
-          <img src={b.fallback} alt={b.alt} width={b.w} height={b.h}
+          <img src={b.fallback} alt={altFor(b)} width={b.w} height={b.h}
                loading={aboveTheFold ? "eager" : "lazy"} decoding="async" />
         </picture>
       );

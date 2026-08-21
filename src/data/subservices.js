@@ -437,7 +437,7 @@ export const SUBSERVICES = {
     "vinyl-siding": {
       label: "Vinyl Siding",
       h1: (m) => `Vinyl Siding in ${m.name}`,
-      lead: (m) => `Vinyl siding installed properly — the value option, and a good one when the details are right.`,
+      lead: (m) => `Vinyl siding installed so it can move, over a wall somebody actually looked at.`,
       intro: (m, c) =>
         `Vinyl gets a poor reputation it mostly does not deserve. Almost every vinyl complaint we are called to look at is an installation problem, not a material one: nailed too tight so it cannot move, no room left at the ends, or a water barrier behind it that was never taped. ${c.weather} Vinyl needs room to expand and contract, and a crew that leaves it that room gets decades out of it.`,
       sections: [

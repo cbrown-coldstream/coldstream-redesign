@@ -2308,7 +2308,51 @@ one. Worth revisiting if the mismatch reads oddly.
 
 ---
 
-## 41. Checks
+## 41. Round 40 — the real BBB seal, and three smaller fixes
+
+### The seal is BBB's own, and the badge now links to the record
+
+`CLAIMS.bbb` was carrying an A+ confirmed verbally with no URL behind it. **Checked against BBB
+itself on 2026-08-21**: the profile states A+ and "BBB Accredited Since: 3/27/2017", which matches
+what the business said and is now recorded with the URL that proves it.
+
+The typographic badge is gone. `/badges/bbb-accredited-seal.svg` is **BBB's own artwork from
+m.bbb.org** — the same asset their profile page serves — and the badge **links to the accreditation
+record**, which is the strongest form this claim can take: a reader can check it rather than take
+our word for it. `profileUrl` lives in claims.js rather than badges.js, because the URL is the
+evidence and evidence belongs with the claim.
+
+It is the "NoRating" seal, so the mark says ACCREDITED BUSINESS and prints no grade. The A+ is in
+the alt text and on the far end of the link.
+
+**⚠ A 0x0 BUG THAT LOOKED LIKE A CSS PROBLEM AND WAS NOT.** The seal loaded perfectly — `complete`
+true, `naturalWidth` 300 — and rendered as an empty 138px gap in the row. Wrapping it in
+`<picture>` to match the other badges' DOM shape was tried and **changed nothing**, which is the
+useful half of the story. The cause was in the asset: BBB ship the seal with a `viewBox` and **no
+width/height**, so it has no intrinsic size, and `.badge img` sets `width:auto` — which resolves to
+zero. Fixed on the file rather than with a CSS override, because an SVG with no intrinsic size does
+this anywhere it is used. Any future single-file badge wants the same check. Eight badges, one row,
+138px tall.
+
+### Three smaller ones
+
+**The gutters scrub video is gone** — both templates and both asset files. `ProcessScrub` renders
+nothing without a poster and a source, so those pages simply carry no scrub section now.
+
+**"The value option" came off the vinyl pages.** Lead and meta description on the national page, and
+the lead on all three market pages. The phrase survives in `services.js`'s hub card and in the
+depth intro, which are different sentences in different places — say if those should go too.
+
+**Service-area towns are links now on `/service-areas/`.** They were 77 plain `<li>` items while the
+identical towns on `/{market}/` were links — the same names behaving differently on two pages, which
+reads as one of them being broken. **The rule is imported from `locations.js` rather than rewritten**:
+`areaForTown` returns a slug, `""` for a market whose locations live on one metro page, or `null` for
+a town with nowhere to point, and `""` IS FALSY — getting that comparison wrong silently unlinked all
+26 Columbus towns once already.
+
+---
+
+## 42. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

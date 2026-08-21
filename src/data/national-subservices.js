@@ -165,9 +165,9 @@ export const NATIONAL_SUBSERVICES = {
       label: "Vinyl Siding",
       marketService: "siding/vinyl-siding",
       title: "Vinyl Siding Installation & Replacement | Coldstream Exteriors",
-      description: "Vinyl siding installed so it can move, over a water barrier that was actually inspected. The value option, fitted by our own crews.",
+      description: "Vinyl siding installed so it can move, over a water barrier that was actually inspected, by our own crews.",
       h1: "Vinyl siding, installed so it can move",
-      lead: "The value option, and a good one — as long as the crew fitting it leaves it the room it needs.",
+      lead: "Installed so it can move, over a wall somebody actually looked at.",
       intro: "Vinyl has a reputation it mostly does not deserve. Nearly every vinyl complaint we are called to look at is an installation fault rather than a material one: panels nailed tight so they cannot expand, no room left at the ends of a run, or a water barrier behind them that was never taped. Fitted properly, over a wall somebody inspected, vinyl gives decades of service for less money than anything else on the wall. Fitted badly, it buckles in its first hot summer and nothing will straighten it afterwards.",
       sections: [
         { title: "Hung loose, not pinned", body: "Nailed to allow movement, with the fastener centred in the slot and left slightly proud. Room left at the end of every run. This single detail is most of the difference between vinyl that lasts and vinyl that waves." },
