@@ -21,7 +21,7 @@ change to every page in it.
 | 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1212 |
 | 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1298 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 547 |
-| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1302 |
+| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1325 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1020 |
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 742 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 586 |
@@ -62,7 +62,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 1232 | 10 | index |
+| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 1266 | 10 | index |
 | `/cincinnati/about/` | Market about | The Coldstream Crew in Cincinnati | 1007 | — | index |
 | `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 1039 | 2 | index |
 | `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 730 | — | index |
@@ -85,7 +85,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 1275 | 11 | index |
+| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 1309 | 11 | index |
 | `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 1000 | — | index |
 | `/columbus/commercial-roofing/` | Service hub | Commercial Roofing in Columbus | 1031 | 2 | index |
 | `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 722 | — | index |
@@ -185,9 +185,10 @@ these sections with this copy.
 4. Everything roofing, on one page
 5. What the river valley does to a roof
 6. The Cincinnati crew
-7. Serving greater Cincinnati
-8. Common questions
-9. Ready for a free, no-pressure estimate?
+7. The brands we fit across Southwest Ohio
+8. Serving greater Cincinnati
+9. Common questions
+10. Ready for a free, no-pressure estimate?
 
 **Market about** — e.g. `/cincinnati/about/`
 

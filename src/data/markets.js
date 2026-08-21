@@ -67,7 +67,12 @@ export const MARKETS = {
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
     credentials: ["gaf", "james-hardie", "owens-corning", "bbb", "google", "yelp", "angi", "homeadvisor"],
-    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+
+    // Cincinnati and Columbus run the SAME product set as each other and as the company-wide
+    // strip; St. Louis is the variant (2026-08-21). Written out per market rather than left to
+    // fall through to the default, because "these two happen to match today" and "these two have
+    // no list" are different facts, and only the first one survives someone editing the default.
+    partners: ["james-hardie", "gaf", "owens-corning", "certainteed", "provia", "royal", "norandex", "wincore"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING — see REVIEWS note above
     // Replaces ~117 thin neighbourhood pages. These link to the surviving location pages, which
     // is the internal linking site-plan calls "the piece doing the job those 250 pages were
@@ -99,7 +104,12 @@ export const MARKETS = {
     // Per market because manufacturer programmes are: Leaf Preferred (Columbus) and Malarkey
     // (St. Louis) are real but UNCONFIRMED, so neither is listed. Adding one is a key here.
     credentials: ["gaf", "james-hardie", "owens-corning", "bbb", "google", "yelp", "angi", "homeadvisor"],
-    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+
+    // Cincinnati and Columbus run the SAME product set as each other and as the company-wide
+    // strip; St. Louis is the variant (2026-08-21). Written out per market rather than left to
+    // fall through to the default, because "these two happen to match today" and "these two have
+    // no list" are different facts, and only the first one survives someone editing the default.
+    partners: ["james-hardie", "gaf", "owens-corning", "certainteed", "provia", "royal", "norandex", "wincore"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING
     servedAreas: [
       "Bexley", "Blacklick Estates", "Clintonville", "Dublin", "Eastmoor", "Easton",

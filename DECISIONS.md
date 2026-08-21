@@ -2261,7 +2261,54 @@ gap rather than a broken page.
 
 ---
 
-## 40. Checks
+## 40. Round 39 — the selector now moves the logos too
+
+Reported: choosing Cincinnati on the home page swapped the phone and left the manufacturer strip
+showing all eight. Two separate faults behind one symptom.
+
+### 1 · Cincinnati and Columbus had no set at all
+
+Round 37 gave St. Louis a `partners` array and left the other two markets without one, so their
+landing pages rendered **no strip whatsoever** — there was nothing for a selector to switch to.
+
+Confirmed on 2026-08-21 that **St. Louis is the variant and the other two match the company-wide
+set**, so both are now written out explicitly rather than left to fall through to the default.
+That is deliberate: *"these two happen to match today"* and *"these two have no list"* are
+different facts, and only the first survives someone editing the default later.
+
+    cincinnati  8    columbus  8    st-louis  6
+
+### 2 · The national strip ignored the control sitting next to it
+
+The selector reads as "this is where I am". A strip that ignores it is the page disagreeing with
+its own chrome. `swappable` opts the home page in; on a market page the selector NAVIGATES, so
+there is nothing to swap and it stays off.
+
+**The server still renders the company-wide set.** A crawler, and any visitor who never touches the
+control, get the national eight; only a deliberate choice changes it. The sets are derived from the
+same `markets.js` data the market pages use, so the home page cannot drift from `/st-louis/`.
+
+### A cloned node, and why not createElement
+
+The swap rebuilds each track by **cloning the `<li>` the server already rendered** rather than
+building one. Astro scopes component CSS behind a generated `data-astro-cid-*` attribute, and an
+element made with `createElement` would not carry it — the new logos would arrive unstyled. Cloning
+sidesteps that and means the script never has to know what the attribute is called. Verified in
+headless Chrome: the attribute survives, and the duplicate track's images keep `alt=""` so the
+aria-hidden copy stays silent.
+
+Measured after: default 8 · st-louis 6 · cincinnati 8 · "other" back to 8.
+
+### Not done
+
+The **heading does not change with the set** — pick St. Louis on the home page and six St. Louis
+logos appear under the national wording. Left alone because the home page's own heading is written
+to speak for the company, and swapping copy as well as logos turns a national page into a market
+one. Worth revisiting if the mismatch reads oddly.
+
+---
+
+## 41. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

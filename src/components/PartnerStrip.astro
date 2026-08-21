@@ -24,7 +24,8 @@
 // height alone — 104px tall makes James Hardie 543px wide. Each mark is fitted to a box instead,
 // so wide wordmarks cap on width, square marks cap on height, and the row reads as one set.
 import { PARTNERS } from "../data/partners.js";
-const { eyebrow, heading, intro, market = null } = Astro.props;
+import { MARKET_LIST } from "../data/markets.js";
+const { eyebrow, heading, intro, market = null, swappable = false } = Astro.props;
 
 // THE SET COMES FROM THE MARKET WHERE ONE IS GIVEN (2026-08-19), the same shape the badge row
 // already uses for `credentials`. A market's `partners` array names keys and orders them; with no
@@ -39,11 +40,36 @@ const SHOWN = market?.partners?.length
   // on a strip that speaks for three metros.
   : PARTNERS.filter((p) => !p.marketOnly);
 
+// ── SWAPPABLE: THE NATIONAL STRIP FOLLOWS THE MARKET SELECTOR ────────────────────────────────
+//
+// Reported 2026-08-21: choosing Cincinnati on the home page swapped the phone and left the logo
+// strip alone. The selector reads as "this is where I am", so a strip that ignores it is the
+// component disagreeing with the control next to it.
+//
+// ONLY ON A NATIONAL PAGE. On a market page the selector NAVIGATES — the content changes because
+// the page changes — so there is nothing to swap and this stays off.
+//
+// The server still renders the company-wide set, so a crawler and a visitor who never touches the
+// control both get the national strip. Only a deliberate choice changes it.
+//
+// SETS ARE BUILT FROM THE SAME markets.js DATA the market pages use, so the home page cannot drift
+// from /st-louis/ — that is the whole reason this is derived rather than a second list.
+const SETS = swappable
+  ? Object.fromEntries([
+      ["", SHOWN],
+      ...MARKET_LIST.map((m) => [
+        m.slug,
+        (m.partners?.length ? m.partners.map((k) => byKey[k]).filter(Boolean) : PARTNERS.filter((p) => !p.marketOnly))
+          .map((p) => ({ file: p.file, alt: p.alt, w: p.w, h: p.h })),
+      ]),
+    ])
+  : null;
+
 // Two copies of the same track. The loop is here rather than the markup written twice, so the
 // two can never drift apart — a seam only reads as seamless while both halves are identical.
 const TRACKS = [0, 1];
 ---
-<section class="partners" id="partners">
+<section class="partners" id="partners" data-cs-partners={swappable ? "1" : null}>
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">{eyebrow}</span>
@@ -76,6 +102,45 @@ const TRACKS = [0, 1];
     ))}
   </div>
 </section>
+{swappable && (
+  <script is:inline define:vars={{ SETS }}>
+    (function () {
+      var sel = document.getElementById("mkt");
+      var sec = document.querySelector('[data-cs-partners="1"]');
+      if (!sel || !sec) return;
+      var tracks = sec.querySelectorAll(".ptrack");
+      if (!tracks.length) return;
+
+      // A CLONED <li> KEEPS ASTRO'S SCOPED-STYLE ATTRIBUTE. Building one with createElement would
+      // not carry `data-astro-cid-*`, so the component's own CSS would not apply to it and the new
+      // logos would render unstyled. Cloning the markup the server already produced avoids that
+      // entirely, and it means this never has to know what that attribute is called.
+      var tpl = tracks[0].querySelector(".pitem");
+      if (!tpl || !tpl.querySelector("img")) return;
+      tpl = tpl.cloneNode(true);
+
+      sel.addEventListener("change", function () {
+        var set = SETS[sel.value];
+        if (!set) return;
+        Array.prototype.forEach.call(tracks, function (ul, idx) {
+          ul.textContent = "";
+          set.forEach(function (p) {
+            if (!p.file) return;          // fileless entries render a wordmark server-side only
+            var li = tpl.cloneNode(true);
+            var img = li.querySelector("img");
+            img.setAttribute("src", p.file);
+            img.setAttribute("width", p.w);
+            img.setAttribute("height", p.h);
+            // The second track is the seamless-loop duplicate and is aria-hidden, so it says
+            // nothing — an alt there would be the same logo announced twice.
+            img.setAttribute("alt", idx === 0 ? p.alt : "");
+            ul.appendChild(li);
+          });
+        });
+      });
+    })();
+  </script>
+)}
 <style>
   .partners{background:var(--cs-paper)}
   .partners .shead{margin-bottom:30px}

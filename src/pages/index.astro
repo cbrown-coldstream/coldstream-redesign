@@ -158,7 +158,9 @@ const org = {
       footer, so the NAP did not live here either. */}
 
   {/* Kept from the previous pass, as asked: the manufacturer strip. */}
-  <PartnerStrip {...page.partners} />
+  {/* swappable: the market selector in the utility bar changes these logos, the same way it
+      changes the phone. See PartnerStrip.astro. */}
+  <PartnerStrip {...page.partners} swappable={true} />
 
   <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners across all three markets." reviews={TESTIMONIALS.national} />
   <OfferBand />
