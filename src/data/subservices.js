@@ -60,6 +60,16 @@ export const SUBSERVICES = {
   roofing: {
     "roof-replacement": {
       label: "Roof Replacement",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `Roof Replacement in ${m.cityState}`,
+        description: (m, c) => `Full tear-off roof replacement across ${m.region}. Decking checked, ventilation balanced, and a 25-year workmanship warranty. Free inspection.`,
+      },
       h1: (m) => `Roof Replacement in ${m.name}`,
       lead: (m) => `Full tear-off and replacement across ${m.region}, priced after someone has walked your roof — not from a satellite image.`,
       intro: (m, c) =>
@@ -145,6 +155,16 @@ export const SUBSERVICES = {
 
     "roof-repair": {
       label: "Roof Repair",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `Roof Repair in ${m.cityState}`,
+        description: (m, c) => `Leak tracing, flashing and storm repairs across ${m.region}. We find where the water is actually getting in. Free inspection — call ${m.phone}.`,
+      },
       h1: (m) => `Roof Repair in ${m.name}`,
       lead: (m) => `Leaks, storm damage and emergency call-outs across ${m.region} — one repair conversation instead of five separate ones.`,
       intro: (m, c) =>
@@ -226,6 +246,16 @@ export const SUBSERVICES = {
 
     "insurance-storm-damage": {
       label: "Insurance & Storm Damage",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `Storm Damage Repair in ${m.cityState}`,
+        description: (m, c) => `Hail and wind damage across ${m.region}, documented the way an adjuster needs it and repaired by our own crews. Free inspection.`,
+      },
       h1: (m) => `Storm Damage and Insurance Claims in ${m.name}`,
       lead: (m) => `Hail and wind damage documented the way an adjuster needs it documented, then handled with them directly.`,
       intro: (m, c) =>
@@ -310,6 +340,16 @@ export const SUBSERVICES = {
   siding: {
     "siding-replacement": {
       label: "Siding Replacement",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `Siding Replacement in ${m.cityState}`,
+        description: (m, c) => `Full re-siding across ${m.region} — old siding off, sheathing checked, flashing done properly. Free inspection and a written quote.`,
+      },
       h1: (m) => `Siding Replacement in ${m.name}`,
       lead: (m) => `Full re-siding across ${m.region}, installed by our own crews — most projects finished inside a week.`,
       intro: (m, c) =>
@@ -393,6 +433,16 @@ export const SUBSERVICES = {
 
     "james-hardie-siding": {
       label: "James Hardie Siding",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `James Hardie Siding in ${m.cityState}`,
+        description: (m, c) => `James Hardie fiber cement siding across ${m.region}, installed to the clearances the warranty depends on. Free inspection — call ${m.phone}.`,
+      },
       h1: (m) => `James Hardie Fiber Cement Siding in ${m.name}`,
       lead: (m) => `Fiber cement siding installed by an Alliance Elite contractor — the option that holds its colour and takes a knock.`,
       intro: (m, c) =>
@@ -436,6 +486,16 @@ export const SUBSERVICES = {
 
     "vinyl-siding": {
       label: "Vinyl Siding",
+      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
+      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
+      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
+      // all three markets shipped the SAME meta description — the one signal that most directly
+      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
+      // what a local search actually matches on.
+      seo: {
+        title: (m) => `Vinyl Siding in ${m.cityState}`,
+        description: (m, c) => `Vinyl siding across ${m.region}, hung so it can move over a wall we actually inspected. Free inspection and a written quote.`,
+      },
       h1: (m) => `Vinyl Siding in ${m.name}`,
       lead: (m) => `Vinyl siding installed so it can move, over a wall somebody actually looked at.`,
       intro: (m, c) =>

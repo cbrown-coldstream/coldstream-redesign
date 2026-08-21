@@ -62,8 +62,9 @@ const schema = {
 };
 ---
 <BaseLayout
-  title={`${h1} | Coldstream Exteriors`}
-  description={lead}
+  {/* Written, not derived — see the seo block in subservices.js for why h1/lead were wrong. */}
+  title={`${svc.seo.title(market)} | Coldstream Exteriors`}
+  description={svc.seo.description(market, ctx)}
   canonical={`/${mSlug}/${hub}/${sub}/`}
   market={market}
   breadcrumbs={[

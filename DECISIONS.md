@@ -2352,7 +2352,68 @@ a town with nowhere to point, and `""` IS FALSY — getting that comparison wron
 
 ---
 
-## 42. Checks
+## 42. Round 41 — the SEO surface, measured against a competitor that ranks
+
+The brief was to model on SWORD Roofing. They were found at **swordroof.com** — a Cincinnati
+roofing and siding company, so a direct local competitor rather than a generic example. Their
+pattern, read off the live pages:
+
+```
+home      SWORD Roofing | Your Trusted Cincinnati Roofing Company      55 chars
+services  Roofing, Gutter & Siding Services in Cincinnati, OH | SWORD  63
+about     About Us | SWORD Roofing                                     24
+```
+
+Short. City AND state code. A brand suffix of one word. H1 restating the title's keyword phrase.
+
+### What was actually wrong here, measured rather than assumed
+
+Decoding HTML entities first, because `&amp;` inflates every title with an ampersand by four
+characters and the first pass over-reported the problem by more than double — 24 "over-length"
+titles were really 11.
+
+```
+                       before   after
+titles over 60 chars      11       0     (max now exactly 60, median 54)
+descriptions over 160      7       0     (max now 159, median 138)
+duplicate descriptions     9       0
+duplicate titles           0       0
+```
+
+**The nine duplicate descriptions were the real find.** All three markets shipped IDENTICAL meta
+descriptions on storm damage, James Hardie and vinyl — the same three page sets whose body copy
+round 38 had just made 30% similar. The description is the most direct signal a crawler has that two
+pages are the same page, and it was contradicting the copy underneath it.
+
+The cause was derivation: `title` came from `h1` and `description` from `lead`. `h1` is a sentence,
+so titles ran long; `lead` carries no city, so the three markets collapsed onto one string. Both are
+now **written** in a `seo` block per sub-service, using `cityState` — which is where the state code
+comes from, and a state code is what a local search matches on.
+
+Service hubs had the same shape of fault: `${lead} Serving ${m.name} from our ${office} office.`
+appended a tail to an already-complete sentence and pushed three hubs to 173–175. `SERVICE_META`
+replaces it with a written, region-bearing line per service.
+
+### What was taken from SWORD, and what was refused
+
+**Taken:** titles inside 60, city + state code on local pages, one keyword idea per title, and
+descriptions that end in a concrete next step.
+
+**Refused, on the voice spec:** their descriptions run `FREE Roof … inspection!` and "top-notch",
+"expert solutions". Capitalised FREE, exclamation marks and vague superlatives are exactly what
+`brand/voice-spec.json` bans, and a competitor ranking well is not evidence those particular words
+are why. The phone number in a description IS worth having and market pages now carry it where the
+line has room — that is a genuine local-intent signal rather than hype.
+
+### One change that was already the rule, now applied to the title
+
+`/roofing/` and `/windows/` listed all three cities in the title. `[service].astro`'s own header
+says a national page "must never compete with [the market hubs] on a city term" — the body was
+careful about that and the title was not. Cities dropped; they remain in the description.
+
+---
+
+## 43. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

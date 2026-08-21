@@ -61,7 +61,9 @@ const schema = {
 const servedFrom = `Served from our ${office.city} office.`;
 ---
 <BaseLayout
-  title={`${loc.name} Roofing & Exteriors | Coldstream Exteriors`}
+  {/* "& Exteriors" dropped: loc.name can be long ("West County and North County") and the
+      pair pushed past 70 characters, where Google stops showing the end of the title. */}
+  title={`${loc.name} Roofing | Coldstream Exteriors`}
   description={loc.blurb}
   canonical={`/${mSlug}/locations/${area}/`}
   market={market}

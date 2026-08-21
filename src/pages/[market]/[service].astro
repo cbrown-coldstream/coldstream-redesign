@@ -27,7 +27,7 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
-import { SERVICE_CONTENT, localFor } from "../../data/services.js";
+import { SERVICE_CONTENT, SERVICE_META, localFor } from "../../data/services.js";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
 import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
@@ -85,7 +85,8 @@ const serviceSchema = {
 ---
 <BaseLayout
   title={`${h1} | Coldstream Exteriors`}
-  description={local?.description ?? `${lead} Serving ${market.name} from our ${market.office.city} office.`}
+  {/* SERVICE_META, not lead + an office tail — that combination ran three hubs past 160. */}
+  description={local?.description ?? SERVICE_META[sKey]?.(market) ?? lead}
   canonical={`/${market.slug}/${sKey}/`}
   market={market}
   breadcrumbs={[

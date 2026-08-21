@@ -164,7 +164,7 @@ export const NATIONAL_SUBSERVICES = {
     "vinyl-siding": {
       label: "Vinyl Siding",
       marketService: "siding/vinyl-siding",
-      title: "Vinyl Siding Installation & Replacement | Coldstream Exteriors",
+      title: "Vinyl Siding Installation | Coldstream Exteriors",
       description: "Vinyl siding installed so it can move, over a water barrier that was actually inspected, by our own crews.",
       h1: "Vinyl siding, installed so it can move",
       lead: "Installed so it can move, over a wall somebody actually looked at.",

@@ -89,6 +89,24 @@ export const localFor = (key, marketSlug, market) => {
   return { intro: LOCAL_INTRO[key](market, c), faq: LOCAL_FAQ[key](market, c), written: true };
 };
 
+/**
+ * MARKET-SCOPED META DESCRIPTIONS for the service hubs.
+ *
+ * The template used to build these as `${lead} Serving ${market.name} from our ${office} office.`
+ * The lead is already a full sentence, so the appended tail carried three of them past 160
+ * characters, where Google cuts the description off mid-clause. Written short here instead, with
+ * the region in them, because a hub page competes on "roofing in {region}" and the description is
+ * the line a searcher actually reads under the title.
+ */
+export const SERVICE_META = {
+  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, our own crews, and a 25-year workmanship warranty.`,
+  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed by our own crews. Free inspection and a written quote before anything starts.`,
+  windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by our own crews. Free, no-obligation quote.`,
+  gutters: (m) => `Seamless gutters, guards and downspouts across ${m.region}, sized to the roof draining into them. Free inspection.`,
+  "commercial-roofing": (m) => `Flat and low-slope roofing for commercial, HOA and multi-family properties across ${m.region}. Surveyed and scoped in writing.`,
+  "garage-doors": (m) => `Garage door installation and replacement across ${m.region}. Free, no-obligation quote from our own crews.`,
+};
+
 export const SERVICE_CONTENT = {
   roofing: {
     label: "Roofing",
