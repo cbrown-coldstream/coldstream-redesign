@@ -13,10 +13,11 @@ import "../styles/ui-tokens.css";
 import "../styles/fonts.css";
 import "../styles/base.css";
 import RooffulTab from "../components/RooffulTab.astro";
+import { OG, SITE_NAME, ROBOTS_INDEXABLE } from "../data/seo.js";
 
 const {
   title, description, canonical,
-  market, breadcrumbs = [], schema = [], ogImage = "/og-default.jpg",
+  market, breadcrumbs = [], schema = [], ogImage = OG.image, ogImageAlt = OG.alt,
   // noindex is for pages that exist structurally but have not yet cleared site-plan's
   // uniqueness bar. Better to build the page and keep it out of the index than to ship a thin
   // duplicate and let Google decide it is one.
@@ -41,18 +42,32 @@ const crumbSchema = breadcrumbs.length > 1 ? {
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalUrl} />
-  {noindex && <meta name="robots" content="noindex, follow" />}
+  {/* ROBOTS. A noindexed page says only that; an indexable one asks for the largest preview
+      Google will give it, because on a trade site the photograph is the argument. The two are
+      mutually exclusive by construction — a page cannot ask to be kept out and shown off. */}
+  <meta name="robots" content={noindex ? "noindex, follow" : ROBOTS_INDEXABLE} />
 
   <link rel="preload" href="/fonts/montserrat-var-latin.woff2" as="font" type="font/woff2" crossorigin />
 
+  {/* OPEN GRAPH, COMPLETE. og:image alone is not enough: without width and height the scraper
+      has to fetch and measure the file before it can lay the card out, and Facebook and LinkedIn
+      both render a link with no card at all on the first share while that happens. og:site_name
+      is what puts the brand above the headline instead of the bare domain. */}
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:locale" content={OG.locale} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={new URL(ogImage, site).href} />
+  <meta property="og:image:width" content={String(OG.width)} />
+  <meta property="og:image:height" content={String(OG.height)} />
+  <meta property="og:image:alt" content={ogImageAlt} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, site).href} />
+  <meta name="twitter:image:alt" content={ogImageAlt} />
 
   {crumbSchema && <script type="application/ld+json" set:html={JSON.stringify(crumbSchema)} />}
   {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}

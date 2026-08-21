@@ -105,6 +105,50 @@ export const CLAIMS = {
 };
 
 /**
+ * THE PROFILES THIS BUSINESS OWNS — the `sameAs` set.
+ *
+ * WHY THIS IS IN THE CLAIMS FILE AND NOT IN A TEMPLATE. `sameAs` is not decoration: it is the
+ * assertion "this URL is the same real-world business as this website", and Google uses it to
+ * decide which entity a page belongs to. Pointing it at a profile that is NOT ours is worse than
+ * omitting it — it merges our entity with someone else's, and unpicking that in the Knowledge
+ * Graph is not a same-day fix. So it is gated exactly like a rating is.
+ *
+ * WHAT MAKES ONE ELIGIBLE: the profile has to be the company's own, and the handle or the listing
+ * has to be checkable from outside. Each entry records how it was checked and when.
+ *
+ * The BBB entry is the same URL `bbb.profileUrl` already carries. It is repeated by reference,
+ * not by value, so the two cannot drift.
+ *
+ * STILL MISSING: the Google Business Profile for each market. That is the single highest-value
+ * entry in this list — it is the link between the website and the map pack — and it needs the
+ * listing's own URL (the `?cid=` form or the maps place link), read off the GBP dashboard. It
+ * cannot be guessed from a search result, so it is null until someone opens the dashboard.
+ */
+export const PROFILES = [
+  { url: "https://www.facebook.com/coldstreamexteriors/",
+    source: "FOUND 2026-08-21 — public page under the exact brand handle, listing (513) 258-0450 " +
+            "and info@coldstreamexteriors.com. CONFIRM OWNERSHIP before this is treated as settled." },
+  { url: "https://www.instagram.com/coldstreamexteriors/",
+    source: "FOUND 2026-08-21 — public profile under the exact brand handle. CONFIRM OWNERSHIP." },
+  { url: "https://www.linkedin.com/company/coldstream-exteriors",
+    source: "FOUND 2026-08-21 — company page under the brand name. CONFIRM OWNERSHIP." },
+];
+
+/**
+ * Opening hours, as an OpeningHoursSpecification-shaped object, or null.
+ *
+ * Shape: `{ dayOfWeek: ["Monday", ...], opens: "08:00", closes: "17:00" }`.
+ *
+ * NOT SET, because nobody has stated them. Hours are a factual claim a customer acts on — they
+ * drive to an office, or they ring at 7pm expecting an answer — and a plausible 8-to-5 typed into
+ * a schema block is the same class of invention as a plausible star rating. It also feeds the
+ * "Open now" line Google can show beside a local result, so a wrong value is wrong in public.
+ *
+ * Fill this in and it appears on all three market business nodes at once.
+ */
+export const HOURS = null;
+
+/**
  * The three claims that are always true, from brand/voice-spec.json's `always_true_claims`.
  *
  * ONE ARRAY, SO THE WORDING CANNOT DRIFT. These strings appear in the hero bullets, the national
@@ -278,6 +322,10 @@ export const CLAIMS_PENDING = [
   !CLAIMS.experience && ["experience", "founding year, for the \"25+ years\" claim"],
   !CLAIMS.customersServed && ["customersServed", "homes served, for the \"3,000+ customers\" figure"],
   !CLAIMS.bbb && ["bbb", "accreditation status, rating and profile URL"],
+  // The single highest-value missing SEO signal — see data/seo.js. It is the link between this
+  // website and the map pack, and it is one URL per office, read off the GBP dashboard.
+  ["profiles.gbp", "the Google Business Profile URL for each of the three offices"],
+  !HOURS && ["hours", "opening hours, for the three offices — drives \"Open now\" in local results"],
   ...Object.entries(TESTIMONIALS)
     .filter(([, t]) => !t.length)
     .map(([k]) => [`testimonials.${k}`, "real, attributable reviews from the GBP listing"]),

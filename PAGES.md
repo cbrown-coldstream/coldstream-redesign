@@ -37,10 +37,10 @@ change to every page in it.
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
 | `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1315 | — | index |
-| `/about-us/` | Standalone | Three metros. Our own crew in each. | 952 | — | noindex |
+| `/about-us/` | Standalone | Three metros. Our own crew in each. | 951 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/commercial-roofing/` | National service | Commercial and multi-family roofing | 927 | — | index |
-| `/financing/` | Standalone | Paying for the work over time | 807 | — | noindex |
+| `/financing/` | Standalone | Paying for the work over time | 805 | — | noindex |
 | `/free-estimate/` | Standalone | Tell us what you need. We'll take a look. | 394 | 11 | index |
 | `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 867 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 399 | — | noindex |

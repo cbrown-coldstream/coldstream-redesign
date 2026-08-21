@@ -43,6 +43,7 @@ import CTABand from "../components/CTABand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST } from "../data/markets.js";
+import { orgRef } from "../data/seo.js";
 
 const market = NATIONAL;
 
@@ -57,7 +58,7 @@ const schema = {
   name: "Storm damage inspection, documentation and repair",
   description: "Hail and wind damage inspected and documented for an insurance claim, then repaired across roofing, siding and gutters.",
   url: "https://coldstreamexteriors.com/storm-damage/",
-  provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  provider: orgRef(),
   areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
 };
 

@@ -44,8 +44,11 @@ These are enforced by `npm run verify`, which fails the build. Do not work aroun
 4. **Three addresses and four phone numbers exist.** They live in `src/data/markets.js`. A
    hard-coded number in a template is the bug this structure exists to prevent.
 5. **Every page self-canonicals**, every URL ends in a trailing slash, and the sitemap lists only
-   indexable pages. 12 pages are deliberately `noindex` — they are waiting on data, and a thin
-   page that ranks is worse than a page that waits.
+   indexable pages. Since round 42 the same gate holds the SEO metadata too: every page has a title
+   and a description, titles are ≤ 60 and descriptions ≤ 160 **measured after decoding HTML
+   entities**, no two indexable pages share either, and every `og:image` resolves to a real file.
+   13 pages are deliberately `noindex` — they are waiting on data, and a thin page that ranks is
+   worse than a page that waits.
 
 ## Architecture
 
@@ -71,13 +74,14 @@ If the two disagree, that is not a bug.
 
 ```
 npm run dev          # local
-npm run build        # build + redirects + tokens; postbuild writes pagemap, /handoff/ and PAGES.md
+npm run build        # build + redirects + tokens + og card; postbuild writes pagemap, /handoff/ and PAGES.md
 npm run verify       # THE GATES. Run after every build. Green or it is not done.
 npm run test:gates   # proves the gates fail when they should
 npm run inventory    # 58 planned pages vs what built; extras must be named
 npm run contracts    # data-shape checks for the Contractors Cloud / GBP pulls
 npm run live:pull    # re-read the live WordPress copy into src/data/live-copy/
 npm run brand:publish # push brand/ out to coldstream-os (this repo owns it)
+npm run og           # regenerate public/og-default.jpg from the brand tokens (headless Chrome)
 ```
 
 ## What is done, and what is not
@@ -102,7 +106,9 @@ and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
    with no flex-wrap, so the document grew wider than the viewport and every section inherited it.
    The CTA moved into the mobile drawer. See DECISIONS §36.
 5. **Open questions:** the Cincinnati number reads (513) 717-5462 in the prototype and
-   (513) 258-0450 in the data — unconfirmed. The GAF certification tier has three conflicting
+   (513) 258-0450 in the data. Round 42 found the public Facebook page printing (513) 258-0450 —
+   a third source agreeing with the data against the prototype. Still not a formal sign-off,
+   but nothing now backs the prototype number. The GAF certification tier has three conflicting
    sources. The hero video button was added but never formally approved.
 
 ## The handoff

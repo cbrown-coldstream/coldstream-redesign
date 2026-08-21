@@ -38,6 +38,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
 import { TESTIMONIALS, ALWAYS_TRUE } from "../data/claims.js";
+import { organizationNode } from "../data/seo.js";
 import { national as page } from "../data/pages/national.js";
 
 const market = NATIONAL;
@@ -54,24 +55,11 @@ const video = {
 
 // One Organization node with all three offices, rather than a LocalBusiness — the national page
 // is not a location and should not claim to be one. LocalBusiness lives on the market pages.
-const org = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Coldstream Exteriors",
-  url: "https://coldstreamexteriors.com/",
-  telephone: NATIONAL.telHref,
-  location: MARKET_LIST.map((m) => ({
-    "@type": "RoofingContractor",
-    name: `Coldstream Exteriors — ${m.name}`,
-    url: `https://coldstreamexteriors.com/${m.slug}/`,
-    telephone: m.telHref,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: m.office.street, addressLocality: m.office.city,
-      addressRegion: m.office.state, postalCode: m.office.zip, addressCountry: "US",
-    },
-  })),
-};
+//
+// ROUND 42: the node itself moved to data/seo.js. It was written out here, again on /about-us/
+// and a third time in [market]/index.astro, and the three copies had already diverged — only the
+// about-us one carried @id. Whatever else changes about it, it changes in one file now.
+const org = organizationNode();
 ---
 <BaseLayout
   title={page.title}

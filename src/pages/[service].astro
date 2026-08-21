@@ -39,6 +39,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/markets.js";
 import { SERVICE_CONTENT } from "../data/services.js";
 import { PROCESS, PROCESS_INTRO } from "../data/process.js";
+import { orgRef } from "../data/seo.js";
 
 // A service gets a national page when more than one market runs it. That is exactly the set the
 // header and footer link nationally, and it is the test that keeps a single-market service line
@@ -103,7 +104,7 @@ const schema = {
   "@context": "https://schema.org",
   "@type": "Service",
   serviceType: svc.label,
-  provider: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
+  provider: orgRef(),
   areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
 };
 // Same map as [market]/[service].astro, and the same rule: the FOOTAGE is the gate, not the

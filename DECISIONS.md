@@ -2413,7 +2413,125 @@ careful about that and the title was not. Cities dropped; they remain in the des
 
 ---
 
-## 43. Checks
+## 44. Round 42 — the rest of the SEO surface, and gates so it stays fixed
+
+Round 41 wrote the titles and descriptions. It did not leave anything behind to hold them, and by
+the time this round opened **two pages had already drifted back over the limits** — `/about-us/` at
+63 characters and `/financing/` at 62 with a 163-character description. That is what an unenforced
+rule does, and it is the reason the largest part of this round is two new gates rather than new
+copy.
+
+The comparison is the same one round 41 used: **swordroof.com**, a Cincinnati roofing and siding
+company that ranks. Round 41 read their titles. This round read their `<head>` and their JSON-LD.
+
+### The three real defects, worst first
+
+**1. Every shared link rendered as a blank rectangle.** `BaseLayout` has pointed `og:image` at
+`/og-default.jpg` since the first build. **No such file was ever in `public/`.** Every link posted
+to Facebook, LinkedIn, Slack or iMessage since this repo existed has shown a bare URL with no card.
+
+Nothing caught it and nothing could have: the dead-link gate reads `href`, not `content`, and the
+contrast gate measures hero media only. A broken share card is invisible from inside the site —
+you find out when somebody else pastes your link.
+
+The card is now **generated**, by `scripts/build-og-image.mjs`, from `ui-tokens.json` and the
+on-dark logo, in headless Chrome at 1200×630. Generated rather than exported by hand for the same
+reason `tokens.css` is generated: an exported JPEG is the first thing to go stale when the brand
+repaints, and nobody would notice. The copy on it is the three always-true claims and the three
+metro names — nothing gated can reach it. `npm run og` is in `npm run build`; no Chrome means a
+warning and the committed file, not a failed build.
+
+**2. `"telephone": "tel:+15132580450"` in every business node.** `markets.js` exposes `telHref` for
+anchors and it was passed straight into schema. schema.org expects a phone *number*; a `tel:` URI
+there is a parse failure that costs the property silently, which is exactly why it survived four
+rounds of review — nothing renders it, so nothing looks wrong. Now the displayed number, which is
+also the string the GBP listing has to match.
+
+**3. Three hand-written copies of the Organization node** — `index.astro`, `about-us.astro`,
+`[market]/index.astro` — and they had already diverged: only the about-us copy carried an `@id`.
+
+### What SWORD had that we did not
+
+Their home page ships one `RoofingContractor` carrying `sameAs`, `openingHoursSpecification`,
+`priceRange`, a logo, an `OfferCatalog` of twelve services and 56 served places. Ours carried a
+name, a phone, an address and an `areaServed` list. **The gap was never in the copy — it was in
+what the page told Google the business *is*.**
+
+Taken, and now in the new `src/data/seo.js`:
+
+```
+sameAs                 the profiles that are the same real-world business
+logo / image           on the Organization and on all three market nodes
+hasOfferCatalog        each market's services, with the market's own URLs
+parentOrganization     the three offices now point at one company @id
+provider: orgRef()     national Service pages reference that @id too
+og:site_name, og:locale, og:image:width/height/alt, twitter:image
+robots: max-image-preview:large, max-snippet:-1, max-video-preview:-1
+```
+
+`parentOrganization` and `orgRef` are the ones worth naming. Before this round the home page's
+Organization, the three market `RoofingContractor` nodes and the `provider` on every national
+service page had no identifier joining them. To a crawler that is not one company with three
+offices — it is four similar businesses that happen to share a domain.
+
+**Refused: `priceRange`, which they set to `"$$$"`.** It is a claim about what Coldstream charges
+and nobody has stated it — the same ruling that keeps the live site's "$11,000–$14,000" out of this
+repo. Also refused: their `serviceArea` property, which schema.org superseded with `areaServed`.
+Copying a competitor's mistake is not benchmarking.
+
+### Two things went into the claims gate rather than into a template
+
+**`PROFILES`** — the `sameAs` list. `sameAs` is not decoration: it asserts "this URL is the same
+real-world business as this website", and pointing it at a profile that is not ours merges our
+entity with someone else's in the Knowledge Graph. So it is gated like a rating is. The BBB entry
+is `CLAIMS.bbb.profileUrl` by reference, not a second copy. The Facebook, Instagram and LinkedIn
+entries were found under the exact brand handle on 2026-08-21 and each records that, **flagged for
+ownership confirmation**.
+
+**`HOURS` — null.** A plausible 8-to-5 typed into a schema block is the same class of invention as
+a plausible star rating, and it is worse in public: it feeds the "Open now" line beside a local
+result, so a customer acts on it.
+
+**Still the biggest hole: no Google Business Profile URL for any of the three offices.** That is
+the link between this website and the map pack, and it cannot be guessed from a search result — it
+comes off the GBP dashboard. It is on `CLAIMS_PENDING` and the build names it every run.
+
+### The gates (verify-build §12 and §13)
+
+```
+§12  every page has a title and a description
+     title ≤ 60, description ≤ 160 — measured AFTER decoding entities
+     no two INDEXABLE pages share a title or a description
+§13  every og:image resolves to a file this build contains
+```
+
+**Entities are decoded first, and that is the part to remember.** `&amp;` is five characters in the
+file and one on screen. Round 41's first pass measured raw HTML and reported 24 over-length titles
+where there were 11 — more than double, entirely from ampersands. A gate that cries wolf gets
+edited out.
+
+**Duplicates compare indexable pages only.** Two noindexed placeholders sharing a description is
+not a ranking problem; the nine duplicate market descriptions round 41 found were.
+
+All four failure modes were proved by mutating built HTML and re-running verify: over-length title
+caught at 74/60 *after* decoding, duplicate description caught, missing og:image caught.
+
+### What was deliberately NOT changed
+
+**`<lastmod>` is still absent from the sitemap.** The obvious implementation — stamp today's build
+date on all 61 URLs — is a lie that Google learns to ignore within a few crawls, because it says
+every page changed every time anyone ran a build. A truthful `lastmod` means resolving each URL to
+the source files that produce it and reading git's date for those; that is a real piece of work and
+it is worth doing properly or not at all.
+
+**`/about-us/` and `/financing/` are still noindex.** Their titles are inside 60 now, but the
+reason they carry noindex is unchanged: the about page is mostly company-history claims nobody has
+sourced, and the financing page cannot quote terms without a lender. Trimming a title does not earn
+a page the right to be indexed. Porting `/about` remains the top of the not-done list.
+
+**No `AggregateRating` anywhere,** for the reason it has never been there: no GBP pull yet.
+
+## 45. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
@@ -2426,6 +2544,8 @@ careful about that and the title was not. Cities dropped; they remain in the des
 ✓ blog block PENDING by decision          ✓ hero copy clears AA on the CSS ground
 ✓ no orphan pages                         ✓ every indexable page is in the sitemap
 ✓ no fixture content in dist/             ✓ gate tests pass in both directions
+✓ every page has a title and description  ✓ no two indexable pages share a title or description
+✓ titles ≤ 60, descriptions ≤ 160         ✓ every og:image resolves to a real file
 ```
 
 75 pages verified: 58 inventory + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,

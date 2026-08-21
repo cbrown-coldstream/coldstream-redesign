@@ -6,7 +6,7 @@
     "tokens": "node scripts/build-tokens.mjs",
     "redirects": "node scripts/build-redirects.mjs",
     "dev": "npm run tokens && astro dev",
-    "build": "npm run tokens && npm run redirects && astro build",
+    "build": "npm run tokens && npm run redirects && npm run og && astro build",
     "preview": "astro preview",
     "verify": "node scripts/verify-build.mjs",
     "contracts": "node scripts/check-contracts.mjs",
@@ -23,7 +23,8 @@
     "handoff:site": "node scripts/build-handoff.mjs",
     "brand:publish": "node scripts/brand-publish.mjs",
     "pages": "node scripts/build-pages-md.mjs",
-    "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs && node scripts/build-review-wall.mjs"
+    "postbuild": "node scripts/build-pagemap.mjs && node scripts/build-handoff.mjs && node scripts/build-pages-md.mjs && node scripts/build-review-wall.mjs",
+    "og": "node scripts/build-og-image.mjs"
   },
   "devDependencies": {
     "astro": "^4.16.18"

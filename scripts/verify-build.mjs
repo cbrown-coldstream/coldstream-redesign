@@ -353,5 +353,91 @@ try {
   console.log(`  ⚠ hero contrast not measured — ${e.message.split("\n")[0]}`);
 }
 
+
+// 12. THE SEO SURFACE — title and description, on every page, measured.
+//
+//     ROUND 41 FIXED THESE BY HAND and nothing held them fixed. By round 42 two pages had drifted
+//     back over the limits, which is what an unenforced rule does. The limits are Google's own
+//     truncation points, not a style preference: past them the tail of the string is replaced with
+//     an ellipsis in the result, so the words after it are written for nobody.
+//
+//     ENTITIES ARE DECODED FIRST, and this is the part worth remembering. `&amp;` is five
+//     characters in the file and one on screen. Measuring the raw HTML made round 41's first pass
+//     report 24 over-length titles where there were 11 — more than double, entirely from
+//     ampersands. A gate that cries wolf gets edited out.
+//
+//     DUPLICATES ARE THE OTHER HALF, and the more damaging one. Nine pages shipped identical
+//     descriptions across the three markets — the single clearest signal a crawler has that two
+//     pages are the same page, on exactly the pages the copy rounds had just spent effort making
+//     different. Only INDEXABLE pages are compared: two noindexed placeholders sharing a
+//     description is not a ranking problem.
+const TITLE_MAX = 60, DESC_MAX = 160;
+const decodeEntities = (t) => t
+  .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+  .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCharCode(parseInt(n, 16)))
+  .replace(/&(quot|apos|lt|gt|nbsp|amp);/g, (_, e) =>
+    ({ quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " ", amp: "&" }[e]));
+
+const meta = pages.map((p) => {
+  const rawTitle = (p.html.match(/<title[^>]*>([\s\S]*?)<\/title>/) ?? [])[1];
+  const rawDesc = (p.html.match(/<meta name="description" content="([^"]*)"/) ?? [])[1];
+  return {
+    url: p.url,
+    noindex: /name="robots" content="noindex/.test(p.html),
+    title: rawTitle == null ? null : decodeEntities(rawTitle.trim()),
+    description: rawDesc == null ? null : decodeEntities(rawDesc.trim()),
+  };
+});
+
+const missingMeta = meta.filter((m) => !m.title || !m.description)
+  .map((m) => `${m.url} — missing ${!m.title ? "title" : "description"}`);
+missingMeta.length
+  ? fail("a page has no title or no meta description", missingMeta)
+  : pass(`every page has a title and a description`);
+
+const overLong = [
+  ...meta.filter((m) => m.title && m.title.length > TITLE_MAX)
+    .map((m) => `${m.url} — title ${m.title.length}/${TITLE_MAX}: ${m.title}`),
+  ...meta.filter((m) => m.description && m.description.length > DESC_MAX)
+    .map((m) => `${m.url} — description ${m.description.length}/${DESC_MAX}`),
+];
+overLong.length
+  ? fail("a title or description is past the point Google truncates it", overLong)
+  : pass(`titles inside ${TITLE_MAX} and descriptions inside ${DESC_MAX} on all ${meta.length} pages`);
+
+const dupes = (field) => {
+  const seen = new Map();
+  for (const m of meta.filter((x) => !x.noindex && x[field])) {
+    const k = m[field];
+    seen.set(k, [...(seen.get(k) ?? []), m.url]);
+  }
+  return [...seen].filter(([, v]) => v.length > 1)
+    .map(([k, v]) => `${v.join(", ")} — all say "${k.slice(0, 70)}${k.length > 70 ? "…" : ""}"`);
+};
+const dupMeta = [...dupes("title"), ...dupes("description")];
+dupMeta.length
+  ? fail("indexable pages share a title or a description", dupMeta)
+  : pass("no two indexable pages share a title or a description");
+
+// 13. THE SOCIAL CARD RESOLVES TO A FILE THAT EXISTS.
+//
+//     og:image pointed at /og-default.jpg from the first build to round 42 and no such file was
+//     ever in public/. Nothing caught it: the link checker reads href and not meta content, and a
+//     broken share card is invisible from inside the site — you only see it in someone else's
+//     Slack. The image is generated now (scripts/build-og-image.mjs); this is the check that says
+//     so out loud on every build.
+const ogRefs = new Set();
+for (const p of pages) {
+  for (const m of p.html.matchAll(/property="og:image" content="https:\/\/coldstreamexteriors\.com([^"]+)"/g)) {
+    ogRefs.add(m[1]);
+  }
+}
+const ogMissing = [...ogRefs].filter((r) => !existsSync(resolve(dist, r.replace(/^\//, ""))));
+ogRefs.size === 0
+  ? fail("no page declares an og:image — every shared link renders as a bare URL")
+  : ogMissing.length
+    ? fail("og:image points at a file this build does not contain", ogMissing)
+    : pass(`og:image resolves for all ${ogRefs.size} card${ogRefs.size === 1 ? "" : "s"} in use`);
+
 console.log(`\n  ${failed ? `✗ ${failed} CHECKS FAILED` : `✓ all checks passed across ${pages.length} pages`}\n`);
 process.exit(failed ? 1 : 0);

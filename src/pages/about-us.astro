@@ -12,25 +12,16 @@
 import PageShell from "../layouts/PageShell.astro";
 import { MARKET_LIST, NATIONAL, servicesFor } from "../data/markets.js";
 import { CLAIMS } from "../data/claims.js";
+import { organizationNode } from "../data/seo.js";
 
-const org = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Coldstream Exteriors",
-  url: "https://coldstreamexteriors.com/",
-  telephone: NATIONAL.telHref,
-  location: MARKET_LIST.map((m) => ({
-    "@type": "RoofingContractor",
-    "@id": `https://coldstreamexteriors.com/${m.slug}/#business`,
-    name: `Coldstream Exteriors — ${m.name}`,
-    url: `https://coldstreamexteriors.com/${m.slug}/`,
-  })),
-};
+// The same Organization node the home page uses — see data/seo.js. It was a third hand-written
+// copy until round 42, and the copies had already drifted.
+const org = organizationNode();
 ---
 <PageShell
   reviews={true}
   offer={true}
-  title="About Coldstream Exteriors | Roofing, Siding, Windows & Gutters"
+  title="About Coldstream Exteriors | Ohio & Missouri Roofers"
   description="Coldstream Exteriors runs three offices — Milford and Galloway in Ohio, and Geyer Road in St. Louis — with our own crews in each. Licensed and insured."
   canonical="/about-us/"
   noindex={true}

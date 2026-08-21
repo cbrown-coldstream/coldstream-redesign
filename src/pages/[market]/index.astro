@@ -28,6 +28,7 @@ import FAQ from "../../components/FAQ.astro";
 import CTABand from "../../components/CTABand.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 
+import { businessNode } from "../../data/seo.js";
 import { MARKETS, businessId } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
 import { cincinnati } from "../../data/pages/cincinnati.js";
@@ -50,20 +51,11 @@ const o = market.office;
 // the one real office address. Service hubs and location pages reference it by @id rather than
 // restating the NAP, so there is exactly one place on the site where each address is written and
 // no page can drift from the GBP listing. No aggregateRating — see Reviews.astro.
-const localBusiness = {
-  "@context": "https://schema.org",
-  "@type": "RoofingContractor",
-  "@id": businessId(market),
-  name: `Coldstream Exteriors — ${market.name}`,
-  url: `https://coldstreamexteriors.com/${market.slug}/`,
-  telephone: market.telHref,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: o.street, addressLocality: o.city,
-    addressRegion: o.state, postalCode: o.zip, addressCountry: "US",
-  },
-  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
-};
+//
+// ROUND 42: the node's contents moved to data/seo.js so the national page and this one describe
+// the same business the same way. It gained parentOrganization, a logo, an offer catalogue and a
+// telephone that is a phone number rather than a tel: href. The address still comes from here.
+const localBusiness = businessNode(market);
 
 // No hero media and no modal on a market landing: the ground is the navy gradient, exactly as
 // the prototype has it. When a market has its own crew footage or a real photograph, pass it as
