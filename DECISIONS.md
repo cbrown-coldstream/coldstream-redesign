@@ -2794,7 +2794,84 @@ cross-market similarity the site has spent four rounds lowering.
 **Geo coordinates on the three offices.** Real and useful, and not derivable without a geocoding
 service. Guessing a latitude is the same class of error as guessing a Wikidata ID.
 
-## 49. Checks
+## 50. Round 45 — staging is not production, and the handoff has to say so
+
+Round 44 named fifteen AI crawlers in `robots.txt` and allowed them. Correct for production. **It
+was wrong for the review host, and nobody noticed for a round.**
+
+### The gap, stated plainly
+
+Staging sends `X-Robots-Tag: noindex, nofollow` on every response. That is what stops Google and
+Bing **indexing** the review build, and it works — verified live on
+`coldstream-exteriors-staging.netlify.app/cincinnati/`.
+
+**It is not what stops an AI crawler reading it.** GPTBot, ClaudeBot, PerplexityBot and the rest
+take their instruction from `robots.txt`, not from an HTTP header. So the next staging deploy would
+have carried a file explicitly inviting all fifteen of them onto a host whose entire purpose is
+unreviewed work in progress — and the HTML says "staging" nowhere, so anything ingested there reads
+as the live site.
+
+This is worth naming as a class of mistake rather than a one-off: **a control that works for one
+kind of reader was assumed to work for all of them.** The header and the robots file answer
+different questions, and the round that added the second one did not re-ask the first.
+
+### Fixed at the host layer, for the reason the noindex already is
+
+`netlify.toml` has always argued that staging must not change the HTML, because then the artifact
+under review is not the artifact handed over. The same argument applies to `robots.txt`, which is
+part of the deliverable too.
+
+So: `public/robots-staging.txt` — `Disallow: /`, every agent, and **no `Sitemap:` line**, because
+advertising the production sitemap from the staging host points a crawler straight at the live
+WordPress site. A `netlify.toml` rewrite with `force = true` serves it at `/robots.txt` on that
+host only. `force` is required — the real file exists and would otherwise win.
+
+The promotion warning in `netlify.toml` now names **both** blocks, because either one left in place
+would silently disable the live site and neither leaves a trace in the HTML.
+
+**⚠ AND IT IS NOT A LOCK.** `robots.txt` is an instruction honoured by convention. If the review
+build ever needs to be genuinely private, the answer is Netlify password protection — the only
+mechanism that actually withholds the bytes. That is written into the staging file itself.
+
+### A new gate, for the mirror-image failure
+
+verify-build §19: `dist/robots.txt` must not carry a blanket `Disallow: /`, and must name the
+sitemap.
+
+**Uploading the staging file to production is the worst deployment mistake available here.** The
+site would go out of every search engine while every page still loaded perfectly — invisible from
+the inside, and running for weeks before traffic told anyone. It is also self-concealing: blocking a
+URL stops Google reading it at all, so it cannot see a corrected file either until it next checks
+`robots.txt`.
+
+### The handoff, which is the point of the round
+
+Two additions to `/handoff/wordpress/`, both generated:
+
+**The upload step now tables every loose file at the web root** and what breaks without each one —
+`sitemap.xml`, `robots.txt`, `llms.txt`, `og-default.jpg`, the four icons, the two logos,
+`_redirects`. It previously named four directories and two files, and rounds 42–44 added six more
+that a reasonable person would have skipped as incidental. It also names `robots-staging.txt` as
+**the one file in `dist/` not to upload**, and closes with the check to run after uploading.
+
+**A new section 8 records the whole search and AI layer** — what each page carries and why — with
+the warning that matters most under route 2:
+
+> **Do not let Yoast, RankMath or All-in-One re-derive any of this.** Every title and description is
+> written per page, measured, and checked for length and uniqueness on every build. A plugin
+> generating them from a template reintroduces the exact defect this work removed — nine pages
+> sharing one description across the three cities.
+
+Two more that would be lost silently: the single `@graph` must not be split back into separate
+blocks, and `dateModified` must not be replaced with the WordPress post-modified date, which moves
+whenever anyone opens and saves a page.
+
+It closes with the six outstanding items — GBP URLs, opening hours, profile confirmation, founding
+year, job photographs, lender terms — each with **what it unlocks and which file it goes in**. Every
+one is gated rather than missing: fill the value in one place and it appears everywhere it belongs
+on the next build.
+
+## 51. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
@@ -2812,8 +2889,8 @@ service. Guessing a latitude is the same class of error as guessing a Wikidata I
 ✓ every favicon link resolves             ✓ no heading level skipped on any page
 ✓ no empty value in any schema node       ✓ every indexable page ≥ 3 inbound internal links
 ✓ every @id reference resolves locally    ✓ llms.txt links only at pages that exist
-✓ sitemap dates all present or all absent ✓ 32 checks green across 75 pages
+✓ sitemap dates all present or all absent ✓ robots.txt is the production file, not staging's
 ```
 
-75 pages verified: 58 inventory + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,
+75 pages verified — 31 checks green: 58 inventory pages + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,
 which is what §6 allows.

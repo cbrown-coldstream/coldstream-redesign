@@ -17,8 +17,13 @@ pointing every retired URL at whichever page absorbed it. Astro, static output, 
 framework, no server runtime. See `PAGES.md` for the full inventory.
 
 **It is not deployed to production yet.** Staging is
-https://coldstream-exteriors-staging.netlify.app (noindex, review only). Production is the
-existing WordPress host — see "The handoff" below.
+https://coldstream-exteriors-staging.netlify.app, and **nothing on it is in any search index**.
+Two layers hold that, and they answer different questions — `netlify.toml` sends
+`X-Robots-Tag: noindex, nofollow` on every response, which stops Google and Bing INDEXING it, and a
+rewrite in the same file serves `public/robots-staging.txt` (`Disallow: /`) at `/robots.txt` there,
+which is what stops GPTBot, ClaudeBot and PerplexityBot READING it. The header alone was not
+enough; see DECISIONS §50. Neither is a lock — for genuine privacy the answer is Netlify password
+protection. Production is the existing WordPress host — see "The handoff" below.
 
 ## The one rule that explains most of the others
 
