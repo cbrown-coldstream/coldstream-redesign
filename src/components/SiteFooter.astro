@@ -41,12 +41,17 @@ const extras = market.slug
           </address>
         )}
       </div>
+      {/* THESE ARE h2, NOT h4. They were h4 and every page in the build jumped h2 → h4 at the
+          footer — a heading level skipped is a screen reader announcing a subsection of something
+          that was never opened, and it is the one structural fault an outline check finds on all
+          75 pages at once. The footer is a landmark of the document, so its column titles sit at
+          the same level as a page section. Only the selector in base.css changed with them. */}
       <div>
-        <h4>Services</h4>
+        <h2>Services</h2>
         {services.map((s) => <a href={serviceHref(market, s)}>{s.label}</a>)}
       </div>
       <div>
-        <h4>Company</h4>
+        <h2>Company</h2>
         {extras.map((e) => <a href={e.href}>{e.label}</a>)}
         <a href={aboutHref(market)}>About</a>
         {market.slug && <a href="/about-us/">The Company</a>}
@@ -55,7 +60,7 @@ const extras = market.slug
         <a href={estimateHref(market)}>Free Estimate</a>
       </div>
       <div>
-        <h4>Markets</h4>
+        <h2>Markets</h2>
         {MARKET_LIST.map((m) => <a href={`/${m.slug}/`}>{m.name}</a>)}
       </div>
     </div>

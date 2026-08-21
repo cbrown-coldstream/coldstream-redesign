@@ -71,7 +71,11 @@ const servedFrom = `Served from our ${office.city} office.`;
   <Hero
     market={market}
     eyebrow={`${market.name} · Areas we serve`}
-    headline={`Where We Work Across ${metro.name}`}
+    {/* The headline names the MARKET, not only the region. It read "Where We Work Across Central
+        Ohio" while the title said "Areas We Serve in Columbus" — so the page's strongest heading
+        carried neither the search term nor the city, on a page whose entire job is the city.
+        `metro.name` still carries the region, in the sub line directly underneath. */}
+    headline={`Areas We Serve in ${market.name}`}
     sub={metro.blurb}
     bullets={["Free, no-obligation inspection", servedFrom, "Licensed and insured"]}
   />

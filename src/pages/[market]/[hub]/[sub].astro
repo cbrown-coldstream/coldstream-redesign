@@ -47,6 +47,21 @@ const h1 = svc.h1(market);
 const lead = svc.lead(market);
 const intro = svc.intro(market, ctx);
 
+// THE SIBLING ROW EXISTS TO FIX AN INTERNAL-LINKING HOLE, not to decorate the page.
+//
+// Measured on the built site in round 43: every sub-service carried 18–21 inbound internal links
+// except siding-replacement, which carried two. The difference was not quality — it was the
+// header. Four of the five sub-services sit in a nav dropdown that renders on all 75 pages;
+// siding-replacement does not, so the only page linking to it was its own hub.
+//
+// THE FIX IS NOT A NAV EDIT. That nav was decided on the 2026-08-18 team call and its shape is
+// deliberate — Roofing lists jobs, Siding lists materials. Instead every sub-service links to its
+// siblings, DERIVED FROM SUBSERVICES rather than from NAV, so no page can be starved by being left
+// out of a menu. It is also the link the reader wants: someone reading about siding replacement is
+// deciding between materials on the next page.
+const siblings = Object.entries(SUBSERVICES[hub] ?? {}).filter(([key]) => key !== sub);
+const hubLabel = parent.label.toLowerCase();
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "Service",
@@ -110,6 +125,29 @@ const schema = {
       string is undefined, which renders nothing and fails silently. It did exactly that once. */}
   <MarketDepth market={market} depth={depthFor(svc, mSlug)} />
 
+  {siblings.length > 0 && (
+    <section class="mist">
+      <div class="wrap">
+        <div class="shead">
+          <span class="eyebrow">Also under {hubLabel}</span>
+          <h2>The rest of our {hubLabel} work in {market.name}</h2>
+        </div>
+        <div class="sib-grid">
+          {siblings.map(([key, s]) => (
+            <a class="sib-card" href={`/${mSlug}/${hub}/${key}/`}>
+              <strong>{s.label}</strong>
+              <span>{s.lead(market)}</span>
+            </a>
+          ))}
+          <a class="sib-card sib-hub" href={`/${mSlug}/${hub}/`}>
+            <strong>All {hubLabel} in {market.name}</strong>
+            <span>The hub page — every option side by side, and how we quote them.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
   <WhyTrust
     heading="Straightforward from quote to cleanup"
     cards={[
@@ -131,3 +169,16 @@ const schema = {
     <SiteFooter market={market} />
   </Fragment>
 </BaseLayout>
+
+<style>
+  /* Same visual language as the hub's "Go deeper" cards, written here rather than shared: the two
+     lists do different jobs — that one opens a hub outward, this one closes a loop between peers. */
+  .sib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .sib-card{display:flex;flex-direction:column;gap:7px;background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-accent);border-radius:11px;padding:20px 22px;text-decoration:none;transition:transform .12s,border-color .12s}
+  .sib-card:hover{transform:translateY(-2px);border-color:var(--cs-steel)}
+  .sib-card:focus-visible{outline:2px solid var(--cs-accent);outline-offset:3px}
+  .sib-card strong{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:1.06rem;color:var(--cs-text)}
+  .sib-card span{color:var(--cs-text-muted);font-size:.94rem;line-height:1.55}
+  .sib-hub{border-left-color:var(--cs-steel)}
+  @media (prefers-reduced-motion: reduce){ .sib-card{transition:none} .sib-card:hover{transform:none} }
+</style>

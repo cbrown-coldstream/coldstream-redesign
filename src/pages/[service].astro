@@ -89,11 +89,21 @@ const description = {
   "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties in Cincinnati and Columbus. TPO, EPDM, coatings and scheduled maintenance.",
 }[service];
 
+// THE H1 CARRIES NO CITY NAME, for the same reason the title above stopped carrying one.
+//
+// Round 41 took the three cities out of the title on this template's own instruction — "a national
+// page must never compete with [the market hubs] on a city term" — and left the H1 saying
+// "Roofing across Cincinnati, Columbus and St. Louis". The H1 is the stronger on-page signal of
+// the two, so the fix was half-applied: the page was still bidding for the city terms its own
+// market pages are built to win, just from a different element.
+//
+// The cities remain in the meta description, which is where round 41 decided they belong: it is
+// read by a person deciding whether to click, not weighed as a heading.
 const h1 = {
-  roofing: "Roofing across Cincinnati, Columbus and St. Louis",
-  siding: "Siding across Cincinnati, Columbus and St. Louis",
-  windows: "Replacement windows across Cincinnati, Columbus and St. Louis",
-  gutters: "Gutters across Cincinnati, Columbus and St. Louis",
+  roofing: "Roofing contractors who walk the roof first",
+  siding: "Siding, fitted by the crew that measured it",
+  windows: "Replacement windows, measured opening by opening",
+  gutters: "Seamless gutters, sized to the roof above them",
   "commercial-roofing": "Commercial and multi-family roofing",
 }[service];
 

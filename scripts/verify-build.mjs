@@ -439,5 +439,101 @@ ogRefs.size === 0
     ? fail("og:image points at a file this build does not contain", ogMissing)
     : pass(`og:image resolves for all ${ogRefs.size} card${ogRefs.size === 1 ? "" : "s"} in use`);
 
+//     THE ICONS ARE THE SAME BUG WAITING TO HAPPEN — a <link rel="icon"> at a path nothing wrote
+//     fails exactly as quietly as the og:image did, and the cost is a generic globe beside the
+//     listing on every mobile search result. Round 43 added the icon set; this keeps it honest.
+const iconRefs = new Set();
+for (const p of pages) {
+  for (const m of p.html.matchAll(/<link rel="(?:icon|apple-touch-icon)"[^>]*href="(\/[^"]+)"/g)) {
+    iconRefs.add(m[1]);
+  }
+}
+const iconMissing = [...iconRefs].filter((r) => !existsSync(resolve(dist, r.replace(/^\//, ""))));
+iconRefs.size === 0
+  ? fail("no page declares a favicon — search results get a generic globe")
+  : iconMissing.length
+    ? fail("a favicon link points at a file this build does not contain", iconMissing)
+    : pass(`all ${iconRefs.size} icon files resolve`);
+
+
+// 14. NO HEADING LEVEL IS SKIPPED.
+//
+//     Every page in the build jumped h2 → h4 at the footer until round 43, because the footer
+//     column titles were h4 under a document whose sections are h2. A skipped level is a screen
+//     reader announcing a subsection of something that was never opened, and it is the one
+//     structural fault an outline check finds on all 75 pages at once — so it is worth a gate
+//     rather than a note, since the next component to add a heading will guess the same way.
+const skipped = [];
+for (const p of pages) {
+  const levels = [...p.html.matchAll(/<h([1-6])[\s>]/g)].map((m) => Number(m[1]));
+  const jumps = [];
+  let prev = 0;
+  for (const l of levels) { if (prev && l > prev + 1) jumps.push(`h${prev} → h${l}`); prev = l; }
+  if (jumps.length) skipped.push(`${p.url} — ${[...new Set(jumps)].join(", ")}`);
+}
+skipped.length
+  ? fail("a page skips a heading level", skipped)
+  : pass("no heading level skipped on any page");
+
+// 15. NO SCHEMA NODE PUBLISHES AN EMPTY VALUE.
+//
+//     /blog/ shipped `blogPost: []` and the three galleries shipped `image: []` — each stating
+//     that the list exists and holds nothing, which is not what "no posts migrated yet" means and
+//     is exactly the shape a structured-data validator flags. The rest of this site already knows
+//     that an absent claim is absent rather than empty (see data/claims.js); this holds the schema
+//     to the same rule. Relative URLs are caught here too: schema wants resolvable ones.
+const URLISH = /^(url|item|logo|image|contentUrl|sameAs)$/;
+const schemaBad = [];
+for (const p of pages) {
+  for (const m of p.html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let parsed;
+    try { parsed = JSON.parse(m[1]); }
+    catch { schemaBad.push(`${p.url} — a JSON-LD block does not parse`); continue; }
+    const walk = (v, path) => {
+      const leaf = path.split(".").pop().replace(/\[\d+\]$/, "");
+      if (v === null || v === "") schemaBad.push(`${p.url} — empty value at ${path}`);
+      else if (Array.isArray(v)) {
+        if (!v.length) schemaBad.push(`${p.url} — empty array at ${path}`);
+        v.forEach((x, i) => walk(x, `${path}[${i}]`));
+      } else if (typeof v === "object") for (const k of Object.keys(v)) walk(v[k], `${path}.${k}`);
+      else if (typeof v === "string" && URLISH.test(leaf) && !/^https?:\/\//.test(v))
+        schemaBad.push(`${p.url} — ${path} is not an absolute URL: ${v}`);
+    };
+    for (const node of (Array.isArray(parsed) ? parsed : [parsed])) {
+      if (!node["@type"]) schemaBad.push(`${p.url} — a schema node has no @type`);
+      for (const k of Object.keys(node)) if (k !== "@context") walk(node[k], k);
+    }
+  }
+}
+schemaBad.length
+  ? fail("a schema node publishes an empty or unresolvable value", [...new Set(schemaBad)])
+  : pass("no empty or relative value in any schema node");
+
+// 16. EVERY INDEXABLE PAGE IS LINKED FROM AT LEAST THREE OTHERS.
+//
+//     The orphan gate above asks whether a page is reachable at all. This asks whether it is
+//     SUPPORTED, which is a different question and the one that found a real problem: every
+//     sub-service carried 18–21 inbound links except siding-replacement, which carried two,
+//     because four of the five sit in a nav dropdown that renders site-wide and it does not.
+//
+//     Three is deliberately a floor and not a target. A page reachable only from its own hub and
+//     the internal sitemap is a page the site is not actually arguing for, and the fix is a link
+//     from somewhere a reader would look — not a nav edit to make the number go up.
+const inbound = new Map(pages.map((p) => [p.url, new Set()]));
+for (const p of pages) {
+  for (const m of p.html.matchAll(/href="(\/[^"#?]*)"/g)) {
+    const target = m[1];
+    if (target !== p.url && inbound.has(target)) inbound.get(target).add(p.url);
+  }
+}
+const underlinked = pages
+  .filter((p) => !/name="robots" content="noindex/.test(p.html))
+  .map((p) => [p.url, inbound.get(p.url).size])
+  .filter(([, n]) => n < 3)
+  .map(([u, n]) => `${u} — linked from ${n} page${n === 1 ? "" : "s"}`);
+underlinked.length
+  ? fail("an indexable page is linked from fewer than three others", underlinked)
+  : pass(`every indexable page is linked from at least three others`);
+
 console.log(`\n  ${failed ? `✗ ${failed} CHECKS FAILED` : `✓ all checks passed across ${pages.length} pages`}\n`);
 process.exit(failed ? 1 : 0);

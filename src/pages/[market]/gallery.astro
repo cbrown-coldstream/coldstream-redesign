@@ -57,11 +57,16 @@ const schema = {
   name: `Completed work in ${market.name}`,
   url: `https://coldstreamexteriors.com/${mSlug}/gallery/`,
   provider: providerRef(market),
-  image: jobs.map((j) => ({
-    "@type": "ImageObject",
-    contentUrl: `https://coldstreamexteriors.com${j.photos[0].src}`,
-    caption: `${j.service} — ${j.town}. ${j.detail}`,
-  })),
+  // OMITTED WHEN THERE ARE NO JOBS — an ImageGallery whose `image` is [] states that this gallery
+  // holds no images, which is a worse thing to publish than saying nothing about it. Same rule as
+  // the rest of the site: an empty value is not rendered, it is absent. See data/claims.js.
+  ...(jobs.length ? {
+    image: jobs.map((j) => ({
+      "@type": "ImageObject",
+      contentUrl: `https://coldstreamexteriors.com${j.photos[0].src}`,
+      caption: `${j.service} — ${j.town}. ${j.detail}`,
+    })),
+  } : {}),
 };
 
 const servedFrom = `Served from our ${office.city} office.`;

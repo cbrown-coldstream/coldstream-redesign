@@ -16,10 +16,10 @@ change to every page in it.
 
 | Pages | Lane | Template | Index | 301s in | Avg words |
 |---:|---|---|---|---:|---:|
-| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1242 |
+| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1312 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1149 |
 | 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1191 |
-| 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1295 |
+| 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1296 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 541 |
 | 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1321 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1016 |
@@ -27,8 +27,8 @@ change to every page in it.
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 582 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 545 |
 | 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1315 |
-| 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 692 |
-| 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 696 |
+| 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 691 |
+| 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 698 |
 
 ## Every page
 
@@ -41,14 +41,14 @@ change to every page in it.
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/commercial-roofing/` | National service | Commercial and multi-family roofing | 927 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 805 | — | noindex |
-| `/free-estimate/` | Standalone | Tell us what you need. We'll take a look. | 394 | 11 | index |
-| `/gutters/` | National service | Gutters across Cincinnati, Columbus and St. Louis | 867 | — | index |
+| `/free-estimate/` | Standalone | Your free, no-obligation estimate | 401 | 11 | index |
+| `/gutters/` | National service | Seamless gutters, sized to the roof above them | 868 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 399 | — | noindex |
-| `/roofing/` | National service | Roofing across Cincinnati, Columbus and St. Louis | 1099 | — | index |
+| `/roofing/` | National service | Roofing contractors who walk the roof first | 1099 | — | index |
 | `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1403 | — | index |
 | `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1435 | — | index |
-| `/service-areas/` | Service areas | Cities we service | 696 | — | index |
-| `/siding/` | National service | Siding across Cincinnati, Columbus and St. Louis | 1023 | — | index |
+| `/service-areas/` | Service areas | Roofing and exterior service areas | 698 | — | index |
+| `/siding/` | National service | Siding, fitted by the crew that measured it | 1024 | — | index |
 | `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1359 | — | index |
 | `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1569 | — | index |
 | `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1378 | — | index |
@@ -56,7 +56,7 @@ change to every page in it.
 | `/storm-damage/` | Standalone | Storm damage, documented before it is argued about | 1389 | — | index |
 | `/terms/` | Standalone | Terms of use | 354 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 635 | 9 | noindex |
-| `/windows/` | National service | Replacement windows across Cincinnati, Columbus and St. Louis | 854 | — | index |
+| `/windows/` | National service | Replacement windows, measured opening by opening | 852 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
@@ -72,13 +72,13 @@ change to every page in it.
 | `/cincinnati/locations/west/` | Location area | Roofing and Exteriors in Cincinnati West | 510 | — | index |
 | `/cincinnati/reviews/` | Reviews | What Cincinnati Homeowners Say | 541 | — | noindex |
 | `/cincinnati/roofing/` | Service hub | Roofing in Cincinnati | 1371 | 10 | index |
-| `/cincinnati/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Cincinnati | 1192 | 15 | index |
-| `/cincinnati/roofing/roof-repair/` | Sub-service | Roof Repair in Cincinnati | 1292 | 12 | index |
-| `/cincinnati/roofing/roof-replacement/` | Sub-service | Roof Replacement in Cincinnati | 1298 | 3 | index |
+| `/cincinnati/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Cincinnati | 1263 | 15 | index |
+| `/cincinnati/roofing/roof-repair/` | Sub-service | Roof Repair in Cincinnati | 1364 | 12 | index |
+| `/cincinnati/roofing/roof-replacement/` | Sub-service | Roof Replacement in Cincinnati | 1368 | 3 | index |
 | `/cincinnati/siding/` | Service hub | Siding in Cincinnati | 1270 | 4 | index |
-| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1248 | 6 | index |
-| `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 1226 | 6 | index |
-| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1216 | 3 | index |
+| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1312 | 6 | index |
+| `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 1294 | 6 | index |
+| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1287 | 3 | index |
 | `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 1001 | 1 | index |
 
 ### Columbus — 17 pages (15 indexable, 2 noindex)
@@ -91,16 +91,16 @@ change to every page in it.
 | `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 717 | — | index |
 | `/columbus/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Columbus | 564 | — | noindex |
 | `/columbus/gutters/` | Service hub | Gutters in Columbus | 1002 | 10 | index |
-| `/columbus/locations/` | Locations index | Where We Work Across Central Ohio | 692 | 4 | index |
+| `/columbus/locations/` | Locations index | Areas We Serve in Columbus | 691 | 4 | index |
 | `/columbus/reviews/` | Reviews | What Columbus Homeowners Say | 540 | — | noindex |
 | `/columbus/roofing/` | Service hub | Roofing in Columbus | 1358 | 10 | index |
-| `/columbus/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Columbus | 1174 | 15 | index |
-| `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 1233 | 12 | index |
-| `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 1246 | 3 | index |
+| `/columbus/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Columbus | 1245 | 15 | index |
+| `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 1305 | 12 | index |
+| `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 1316 | 3 | index |
 | `/columbus/siding/` | Service hub | Siding in Columbus | 1262 | 4 | index |
-| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1240 | 6 | index |
-| `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 1194 | 6 | index |
-| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1203 | 3 | index |
+| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1304 | 6 | index |
+| `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 1262 | 6 | index |
+| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1274 | 3 | index |
 | `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 998 | 1 | index |
 
 ### St. Louis — 18 pages (16 indexable, 2 noindex)
@@ -117,13 +117,13 @@ change to every page in it.
 | `/st-louis/locations/south/` | Location area | Roofing and Exteriors in South County and South City | 565 | — | index |
 | `/st-louis/reviews/` | Reviews | What St. Louis Homeowners Say | 553 | — | noindex |
 | `/st-louis/roofing/` | Service hub | Roofing in St. Louis | 1410 | 10 | index |
-| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1221 | 15 | index |
-| `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1272 | 12 | index |
-| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1299 | 3 | index |
+| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1296 | 15 | index |
+| `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1347 | 12 | index |
+| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1372 | 3 | index |
 | `/st-louis/siding/` | Service hub | Siding in St. Louis | 1313 | 4 | index |
-| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1293 | 6 | index |
-| `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1258 | 6 | index |
-| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1253 | 3 | index |
+| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1360 | 6 | index |
+| `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1328 | 6 | index |
+| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1327 | 3 | index |
 | `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1049 | 1 | index |
 
 ## Section order per lane
@@ -136,10 +136,14 @@ these sections with this copy.
 1. Get Your Free Estimate
 2. Insurance & Storm Damage in Cincinnati
 3. Three seasons of damage, and a state line in the middle of the market
-4. Straightforward from quote to cleanup
-5. Insurance & Storm Damage across Southwest Ohio
-6. Common questions
-7. Ready for a free, no-pressure estimate?
+4. The rest of our roofing work in Cincinnati
+5. Straightforward from quote to cleanup
+6. Insurance & Storm Damage across Southwest Ohio
+7. Common questions
+8. Ready for a free, no-pressure estimate?
+9. Services
+10. Company
+11. Markets
 
 **Service hub** — e.g. `/cincinnati/commercial-roofing/`
 
@@ -150,6 +154,9 @@ these sections with this copy.
 5. Commercial Roofing across Southwest Ohio
 6. Common questions
 7. Ready for a free, no-pressure estimate?
+8. Services
+9. Company
+10. Markets
 
 **National service** — e.g. `/commercial-roofing/`
 
@@ -161,12 +168,18 @@ these sections with this copy.
 6. Materials from manufacturers who stand behind them
 7. Common questions
 8. Ready for a free, no-pressure estimate?
+9. Services
+10. Company
+11. Markets
 
 **Standalone** — e.g. `/free-estimate/`
 
 1. Get Your Free Estimate
 2. Common questions
 3. What we hold ourselves to
+4. Services
+5. Company
+6. Markets
 
 **Location area** — e.g. `/cincinnati/locations/east/`
 
@@ -176,6 +189,9 @@ these sections with this copy.
 4. What we do here
 5. Common questions
 6. Ready for a free, no-pressure estimate?
+7. Services
+8. Company
+9. Markets
 
 **Market landing** — e.g. `/cincinnati/`
 
@@ -189,6 +205,9 @@ these sections with this copy.
 8. Serving greater Cincinnati
 9. Common questions
 10. Ready for a free, no-pressure estimate?
+11. Services
+12. Company
+13. Markets
 
 **Market about** — e.g. `/cincinnati/about/`
 
@@ -200,6 +219,9 @@ these sections with this copy.
 6. What this crew does
 7. Common questions
 8. Want us to take a look?
+9. Services
+10. Company
+11. Markets
 
 **Market convert** — e.g. `/cincinnati/free-estimate/`
 
@@ -209,6 +231,9 @@ these sections with this copy.
 4. Why the estimate is genuinely free
 5. We quote across Southwest Ohio
 6. Common questions
+7. Services
+8. Company
+9. Markets
 
 **Gallery** — e.g. `/cincinnati/gallery/`
 
@@ -217,6 +242,9 @@ these sections with this copy.
 3. What we do here
 4. Working across Southwest Ohio
 5. Want your project on this page?
+6. Services
+7. Company
+8. Markets
 
 **Reviews** — e.g. `/cincinnati/reviews/`
 
@@ -225,6 +253,9 @@ these sections with this copy.
 3. What we do here
 4. Common questions
 5. Ready for a free, no-pressure estimate?
+6. Services
+7. Company
+8. Markets
 
 **National home** — e.g. `/`
 
@@ -236,6 +267,9 @@ these sections with this copy.
 6. Materials from manufacturers who stand behind them
 7. Questions we get asked most
 8. Book a free inspection
+9. Services
+10. Company
+11. Markets
 
 **Locations index** — e.g. `/columbus/locations/`
 
@@ -245,6 +279,9 @@ these sections with this copy.
 4. What we do here
 5. Common questions
 6. Ready for a free, no-pressure estimate?
+7. Services
+8. Company
+9. Markets
 
 **Service areas** — e.g. `/service-areas/`
 
@@ -254,6 +291,9 @@ these sections with this copy.
 4. Booking one is four steps, and the first two are free
 5. Common questions
 6. Not sure which market you are in?
+7. Services
+8. Company
+9. Markets
 
 ## The noindex set, and what each is waiting on
 

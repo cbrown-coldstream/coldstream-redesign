@@ -2531,7 +2531,116 @@ a page the right to be indexed. Porting `/about` remains the top of the not-done
 
 **No `AggregateRating` anywhere,** for the reason it has never been there: no GBP pull yet.
 
-## 45. Checks
+## 46. Round 43 — the second SEO pass, on everything the first one did not look at
+
+Round 42 fixed the `<head>` and the entity graph. This round audited what was left — icons,
+headings, internal linking, structured-data validity, thin content, crawl depth — and found six
+things. Two were real holes, four were tidying.
+
+### The site had no icon of any kind
+
+Not a favicon, not an apple-touch-icon, nothing. That is not only a blank browser tab: **Google
+prints a favicon beside every result on mobile**, and a site without one gets a generic globe while
+every competitor in the list shows their mark. It is the smallest piece of brand real estate in a
+search result and ours was empty.
+
+`scripts/build-icons.mjs` now generates the set — `.ico` at 48 (the size Google's guidance asks
+for), PNGs at 96, 180 and 192 — from the on-dark lockup and the brand navy, in headless Chrome,
+the same way the OG card is generated. **The mark, not the lockup:** "COLDSTREAM EXTERIORS" set
+across 16 pixels is a grey smear, and 16 pixels is the size that matters. Drawn white on navy
+rather than blue on transparent, because a transparent icon vanishes into a dark browser chrome.
+
+The `.ico` is a PNG inside an ICO container — valid since Vista, 22 bytes of header written by
+hand so this repo takes no image dependency for one file. verify-build §13 was extended to cover
+icon links for the same reason it covers og:image: a `<link rel="icon">` at a path nothing wrote
+fails exactly as silently.
+
+### Four H1s named the page without naming what it was for
+
+The H1 is the strongest on-page heading signal there is, and four indexable pages spent it on
+something else. **The national service hubs are the important case.** Round 41 removed the three
+city names from their titles, quoting the template's own rule — a national page "must never compete
+with [the market hubs] on a city term" — and left the H1 reading *"Roofing across Cincinnati,
+Columbus and St. Louis"*. The fix was half-applied: the page went on bidding for the city terms its
+own market pages are built to win, from a stronger element than the one that was corrected.
+
+```
+/roofing/          Roofing across Cincinnati…    →  Roofing contractors who walk the roof first
+/siding/           Siding across Cincinnati…     →  Siding, fitted by the crew that measured it
+/windows/          Replacement windows across…   →  Replacement windows, measured opening by opening
+/gutters/          Gutters across Cincinnati…    →  Seamless gutters, sized to the roof above them
+/columbus/locations/   Where We Work Across Central Ohio  →  Areas We Serve in Columbus
+/free-estimate/    Tell us what you need…        →  Your free, no-obligation estimate
+/service-areas/    Cities we service             →  Roofing and exterior service areas
+```
+
+`/free-estimate/` is the one to notice: **priority 0.9 in the sitemap, second only to the home
+page, and its H1 contained no search term at all.** The warm line was not deleted — it moved down
+one level, where it is still the first thing read after the heading.
+
+The cities stay in the meta descriptions, which is where round 41 put them: read by a person
+deciding whether to click, not weighed as a heading.
+
+### One page had two inbound links and the rest had twenty
+
+Measured across the built site: every sub-service carried 18–21 inbound internal links except
+`siding-replacement`, which carried **two**. The difference was not quality — it was the header.
+Four of the five sub-services sit in a nav dropdown that renders on all 75 pages; siding-replacement
+does not, so the only page linking to it was its own hub.
+
+**The fix is not a nav edit.** That nav was decided on the 2026-08-18 call and its shape is
+deliberate — Roofing lists jobs, Siding lists materials. Instead every sub-service page now carries
+a sibling row, **derived from `SUBSERVICES` rather than from `NAV`**, so no page can be starved by
+being left out of a menu. It is also the link the reader actually wants: someone reading about
+siding replacement is choosing between materials on the next page.
+
+Cross-market similarity moved 30.1% → 32.1% on that set, well inside the 80% gate.
+
+### Three smaller ones
+
+**Every page jumped h2 → h4 at the footer.** The footer column titles were `<h4>` under a document
+whose sections are `<h2>`, on all 75 pages — a heading level skipped is a screen reader announcing
+a subsection of something that was never opened. They are `<h2>` now; only the selector in base.css
+moved with them.
+
+**Two schema nodes published empty arrays.** `/blog/` emitted `blogPost: []` and the three gallery
+pages emitted `image: []` — each stating that the list exists and is empty, which is not what "no
+posts migrated yet" means. Both are now omitted when empty, the same rule the rest of the site
+follows for a null claim.
+
+**robots.txt and two sitemap comments said nineteen noindex pages.** It is fourteen.
+
+### What the audit found nothing wrong with
+
+Worth writing down, because a clean result is only useful if it is recorded:
+
+```
+0  thin pages            min 310 words, median 1159
+0  orphans               every indexable page ≤ 3 clicks from home
+0  duplicate H1s         across 61 indexable pages
+0  generic anchor text   no "click here", no "read more"
+0  links missing a trailing slash
+0  images without width and height   (no layout shift from media)
+0  images without alt                (119 decorative, alt="" by intent)
+4  external links, all rel="noopener"
+```
+
+### Still deliberately not done
+
+**`<lastmod>` in the sitemap.** Reconsidered this round and refused again. The tractable version —
+stamp the build date on all 61 URLs — tells Google every page changed every time anyone ran a
+build, and Google stops trusting the field within a few crawls. The honest version means resolving
+each URL to the source files that produce it and reading git's date for those. It is worth doing
+properly or not at all.
+
+**`image` on the business nodes is the OG card, not a photograph of real work.** It is a valid
+image and better than nothing; it becomes a real one when the Contractors Cloud job pull lands.
+
+**The service hubs sit at 66–74% cross-market similarity** — under the gate, but the highest on the
+site, and the same three sets whose descriptions were duplicated before round 41. That is a copy
+round, not a metadata one.
+
+## 47. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
@@ -2546,6 +2655,8 @@ a page the right to be indexed. Porting `/about` remains the top of the not-done
 ✓ no fixture content in dist/             ✓ gate tests pass in both directions
 ✓ every page has a title and description  ✓ no two indexable pages share a title or description
 ✓ titles ≤ 60, descriptions ≤ 160         ✓ every og:image resolves to a real file
+✓ every favicon link resolves             ✓ no heading level skipped on any page
+✓ no empty value in any schema node       ✓ every indexable page ≥ 3 inbound internal links
 ```
 
 75 pages verified: 58 inventory + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,

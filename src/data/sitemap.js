@@ -1,7 +1,7 @@
 // THE INDEXABLE URL LIST — one computation, used by the sitemap and checked by the build.
 //
 // A sitemap that lists a noindex page sends Google two contradictory instructions about the same
-// URL, and Search Console reports it as an error. With nineteen of this site's pages currently
+// URL, and Search Console reports it as an error. With fourteen of this site's pages currently
 // noindexed by design, the sitemap cannot be a hand-kept list — it has to be derived from the
 // same gates the templates use, so a page becomes crawlable in exactly one step: source the
 // thing it was missing.

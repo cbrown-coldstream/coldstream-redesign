@@ -37,7 +37,11 @@ const schema = {
   name: "Coldstream Exteriors — Advice and Updates",
   url: "https://coldstreamexteriors.com/blog/",
   publisher: { "@type": "Organization", name: "Coldstream Exteriors", url: "https://coldstreamexteriors.com/" },
-  blogPost: POSTS,
+  // OMITTED WHEN EMPTY, not emitted as []. A property present with nothing in it is a claim that
+  // this Blog has a list of posts and the list is empty — which is not what "no posts migrated
+  // yet" means, and is the kind of node a structured-data validator flags. The spread disappears
+  // entirely when there is nothing to spread.
+  ...(POSTS.length ? { blogPost: POSTS } : {}),
 };
 ---
 <BaseLayout

@@ -476,7 +476,7 @@ section{padding:62px 0}
 
 footer{background:var(--cs-text);color:var(--cs-mist);padding:52px 0 24px;font-size:.94rem}
 footer .cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:30px;padding-bottom:32px;border-bottom:1px solid color-mix(in srgb, var(--cs-paper) 10%, transparent)}
-footer h4{color:var(--cs-paper);font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:14px;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight)}
+footer .cols h2{color:var(--cs-paper);font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:14px;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight)}
 footer a{color:var(--cs-mist);text-decoration:none;display:block;padding:4px 0}
 footer a:hover{color:var(--cs-accent)}
 footer .brand img{height:38px;background:var(--cs-paper);padding:7px 10px;border-radius:8px;margin-bottom:12px}
