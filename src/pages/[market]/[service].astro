@@ -31,6 +31,7 @@ import { SERVICE_CONTENT, SERVICE_META, localFor } from "../../data/services.js"
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
 import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
+import { servedPlaces } from "../../data/seo.js";
 
 export async function getStaticPaths() {
   const { MARKETS, servicesFor } = await import("../../data/markets.js");
@@ -80,7 +81,7 @@ const serviceSchema = {
   // Reference to the market's single LocalBusiness node, not a restatement of it. The NAP is
   // written once, on the market landing page, and pointed at from everywhere else.
   provider: providerRef(market),
-  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+  areaServed: servedPlaces(market),
 };
 ---
 <BaseLayout

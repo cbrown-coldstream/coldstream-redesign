@@ -40,6 +40,7 @@ import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/mar
 import { SERVICE_CONTENT } from "../data/services.js";
 import { PROCESS, PROCESS_INTRO } from "../data/process.js";
 import { orgRef } from "../data/seo.js";
+import { placeNode } from "../data/seo.js";
 
 // A service gets a national page when more than one market runs it. That is exactly the set the
 // header and footer link nationally, and it is the test that keeps a single-market service line
@@ -115,7 +116,7 @@ const schema = {
   "@type": "Service",
   serviceType: svc.label,
   provider: orgRef(),
-  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+  areaServed: markets.map((m) => placeNode(m.name)),
 };
 // Same map as [market]/[service].astro, and the same rule: the FOOTAGE is the gate, not the
 // service list. Gutters has no clip yet, so the national gutters page renders no section at all

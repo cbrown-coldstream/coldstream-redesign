@@ -12,6 +12,7 @@ import { marketsWithReviews, marketsWithSourcedReviews } from "./claims.js";
 import { SUBSERVICES } from "./subservices.js";
 import { nationalSubservicePaths } from "./national-subservices.js";
 import { GLOBAL_PENDING } from "./pages/global.js";
+import { lastModified } from "./seo.js";
 
 const SITE = "https://coldstreamexteriors.com";
 
@@ -96,10 +97,29 @@ export const urls = () => {
 export const INDEXABLE = () => urls().filter((u) => u.index);
 export const NOINDEXED = () => urls().filter((u) => !u.index);
 
+/**
+ * <lastmod>, ADDED IN ROUND 44 AFTER BEING REFUSED IN TWO EARLIER ONES.
+ *
+ * The refusals were right at the time and the reason is worth keeping: stamping the build date on
+ * all 61 URLs tells a crawler that every page changed every time anyone ran `npm run build`, and
+ * Google uses lastmod only while it stays accurate — a field that is wrong on 60 of 61 URLs
+ * teaches it to disbelieve the one that was right.
+ *
+ * The date now comes from GIT, per page, from the content sources that page is built out of. See
+ * scripts/build-lastmod.mjs for exactly what is counted and what is deliberately not.
+ *
+ * NO DATE MEANS NO ELEMENT. A page whose date cannot be established — no git, or a file with no
+ * commits yet — simply omits it, which is a legal sitemap and an honest one.
+ */
 export const sitemapXml = () =>
   `<?xml version="1.0" encoding="UTF-8"?>\n` +
   `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   INDEXABLE()
-    .map((u) => `  <url>\n    <loc>${SITE}${u.path}</loc>\n    <priority>${u.priority ?? "0.5"}</priority>\n  </url>\n`)
+    .map((u) => {
+      const mod = lastModified(u.path);
+      return `  <url>\n    <loc>${SITE}${u.path}</loc>\n` +
+             (mod ? `    <lastmod>${mod}</lastmod>\n` : "") +
+             `    <priority>${u.priority ?? "0.5"}</priority>\n  </url>\n`;
+    })
     .join("") +
   `</urlset>\n`;

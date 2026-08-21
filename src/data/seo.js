@@ -23,6 +23,7 @@
 // Copying a competitor's mistake is not benchmarking.
 import { MARKET_LIST, NATIONAL, NATIONAL_PHONE, businessId, servicesFor } from "./markets.js";
 import { CLAIMS, PROFILES, HOURS } from "./claims.js";
+import LASTMOD from "./generated/lastmod.json" with { type: "json" };
 
 export const SITE = "https://coldstreamexteriors.com";
 export const SITE_NAME = "Coldstream Exteriors";
@@ -135,6 +136,118 @@ export const ORG_ID = `${SITE}/#organization`;
 export const orgRef = () => ({ "@type": "Organization", "@id": ORG_ID, name: SITE_NAME, url: `${SITE}/` });
 
 /**
+ * When a page's content last changed, ISO 8601, or null.
+ *
+ * Computed from git by scripts/build-lastmod.mjs — read that file for exactly what it counts.
+ * NULL IS A REAL ANSWER and every caller drops the field rather than substituting today's date;
+ * a `dateModified` that moves on every build is worse than no `dateModified` at all, because it
+ * trains a crawler to disbelieve the one on the page that really did change.
+ */
+export const lastModified = (path) => LASTMOD.pages?.[path] ?? null;
+
+/**
+ * THE PLACES THIS BUSINESS WORKS, AS ENTITIES RATHER THAN STRINGS.
+ *
+ * `{ "@type": "City", "name": "Columbus" }` is a string in a box. There are Columbuses in Ohio,
+ * Georgia, Indiana, Mississippi and Nebraska, and the site's own geo-detection code already carries
+ * a comment about exactly that ambiguity — it refuses to route a Columbus, Georgia visitor to a
+ * Central Ohio roofing page. The schema was making the mistake the JavaScript was careful about.
+ *
+ * A Wikidata ID removes the ambiguity for any machine reading the page — a search crawler, an
+ * answer engine, a model summarising the site. It is the difference between telling a reader the
+ * name of a place and telling it WHICH place.
+ *
+ * VERIFIED AGAINST WIKIDATA 2026-08-21, by label and description, not from memory:
+ *   Q43196  Cincinnati  "city in and seat of Hamilton County, Ohio, United States"
+ *   Q16567  Columbus    "capital city of the U.S. state of Ohio and seat of Franklin County"
+ *   Q38022  St. Louis   "independent city in Missouri, United States"
+ *   Q1397   Ohio        "state of the United States of America"
+ *   Q1581   Missouri    "state of the United States of America"
+ *
+ * ONLY THE THREE METROS AND TWO STATES ARE HERE. The 77 served towns are not, and should not be
+ * guessed at in bulk: "Milford" alone is a town in Ohio, Connecticut, Delaware, Massachusetts,
+ * Michigan, Nebraska, New Hampshire and Pennsylvania, and a wrong Wikidata ID is a worse statement
+ * than no ID — it actively asserts the wrong place. Adding one means looking it up, like these.
+ */
+const WIKIDATA = {
+  Cincinnati: "Q43196",
+  Columbus: "Q16567",
+  "St. Louis": "Q38022",
+};
+
+const STATE_ENTITY = {
+  OH: { name: "Ohio", id: "Q1397" },
+  MO: { name: "Missouri", id: "Q1581" },
+};
+
+/** A served place, with its Wikidata identity where we have verified one. */
+export const placeNode = (name) => WIKIDATA[name]
+  ? { "@type": "City", name, sameAs: `https://www.wikidata.org/wiki/${WIKIDATA[name]}` }
+  : { "@type": "City", name };
+
+/**
+ * Everywhere a market serves, as entities — the metro itself first, then its towns.
+ *
+ * THE METRO WAS MISSING. `servedAreas` lists the surrounding towns, so Cincinnati's own areaServed
+ * named 24 suburbs and not Cincinnati, on a page titled "Roofing in Cincinnati". The metro is also
+ * the one name in the list carrying a Wikidata ID, which is what makes it unambiguous.
+ */
+export const servedPlaces = (market) => [
+  placeNode(market.name),
+  ...market.servedAreas.filter((a) => a !== market.name).map(placeNode),
+];
+
+/** The state a market sits in, as an entity. Used as the market node's containing place. */
+export const stateNode = (market) => {
+  const st = STATE_ENTITY[market.office?.state];
+  return st ? { "@type": "State", name: st.name, sameAs: `https://www.wikidata.org/wiki/${st.id}` } : null;
+};
+
+/**
+ * The WebSite node — one per site, referenced by every page.
+ *
+ * It is what makes `isPartOf` on a WebPage resolve to something. Without it a crawler has 75 pages
+ * and no statement that they are one site under one publisher.
+ */
+export const webSiteNode = () => ({
+  "@type": "WebSite",
+  "@id": `${SITE}/#website`,
+  url: `${SITE}/`,
+  name: SITE_NAME,
+  publisher: { "@id": ORG_ID },
+  inLanguage: "en-US",
+});
+
+/**
+ * The WebPage node — one per page, and the hub the rest of that page's graph hangs off.
+ *
+ * WHY IT IS WORTH THE BYTES. Before this, a page emitted two or three disconnected JSON-LD blocks:
+ * a breadcrumb here, a Service there, an FAQ in a third. Nothing said they described the same page,
+ * and nothing tied any of them to the page's own URL, title or publisher. A reader — a crawler, an
+ * answer engine, a model asked "what does this company do in Columbus" — had to infer the join.
+ *
+ * Now every page states it: this URL is a WebPage, it is part of that WebSite, it is about that
+ * Organization, its breadcrumb is that BreadcrumbList, and it was last changed on this date.
+ */
+export const webPageNode = ({ canonical, title, description, breadcrumbId, ogImage }) => {
+  const url = new URL(canonical, SITE).href;
+  const modified = lastModified(canonical);
+  return {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: title,
+    description,
+    isPartOf: { "@id": `${SITE}/#website` },
+    about: { "@id": ORG_ID },
+    inLanguage: "en-US",
+    primaryImageOfPage: `${SITE}${ogImage ?? OG.image}`,
+    ...(breadcrumbId ? { breadcrumb: { "@id": breadcrumbId } } : {}),
+    ...(modified ? { dateModified: modified } : {}),
+  };
+};
+
+/**
  * The national Organization node.
  *
  * ONE ORGANIZATION, THREE LOCATIONS — not a LocalBusiness. The national page is not a location and
@@ -204,6 +317,7 @@ export const businessNode = (market) => ({
   // What DOES belong here is each market's own Google Business Profile URL, one per office. Those
   // are the missing piece — see claims.js PROFILES.
   ...hoursNode(),
-  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+  areaServed: servedPlaces(market),
+  ...(stateNode(market) ? { containedInPlace: stateNode(market) } : {}),
   ...offerCatalog(market),
 });

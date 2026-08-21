@@ -44,6 +44,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST } from "../data/markets.js";
 import { orgRef } from "../data/seo.js";
+import { placeNode } from "../data/seo.js";
 
 const market = NATIONAL;
 
@@ -59,7 +60,7 @@ const schema = {
   description: "Hail and wind damage inspected and documented for an insurance claim, then repaired across roofing, siding and gutters.",
   url: "https://coldstreamexteriors.com/storm-damage/",
   provider: orgRef(),
-  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+  areaServed: markets.map((m) => placeNode(m.name)),
 };
 
 const DAMAGE = [

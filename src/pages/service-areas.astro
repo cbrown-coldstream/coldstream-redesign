@@ -31,6 +31,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, homeownerServicesFor, estimateHref } from "../data/markets.js";
 import { areaForTown } from "../data/locations.js";
 import { metroLocations, publishedLocations } from "../data/locations.js";
+import { placeNode } from "../data/seo.js";
 
 const market = NATIONAL;
 const totalTowns = MARKET_LIST.reduce((n, m) => n + m.servedAreas.length, 0);
@@ -60,7 +61,7 @@ const schema = {
   "@type": "Organization",
   name: "Coldstream Exteriors",
   url: "https://coldstreamexteriors.com/",
-  areaServed: MARKET_LIST.flatMap((m) => m.servedAreas.map((a) => ({ "@type": "City", name: a }))),
+  areaServed: MARKET_LIST.flatMap((m) => m.servedAreas.map(placeNode)),
 };
 ---
 <BaseLayout

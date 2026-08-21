@@ -34,6 +34,7 @@ import SiteFooter from "../../../components/SiteFooter.astro";
 import { MARKETS, providerRef } from "../../../data/markets.js";
 import { TESTIMONIALS } from "../../../data/claims.js";
 import { LOCATIONS, showableJobs } from "../../../data/locations.js";
+import { placeNode } from "../../../data/seo.js";
 
 export async function getStaticPaths() {
   const { publishedLocations } = await import("../../../data/locations.js");
@@ -55,7 +56,7 @@ const schema = {
   serviceType: "Roofing, siding, windows and gutters",
   url: `https://coldstreamexteriors.com/${mSlug}/locations/${area}/`,
   provider: providerRef(market),
-  areaServed: loc.towns.map((t) => ({ "@type": "City", name: t })),
+  areaServed: loc.towns.map(placeNode),
 };
 
 const servedFrom = `Served from our ${office.city} office.`;

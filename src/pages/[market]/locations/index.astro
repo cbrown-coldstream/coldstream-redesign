@@ -26,6 +26,7 @@ import { MARKETS, providerRef } from "../../../data/markets.js";
 import { TESTIMONIALS } from "../../../data/claims.js";
 import { LOCATIONS, marketJobs } from "../../../data/locations.js";
 import { MARKET_CONTEXT } from "../../../data/subservices.js";
+import { servedPlaces } from "../../../data/seo.js";
 
 export async function getStaticPaths() {
   const { metroLocations } = await import("../../../data/locations.js");
@@ -46,7 +47,7 @@ const schema = {
   serviceType: "Roofing, siding, windows and gutters",
   url: `https://coldstreamexteriors.com/${mSlug}/locations/`,
   provider: providerRef(market),
-  areaServed: market.servedAreas.map((t) => ({ "@type": "City", name: t })),
+  areaServed: servedPlaces(market),
 };
 
 const servedFrom = `Served from our ${office.city} office.`;

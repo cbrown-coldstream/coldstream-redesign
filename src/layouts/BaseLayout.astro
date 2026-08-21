@@ -13,7 +13,7 @@ import "../styles/ui-tokens.css";
 import "../styles/fonts.css";
 import "../styles/base.css";
 import RooffulTab from "../components/RooffulTab.astro";
-import { OG, SITE_NAME, ROBOTS_INDEXABLE } from "../data/seo.js";
+import { OG, SITE_NAME, ROBOTS_INDEXABLE, ORG_ID, LOGO, SITE, webSiteNode, webPageNode } from "../data/seo.js";
 
 const {
   title, description, canonical,
@@ -27,12 +27,56 @@ const {
 const site = "https://coldstreamexteriors.com";
 const canonicalUrl = new URL(canonical, site).href;
 
+const crumbId = `${canonicalUrl}#breadcrumb`;
 const crumbSchema = breadcrumbs.length > 1 ? {
-  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  "@type": "BreadcrumbList",
+  "@id": crumbId,
   itemListElement: breadcrumbs.map((c, i) => ({
     "@type": "ListItem", position: i + 1, name: c.name, item: new URL(c.href, site).href,
   })),
 } : null;
+
+// ── ONE @graph PER PAGE, NOT THREE LOOSE BLOCKS ──────────────────────────────────────────────
+//
+// Until round 44 a page emitted its breadcrumb, its business or service node and its FAQ as
+// separate <script> tags. Every one of them was valid; NOTHING SAID THEY DESCRIBED THE SAME PAGE.
+// A reader — a search crawler, an answer engine, a model asked what this company does in Columbus —
+// got three unlabelled facts and had to infer the join between them.
+//
+// A single @graph states it instead: this URL is a WebPage, part of this WebSite, about this
+// Organization, with this breadcrumb, and here is the Service or the FAQ it carries. Same facts,
+// one structure, and the structure is the part a machine can follow.
+//
+// `@context` is hoisted to the graph, so nodes passed in by a page have theirs stripped — repeating
+// it inside a graph is not wrong, it is just noise on every page.
+const strip = ({ "@context": _drop, ...node }) => node;
+const pageNodes = schema.map(strip);
+
+// A REFERENCE HAS TO RESOLVE TO SOMETHING ON THE SAME PAGE.
+//
+// `publisher` and `about` above both point at the Organization's @id. That node is written out in
+// full on / and /about-us/ and nowhere else, so on the other 73 pages those two references pointed
+// at nothing a reader of THAT page could resolve. Cross-page @id resolution is not something a
+// crawler is obliged to do.
+//
+// So every page carries the organisation — but a LEAN version of it: identity, name, URL, logo.
+// NOT the addresses. Three PostalAddress nodes on all 75 pages would restate the NAP everywhere,
+// which is the exact thing the location-page ruling forbids and verify-build gates. JSON-LD merges
+// nodes sharing an @id, so the full node on the home page and the lean one here are one entity
+// described twice, not two entities.
+const hasFullOrg = pageNodes.some((n) => n["@id"] === ORG_ID);
+const leanOrg = { "@type": "Organization", "@id": ORG_ID, name: SITE_NAME, url: `${SITE}/`, logo: LOGO };
+
+const graph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    webSiteNode(),
+    webPageNode({ canonical, title, description, ogImage, breadcrumbId: crumbSchema ? crumbId : null }),
+    ...(hasFullOrg ? [] : [leanOrg]),
+    ...(crumbSchema ? [crumbSchema] : []),
+    ...pageNodes,
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -80,8 +124,7 @@ const crumbSchema = breadcrumbs.length > 1 ? {
   <meta name="twitter:image" content={new URL(ogImage, site).href} />
   <meta name="twitter:image:alt" content={ogImageAlt} />
 
-  {crumbSchema && <script type="application/ld+json" set:html={JSON.stringify(crumbSchema)} />}
-  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  <script type="application/ld+json" set:html={JSON.stringify(graph)} />
 </head>
 <body>
   <a href="#main" class="visually-hidden">Skip to content</a>

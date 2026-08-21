@@ -37,6 +37,7 @@ import SiteFooter from "../../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, offers, serviceFor } from "../../data/markets.js";
 import { NATIONAL_SUBSERVICES, nationalSubservicePaths } from "../../data/national-subservices.js";
 import { orgRef } from "../../data/seo.js";
+import { placeNode } from "../../data/seo.js";
 
 export function getStaticPaths() {
   return nationalSubservicePaths().map(({ hub, sub }) => ({ params: { hub, sub } }));
@@ -62,7 +63,7 @@ const schema = {
   // metros, so pinning it to one office's @id would be wrong. No address is emitted here — the
   // three real ones live on the market landings and nowhere else.
   provider: orgRef(),
-  areaServed: markets.map((m) => ({ "@type": "City", name: m.name })),
+  areaServed: markets.map((m) => placeNode(m.name)),
   isPartOf: { "@type": "WebPage", "@id": `https://coldstreamexteriors.com/${hub}/` },
 };
 ---

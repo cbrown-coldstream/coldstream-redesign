@@ -499,7 +499,11 @@ for (const p of pages) {
       else if (typeof v === "string" && URLISH.test(leaf) && !/^https?:\/\//.test(v))
         schemaBad.push(`${p.url} — ${path} is not an absolute URL: ${v}`);
     };
-    for (const node of (Array.isArray(parsed) ? parsed : [parsed])) {
+    // A page emits one @graph plus, where a component owns its own node, a second block that
+    // joins it by @id. Unwrap both shapes to the same flat list of nodes.
+    const blocks = Array.isArray(parsed) ? parsed : [parsed];
+    const nodes = blocks.flatMap((b) => (Array.isArray(b?.["@graph"]) ? b["@graph"] : [b]));
+    for (const node of nodes) {
       if (!node["@type"]) schemaBad.push(`${p.url} — a schema node has no @type`);
       for (const k of Object.keys(node)) if (k !== "@context") walk(node[k], k);
     }
@@ -508,6 +512,40 @@ for (const p of pages) {
 schemaBad.length
   ? fail("a schema node publishes an empty or unresolvable value", [...new Set(schemaBad)])
   : pass("no empty or relative value in any schema node");
+
+// 15b. EVERY @id REFERENCE RESOLVES ON THE PAGE THAT MAKES IT.
+//
+//      Round 44 tied each page's schema into one graph — WebPage isPartOf WebSite, about the
+//      Organization, breadcrumb this BreadcrumbList. A reference is only worth having if the thing
+//      it points at is defined where the reader is looking: a crawler is not obliged to go and
+//      fetch another page to resolve an @id, and a dangling reference is a claim about a node that,
+//      as far as that page is concerned, does not exist. `about` pointed at exactly such a node on
+//      73 of 75 pages until the lean Organization was added to every one of them.
+const danglingRefs = [];
+for (const p of pages) {
+  const defined = new Set(), referenced = [];
+  for (const m of p.html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let parsed;
+    try { parsed = JSON.parse(m[1]); } catch { continue; }
+    const blocks = Array.isArray(parsed) ? parsed : [parsed];
+    const nodes = blocks.flatMap((b) => (Array.isArray(b?.["@graph"]) ? b["@graph"] : [b]));
+    // A node DEFINES its @id when it carries anything besides the @id itself.
+    const collect = (v, top) => {
+      if (Array.isArray(v)) return v.forEach((x) => collect(x, false));
+      if (!v || typeof v !== "object") return;
+      if (typeof v["@id"] === "string") {
+        if (Object.keys(v).length === 1) referenced.push(v["@id"]);
+        else defined.add(v["@id"]);
+      }
+      for (const k of Object.keys(v)) if (k !== "@id") collect(v[k], false);
+    };
+    nodes.forEach((n) => collect(n, true));
+  }
+  for (const r of new Set(referenced)) if (!defined.has(r)) danglingRefs.push(`${p.url} → ${r}`);
+}
+danglingRefs.length
+  ? fail("a schema @id reference points at a node the page never defines", danglingRefs)
+  : pass("every schema @id reference resolves on its own page");
 
 // 16. EVERY INDEXABLE PAGE IS LINKED FROM AT LEAST THREE OTHERS.
 //
@@ -534,6 +572,42 @@ const underlinked = pages
 underlinked.length
   ? fail("an indexable page is linked from fewer than three others", underlinked)
   : pass(`every indexable page is linked from at least three others`);
+
+
+// 17. THE MACHINE-READABLE SUMMARY IS REAL AND ITS LINKS ARE REAL.
+//
+//     public/llms.txt is a single fetch that answers "what is this company and what pages does it
+//     have" — the request an assistant makes when someone asks about Coldstream by name. It is
+//     GENERATED from the same modules the pages render from, so it cannot drift into being a
+//     second, stale description of the business; this proves that the links in it point at pages
+//     that exist, which is the one way a generated file can still be wrong.
+const llmsFile = resolve(dist, "llms.txt");
+if (!existsSync(llmsFile)) {
+  fail("llms.txt is missing — run npm run llms");
+} else {
+  const llms = readFileSync(llmsFile, "utf8");
+  const linked = [...new Set([...llms.matchAll(/https:\/\/coldstreamexteriors\.com(\/[^\s)\]]*)/g)].map((m) => m[1]))]
+    .filter((u) => !u.startsWith("/sitemap.xml"));
+  const llmsDead = linked.filter((u) => !built.has(u));
+  llmsDead.length
+    ? fail("llms.txt links at a page this build does not contain", llmsDead)
+    : pass(`llms.txt lists ${linked.length} URLs, all of them real`);
+}
+
+// 18. EVERY INDEXABLE URL CARRIES A CONTENT DATE, OR NONE OF THEM DOES.
+//
+//     <lastmod> is only worth having while it is accurate — Google uses it as a hint and stops
+//     using it when it stops matching reality. The dates come from git, per page, from the content
+//     sources that page is built out of (scripts/build-lastmod.mjs). Two states are correct: every
+//     indexable URL has one, or, with no git available, none does. A sitemap where SOME pages
+//     carry a date is the state that misleads — the undated ones read as never having changed.
+const dated = [...sitemap.matchAll(/<url>[\s\S]*?<loc>[^<]*<\/loc>\s*(<lastmod>)?/g)].filter((m) => m[1]).length;
+const totalUrls = listed.length;
+dated === 0
+  ? pass("no <lastmod> in the sitemap — no git dates available, and none invented")
+  : dated === totalUrls
+    ? pass(`every one of the ${totalUrls} sitemap URLs carries a content date`)
+    : fail(`${totalUrls - dated} of ${totalUrls} sitemap URLs have no <lastmod> while the rest do`);
 
 console.log(`\n  ${failed ? `✗ ${failed} CHECKS FAILED` : `✓ all checks passed across ${pages.length} pages`}\n`);
 process.exit(failed ? 1 : 0);

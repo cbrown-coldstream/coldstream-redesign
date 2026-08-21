@@ -13,4 +13,76 @@
 User-agent: *
 Allow: /
 
+# ── THE AI CRAWLERS ARE NAMED, AND ALLOWED, ON PURPOSE ───────────────────────────────────────
+#
+# `User-agent: *` above already permits every one of them, so none of these lines CHANGES what any
+# crawler may do. They are here because a named directive is a stated position, and this is a
+# position worth stating rather than leaving to a wildcard somebody later narrows without thinking
+# about the consequence.
+#
+# WHY ALLOW. A roofing customer increasingly starts at an assistant rather than a search box —
+# "who does James Hardie siding near Milford, Ohio" — and the answer is assembled from pages the
+# assistant is allowed to read. A blocked crawler cannot cite you; it can still describe you, from
+# whatever it finds elsewhere, which for a contractor means directory listings and reviews rather
+# than your own words. This site is a careful, sourced account of what Coldstream does. It is the
+# version we want quoted.
+#
+# WHAT THIS DOES NOT DO. It does not grant a licence to anything, and it is not a training
+# permission in any legal sense — it is a crawl instruction. Two of these agents are worth telling
+# apart if the position ever changes:
+#
+#   Google-Extended       ONLY controls Gemini and AI Overviews grounding. It does NOT affect
+#                         ordinary Google Search ranking, and disallowing it does not remove the
+#                         site from Search — a confusion that costs sites their AI visibility for
+#                         nothing in return.
+#   Applebot-Extended     Apple Intelligence. Applebot itself (Siri, Spotlight) is separate.
+#
+# TO REVERSE ANY OF THIS, change Allow to Disallow on that agent alone. Do not add a Disallow to
+# the wildcard block — that would take the whole site out of ordinary search as well.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://coldstreamexteriors.com/sitemap.xml

@@ -1,4 +1,5 @@
 ---
+import { SITE } from "../data/seo.js";
 // Native <details>/<summary> so the accordion opens with JS disabled and is keyboard-operable
 // for free. The prototype used a button + max-height transition driven by an onclick handler,
 // which breaks both.
@@ -6,9 +7,21 @@
 // On-page text and the FAQPage schema are generated from the SAME array, because Google
 // requires them to match and hand-maintaining two copies is how they drift apart.
 const { eyebrow = "Good to know", heading = "Common questions", items = [] } = Astro.props;
+
+// THE FAQ NODE JOINS THE PAGE'S GRAPH, it does not float beside it.
+//
+// This block stays a separate <script> because the component owns it and the layout cannot see the
+// items — but JSON-LD merges nodes by @id ACROSS blocks on the same page, so an @id and a
+// mainEntityOfPage pointing at the WebPage is enough to make it one graph rather than two
+// unrelated facts. Round 44 did the same for everything the layout does control.
+//
+// Astro.url.pathname is the built path, which is what the layout's canonical resolves to as well.
+const pageUrl = `${SITE}${Astro.url.pathname}`;
 const schema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": `${pageUrl}#faq`,
+  mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
   mainEntity: items.map((i) => ({
     "@type": "Question",
     name: i.q,

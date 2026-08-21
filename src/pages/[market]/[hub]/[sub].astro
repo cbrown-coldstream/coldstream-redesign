@@ -31,6 +31,7 @@ import SiteFooter from "../../../components/SiteFooter.astro";
 import { MARKETS, providerRef, serviceFor } from "../../../data/markets.js";
 import { TESTIMONIALS } from "../../../data/claims.js";
 import { SUBSERVICES, MARKET_CONTEXT, depthFor } from "../../../data/subservices.js";
+import { servedPlaces } from "../../../data/seo.js";
 
 export async function getStaticPaths() {
   const { MARKETS } = await import("../../../data/markets.js");
@@ -72,7 +73,7 @@ const schema = {
   // The market's single business node by @id — no address is restated here, same as every other
   // non-landing page on the site.
   provider: providerRef(market),
-  areaServed: market.servedAreas.map((a) => ({ "@type": "City", name: a })),
+  areaServed: servedPlaces(market),
   isPartOf: { "@type": "WebPage", "@id": `https://coldstreamexteriors.com/${mSlug}/${hub}/` },
 };
 ---
