@@ -30,7 +30,7 @@ import SiteFooter from "../../../components/SiteFooter.astro";
 
 import { MARKETS, providerRef, serviceFor } from "../../../data/markets.js";
 import { TESTIMONIALS } from "../../../data/claims.js";
-import { SUBSERVICES, MARKET_CONTEXT } from "../../../data/subservices.js";
+import { SUBSERVICES, MARKET_CONTEXT, depthFor } from "../../../data/subservices.js";
 
 export async function getStaticPaths() {
   const { MARKETS } = await import("../../../data/markets.js");
@@ -107,7 +107,7 @@ const schema = {
       Renders nothing for sub-services that have no depth block yet. */}
   {/* `svc`, not `sub` — `sub` is the URL param string from Astro.params and `.depth` on a
       string is undefined, which renders nothing and fails silently. It did exactly that once. */}
-  <MarketDepth market={market} depth={svc.depth} />
+  <MarketDepth market={market} depth={depthFor(svc, mSlug)} />
 
   <WhyTrust
     heading="Straightforward from quote to cleanup"

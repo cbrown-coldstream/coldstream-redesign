@@ -2208,7 +2208,60 @@ names it. National is back to eight.
 
 ---
 
-## 39. Checks
+## 39. Round 38 — the sub-service depth port finished, and it changed shape
+
+Round 33 gave two of six sub-services a depth block and left four. This finishes them — and not in
+the shape round 33 used, for a reason that only became true afterwards.
+
+### Why these four are PER-MARKET and vinyl/Hardie are not
+
+`depthFor(svc, marketSlug)` now accepts two shapes. Vinyl and James Hardie stay **shared** across
+the three markets: how a plank is fastened and what sits behind it does not change by metro, and
+pretending it did would be the city-swapped copy this rebuild exists to remove.
+
+The other four are **per-market**, because round 34 built national pages that took the shared
+argument off them. `/roofing/replacement/` and `/roofing/repair/` now carry the material and process
+case, and `/storm-damage/` carries the claims case. A shared block on the market page would have
+duplicated those and left the market page with nothing only it could say — the exact rule in
+CLAUDE.md. What a market page can say is what THIS climate and THIS building stock demand of the
+job, and **swapping a city name between these twelve blocks produces sentences that are false**:
+ice damming on north slopes is not St. Louis's problem, brick parapets are not Columbus's, and a
+subdivision that aged in one fifteen-year run is not Cincinnati's.
+
+### Measured, and it went the opposite way to the obvious guess
+
+Adding ~400 words of shared copy would have pushed cross-market similarity **up**. Per-market copy
+pushed it **down by roughly 22 points on every one of the four**:
+
+```
+                          before   after
+roof-replacement           53.7%   30.8%
+roof-repair                55.2%   30.9%
+insurance-storm-damage     57.7%   32.8%
+siding-replacement         52.2%   30.3%
+```
+
+Those four are now among the most distinct pages on the site — tighter than the market landings at
+28.9% only just, and far below the shared-depth pair (vinyl 72.9%, Hardie 66.6%). **The two shared
+blocks are now the outliers among sub-services**, which is defensible on the material argument but
+worth a look if anyone wants the number down.
+
+Against their national counterparts, measured with the same method the similarity script does not
+cover: **roof-replacement 12.2–13.0%, roof-repair 14.3–15.0%, storm damage 7.5–7.7%** — all lower
+than vinyl and Hardie's 23.6–24.3%, which still carry a rewritten version of the shared argument.
+
+All 18 market sub-service pages now run **2,426–2,598 words**, tightly clustered, where the four
+untouched ones sat around 2,100 against the depth pair's 2,470–2,530.
+
+### A market with no entry renders nothing
+
+`depthFor` returns null for a market absent from a per-market block, and `MarketDepth` renders
+nothing without blocks. So these can be filled in one market at a time, and a missing market is a
+gap rather than a broken page.
+
+---
+
+## 40. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

@@ -87,9 +87,11 @@ language matched to the prototype. Real partner logos on a rotating strip. Natio
 and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
 
 **Not done, in rough priority order:**
-1. **Sub-service and market/location copy port.** `src/data/live-copy/` holds ~150k words pulled
-   from the live site (`npm run live:pull`). The service hubs have been ported; the 18 sub-service
-   pages, the market landings, `/about`, and the conversion pages have not.
+1. **Copy port — `/about` and the conversion pages are what is left.** `src/data/live-copy/` holds
+   ~150k words pulled from the live site (`npm run live:pull`). Done since this list was written:
+   the service hubs, the market landings (round 32) and all six sub-services, which now carry depth
+   blocks — vinyl and Hardie shared, the other four per-market (rounds 33 and 37). `/about` and the
+   conversion pages have not been ported.
 2. **Gallery and reviews pages are empty and noindex** — waiting on the Contractors Cloud job pull
    (photos with consent) and the Google Business Profile review pull. `src/data/contracts.js` has
    the shapes both must satisfy. Nothing is invented in the meantime and nothing should be.

@@ -76,6 +76,71 @@ export const SUBSERVICES = {
         { q: `What does the ${m.name} weather do to a roof?`, a: c.weather },
         ...commonFaq(m),
       ],
+      // ── PER-MARKET DEPTH (2026-08-21) ────────────────────────────────────────────────────────
+      // NOT the shared shape vinyl and Hardie use. The material and process argument for a
+      // replacement now lives on /roofing/replacement/, so repeating it here would leave the market
+      // page saying nothing only it could say. This is the job as THIS climate and THIS building
+      // stock demand it — swap a city name between these three and the sentences become false,
+      // which is the test the old site failed. See depthFor() for the two shapes.
+      depth: {
+        cincinnati: {
+          eyebrow: "Replacing a roof here",
+          heading: "What a river-valley roof asks of a replacement",
+          intro: "Freeze-thaw and hillside drainage decide more about a Cincinnati replacement than the shingle on the quote does. These are the four things we price differently here.",
+          blocks: [
+            { h: "Membrane goes further up the north slopes",
+              p: ["A north-facing slope in the valley holds snow for days after a south slope has cleared, and the cycle of thawing by afternoon and freezing again overnight drives meltwater back up under the courses. The code minimum for ice-and-water membrane is a floor, not a specification written for this.",
+                  "On north slopes, shallow pitches and every valley we run it further than the minimum. It is a modest line on the quote and it is the difference between a roof that leaks in February and one that does not."] },
+            { h: "Hillside roofs move water sideways before they move it down",
+              p: ["Split-levels and cross-gables on the hillsides throw long valleys that carry the runoff of two planes into one channel. That is where the volume is, and it is where a woven valley on a steep run eventually gives way.",
+                  "We line those in metal rather than weaving them, and we look at where the water actually lands — a valley discharging onto a lower roof or past the end of a gutter is a drainage problem the covering cannot fix on its own."] },
+            { h: "Pre-war chimneys need cut flashing, not sealant",
+              p: ["The older brick stock through the city neighbourhoods carries chimneys that were flashed once and sealed repeatedly since. Sealant on brick is a maintenance material with a life measured in a few years, and for every one of those years it looked fine from the ground.",
+                  "A replacement is the moment to cut fresh counterflashing into the mortar joint and step the base flashing properly. If the mortar itself is spent, we say so before the roof goes on rather than after."] },
+            { h: "What the east-side ranches have under the shingles",
+              p: ["The post-war ranches and split-levels through Blue Ash, Kenwood and Madeira often carry plank decking rather than plywood — boards with gaps between them, which hold a nail differently and are not always sound at the eaves after decades of freeze-thaw.",
+                  "Nobody knows which until the old covering is off. That is why the quote says what happens if boards need replacing, rather than leaving it as a conversation in the middle of the job."] },
+          ],
+        },
+        columbus: {
+          eyebrow: "Replacing a roof here",
+          heading: "Open ground, one build era, and what that changes",
+          intro: "Central Ohio's wind and the age of its suburban ring decide more about a replacement here than the shingle does. Four things we handle differently.",
+          blocks: [
+            { h: "Wind resistance is a nailing pattern, not a product",
+              p: ["A shingle's wind rating assumes it was fastened the way the manufacturer specifies: the right number of nails, placed in the nailing strip, driven flush. High nails and four-nail patterns are quicker, and they are why shingles lift on the first serious gust across open ground.",
+                  "We fasten to the specification the rating depends on, and take it up a step on exposed elevations. It costs a little labour and nothing in material."] },
+            { h: "A whole subdivision reaches the end at once",
+              p: ["Dublin, Hilliard, New Albany and Lewis Center went up in runs, so the builder-grade covering on a whole street is the same age within a season or two. When one roof starts failing, the neighbours usually are as well.",
+                  "That is worth knowing for scheduling rather than as pressure: it is a reason to book before the first hail run of the spring, when every crew in the county is already committed."] },
+            { h: "Shallow pitches are a different assembly",
+              p: ["The porches, bump-outs and rear additions on newer builds are frequently much shallower than the main roof. Below a certain pitch a shingle is the wrong covering — water does not shed fast enough and wind drives it back up the laps.",
+                  "Those sections get a low-slope system rather than the same shingle carried around the corner, and the quote separates them so you can see which is which."] },
+            { h: "Ridge vent on an exposed ridge",
+              p: ["A ridge running across flat, open ground takes wind-driven rain and snow at an angle a sheltered ridge never sees. An unbaffled vent on that ridge lets weather in, and it shows up later as attic staining nobody connects back to the vent.",
+                  "Baffled vent, with intake at the eaves sized to match it. Exhaust without intake pulls its air from the house instead, which is how a new roof still cooks a deck."] },
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Replacing a roof here",
+          heading: "Hail, brick, and a wide seasonal swing",
+          intro: "Hail drives most of the replacement conversations in St. Louis, and the brick stock changes how the roof meets everything around it. Four things we price differently.",
+          blocks: [
+            { h: "Impact-resistant is a real decision, not an upsell",
+              p: ["Where hail comes through most summers, an impact-rated shingle is worth weighing on its own terms: it resists the bruising that strips the granule layer and shortens a roof's life without ever making it leak.",
+                  "It costs more up front and it is not armour — a large enough stone will still mark it. Some carriers reduce a premium for one, which is worth asking yours about before you choose rather than after."] },
+            { h: "Brick changes where the roof ends",
+              p: ["The city and inner-ring stock is brick, and brick means chimneys, parapets and party walls rather than a simple gable end. Each is a junction handled in metal and cut into the mortar, and each is a place a roof leaks when it was sealed instead of flashed.",
+                  "Where the tuckpointing is spent, new flashing into failing mortar buys less time than it should. We would rather tell you that before the roof goes on."] },
+            { h: "The seasonal swing works fasteners and seams",
+              p: ["The spread between a St. Louis summer and a St. Louis winter is wide enough to move a roof through a real range every year. Fasteners back out, laps work against each other, and details that were adequate on the day slowly stop being.",
+                  "It is an argument for fastening to specification, and for details that do not depend on a bead of sealant staying flexible for twenty years."] },
+            { h: "Low-slope sections on the older stock",
+              p: ["Rear additions, porch roofs and dormer tops on the city stock are frequently close to flat while attached to a steep main roof. They are a different assembly and they fail first when they are shingled as though they were not.",
+                  "Those get their own system and their own line on the quote. The mid-century ranches through Affton, Mehlville and Oakville are simpler — long runs, one pitch — and price accordingly."] },
+          ],
+        },
+      },
     },
 
     "roof-repair": {
@@ -96,6 +161,67 @@ export const SUBSERVICES = {
         { q: `What fails first on roofs around ${m.name}?`, a: c.weather },
         ...commonFaq(m),
       ],
+      // PER-MARKET. /roofing/repair/ carries how water travels and which details fail; this is
+      // what gets called in around each metro and why. See depthFor().
+      depth: {
+        cincinnati: {
+          eyebrow: "Repairs we get called to here",
+          heading: "What actually gets called in around the valley",
+          intro: "The repair list in Cincinnati is shaped by three things: winter, tree cover, and a lot of houses with more than one roof plane meeting at a valley.",
+          blocks: [
+            { h: "Ice damming is not a roof fault, and repairing the roof will not stop it",
+              p: ["A dam forms when heat escaping into the attic melts snow on the upper slope, the meltwater runs down to a cold eave and refreezes there. The ridge of ice then holds the next melt against the roof until it finds a way under the courses. The covering is doing what it was designed to do.",
+                  "So the fix is intake and exhaust ventilation and the insulation line, not another layer of sealant at the gutter. We will say that even though it is the less convenient answer, because replacing shingles under a dam buys you one winter."] },
+            { h: "Shaded slopes wear differently",
+              p: ["Clermont County and the river townships carry heavy tree cover, and a slope that stays damp under it holds moss and debris that a sunny slope sheds. Granule loss runs ahead of the rest of the roof there, and the valley below fills faster than anyone expects.",
+                  "Half of what looks like a failing roof on those houses is a shaded plane and a blocked valley. Clearing and relining one valley is a different conversation from replacing a roof, and we will tell you which one you are in."] },
+            { h: "The leak that only appears in a thaw",
+              p: ["A detail sealed rather than flashed will hold through a rainstorm and fail during a thaw, because meltwater arrives slowly, from above, and sits. That is why a leak somebody has already had looked at twice can still be genuinely hard to reproduce in summer.",
+                  "When a leak is seasonal we look at the details that only see water under those conditions — the chimney cricket, the sidewall step flashing, the low end of a valley — rather than at the field of the roof."] },
+            { h: "When relining one valley is the right answer",
+              p: ["A hillside house with cross-gables concentrates the runoff of several planes into a small number of valleys, and those valleys wear out well before the slopes either side of them do.",
+                  "If the covering has life left, relining the valley in metal is a real repair rather than a stopgap. If the shingles either side are brittle, it is not, and we would rather have that conversation once."] },
+          ],
+        },
+        columbus: {
+          eyebrow: "Repairs we get called to here",
+          heading: "What open ground and one build era send us out for",
+          intro: "Most Columbus repair calls trace back to two things: wind that has nothing to slow it down, and a suburban ring whose roofs are all about the same age.",
+          blocks: [
+            { h: "The wind damage that looks like nothing",
+              p: ["A gust can lift a shingle, break the seal strip underneath and lay it back down. From the ground the roof is untouched. It is also no longer sealed, and the next driven rain goes under it.",
+                  "We check by hand along the exposed elevations rather than by eye from the driveway, because a broken seal is something you feel rather than see. Caught early it is a repair; left, it is where the next real leak starts."] },
+            { h: "The builder-grade original is the common denominator",
+              p: ["Across the newer ring the original covering is the same specification, fitted the same way, at the same time. That makes the failures predictable — the same ridge detail, the same shallow porch, the same fastening pattern turning up street after street.",
+                  "It also means a repair is often genuinely worth doing, because the rest of the roof is in known condition rather than a mystery."] },
+            { h: "Pipe boots outlive nobody",
+              p: ["The rubber collar on a plumbing stack hardens and splits long before the shingles around it are worn, and on a roof between about fifteen and twenty-five years old it is the single most common cause of a ceiling stain we are called to.",
+                  "It is a small repair and an easy one to miss from the ground, which is why we look at every penetration when we are up there rather than only the one above the stain."] },
+            { h: "Tree cover here is patchy, and that changes the list",
+              p: ["Clintonville and Worthington carry mature cover; large parts of the newer rings carry almost none. The same house in the two places has a different maintenance list — debris, moss and blocked valleys in one, and bare exposure to sun and wind in the other.",
+                  "It is worth saying because advice that suits one half of this market is wrong for the other half, and the roof will tell you which you have."] },
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Repairs we get called to here",
+          heading: "Hail you cannot see, brick, and humid attics",
+          intro: "St. Louis repair calls cluster around three things: storm damage that leaves no obvious mark, the junctions a brick house creates, and moisture that never came through the roof at all.",
+          blocks: [
+            { h: "Hail bruising is the repair nobody knows they need",
+              p: ["A stone can take the granule layer off a shingle without cracking it. The roof sheds water afterwards exactly as before, so nothing announces itself — and the exposed mat then ages several times faster than the rest of the slope.",
+                  "That is why a post-storm inspection is worth having even when the roof looks fine, and why the documentation matters more than the repair on the day."] },
+            { h: "Brick makes junctions, and junctions leak",
+              p: ["A brick house has chimneys, parapets and shared walls where a frame house has a simple edge. Every one of those is metal cut into mortar, and every one is a place a previous repair may have reached for sealant instead.",
+                  "When the mortar itself has gone, flashing into it will not hold. We would rather point at the tuckpointing than sell you a flashing repair that fails in two winters."] },
+            { h: "Not every stain is a leak",
+              p: ["Humid summers and an under-ventilated attic will condense moisture on the underside of the deck and drop it onto the insulation below. The staining looks like a roof leak, appears in weather that has nothing to do with rain, and no amount of work on the covering will change it.",
+                  "We check the attic before quoting a repair. Telling somebody their roof is fine is a shorter conversation than the one after a repair that fixed nothing."] },
+            { h: "The low-slope sections go first",
+              p: ["Rear additions, porch roofs and dormer tops on the older city stock sit close to flat against a steep main roof. Water moves slowly across them and sits at the seams, so they reach the end of their life well ahead of the roof they are attached to.",
+                  "Those are frequently repairable on their own, and replacing one low-slope section is a far smaller job than the whole roof it adjoins."] },
+          ],
+        },
+      },
     },
 
     "insurance-storm-damage": {
@@ -116,6 +242,68 @@ export const SUBSERVICES = {
         { q: `What kind of storms hit ${m.name}?`, a: `Mostly ${c.stormLine}.` },
         ...commonFaq(m),
       ],
+      // PER-MARKET. /storm-damage/ carries the claims argument — documentation, the adjuster, and
+      // the four things nobody can promise. This is which storms actually come through each metro,
+      // what they damage beyond the roof, and how the local paperwork differs. See depthFor().
+      depth: {
+        cincinnati: {
+          eyebrow: "Storms around the valley",
+          heading: "Three seasons of damage, and a state line in the middle of the market",
+          intro: "Cincinnati takes its damage in two distinct seasons and across four counties plus Northern Kentucky, which matters more for a claim than most people expect.",
+          blocks: [
+            { h: "Spring hail, then summer wind",
+              p: ["The hail runs come through in spring and early summer and are the events that quietly shorten a roof's life. Straight-line wind arrives with the summer storms and does more visible damage — lifted shingles, branches, gutters pulled off a fascia.",
+                  "They are different claims with different evidence. Hail needs the slope-by-slope documentation; wind damage usually announces itself and is worth photographing before anything is tidied up."] },
+            { h: "Winter is the third season, and it is not always a claim",
+              p: ["Ice damming causes real interior damage here, and it is frequently not a storm event in the sense a policy means. It is heat loss and ventilation acting on a normal winter, which is maintenance rather than a sudden loss.",
+                  "We will tell you which one we think you have before you file. A denied claim can still sit on your record, and the underlying problem needs fixing either way."] },
+            { h: "Heavy tree cover changes what gets damaged",
+              p: ["Clermont County and the river townships carry enough canopy that a wind event brings limbs down as often as it lifts shingles. Impact damage from a branch is a straightforward claim and an obvious one.",
+                  "It is also the case that a roof under heavy cover has been ageing faster than its neighbours, which an adjuster will notice. Worth knowing before the conversation rather than during it."] },
+            { h: "Four counties and a state line",
+              p: ["Hamilton, Clermont, Butler and Warren each permit differently, and Northern Kentucky is a different state with its own rules and its own adjusters. A repair scope that is routine on one side of the river is not automatically routine on the other.",
+                  "We work both sides and pull the permits either way. It is one fewer thing to discover halfway through a claim."] },
+          ],
+        },
+        columbus: {
+          eyebrow: "Storms across Central Ohio",
+          heading: "Open ground, spring hail, and whole streets claiming at once",
+          intro: "Central Ohio's damage pattern is shaped by flat ground and by a suburban ring where every roof is the same age — which affects both what happens and how busy everyone is afterwards.",
+          blocks: [
+            { h: "Wind has a clear run at the newer subdivisions",
+              p: ["There is very little between an open field and a subdivision built on it. Wind arrives at the exposed elevations at full strength, and the damage concentrates on the windward slopes and the ridge rather than being spread across the roof.",
+                  "That pattern is useful evidence: damage that follows the prevailing direction across a whole elevation reads as a storm event rather than as wear, which is exactly the distinction a claim turns on."] },
+            { h: "Spring hail runs, most years",
+              p: ["Central Ohio takes a hail run most springs. Not every one of them damages a roof, and the difference between a storm that marked your shingles and one that did not is measurable rather than a matter of opinion.",
+                  "We inspect and document it either way. If the answer is that your roof is fine, that is a useful thing to have on file for the next storm."] },
+            { h: "When the whole street claims together",
+              p: ["Because the ring went up in runs, one hail event can put an entire subdivision into the claims process in the same week. Adjusters get busy, crews get committed, and both timelines stretch.",
+                  "Being early is worth more here than anywhere else in our markets. It is also worth being careful about who knocks on the door afterwards — a storm brings contractors into the area who will not be here next year."] },
+            { h: "Each suburb permits separately",
+              p: ["Columbus and each surrounding suburb permit on their own terms, and the historic districts add a review step on top. A storm repair still needs the paperwork, and the timeline differs street to street.",
+                  "We handle both, and we would rather set the expectation at the inspection than explain a delay later."] },
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Storms across the St. Louis area",
+          heading: "Summer wind and hail, on a housing stock made of brick",
+          intro: "St. Louis takes straight-line wind and hail most summers, and the masonry stock means the damage frequently extends past the roof in ways a roof-only scope misses.",
+          blocks: [
+            { h: "Straight-line wind is the event that does visible damage",
+              p: ["Most summers bring at least one system with enough sustained wind to lift covering, empty a gutter run off a fascia and bring limbs down. It is the damage people notice and the one they call about.",
+                  "Photograph it before anything is cleared. A tidied-up yard is a harder claim than an untidy one, which is an awkward thing to have to say and a true one."] },
+            { h: "Hail marks more than the roof",
+              p: ["The same stones that bruise shingles dent gutters, downspouts, soft metal, siding on the windward elevation and the fins on an air-conditioning condenser. Those are part of the same event and belong in the same scope.",
+                  "A roof-only inspection after a hail event routinely under-reports the damage. We walk the elevations and the ground-level units as well, because they are evidence for the roof claim as much as claims in their own right."] },
+            { h: "Brick changes the damage list",
+              p: ["A brick house does not dent, but it has chimneys, parapets and copings that take wind directly, and mortar that has been weathering for decades. Storm damage here shows up as displaced coping, cracked mortar and failed counterflashing rather than as marked siding.",
+                  "That is masonry work alongside roofing, and it is worth having documented at the same time rather than discovering it the following winter."] },
+            { h: "Two counties and a lot of municipalities",
+              p: ["St. Louis County and the individual municipalities permit separately, and Jefferson County is different again. After a widespread event the queues are the constraint rather than the crews.",
+                  "We pull them where they are needed. Knowing which jurisdiction you are in is the first thing we work out at the inspection."] },
+          ],
+        },
+      },
     },
   },
 
@@ -138,6 +326,69 @@ export const SUBSERVICES = {
         { q: `What does ${m.name} weather do to siding?`, a: c.weather },
         ...commonFaq(m),
       ],
+      // PER-MARKET. The vinyl and Hardie pages carry the material argument and are SHARED, because
+      // how a plank is fastened does not change by metro. This page is the job rather than the
+      // product, and the job does change: what is behind the wall, and what the weather does to
+      // the bottom of it. See depthFor().
+      depth: {
+        cincinnati: {
+          eyebrow: "Re-siding here",
+          heading: "What the wall behind it looks like around the valley",
+          intro: "Siding fails from the bottom and from behind, and in Cincinnati both are driven by the same thing: water that freezes, thaws, and does it again.",
+          blocks: [
+            { h: "The base course takes the winter",
+              p: ["Splash-back off a path or a driveway soaks the bottom course through the winter, and every freeze cycle works that moisture further into whatever is behind it. On the older frame stock that is sheathing and sill plate, and it is the first thing we look at when the siding comes off.",
+                  "It is also why we take the old course off rather than going over it. Covering a wet base course hides the one part of the wall most likely to be rotten."] },
+            { h: "Hillside houses get more splash than they should",
+              p: ["A house cut into a slope frequently has ground much closer to the siding on the uphill side than anyone intended, and grade that has crept up over the years. Siding held too close to soil wicks moisture continuously and never dries.",
+                  "Sometimes the fix is regrading rather than siding. We would rather say that at the inspection than fit new material to the same problem."] },
+            { h: "Mixed walls on the pre-war stock",
+              p: ["A lot of the older housing here is brick at the front and frame at the sides and rear, or brick to the first floor and frame above. The transition between the two is a detail rather than an edge, and it is where water gets behind a wall.",
+                  "Flashing that transition properly is most of what decides whether the new siding lasts. It is also the detail most often skipped, because it is not visible from the street."] },
+            { h: "Trim, soffit and fascia in a wet market",
+              p: ["Under heavy tree cover the fascia and soffit stay damp for long stretches of the year, and they fail well ahead of the siding below them. Replacing the siding and leaving them is a false economy on this stock.",
+                  "We quote them together because the crew is already set up, and because water entering at a soffit does not care how new the siding underneath is."] },
+          ],
+        },
+        columbus: {
+          eyebrow: "Re-siding here",
+          heading: "A ring of houses reaching the same age at the same time",
+          intro: "Central Ohio's suburban ring was built fast and built alike, which makes the siding conversation here unusually predictable — and unusually wind-driven.",
+          blocks: [
+            { h: "Builder vinyl reaching the end together",
+              p: ["Dublin, Hilliard, New Albany and Lewis Center went up within about fifteen years of each other, largely in the same thin builder-grade vinyl. It is reaching the end of its service life across whole streets at once, which is why so much of what we quote here is a full re-side rather than a repair.",
+                  "The upside is predictability: we know what is behind it before we take it off, because we have taken the same wall apart on the next street."] },
+            { h: "Wind gets behind a loose course",
+              p: ["Open ground means the windward elevation takes sustained pressure that a sheltered wall never sees. A course that was fitted slightly loose, or a J-channel that was never properly locked, will let wind lift it and drive rain in behind.",
+                  "That damage concentrates on one or two elevations rather than the whole house, which is worth knowing — sometimes the honest answer is two elevations rather than four."] },
+            { h: "The water barrier is the part that was rushed",
+              p: ["On a fast build, house wrap goes on quickly and gets lapped the wrong way or left untaped around openings. It is invisible for twenty years and then it is the reason a wall is soft under a window.",
+                  "Every re-side we do is a chance to put that right, and it is the part of the job we would rather you asked about than the colour."] },
+            { h: "Steeper pitches mean more gable to cover",
+              p: ["The newer stock here runs to steeper roofs and larger gable ends than the older housing in our other markets, which puts more siding high up where nobody inspects it.",
+                  "Those elevations weather hardest and get looked at least. We photograph them at the inspection so you can see the wall you have never actually seen."] },
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Re-siding here",
+          heading: "Siding on a brick city, and humidity behind it",
+          intro: "St. Louis is largely brick, so siding here is usually on the parts of a house that are not — gables, dormers, rear additions and the post-war suburbs. That changes the job.",
+          blocks: [
+            { h: "Siding is often a partial elevation, not a house",
+              p: ["On the city and inner-ring stock the siding is frequently a gable end, a dormer cheek or a rear addition attached to brick. The work is smaller and the detailing matters more, because almost all of it is transition.",
+                  "Where siding meets masonry there has to be a flashing and a gap. Fitted tight to brick it traps water against both materials, and the brick loses that argument slowly."] },
+            { h: "The post-war ranches are a different job entirely",
+              p: ["South County through Affton, Mehlville and Oakville runs to mid-century ranches with long, simple runs and low elevations. Those are straightforward re-sides and they go quickly.",
+                  "Long runs do mean expansion matters more, because a full-length panel has further to move. Room left at the ends is not optional on a wall like that."] },
+            { h: "Humidity is behind the wall, not on it",
+              p: ["A humid summer pushes moisture into a wall from the outside during the day and the house pushes it back the other way at night. A barrier that cannot dry in one direction or the other will hold that moisture against the sheathing.",
+                  "It is an argument for taking the old siding off and for what goes back behind the new — a wall that can dry is worth more here than a wall that is merely sealed."] },
+            { h: "Hail marks siding as well as roofs",
+              p: ["The same summer hail that bruises a roof dents and cracks siding on the windward elevation, and older vinyl gets brittle enough that it cracks rather than dents.",
+                  "That is part of the same storm claim as the roof and belongs in the same scope. It is also the case that a cracked panel on a discontinued profile is frequently not matchable, which we would rather tell you before we try."] },
+          ],
+        },
+      },
     },
 
     "james-hardie-siding": {
@@ -227,6 +478,32 @@ export const SUBSERVICES = {
       },
     },
   },
+};
+
+/**
+ * Resolve a sub-service's depth block for one market.
+ *
+ * ── TWO SHAPES, AND WHICH ONE A PAGE SHOULD USE ──────────────────────────────────────────────
+ *
+ *   SHARED   depth: { eyebrow, heading, blocks: [...] }        one argument, all three markets
+ *   PER-MARKET depth: { cincinnati: {...}, columbus: {...} }   a different argument per market
+ *
+ * Vinyl and James Hardie are SHARED on purpose: how a plank is fastened and what sits behind it is
+ * the same in all three metros, and pretending otherwise would be the city-swapped copy this whole
+ * rebuild exists to remove.
+ *
+ * Roof replacement and roof repair are PER-MARKET for the opposite reason. Their material and
+ * process argument now lives on the national pages (/roofing/replacement/, /roofing/repair/), so a
+ * shared block here would duplicate them and leave the market page saying nothing only it could
+ * say. What a market page can say is what THIS climate and THIS building stock demand of the job —
+ * which is different in each metro and would be factually wrong if swapped.
+ *
+ * A market with no entry renders no depth section, so these can be filled in one at a time.
+ */
+export const depthFor = (svc, marketSlug) => {
+  const d = svc?.depth;
+  if (!d) return null;
+  return Array.isArray(d.blocks) ? d : (d[marketSlug] ?? null);
 };
 
 /** [{ market, hub, sub }] for every sub-service page in every market that offers the parent hub. */
