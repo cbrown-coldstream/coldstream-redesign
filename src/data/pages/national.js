@@ -29,10 +29,18 @@ export const national = {
   description:
     "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, our own crews, and a 25-year workmanship warranty.",
 
-  // 1 — HERO. Live kicker: "STORM DAMAGE? AGING ROOF? WE'VE GOT YOU COVERED".
+  // 1 — HERO. The situation line LEADS and the service list supports, swapped 2026-08-24.
+  //
+  // The line itself is not new — it has been the eyebrow since round 1, rewritten from the live
+  // site's own kicker ("STORM DAMAGE? AGING ROOF? WE'VE GOT YOU COVERED"). What changed is which
+  // line gets the H1. The old H1 restated the category and all three cities, and neither earns
+  // the big type: the title tag, the description and the schema already carry the category, and
+  // the three city names in a home H1 bid against the market landings' own head terms — the same
+  // cannibalisation round 43 removed from the national service hubs. The headline now speaks to
+  // why the visitor is here; the eyebrow keeps the category so the hero still names what we do.
   hero: {
-    eyebrow: "Storm damage or an aging roof — either way, start here",
-    headline: "Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis",
+    eyebrow: "Roofing, siding, windows and gutters — Cincinnati, Columbus and St. Louis",
+    headline: "Storm damage or an aging roof — either way, start here",
     sub: "Three metros, three local crews, one standard of work. Free inspections, a written quote before anything starts, and a 25-year workmanship warranty behind it.",
   },
 

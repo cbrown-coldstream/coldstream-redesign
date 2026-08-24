@@ -36,7 +36,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, Siding, Windows and Gutters Across Cincinnati, Columbus and St. Louis | 1315 | — | index |
+| `/` | National home | Storm damage or an aging roof — either way, start here | 1315 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 951 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/commercial-roofing/` | National service | Commercial and multi-family roofing | 927 | — | index |

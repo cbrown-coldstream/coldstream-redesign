@@ -2921,7 +2921,23 @@ came from the build order and the index was pulled from the live page; reconcili
 URL export is for, and inventing a number to make them agree is the failure this repo is built
 against.
 
-## 53. Checks
+## 53. Round 47 — the home hero leads with the visitor's situation
+
+One swap, asked for by name: the home H1 was "Roofing, Siding, Windows and Gutters Across
+Cincinnati, Columbus and St. Louis" and it is now **"Storm damage or an aging roof — either way,
+start here"** — the line that had been sitting above it as the eyebrow since round 1, itself a
+rewrite of the live site's own kicker ("STORM DAMAGE? AGING ROOF? WE'VE GOT YOU COVERED").
+
+Why the big type moves: the title tag, description and schema already carry the category, so the
+H1 repeating it earned nothing — and the three city names in a home H1 bid against the market
+landings' own head terms, the same cannibalisation round 43 removed from the national hubs. The
+eyebrow keeps the category and the cities, so the hero still names what we do; the headline now
+names why the visitor came. "Storm damage" and "roof" are real query terms, not decoration.
+
+The comparison point was Mr. Roof's home page, which leads the same way — but the line is ours,
+with the provenance recorded in national.js since the first commit.
+
+## 54. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
