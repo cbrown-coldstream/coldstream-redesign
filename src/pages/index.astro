@@ -25,19 +25,41 @@ import BadgeRow from "../components/BadgeRow.astro";
 import MarketChooser from "../components/MarketChooser.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
 import GeoRedirect from "../components/GeoRedirect.astro";
-import ServiceDetail from "../components/ServiceDetail.astro";
 import MarketNotice from "../components/MarketNotice.astro";
 import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
-import ServicesGrid from "../components/ServicesGrid.astro";
+import WhatWeDo from "../components/WhatWeDo.astro";
+import OffersSection from "../components/OffersSection.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import ReviewsByMarket from "../components/ReviewsByMarket.astro";
 import Reviews from "../components/Reviews.astro";
-import OfferBand from "../components/OfferBand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
-import { TESTIMONIALS, ALWAYS_TRUE } from "../data/claims.js";
+import { TESTIMONIALS, ALWAYS_TRUE, CLAIMS } from "../data/claims.js";
+
+// HERO SUB AND TRUST ROW, COMPOSED HERE — the brief requires the approved figures read from
+// claims.js so a change to the number propagates, and formatted at the point of display so the
+// raw integer stays reusable in schema. The trust row replaces the generic bullet trio on this
+// page only: Locally Owned & Operated · BBB A+ Accredited (text; the seal itself is in the badge
+// row) · Fully Insured — the last is owner-approved wording from the same brief, a deliberate
+// step past ALWAYS_TRUE's "Licensed and insured".
+const satisfied = CLAIMS.satisfiedCustomers.toLocaleString("en-US");
+const heroSub =
+  "Roof replacement and repair, James Hardie and vinyl siding, seamless gutters, replacement " +
+  "windows and storm damage restoration. Factory-certified crews, " +
+  CLAIMS.warrantyPositioning.toLowerCase() + ", and over " + satisfied + " satisfied homeowners.";
+// Two why-cards take their titles from claims.js — the satisfied count and the warranty
+// positioning phrase — formatted here, at the point of display, per the brief.
+const whyCards = page.why.cards.map((c) =>
+  c.id === "satisfied" ? { ...c, title: `Over ${satisfied} satisfied homeowners` }
+  : c.id === "warranty" ? { ...c, title: CLAIMS.warrantyPositioning }
+  : c);
+const heroTrust = [
+  "Locally Owned & Operated",
+  ...(CLAIMS.bbb?.accredited && CLAIMS.bbb?.rating ? [`BBB ${CLAIMS.bbb.rating} Accredited`] : []),
+  "Fully Insured",
+];
 import { organizationNode } from "../data/seo.js";
 import { national as page } from "../data/pages/national.js";
 
@@ -91,7 +113,7 @@ const org = organizationNode();
   <Hero
     market={market}
     media={{ poster: "/video/hero-ground-poster.jpg", mp4: "/video/hero-placeholder.mp4", webm: "/video/hero-placeholder.webm" }}
-    video={video} videoModal={true} {...page.hero} />
+    video={video} videoModal={true} {...page.hero} sub={heroSub} bullets={heroTrust} />
   <MarketNotice market={market} />
 
   {/* TRUST BAND. page.trust existed in national.js since round 7 and nothing ever rendered it, so
@@ -110,18 +132,16 @@ const org = organizationNode();
   </section>
   <BadgeRow market={market} aboveTheFold={true} />
 
-  {/* DIRECTLY UNDER THE BADGE ROW, because this is where a visitor is deciding whether we cover
-      them — not three-quarters down at #locations, which is the same three offices in more detail
-      and stays where it is. Static output cannot detect an area, so the page asks rather than
-      guesses; the 844 number remains the national default and every number here comes from
-      markets.js. See MarketChooser.astro. */}
-  <MarketChooser />
-
-  <ServicesGrid market={market} heading={page.services.heading} intro={page.services.intro} />
+  {/* SECTION ORDER PER THE OWNER BRIEF (2026-08-24, §4): the services block leads and the area
+      finder moves to the BOTTOM, directly above the final CTA band. The earlier round argued the
+      chooser belonged up here; the brief reverses that — the visitor meets what we do before
+      where we are, and the selector in the utility bar still answers "do you cover me" from the
+      first viewport. Logged as a reversal in DECISIONS. */}
+  <WhatWeDo />
   {/* eyebrow suppressed: "Why homeowners choose us" over "Why homeowners keep calling us back" is
       the same sentence twice, and the eyebrow is accent orange, so it was also the loudest thing
       in the section competing with nothing. */}
-  <WhyTrust eyebrow={null} heading={page.why.heading} cards={page.why.cards}
+  <WhyTrust eyebrow={null} heading={page.why.heading} cards={whyCards}
             reviews={TESTIMONIALS.national} marketSlug="national" />
 
   {/* DIRECTLY BELOW "Why homeowners keep calling us back", and the stacking is the point: those six
@@ -132,7 +152,12 @@ const org = organizationNode();
       Renders NOTHING until reviews are pulled. See ReviewsByMarket.astro for why there is no
       placeholder: the prototype's three invented testimonials are the reason this gate exists. */}
   <ReviewsByMarket />
-  <ServiceDetail id="roofing" market={market} {...page.roofing} />
+
+  {/* OFFERS & PROMOTIONS replaces the standing roofing ServiceDetail block (owner brief §8) —
+      the roofing depth lives on /roofing/, where round 48 put it; the homepage slot now carries
+      the offer shell, which renders the evergreen free-inspection card until real offers land in
+      src/data/offers.js. Reg Z gate in verify-build. */}
+  <OffersSection market={market} />
 
   {/* THE #locations BLOCK WAS HERE AND IS GONE. It asked the same question MarketChooser asks
       directly under the badge row — "which of the three is near me" — and answering it twice on one
@@ -150,9 +175,12 @@ const org = organizationNode();
       changes the phone. See PartnerStrip.astro. */}
   <PartnerStrip {...page.partners} swappable={true} />
 
-  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners across all three markets." reviews={TESTIMONIALS.national} />
-  <OfferBand />
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} />
   <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
+
+  {/* FIND YOUR AREA — moved here from under the badge row (owner brief §4): last thing before
+      the final CTA, so the page closes on "which office is mine" right where the ask is made. */}
+  <MarketChooser />
   <CTABand market={market} heading={page.cta.heading} body={page.cta.body} />
 
   <GeoRedirect markets={GEO} />

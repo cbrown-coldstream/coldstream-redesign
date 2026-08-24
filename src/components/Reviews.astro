@@ -1,42 +1,174 @@
 ---
-// RATING SCHEMA IS DELIBERATELY ABSENT.
+// REVIEWS — rebuilt to the owner brief (2026-08-24, §7): top nine pulled reviews, a 3-up
+// carousel, and a deep-navy band so the section has the presence the old flat grid lacked.
 //
-// Marking up a ratingValue we are not reading from a real source is a structured-data
-// violation and Google issues manual actions for it. The prototype hardcoded 4.8 / 400
-// reviews, which also disagreed with the 4.8 / 500+ used elsewhere. Review/aggregateRating
-// goes in only once live GBP reviews are pulled per market, with the real count.
+// ── THE GATE IS UNCHANGED AND IS THE POINT ───────────────────────────────────────────────────
 //
-// THE SECTION DOES NOT RENDER WITHOUT REAL REVIEWS. The prototype shipped three invented
-// testimonials — named people, quoted words, under the heading "Real feedback from Cincinnati
-// homeowners" — and the same three appeared on the national page with different towns attached.
-// Fabricated endorsements are a bigger problem than an unsourced star rating, so the same gate
-// applies: real, attributable reviews in data/claims.js, or no section at all.
-// A REVIEW'S STAR COUNT IS PART OF THE REVIEW. This rendered a hardcoded five stars on every
-// card, which would misstate a real four-star review the moment one is pulled from GBP — the
-// same class of unsourced rating claim the rest of this file exists to prevent. It now shows the
-// review's own rating, and falls back to no stars rather than to five.
+// Nothing renders without real pulled data. The prototype shipped three invented testimonials
+// under "Real feedback from Cincinnati homeowners"; that is why this section's empty state is
+// ABSENCE, not sample copy — not even during development. Source order: the GBP pull at
+// src/data/generated/reviews.json (top nine across the markets, newest first, exactly as pulled
+// — nothing here sorts by rating or drops a low one); the legacy `reviews` prop stays as the
+// fallback input so market pages keep working the day TESTIMONIALS fills instead.
+//
+// ── DESIGN DECISIONS THAT NEED THEIR REASONS KEPT ────────────────────────────────────────────
+//
+// · THE CITY LABEL IS GONE from each card (brief). The pull keeps `market` on the record for
+//   attribution elsewhere; the card shows name + date only.
+// · STAR GLYPHS ARE ACCENT ORANGE — a deliberate second use of a colour that is otherwise
+//   emphasis-only. Review stars are conventionally warm and read as an icon, not as headline
+//   emphasis; the alternative tried on paper was light-blue stars, which read as INACTIVE
+//   (empty) stars. Logged in DECISIONS as an exception.
+// · A review's star count is its own: a real four-star review renders four stars. No fallback
+//   to five, ever.
+//
+// ── HOW THE CAROUSEL DEGRADES ────────────────────────────────────────────────────────────────
+//
+// The markup is a plain 3-up grid. JS, when present, turns it into a paged carousel: previous /
+// next buttons (real <button>s, visible focus), arrow-key support on the group, pause-on-hover
+// for the auto-advance, and prefers-reduced-motion disables auto-advance entirely. With JS off
+// the buttons never render and the first page stands as a static grid — which is the brief's
+// no-JS fallback, by construction rather than by a second code path.
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+
 const { eyebrow = "Reviews", heading, intro, reviews = [] } = Astro.props;
+
+const PULLED = resolve(process.cwd(), "src/data/generated/reviews.json");
+let pulled = [];
+if (existsSync(PULLED)) {
+  try {
+    const j = JSON.parse(readFileSync(PULLED, "utf8"));
+    pulled = Object.values(j.markets ?? {}).flatMap((m) => m.reviews ?? []);
+    pulled.sort((a, b) => String(b.date ?? "").localeCompare(String(a.date ?? "")));
+  } catch { pulled = []; }
+}
+const items = (pulled.length ? pulled : reviews).slice(0, 9);
 const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math.round(n)) : null);
 ---
-{reviews.length > 0 && (
-<section id="reviews">
+{items.length > 0 && (
+<section id="reviews" class="revband">
   <div class="wrap">
-    <div class="shead">
+    <div class="shead" data-reveal>
       <span class="eyebrow">{eyebrow}</span>
-      <h2 class="accent">{heading}</h2>
+      <h2>{heading}</h2>
       {intro && <p>{intro}</p>}
     </div>
-    <div class="rev-grid">
-      {reviews.map((r) => (
-        <figure class="rev" style="margin:0">
-          {stars(r.rating) && (
-            <div class="stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</div>
-          )}
-          <blockquote style="margin:0"><p>{r.quote}</p></blockquote>
-          <figcaption class="who">{r.name}<span>{r.detail}</span></figcaption>
-        </figure>
-      ))}
+
+    <div class="rev-shell" data-rev-carousel data-count={items.length}>
+      <div class="rev-track" id="revTrack" tabindex="-1">
+        {items.map((r) => (
+          <figure class="rev-card">
+            {stars(r.rating) && (
+              <div class="rev-stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</div>
+            )}
+            <blockquote><p>{r.quote}</p></blockquote>
+            <figcaption>
+              <span class="rev-name">{r.name}</span>
+              {r.date && <span class="rev-date">{r.date}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      {/* Controls are injected by the script so a no-JS page never shows dead buttons. */}
     </div>
   </div>
+
+  <script is:inline>
+    (function () {
+      var shell = document.querySelector("[data-rev-carousel]");
+      if (!shell) return;
+      var track = shell.querySelector(".rev-track");
+      var cards = track.children.length;
+      var perPage = 3, page = 0, pages = Math.ceil(cards / perPage);
+      if (pages < 2) return;                       // nothing to control
+
+      var nav = document.createElement("div");
+      nav.className = "rev-nav";
+      nav.innerHTML =
+        '<button type="button" class="rev-btn" data-dir="-1" aria-label="Previous reviews">←</button>' +
+        '<span class="rev-pos" aria-live="polite"></span>' +
+        '<button type="button" class="rev-btn" data-dir="1" aria-label="Next reviews">→</button>';
+      shell.appendChild(nav);
+      var pos = nav.querySelector(".rev-pos");
+
+      function go(n) {
+        page = (n + pages) % pages;
+        track.style.transform = "translateX(-" + page * 100 + "%)";
+        pos.textContent = (page + 1) + " / " + pages;
+      }
+      nav.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-dir]");
+        if (b) go(page + Number(b.dataset.dir));
+      });
+      shell.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); go(page + 1); }
+        if (e.key === "ArrowLeft")  { e.preventDefault(); go(page - 1); }
+      });
+
+      shell.classList.add("is-carousel");
+      go(0);
+
+      // Auto-advance: only when motion is welcome, and paused whenever a pointer or focus is in.
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        var timer = setInterval(function () { go(page + 1); }, 7000);
+        function hold() { clearInterval(timer); timer = null; }
+        function resume() { if (!timer) timer = setInterval(function () { go(page + 1); }, 7000); }
+        shell.addEventListener("mouseenter", hold);
+        shell.addEventListener("mouseleave", resume);
+        shell.addEventListener("focusin", hold);
+        shell.addEventListener("focusout", resume);
+      }
+    })();
+  </script>
 </section>
 )}
+
+<style>
+  /* The deep navy band — --cs-web-hero-base ground, white elevated cards, accent name rule. */
+  .revband { background: var(--cs-web-hero-base, #101922); }
+  .revband .shead .eyebrow { color: var(--cs-web-hero-accent, #8fc0ea); }
+  .revband .shead h2 { color: #fff; }
+  .revband .shead p { color: var(--cs-web-hero-sub, #c8d8e7); }
+
+  .rev-shell { position: relative; overflow: hidden; }
+  .rev-track {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    transition: transform .35s ease-out;
+  }
+  /* Carousel mode: pages of three, side by side. */
+  .rev-shell.is-carousel .rev-track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 36px) / 3);
+  }
+  @media (max-width: 760px) {
+    .rev-track { grid-template-columns: 1fr; }
+    .rev-shell.is-carousel .rev-track { grid-auto-columns: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .rev-track { transition: none; } }
+
+  .rev-card {
+    margin: 0; background: var(--cs-paper); border-radius: 12px;
+    padding: 24px 24px 20px; display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
+  }
+  /* Orange stars — the logged exception. Conventionally warm; light blue read as inactive. */
+  .rev-stars { color: var(--cs-accent); letter-spacing: 2px; font-size: 1.02rem; }
+  .rev-card blockquote { margin: 0; flex: 1; }
+  .rev-card blockquote p { margin: 0; font-size: .96rem; line-height: 1.6; color: var(--cs-text); }
+  .rev-card figcaption {
+    border-top: 2px solid var(--cs-web-hero-accent, #8fc0ea);
+    padding-top: 10px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
+  }
+  .rev-name { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: .95rem; }
+  .rev-date { font-size: .8rem; color: var(--cs-text-muted); }
+
+  .rev-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 22px; }
+  .rev-btn {
+    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    background: transparent; color: var(--cs-web-hero-accent, #8fc0ea);
+    border: 2px solid var(--cs-web-hero-accent, #8fc0ea); font-size: 1.05rem;
+  }
+  .rev-btn:hover { background: color-mix(in srgb, var(--cs-web-hero-accent, #8fc0ea) 18%, transparent); }
+  .rev-btn:focus-visible { outline: 3px solid var(--cs-ui-focus); outline-offset: 2px; }
+  .rev-pos { color: var(--cs-web-hero-sub, #c8d8e7); font-size: .88rem; font-variant-numeric: tabular-nums; }
+</style>

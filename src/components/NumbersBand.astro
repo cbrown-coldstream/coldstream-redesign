@@ -5,7 +5,7 @@
 // ARE GATED CLAIMS and one is unknown:
 //
 //   years in business   gated — nobody has sourced the founding year (claims.experience)
-//   homes served        gated — the live site's "3,000+" has no source (claims.customersServed)
+//   satisfied customers  owner-attested 11,000 (claims.satisfiedCustomers, 2026-08-24)
 //   crew size           not recorded anywhere in this repo
 //   markets             real, and derived from markets.js
 //
@@ -25,7 +25,7 @@ const communities = MARKET_LIST.reduce((n, m) => n + m.servedAreas.length, 0);
 const figures = [
   // Gated — absent until sourced, first in line when they arrive.
   CLAIMS.experience && { value: `${CLAIMS.experience}`, suffix: "+", label: "Years in business" },
-  CLAIMS.customersServed && { value: `${CLAIMS.customersServed.toLocaleString()}`, suffix: "+", label: "Homes served" },
+  CLAIMS.satisfiedCustomers && { value: `${CLAIMS.satisfiedCustomers.toLocaleString("en-US")}`, suffix: "+", label: "Satisfied customers" },
   // Derived, and true today.
   { value: `${MARKET_LIST.length}`, label: "Metros, each locally owned" },
   { value: `${communities}`, label: "Communities we work in" },

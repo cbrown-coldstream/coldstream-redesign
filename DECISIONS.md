@@ -2985,7 +2985,116 @@ path, the national one imports differently, and `npm run build >/dev/null` swall
 verify then failed loudly with 573 dead links. The lesson is old but re-earned: never silence the
 build, and never trust an edit that did not assert its match.
 
-## 55. Checks
+## 55. Round 49 — the homepage + roofing round, from the owner brief of 2026-08-24
+
+The largest single round since the build order. Everything below traces to the written brief;
+where the brief and the repo disagreed about the current state, the disagreement is recorded
+rather than papered over.
+
+### Claims: three approvals, two exceptions, one thing the brief did not know
+
+**Approved and live** (`claims.js`, each with provenance): `satisfiedCustomers: 11000`
+(owner-attested, replaces the gated `customersServed`; integer in data, formatted at display),
+`warrantyPositioning: "Industry-leading warranties"`, and BBB accreditation (already confirmed
+against the record in §41).
+
+**⚠ THE OWNER-APPROVED SUPERLATIVE EXCEPTION.** voice-spec.json bans superlatives, and
+"Industry-leading warranties" is one. It ships as a NAMED EXCEPTION approved by Craig 2026-08-24,
+on the condition the brief itself set: body copy must carry the substantiation — manufacturer
+certification tiers extend coverage beyond a standard installer warranty, on top of the concrete
+25-year workmanship figure. **Do not "correct" this phrase back out**, and do not print it
+without its substantiation.
+
+**"Fully Insured" in the hero trust row** — previously on the pending list ("Licensed and
+insured" was the approved wording). The brief specifies it; owner instruction wins; logged here.
+
+**The BBB "text lockup" instruction was already superseded.** The brief assumed no BBB artwork in
+the repo; round 40 had already installed BBB's own hosted seal, linked to the accreditation
+record — strictly stronger than a text lockup. The seal stays; `bbbLogo` gates only Craig's
+replacement file (`brand/logos/bbb-a-plus.png`, awaited in MISSING_ASSETS.md, never sourced from
+WordPress uploads).
+
+### The hero, and one resolved contradiction
+
+The brief's H1 — **"Roofing, siding and gutter experts"** — arrived hours after Craig had picked
+"Storm damage or an aging roof — either way, start here" as the H1 in-session. The brief is the
+later, formal instruction: it takes the H1, and the storm line returns to the eyebrow rather
+than being deleted. Sub composed in index.astro from `claims.js` values. Trust row: Locally
+Owned & Operated · BBB A+ Accredited · Fully Insured — no rating, no review count (still gated).
+"We answer live — no phone trees" removed sitewide (it lived once, in Hero.astro). The market
+selector reads **Select location** and styles as a field (`--cs-ui-field-border`,
+`--cs-ui-focus`). The second control beside it is the `<noscript>` **Go** button
+(UtilityBar.astro:72) — JS-off fallback, identified and left in place per the brief.
+
+### The market-enumeration rule became a gate (verify §20)
+
+No h1–h3, eyebrow or hero block may name two or more markets. Six surfaces were cleaned: the four
+national service-hero subs, the whole-house eyebrow, the team-section body and the CTA band.
+Meta descriptions deliberately stay out of scope (round 41 put cities there on purpose), as does
+the about page's factual office list. Proven in the failing direction in test:gates.
+
+### "Our own crews / never subcontracted" retired — sitewide
+
+Craig dropped the positioning this round. It was one of the three ungated true claims; ~30
+occurrences swept — why-cards, hero bullets, FAQ answers, meta descriptions, leads — replaced
+with "factory-certified crews" (already accepted) or the one-project-manager fact. **If a future
+round wants it back**: the canonical wordings were "Our own crews, never subcontracted" and "The
+people who quote the job are the people who do it. No subcontractor gets handed the keys to your
+house." — this entry is the record.
+
+### Homepage restructure
+
+Section order per §4 — What We Do up, Find Your Area down to just above the final CTA (a
+REVERSAL of the round that argued the chooser belonged under the badge row). What We Do is a new
+eight-card photo grid (Hardie beside Siding, per the brief), pure-CSS hover/focus overlay using
+the hero scrim's 105° direction and `--cs-web-hero-accent`, static overlay on `hover: none`,
+body copy always in the DOM. **Photos: the live site turned out to hold only THREE real project
+photographs** — scraped and verified 2026-08-24 — so three cards carry them (live filenames kept
+for provenance) and five carry a deliberately obvious placeholder registered in
+MISSING_ASSETS.md. The vinyl card's photo is a real Coldstream job whose material is unverified;
+its alt claims the work, not the product.
+
+The standing roofing block gave way to **Offers & Promotions** — a claims-gated shell
+(`offers.js`) whose only permanent card is the evergreen free inspection. **The Reg Z gate
+(verify §21): an `apr` or `termMonths` with no lender `disclosure` fails the build.** Proven
+failing in test:gates. Old OfferBand left the page; nav order changed to put Storm Damage beside
+Service Areas (a reversal of the 2026-08-18 call's "storm third", by owner instruction).
+
+### Reviews rebuilt, dark, and still absent
+
+Navy band (`--cs-web-hero-base`), white elevated cards, accent name-rule, top nine from the GBP
+pull, city labels off the cards, 3-up carousel (keyboard, pause-on-hover, auto-advance off under
+reduced motion) that degrades to a static grid with no JS. Renders NOTHING until the pull lands —
+unchanged, and the point. **⚠ THE ORANGE-STAR EXCEPTION**: star glyphs use `--cs-accent` orange,
+a second use of a colour that is otherwise emphasis-only. Reasoning: review stars are
+conventionally warm and read as an icon, not as headline emphasis; the rejected alternative was
+hero-accent light-blue stars, which read as INACTIVE (empty) stars.
+
+### Instant Roof Quote — built, fallback state
+
+`/instant-roof-quote/` exists, noindex, named in GLOBAL_PENDING and the inventory, `?market=`
+routing wired. **The Roofful embed is not in the repo**, so per the brief's own fallback: every
+CTA keeps pointing at `/free-estimate/`, and the live per-market URLs KEEP their existing 301s
+there — repointing them at a noindex page would fail the redirect gates, correctly. The page is
+an ALLOWED_ORPHAN until the embed lands (a CTA to an empty quote tool is a broken promise).
+
+### Roofing page
+
+Three more depth blocks (repair-vs-replace, what a replacement includes, how the job runs) and
+three consolidated live-FAQ questions (winter installs, tear-off vs overlay, lifespan) — 1,620
+words, 10 FAQPage questions, no cost figures ($8,500–$18,000 and $12,000–$15,000 on the live page
+remain unsourced and gated). The live "Blue Ash" FAQ heading was not ported. Tri-market hero
+enumeration gone (gate enforces it now).
+
+### Deliberately NOT done
+
+Star ratings and review counts (live shows 4.9 and 4.8 — they disagree; both stay null). "25+
+years" (three sources, three answers — see §the claims file). Financing figures (Reg Z). Named
+testimonials. Cost ranges. New pages for the SEO gaps — SEO-GAP.md lists them for Craig's
+approval instead. The hover-3D/satellite section — Craig has said we do not estimate from
+satellite imagery; if it ever returns it must be framed as post-inspection visualisation.
+
+## 56. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
@@ -3004,6 +3113,7 @@ build, and never trust an edit that did not assert its match.
 ✓ no empty value in any schema node       ✓ every indexable page ≥ 3 inbound internal links
 ✓ every @id reference resolves locally    ✓ llms.txt links only at pages that exist
 ✓ sitemap dates all present or all absent ✓ robots.txt is the production file, not staging's
+✓ no heading/hero enumerates the markets   ✓ no financing figure without its disclosure (Reg Z)
 ```
 
 75 pages verified — 31 checks green: 58 inventory pages + 16 named beyond it, plus 404. The blog block is the only `PENDING` in the 301 map,

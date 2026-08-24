@@ -18,6 +18,7 @@ import { MARKETS, NATIONAL_PHONE, MARKET_LIST } from "../src/data/markets.js";
 import { BLOG } from "../src/data/redirects.js";
 import { urls } from "../src/data/sitemap.js";
 import { CLAIMS } from "../src/data/claims.js";
+import { offers, regZViolation } from "../src/data/offers.js";
 import { measureHero, measureHeroGround } from "./lib/contrast.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -298,7 +299,9 @@ fixtureLeak.length ? fail("FIXTURE content reached the built HTML — this build
 //
 //      /thank-you/ is the one legitimate orphan — you get there by submitting the form, and it is
 //      noindex by design.
-const ALLOWED_ORPHANS = new Set(["/thank-you/", "/404.html"]);
+// /instant-roof-quote/ is an orphan BY THE BRIEF (§9): the page is built ahead of its embed
+// and no CTA may point at an empty quote tool. It leaves this list the day the embed lands.
+const ALLOWED_ORPHANS = new Set(["/thank-you/", "/404.html", "/instant-roof-quote/"]);
 const linkedTo = new Set();
 for (const p of pages)
   for (const m of p.html.matchAll(/href="(\/[^"#?]*)"/g)) linkedTo.add(m[1]);
@@ -637,6 +640,44 @@ if (!existsSync(robotsFile)) {
       ? fail("dist/robots.txt names no sitemap")
       : pass("robots.txt is the production file — crawlable, and it names the sitemap");
 }
+
+
+// 20. NO HEADING OR HERO ENUMERATES THE MARKETS (owner brief 2026-08-24, §2).
+//
+//     The rule: a market-scoped page speaks only for its market, and on national pages the three
+//     markets are reachable through the selector, the footer and /service-areas/ — never listed
+//     as a trust signal or a headline. The gate reads h1–h3, eyebrow spans and the hero block of
+//     every built page and fails when two or more market names share one of them. Body prose and
+//     meta descriptions are out of scope on purpose: round 41 put the cities in descriptions
+//     deliberately, and the about page describing three offices is content, not decoration.
+const MARKET_NAMES = ["Cincinnati", "Columbus", "St. Louis"];
+const countMarkets = (text) => MARKET_NAMES.filter((n) => text.includes(n)).length;
+const enumHits = [];
+for (const p of pages) {
+  const spots = [];
+  for (const m of p.html.matchAll(/<h[1-3][^>]*>([\s\S]*?)<\/h[1-3]>/g)) spots.push(["heading", m[1]]);
+  for (const m of p.html.matchAll(/<span class="eyebrow"[^>]*>([\s\S]*?)<\/span>/g)) spots.push(["eyebrow", m[1]]);
+  const hero = p.html.match(/<section class="hero[\s\S]*?<\/section>/);
+  if (hero) spots.push(["hero", hero[0].replace(/<script[\s\S]*?<\/script>/g, "")]);
+  for (const [kind, raw] of spots) {
+    const text = raw.replace(/<[^>]+>/g, " ");
+    if (countMarkets(text) >= 2) enumHits.push(`${p.url} — ${kind}: "${text.replace(/\s+/g, " ").trim().slice(0, 80)}"`);
+  }
+}
+enumHits.length
+  ? fail("a heading or hero block enumerates two or more markets", [...new Set(enumHits)])
+  : pass("no heading or hero block enumerates the markets");
+
+// 21. REGULATION Z — A RATE WITHOUT ITS DISCLOSURE FAILS THE BUILD (owner brief §8).
+//
+//     Advertising an APR, a term or a monthly payment is a "triggering term" under 12 CFR
+//     1026.24: printing one obliges the ad to carry the lender's actual terms. offers.js holds
+//     the structural rule (regZViolation); this executes it at build time so the failure mode is
+//     a red build, not a compliance letter. The disclosure must be lender-supplied verbatim.
+const regZ = offers.filter(regZViolation).map((o) => `offers.js "${o.id}" — apr/termMonths set with no lender disclosure`);
+regZ.length
+  ? fail("Reg Z: a financing figure is set without its lender disclosure", regZ)
+  : pass("no financing figure without its lender disclosure (Reg Z)");
 
 console.log(`\n  ${failed ? `✗ ${failed} CHECKS FAILED` : `✓ all checks passed across ${pages.length} pages`}\n`);
 process.exit(failed ? 1 : 0);

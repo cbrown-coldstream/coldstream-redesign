@@ -75,10 +75,29 @@ export const CLAIMS = {
   experience: null,
 
   /**
-   * Homes served, as a number. The live site prints "3,000+ satisfied customers" with no source.
-   * Fill this in and it appears in the home page's numbers band automatically.
+   * Satisfied customers, as a number.
+   *
+   * APPROVED BY CRAIG (OWNER) 2026-08-24 — owner-attested figure, supplied in the homepage round
+   * brief. This replaces the gated `customersServed`, which existed because the live site printed
+   * "3,000+ satisfied customers" with no source; the owner's own attestation IS the source class
+   * this file accepts for a company figure, and the value is recorded with its provenance here.
+   *
+   * STAYS AN INTEGER. Display formatting ("11,000", "over 11,000 satisfied homeowners") happens in
+   * the component that prints it, never here — the raw number is reused in schema markup.
    */
-  customersServed: null,
+  satisfiedCustomers: 11000,
+
+  /**
+   * Warranty positioning phrase. APPROVED BY CRAIG (OWNER) 2026-08-24.
+   *
+   * ⚠ THIS IS A SUPERLATIVE AND voice-spec.json BANS SUPERLATIVES. It ships anyway because the
+   * owner approved it as a NAMED EXCEPTION, on the condition that body copy carries the
+   * substantiation wherever the phrase appears: manufacturer certification tiers let us extend
+   * coverage beyond a standard installer warranty, on top of the 25-year workmanship warranty.
+   * The phrase without that substantiation is bare puffery — do not print it alone. Logged in
+   * DECISIONS.md so a future reviewer does not "correct" it back out.
+   */
+  warrantyPositioning: "Industry-leading warranties",
 
   /**
    * BBB accreditation. Shape: `{ rating: "A+", profileUrl: "https://www.bbb.org/..." }`.
@@ -115,6 +134,19 @@ export const CLAIMS = {
    * programme requires their hosted, linked seal, so it has to come from the accreditation
    * account. badges.js renders a typographic badge until it lands.
    */
+  /**
+   * Craig-supplied BBB seal artwork. APPROVED as a slot 2026-08-24; the FILE is not in the repo.
+   *
+   * When it arrives it goes to brand/logos/bbb-a-plus.png (raster, ≥1000px long edge) and this
+   * becomes that path. Until then: NOTE THAT THE BADGE ROW ALREADY RENDERS BBB'S OWN SEAL —
+   * public/badges/bbb-accredited-seal.svg, BBB's hosted programme artwork, linked to the
+   * accreditation record (DECISIONS §41). The round-brief's "text lockup until the logo lands"
+   * was written before that existed; downgrading their own linked seal to text would be a
+   * regression, so the seal stays and this field gates only a REPLACEMENT. Do not fill it from
+   * the live WordPress uploads folder — owner-supplied file only.
+   */
+  bbbLogo: null,
+
   bbb: {
     accredited: true,
     rating: "A+",
@@ -420,7 +452,8 @@ export const heroBullets = () => {
  * ELIGIBILITY IS DELIBERATELY NARROW. Only the three always-true claims from
  * brand/voice-spec.json, plus the three ungated descriptions this repo has already accepted are
  * backed at that level of generality — three real offices and three real crews carry "locally
- * owned" and "our own crews", and the manufacturer badges carry "factory-certified installers".
+ * owned" (the "our own crews" companion retired 2026-08-24), and the manufacturer badges carry
+ * "factory-certified installers".
  * Badge TIERS stay out: the GAF tier is still claimed three different ways by three sources.
  *
  * Nothing gated joins this list by being added below. `.filter(Boolean)` is what makes that
@@ -432,7 +465,9 @@ export const cardAssurances = () => [
   "Free, no-obligation inspections",
   "25-year workmanship warranty",
   "Locally owned",
-  "Our own crews",
+  // "Our own crews" REMOVED 2026-08-24 — Craig dropped the never-subcontracted positioning this
+  // round (homepage brief §6). It was one of the three ungated true claims; if a future round
+  // wants it back, the wording that was here was "Our own crews". See DECISIONS.
   "Factory-certified installers",
 ].filter(Boolean);
 
@@ -445,7 +480,8 @@ export const CLAIMS_PENDING = [
   !CLAIMS.financing && ["financing", "lender, advertised monthly payment, APR and terms (Reg Z)"],
   !CLAIMS.paymentTerms && ["paymentTerms", "\"no payment until complete\" — confirm it is policy"],
   !CLAIMS.experience && ["experience", "founding year, for the \"25+ years\" claim"],
-  !CLAIMS.customersServed && ["customersServed", "homes served, for the \"3,000+ customers\" figure"],
+  // ✔ customersServed CLEARED 2026-08-24 as `satisfiedCustomers` — owner-attested 11,000.
+  !CLAIMS.bbbLogo && ["bbbLogo", "Craig's BBB seal file → brand/logos/bbb-a-plus.png (badge row meanwhile renders BBB's own seal)"],
   !CLAIMS.bbb && ["bbb", "accreditation status, rating and profile URL"],
   // ✔ profiles.gbp CLEARED 2026-08-24 — all three offices supplied. See MARKET_PROFILES.
   //   What it does NOT clear: the review figures below. A profile URL says which listing is ours;

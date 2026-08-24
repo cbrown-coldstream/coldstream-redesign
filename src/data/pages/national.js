@@ -27,7 +27,7 @@
 export const national = {
   title: "Roofing, Siding, Windows & Gutters | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, our own crews, and a 25-year workmanship warranty.",
+    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, factory-certified crews, and a 25-year workmanship warranty.",
 
   // 1 — HERO. The situation line LEADS and the service list supports, swapped 2026-08-24.
   //
@@ -42,9 +42,13 @@ export const national = {
     // "Experts" cleared against voice-spec: the ban is on vague superlative PHRASES ("expert
     // solutions", "world-class"), not the word. The trades and cities left the eyebrow with this
     // edit — they still live in the description, the schema and the sub line's "three metros".
-    eyebrow: "Roofing and Home Exterior Experts",
-    headline: "Storm damage or an aging roof — either way, start here",
-    sub: "Three metros, three local crews, one standard of work. Free inspections, a written quote before anything starts, and a 25-year workmanship warranty behind it.",
+    // H1 per the owner brief of 2026-08-24: "Roofing, siding and gutter experts", sentence case.
+    // The storm line — Craig's own pick earlier the same day — moves back to the eyebrow rather
+    // than being deleted; the brief specifies the H1 and is silent on the eyebrow, and the two
+    // read correctly stacked. NO SUB HERE: the brief requires it composed from claims.js values
+    // with formatting at the point of display, so index.astro builds it and passes it down.
+    eyebrow: "Storm damage or an aging roof — either way, start here",
+    headline: "Roofing, siding and gutter experts",
   },
 
   // 2 — TRUST BAND. Live: "Locally Owned & Operated | BBB A+ Accredited | Fully Insured".
@@ -61,7 +65,7 @@ export const national = {
 
   // 3 — INTRO. Sits above the badge row; the estimate form is already in the hero.
   intro: {
-    eyebrow: "Roofing and exterior specialists in Cincinnati, Columbus and St. Louis",
+    eyebrow: "Whole-home exterior specialists",
     heading: "Show up, do the work properly, stand behind it",
     body: [
       "Coldstream Exteriors works across Ohio, Kentucky and Missouri on roofing, siding, windows and gutters. Each market has its own office and its own crew, so the person who walks your roof and writes your quote is on the job when the work happens. Nothing is handed to a subcontractor.",
@@ -119,12 +123,12 @@ export const national = {
     eyebrow: "Who we are",
     heading: "Three local companies, not one national brand",
     body: [
-      "Coldstream Exteriors runs as three local businesses — Cincinnati, Columbus and St. Louis — each with its own office, its own crew and its own phone number. When you call, you get someone who works in your market and knows what the weather does to houses there.",
+      "Coldstream Exteriors runs as three local businesses, each with its own office, its own team and its own phone number. When you call, you get someone who works in your market and knows what the weather does to houses there.",
       "We do not subcontract. The person who walks your roof and writes your quote is on the job when the work happens, and is the person you call afterwards if anything is not right.",
     ],
     points: [
       "Locally owned and operated in each market",
-      "Our own crews on every job",
+      "Factory-certified crews on every job",
       "Licensed and insured in Ohio, Kentucky and Missouri",
       "A 25-year workmanship warranty behind the work",
     ],
@@ -160,14 +164,24 @@ export const national = {
   // 5 — WHY US. The live section is twelve items, nine of which are gated claims. What survives
   // is the part that describes how the work actually runs.
   why: {
-    heading: "Why homeowners keep calling us back",
+    heading: "Why homeowners trust Coldstream",
+    // REWRITTEN TO THE OWNER BRIEF, 2026-08-24. Expertise language, not risk-reversal.
+    //   · "Our own crews, never subcontracted" REMOVED — Craig dropped the positioning this
+    //     round. It was one of the accepted true claims; the old card wording is in git and in
+    //     DECISIONS if a future round wants it back.
+    //   · Two titles are null and carry an id instead: the component injects them from claims.js
+    //     ("Over 11,000 satisfied homeowners", "Industry-leading warranties") so the figure and
+    //     the approved phrase live in exactly one place. The warranty BODY carries the
+    //     substantiation — certifications extend coverage past a standard installer warranty, on
+    //     top of the concrete 25-year workmanship figure — because the headline without it is
+    //     bare puffery, and that condition is what the superlative exception was granted on.
     cards: [
-      { title: "Our own crews, never subcontracted", match: ["crew","subcontract","same team","their own"], body: "Each market has its own office and its own crew. The people who quote your job are the people who turn up to do it, and they are the people you call afterwards." },
-      { title: "A free inspection, usually within a day", match: ["inspection","inspect","came out","next day","same day","quick"], body: "We aim to have someone at your property within about 24 hours of your call. On the roof or along the elevation — not a look from the driveway or a satellite image." },
-      { title: "Honest pricing, in writing, first", match: ["price","pricing","quote","estimate","honest","upfront","no pressure"], body: "A written quote with the scope, the materials and the number, before anything begins. No deposit to book an inspection and no pressure afterwards." },
-      { title: "We deal with your insurer", match: ["insurance","insurer","adjuster","claim"], body: "For storm damage we inspect, photograph and document the damage the way an adjuster needs it, then talk to them directly so you are not relaying messages between two parties who do this for a living." },
-      { title: "Materials chosen for this climate", match: ["shingle","material","hail","storm","tpo","siding"], body: "Architectural asphalt, impact-resistant shingles where hail is a recurring problem, TPO and EPDM on low-slope, fiber cement and vinyl siding. We quote what the building needs." },
-      { title: "A 25-year workmanship warranty", match: ["warranty","stood behind","came back","fixed it"], body: "Materials carry their manufacturer warranty. Our workmanship carries ours, and if something is wrong you call the same office that did the job." },
+      { id: "satisfied", title: null, match: ["recommend","happy","satisfied","again"], body: "Across three markets and every trade we run, homeowners who have had us out once call us back for the next job. That number is the record the rest of this list has to live up to." },
+      { title: "Free inspection within 24 hours", match: ["inspection","inspect","came out","next day","same day","quick"], body: "A Coldstream project manager comes to the property and walks the roof in person. We do not rely on satellite imagery — what is under the last layer decides the job, and a photo from orbit cannot see soft decking." },
+      { title: "Clear pricing, up front", match: ["price","pricing","quote","estimate","honest","upfront","no pressure"], body: "A written quote with the scope, the materials and the number, before anything begins. No deposit to book an inspection and no pressure afterwards." },
+      { title: "Filing a claim made easy", match: ["insurance","insurer","adjuster","claim"], body: "For storm damage we inspect, photograph and document the damage the way an adjuster needs it, then talk to them directly so you are not relaying messages between two parties who do this for a living." },
+      { title: "Job-specific materials", match: ["shingle","material","hail","storm","tpo","siding"], body: "Materials are specified for the actual roof — its pitch, its exposure and this climate — not pulled from a single default package. Impact-resistant shingles where hail keeps returning, membrane systems on low-slope, fiber cement or vinyl matched to the wall." },
+      { id: "warranty", title: null, match: ["warranty","stood behind","came back","fixed it"], body: "Our certifications with the manufacturers we install let us extend coverage beyond a standard installer warranty — on top of our own 25-year workmanship warranty. If something is wrong, you call the same office that did the job." },
     ],
   },
 
@@ -222,7 +236,7 @@ export const national = {
       { q: "What areas do you serve?",
         a: "Greater Cincinnati and Northern Kentucky, Columbus and Central Ohio, and Greater St. Louis. Each market is locally owned and operated. If you are not sure whether your street is covered, call and ask — it takes a minute." },
       { q: "What makes Coldstream different from other contractors?",
-        a: "Our own crews rather than subcontractors, so the person who quoted the job is on it. Local ownership in each market rather than a national brand with a local number. And a written quote up front, with an honest answer when a repair beats a replacement." },
+        a: "One project manager who stays on your job from quote to cleanup. Local ownership in each market rather than a national brand with a local number. And a written quote up front, with an honest answer when a repair beats a replacement." },
     ],
   },
 
@@ -230,6 +244,6 @@ export const national = {
   cta: {
     eyebrow: "Take the next step",
     heading: "Book a free inspection",
-    body: "Tell us what is going on and we will come and look at it. Free, no obligation, and a written quote at the end of it — across Cincinnati, Columbus, St. Louis and the communities around them.",
+    body: "Tell us what is going on and we will come and look at it. Free, no obligation, and a written quote at the end of it — wherever you are in our service area.",
   },
 };

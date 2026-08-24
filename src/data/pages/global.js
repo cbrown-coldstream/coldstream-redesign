@@ -34,6 +34,12 @@
  */
 export const GLOBAL_PENDING = [
   {
+    path: "/instant-roof-quote/",
+    needs:
+      "the Roofful embed. Page and ?market= routing are built; until the widget is in the repo " +
+      "every instant-quote CTA points at /free-estimate/ and the live URLs keep their 301s there.",
+  },
+  {
     path: "/about-us/",
     needs:
       "founding year, ownership, crew size, markets-served history — every company-story fact. " +

@@ -1,7 +1,7 @@
 // THE PRIMARY NAV, AS DECIDED ON THE TEAM REVIEW CALL (2026-08-18) AND REVISED 2026-08-19.
 //
-// Top-level, in this order: Roofing · Siding · Storm Damage · Windows · Gutters · Service Areas,
-// then About pushed right against the estimate CTA. Seven items.
+// Top-level, in this order (owner brief 2026-08-24): Roofing · Siding · Windows · Gutters ·
+// Service Areas · Storm Damage, then About pushed right against the estimate CTA. Seven items.
 //
 // NOT ONE "SERVICES" DROPDOWN. That was raised and rejected on the call: top-level visibility of
 // each trade was the explicit ask. It costs horizontal room and that cost is taken deliberately —
@@ -63,17 +63,18 @@ export const NAV = [
       { key: "stone-veneer", label: "Stone Veneer", nationalOnly: true },
     ],
   },
-  // Storm Damage: standalone and third, not nested under roofing and not sixth. `href` is explicit
-  // because the destination differs by context — see note 1 in the file header.
+  // Windows: top-level link only. The call was explicit that it gets no dropdown.
+  { key: "windows", label: "Windows" },
+  { key: "gutters", label: "Gutters" },
+  { key: "service-areas", label: "Service Areas", href: (m) => (m?.slug ? `/service-areas/#${m.slug}` : "/service-areas/") },
+  // Storm Damage sat THIRD by the 2026-08-18 call; the owner brief of 2026-08-24 moves it here,
+  // beside Service Areas. A reversal, logged as one in DECISIONS. Destination logic unchanged:
+  // standalone position, market-local target where a market is in context.
   {
     key: "storm-damage",
     label: "Storm Damage",
     href: (m) => (m?.slug ? `/${m.slug}/roofing/insurance-storm-damage/` : "/storm-damage/"),
   },
-  // Windows: top-level link only. The call was explicit that it gets no dropdown.
-  { key: "windows", label: "Windows" },
-  { key: "gutters", label: "Gutters" },
-  { key: "service-areas", label: "Service Areas", href: (m) => (m?.slug ? `/service-areas/#${m.slug}` : "/service-areas/") },
 ];
 
 /** Pushed right, adjacent to the CTA — the call's wording. */

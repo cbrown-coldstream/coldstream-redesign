@@ -1,0 +1,133 @@
+---
+// WHAT WE DO — the homepage's eight-card service grid (owner brief 2026-08-24, §5).
+//
+// This replaces ServicesGrid ON THE HOME PAGE ONLY; the market landings keep their four-card
+// flip grid, which does a different job (routing inside one market).
+//
+// ── HOW THE OVERLAY DEGRADES, WHICH IS MOST OF THE DESIGN ────────────────────────────────────
+//
+// The reveal is pure CSS — :hover and :focus-within — so it works with JS off by construction.
+// Keyboard: every overlay link is a real link; tabbing into the card triggers :focus-within and
+// the overlay opens exactly as it does for a mouse. Touch and no-hover devices get the overlay
+// content STATICALLY (media query on hover:none) rather than trapped behind a hover nobody can
+// perform. Reduced motion: the transition is dropped, the states still switch.
+//
+// The scrim reuses --cs-web-hero-scrim's direction (105deg) rather than inventing a gradient,
+// and the emphasis colour is --cs-web-hero-accent — NOT accent orange, per the brief. The body
+// copy lives inside the overlay in the DOM at all times, so crawlers read it regardless of
+// hover state.
+import { WHAT_WE_DO } from "../data/whatwedo.js";
+
+const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
+---
+<section class="wwd" aria-labelledby="wwd-h">
+  <div class="wrap">
+    <div class="shead" data-reveal>
+      <span class="eyebrow">What we do</span>
+      <h2 id="wwd-h">Every trade on the outside of your home</h2>
+      <p>Eight services, one standard of work, and a free inspection at the start of all of them.</p>
+    </div>
+
+    <div class="wwd-grid" data-reveal="stagger">
+      {WHAT_WE_DO.map((s) => (
+        <article class="wwd-card">
+          <div class="wwd-media">
+            {s.photo ? (
+              <picture>
+                <source type="image/avif" srcset={src(s.photo, "avif")} />
+                <source type="image/webp" srcset={src(s.photo, "webp")} />
+                <img src={src(s.photo, "jpg")} alt={s.photo.alt}
+                     width={s.photo.w} height={s.photo.h} loading="lazy" decoding="async" />
+              </picture>
+            ) : (
+              <img src="/photos/placeholder-project.svg" alt=""
+                   width="900" height="600" loading="lazy" decoding="async" />
+            )}
+          </div>
+
+          <div class="wwd-face">
+            <h3>{s.label}</h3>
+            <p>{s.benefit}</p>
+          </div>
+
+          <div class="wwd-over">
+            <p class="wwd-over-h" aria-hidden="true">{s.label}</p>
+            <p class="wwd-body">{s.body}</p>
+            {s.subs.length > 0 && (
+              <ul class="wwd-subs">
+                {s.subs.map((x) => <li><a href={x.href}>{x.label}</a></li>)}
+              </ul>
+            )}
+            <a class="wwd-cta" href={s.href}>{s.label} <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wwd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; }
+  .wwd-card {
+    position: relative; border-radius: 14px; overflow: hidden;
+    background: var(--cs-primary-deep); border: 1px solid var(--cs-line);
+    min-height: 320px; display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .wwd-media, .wwd-media picture { position: absolute; inset: 0; }
+  .wwd-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Face: name + one-line benefit on a bottom gradient so it reads over any photo. */
+  .wwd-face {
+    position: relative; padding: 74px 20px 18px; color: #fff;
+    background: linear-gradient(0deg, rgba(11,20,30,.88) 0%, rgba(15,32,52,.55) 55%, transparent 100%);
+    transition: opacity .18s ease-out;
+  }
+  .wwd-face h3 {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: 1.18rem; letter-spacing: var(--cs-web-display-ls); margin: 0 0 3px;
+    color: #fff;   /* base.css's element rule paints headings ink-navy; on this scrim that is
+                      near-invisible, so the colour is stated rather than inherited */
+  }
+  .wwd-face p { margin: 0; font-size: .87rem; color: var(--cs-web-hero-sub, #c8d8e7); line-height: 1.45; }
+
+  /* Overlay: same 105deg direction as the hero scrim, accent per the brief. */
+  .wwd-over {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
+    gap: 10px; padding: 20px; color: #fff;
+    background: linear-gradient(105deg, rgba(11,20,30,.94) 0%, rgba(15,32,52,.9) 46%, rgba(20,45,73,.82) 100%);
+    opacity: 0; visibility: hidden; transition: opacity .2s ease-out, visibility .2s;
+  }
+  .wwd-card:hover .wwd-over, .wwd-card:focus-within .wwd-over { opacity: 1; visibility: visible; }
+  .wwd-card:hover .wwd-face, .wwd-card:focus-within .wwd-face { opacity: 0; }
+  .wwd-over-h {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: 1.3rem; letter-spacing: var(--cs-web-display-ls); margin: 0;
+    color: var(--cs-web-hero-accent, #8fc0ea);
+  }
+  .wwd-body { margin: 0; font-size: .88rem; line-height: 1.55; color: #e7eff7; }
+  .wwd-subs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; }
+  .wwd-subs a {
+    display: inline-block; font-size: .8rem; font-weight: 600; color: #fff; text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--cs-web-hero-accent, #8fc0ea) 55%, transparent);
+    border-radius: 999px; padding: 4px 12px;
+  }
+  .wwd-subs a:hover, .wwd-subs a:focus-visible { background: color-mix(in srgb, var(--cs-web-hero-accent, #8fc0ea) 22%, transparent); }
+  .wwd-cta {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight);
+    color: var(--cs-web-hero-accent, #8fc0ea); text-decoration: none; font-size: .95rem;
+  }
+  .wwd-cta:hover, .wwd-cta:focus-visible { text-decoration: underline; }
+  .wwd-card a:focus-visible { outline: 2px solid var(--cs-ui-focus); outline-offset: 2px; border-radius: 4px; }
+
+  /* Touch and any no-hover device: the overlay content is simply part of the card. */
+  @media (hover: none) {
+    .wwd-card { min-height: 0; }
+    .wwd-media, .wwd-media picture { position: relative; }
+    .wwd-media img { aspect-ratio: 3 / 2; height: auto; }
+    .wwd-face { display: none; }
+    .wwd-over { position: relative; opacity: 1; visibility: visible; background: var(--cs-primary-deep); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wwd-face, .wwd-over { transition: none; }
+  }
+</style>

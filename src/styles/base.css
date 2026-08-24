@@ -115,15 +115,15 @@ img{max-width:100%;display:block}
 .util select{
   font-family:var(--cs-web-body);font-weight:600;font-size:.84rem;
   background:var(--cs-paper);color:var(--cs-primary-deep);
-  border:2px solid var(--cs-paper);border-radius:8px;
+  border:2px solid var(--cs-ui-field-border);border-radius:8px;
   padding:7px 30px 7px 11px;min-height:36px;cursor:pointer;
   -webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%232A6699' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M1 1.6l5 4.8 5-4.8'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;background-size:11px;
   box-shadow:0 1px 4px rgba(0,0,0,.18);
   transition:box-shadow .18s ease-out,border-color .18s ease-out}
-.util select:hover{box-shadow:0 3px 10px rgba(0,0,0,.26)}
-.util select:focus-visible{outline:3px solid var(--cs-accent);outline-offset:2px}
+.util select:hover{box-shadow:0 3px 10px rgba(0,0,0,.26);border-color:var(--cs-ui-field-border-focus)}
+.util select:focus-visible{outline:3px solid var(--cs-ui-focus);outline-offset:2px}
 .util select.is-chosen{border-color:var(--cs-accent)}
 .util select option{color:var(--cs-text)}
 

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" role="img" aria-label="Project photo pending">
+  <!-- OBVIOUSLY A PLACEHOLDER, BY DESIGN (owner brief §5): a photo slot waiting on the
+       Contractors Cloud job pull. Never to be mistaken for a Coldstream job photo. -->
+  <rect width="900" height="600" fill="#1c4c78"/>
+  <rect x="14" y="14" width="872" height="572" fill="none" stroke="#8fc0ea" stroke-width="3" stroke-dasharray="16 12" opacity=".55"/>
+  <g transform="translate(450 170)" fill="none" stroke="#8fc0ea" stroke-width="6" opacity=".8">
+    <rect x="-64" y="-34" width="128" height="88" rx="10"/>
+    <circle cx="0" cy="10" r="26"/>
+    <path d="M-28-34l10-18h36l10 18"/>
+  </g>
+  <text x="450" y="292" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="30" font-weight="700" fill="#d6e6f5">Project photo pending</text>
+  <text x="450" y="324" text-anchor="middle" font-family="Inter, sans-serif" font-size="17" fill="#a9c0d6">Awaiting the job-photo pull</text>
+</svg>

@@ -99,12 +99,12 @@ export const localFor = (key, marketSlug, market) => {
  * the line a searcher actually reads under the title.
  */
 export const SERVICE_META = {
-  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, our own crews, and a 25-year workmanship warranty.`,
-  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed by our own crews. Free inspection and a written quote before anything starts.`,
-  windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by our own crews. Free, no-obligation quote.`,
+  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, factory-certified crews, and a 25-year workmanship warranty.`,
+  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed by factory-certified crews. Free inspection and a written quote before anything starts.`,
+  windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
   gutters: (m) => `Seamless gutters, guards and downspouts across ${m.region}, sized to the roof draining into them. Free inspection.`,
   "commercial-roofing": (m) => `Flat and low-slope roofing for commercial, HOA and multi-family properties across ${m.region}. Surveyed and scoped in writing.`,
-  "garage-doors": (m) => `Garage door installation and replacement across ${m.region}. Free, no-obligation quote from our own crews.`,
+  "garage-doors": (m) => `Garage door installation and replacement across ${m.region}. Free, no-obligation quote and a written price.`,
 };
 
 export const SERVICE_CONTENT = {
@@ -139,13 +139,16 @@ export const SERVICE_CONTENT = {
       { q: "What roofing materials do you install?", a: "Architectural asphalt on most homes, impact-resistant shingles where hail is the recurring problem, metal, and flat systems for low-slope sections. The specification follows the inspection rather than a default." },
       { q: "What does a new roof cost?", a: "Size, pitch, how many layers come off, the state of the decking underneath and the material you choose. We put the number in writing after the free inspection, and it does not move unless the scope does." },
       { q: "What do I need to do before the crew arrives?", a: "Move vehicles off the drive and take anything fragile off the walls in the top rooms. We cover the landscaping, protect the gutters and run a magnet over the whole property before we leave." },
+      { q: "Can you replace a roof in winter?", a: "Yes, with the right conditions and materials — shingle adhesives need temperatures the forecast has to cooperate on, and we schedule around cold snaps rather than pretending they are not happening. Emergency repairs do not wait for spring." },
+      { q: "Do you tear off the old roof or lay over it?", a: "Tear off, always. An overlay hides the decking — the one thing that decides whether the new roof has something sound to fasten to — and most shingle manufacturers reduce or void coverage over a second layer." },
+      { q: "How long should a roof last here?", a: "Architectural asphalt is typically rated for decades, but ventilation and installation quality decide whether it gets there — an attic that cannot breathe shortens any shingle's life. Hail and wind can end a roof early regardless of age, which is what the free inspection is for after a storm." },
     ],
     local: {},   // PENDING per market — see header
   },
   siding: {
     label: "Siding",
     h1: (m) => `Siding in ${m.name}`,
-    lead: "James Hardie fiber cement and vinyl siding, installed and repaired by our own crews.",
+    lead: "James Hardie fiber cement and vinyl siding, installed and repaired by factory-certified crews.",
     sections: [
       { title: "James Hardie Fiber Cement", body: "The premium option: holds paint far longer than vinyl and stands up to impact. We are an Alliance Elite contractor." },
       { title: "Vinyl Siding", body: "The value option, and a good one when it is installed properly. Most siding complaints trace back to installation, not material." },
@@ -171,7 +174,7 @@ export const SERVICE_CONTENT = {
   windows: {
     label: "Windows",
     h1: (m) => `Replacement Windows in ${m.name}`,
-    lead: "Energy-efficient replacement windows, measured and installed by our own crews.",
+    lead: "Energy-efficient replacement windows, measured and installed by trained crews.",
     sections: [
       { title: "Full-Frame Replacement", body: "When the frame itself has failed, replacing the insert alone just hides the problem." },
       { title: "Insert Replacement", body: "Where the existing frame is sound, an insert is faster, cheaper and less disruptive." },
@@ -224,7 +227,7 @@ export const SERVICE_CONTENT = {
   "commercial-roofing": {
     label: "Commercial Roofing",
     h1: (m) => `Commercial Roofing in ${m.name}`,
-    lead: "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by our own crews.",
+    lead: "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by certified commercial crews.",
     sections: [
       { title: "Flat and Low-Slope Systems", body: "TPO, EPDM and modified bitumen, specified against the deck, the drainage and what the building is used for — not against a default." },
       { title: "Roof Coatings and Restoration", body: "Where the deck is sound, a coating buys years for a fraction of a tear-off. We will tell you when it is the honest answer and when it is only postponing one." },
@@ -301,6 +304,17 @@ export const NATIONAL_DEPTH = {
       ]},
       { h: "The decking decides on tear-off day", p: [
         "What is under the old shingles cannot be known from the ground or a satellite photo. Soft decking found on tear-off gets replaced before anything new goes down — which is why the quote is written after a walk on the roof, and why it holds unless the scope itself changes.",
+      ]},
+      { h: "Repair or replace — how the call actually gets made", p: [
+        "Three things decide it: the age of the shingles, the state of the decking, and how widespread the damage is. A ten-year-old roof with one lifted valley is a repair; a twenty-year-old roof leaking in three places is a replacement being paid for in installments.",
+        "The inspection settles it, and we will say when a repair is the honest answer — a roof with years left in it should get them.",
+      ]},
+      { h: "What a replacement includes", p: [
+        "Full tear-off to the deck — never an overlay, which hides the decking and voids most shingle warranties. Then ice-and-water membrane at the eaves and valleys, synthetic underlayment, new flashing throughout, ridge ventilation, and the shingle system installed as the manufacturer specifies.",
+        "Cleanup is part of the job: magnet runs for nails, and a walk of the finished work with you before the crew leaves.",
+      ]},
+      { h: "How the job runs", p: [
+        "A project manager walks the roof and writes the quote. Materials arrive ahead of the crew, most homes are finished in a single day, and weather moves the schedule rather than the standard — we tell you when it does.",
       ]},
     ],
   },

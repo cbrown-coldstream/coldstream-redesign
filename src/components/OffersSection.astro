@@ -1,0 +1,61 @@
+---
+// OFFERS & PROMOTIONS — replaces the standing roofing block on the homepage (owner brief §8).
+//
+// Mr. Roof's offers page is the structural reference: cards with a headline, an eligibility
+// line, and fine print. The CONTENT architecture is claims-gated: src/data/offers.js renders a
+// card only when its required fields are real, and with nothing confirmed the section holds one
+// evergreen card — the free inspection — which is approved and always true. So this component
+// never has an empty state: it degrades to the one offer that is never false.
+import { liveOffers } from "../data/offers.js";
+import { estimateHref } from "../data/markets.js";
+const { market } = Astro.props;
+const cards = liveOffers();
+---
+<section class="offers" aria-labelledby="offers-h">
+  <div class="wrap">
+    <div class="shead" data-reveal>
+      <span class="eyebrow">Offers &amp; promotions</span>
+      <h2 id="offers-h">Current offers</h2>
+      <p>Across roofing, siding, windows and gutters. Every offer is in writing on your quote.</p>
+    </div>
+    <div class="offer-grid" data-reveal="stagger">
+      {cards.map((o) => (
+        <article class="offer-card">
+          <h3>{o.headline}</h3>
+          {o.services && <p class="offer-svcs">{o.services}</p>}
+          <p class="offer-elig">{o.eligibility}</p>
+          {o.id === "financing" && o.lender && <p class="offer-lender">Financing through {o.lender}</p>}
+          <p class="offer-fine">{o.finePrint}{o.id === "financing" && o.disclosure && ` ${o.disclosure}`}</p>
+        </article>
+      ))}
+      {/* The evergreen card renders ALWAYS — it is the floor, not a fallback that vanishes when a
+          promotion lands. A visitor who misses a seasonal offer still leaves with the real one. */}
+      <article class="offer-card offer-evergreen">
+        <h3>Free, no-obligation inspection and quote</h3>
+        <p class="offer-elig">Every service, every market, all year. A project manager walks the
+        property in person and you get the scope, the materials and the number in writing.</p>
+        <a class="btn btn-orange" href={estimateHref(market)}>Book a free inspection</a>
+        <p class="offer-fine">No deposit to book. The quote is yours to keep and compare.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .offers { background: var(--cs-mist); }
+  .offer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .offer-card {
+    background: var(--cs-paper); border: 1px solid var(--cs-line); border-radius: 12px;
+    padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .offer-card h3 {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: 1.22rem; letter-spacing: var(--cs-web-display-ls);
+  }
+  .offer-svcs { font-weight: 600; font-size: .92rem; color: var(--cs-primary-deep); }
+  .offer-elig { color: var(--cs-text-muted); font-size: .98rem; line-height: 1.6; flex: 1; }
+  .offer-lender { font-size: .9rem; font-weight: 600; }
+  .offer-fine { font-size: .8rem; color: var(--cs-text-muted); border-top: 1px dashed var(--cs-line); padding-top: 10px; }
+  .offer-evergreen { border-top: 4px solid var(--cs-accent); }
+  .offer-evergreen .btn { align-self: flex-start; margin: 4px 0 2px; }
+</style>

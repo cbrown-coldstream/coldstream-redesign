@@ -1,0 +1,58 @@
+---
+// /instant-roof-quote/ — the Roofful widget's page, BUILT AHEAD OF ITS EMBED (owner brief §9).
+//
+// THE EMBED IS NOT IN THE REPO. RooffulTab.astro has carried "no Roofful embed exists yet" since
+// round 1, and nothing arrived with this round. The brief's fallback applies in full:
+//   · the page exists, noindex, and is named in GLOBAL_PENDING so the build reports it;
+//   · every CTA keeps pointing at the free-estimate flow — a button promising an instant quote
+//     that cannot give one is a broken promise, which is the same ruling redirects.js made when
+//     it folded the live instant-quote URLs into /free-estimate/;
+//   · the live per-market URLs (/cincinnati/instant-roof-quote/ etc.) KEEP their existing 301s
+//     to /free-estimate/ rather than being repointed here, because the redirect gates refuse a
+//     301 into a page that is noindex for want of content — correctly. When the embed lands,
+//     this page leaves noindex, the rules repoint here with ?market= preselection, and the CTAs
+//     switch. The ?market= plumbing below is already wired so that day is a data change.
+//
+// Market-aware: ?market=cincinnati|columbus|st-louis preselects the office so the lead routes
+// correctly the moment the widget exists. Until then the page says plainly what it is.
+import PageShell from "../layouts/PageShell.astro";
+import { MARKET_LIST } from "../data/markets.js";
+---
+<PageShell
+  title="Instant Roof Quote | Coldstream Exteriors"
+  description="An instant roof quote from Coldstream Exteriors. Until the tool goes live, the free in-person inspection is the fastest route to a real number."
+  canonical="/instant-roof-quote/"
+  noindex={true}
+  eyebrow="Instant quote"
+  heading="Instant roof quote"
+  intro="The instant-quote tool is on its way. Until it is live, the fastest route to a real number is the one that has always worked: a free inspection, and a written quote."
+  reviews={false} offer={false}
+>
+  <section>
+    <div class="wrap" style="max-width:720px">
+      {/* THE WIDGET MOUNTS HERE. data-market carries the preselection; the inline script resolves
+          it from the query string so the embed, when it arrives, reads one attribute and routes
+          the lead to the right office. */}
+      <div id="roofful-mount" data-market="">
+        <p style="color:var(--cs-text-muted);line-height:1.7">
+          A roof quote you can act on needs the thing no widget sees: what is under the last
+          layer. Book the free inspection and a project manager walks the roof in person —
+          same-day or next-day for anything letting water in.
+        </p>
+        <p><a class="btn btn-orange" href="/free-estimate/">Get my free estimate →</a></p>
+        <p style="font-size:.9rem;color:var(--cs-text-muted)">
+          Offices: {MARKET_LIST.map((m, i) => (
+            <span>{i > 0 && " · "}{m.cityState}</span>
+          ))}
+        </p>
+      </div>
+    </div>
+  </section>
+  <script is:inline>
+    (function () {
+      var ok = ["cincinnati", "columbus", "st-louis"];
+      var m = new URLSearchParams(location.search).get("market");
+      if (ok.indexOf(m) !== -1) document.getElementById("roofful-mount").dataset.market = m;
+    })();
+  </script>
+</PageShell>

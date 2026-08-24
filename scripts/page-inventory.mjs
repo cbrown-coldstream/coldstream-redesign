@@ -63,6 +63,7 @@ const KEPT_BEYOND_INVENTORY = {
   // sub-service. See data/national-subservices.js for the split and the slug mapping.
   "/roofing/replacement/": "National sub-service page behind the Roofing dropdown. Nationally the dropdown child resolved to /roofing/ itself. Market equivalent is /{market}/roofing/roof-replacement/, whose slug is unchanged because 273 redirect rules resolve to it.",
   "/roofing/repair/": "National sub-service page behind the Roofing dropdown. Same reason as /roofing/replacement/.",
+  "/instant-roof-quote/": "Roofful widget host, built ahead of its embed (owner brief 2026-08-24 §9). Noindex and deliberately unlinked until the widget is in the repo; ?market= routing already wired.",
   "/siding/vinyl-siding/": "National sub-service page behind the Siding dropdown. Same reason as /roofing/replacement/.",
   "/siding/james-hardie-siding/": "National sub-service page behind the Siding dropdown. Same reason as /roofing/replacement/.",
   "/siding/stone-veneer/": "National sub-service page behind the Siding dropdown, requested 2026-08-19. NATIONAL-ONLY — there is no market variant, because three would be this page with a city dropped into it and there is no local stone veneer content to carry. ⚠ The offering itself is unconfirmed: stone veneer appears in no live-copy page and in no market's services array. See the flag in data/national-subservices.js.",

@@ -17,7 +17,7 @@
 //   2. WITHOUT FIXTURES. The pages must still exist — they are inventory pages — but must be back
 //      to their empty states, and no fixture string may survive anywhere in dist/.
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, join } from "node:path";
 
@@ -116,6 +116,37 @@ const walk = (dir) => readdirSync(dir).flatMap((f) => {
 });
 const leaked = walk(dist).filter((f) => /\.(html|xml|txt|json)$/.test(f) && /FIXTURE/i.test(readFileSync(f, "utf8")));
 check(leaked.length === 0, `no fixture content in dist/ ${leaked.length ? `— LEAKED INTO ${leaked.join(", ")}` : ""}`);
+
+// ── ROUND 49'S GATES, PROVEN IN THE FAILING DIRECTION ────────────────────────────────────────
+//
+// Verify's own run above proves the passing direction; these mutate a copy of the built output
+// (and, for Reg Z, the offers module) and assert verify actually fails. Same discipline as the
+// fixture halves: a gate that has never been seen to fail is a decoration.
+console.log("\n  GATE TEST — verify must FAIL on seeded violations\n");
+const verifyFails = (label, mutate, restore) => {
+  mutate();
+  let failedRun = false;
+  try { execFileSync("node", ["scripts/verify-build.mjs"], { cwd: root, stdio: "pipe" }); }
+  catch { failedRun = true; }
+  restore();
+  check(failedRun, label);
+};
+
+const homePath = join(dist, "index.html");
+const homeOrig = readFileSync(homePath, "utf8");
+verifyFails(
+  "verify fails when a heading enumerates two markets",
+  () => writeFileSync(homePath, homeOrig.replace(/<h2([^>]*)>[^<]*<\/h2>/, "<h2$1>Serving Cincinnati and Columbus</h2>")),
+  () => writeFileSync(homePath, homeOrig),
+);
+
+const offersPath = resolve(root, "src/data/offers.js");
+const offersOrig = readFileSync(offersPath, "utf8");
+verifyFails(
+  "verify fails on an APR with no lender disclosure (Reg Z)",
+  () => writeFileSync(offersPath, offersOrig.replace("apr: null,", "apr: 6.99,")),
+  () => writeFileSync(offersPath, offersOrig),
+);
 
 console.log(failed ? "\n  ✗ GATE TEST FAILED\n" : "\n  ✓ gate test passed — the gates work in both directions\n");
 process.exit(failed ? 1 : 0);
