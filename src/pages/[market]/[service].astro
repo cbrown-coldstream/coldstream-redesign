@@ -85,7 +85,11 @@ const serviceSchema = {
 };
 ---
 <BaseLayout
-  title={`${h1} | Coldstream Exteriors`}
+  {/* cityState, NOT the bare h1. Round 41's rule — a local page's title carries the state code,
+      because that is what a local search matches on — reached the sub-services and the landings
+      and skipped this template: the title was derived from the H1, and the H1 has no state. The
+      live site's own hub ("Residential Roofing Services in Cincinnati, OH") had this right. */}
+  title={`${h1.replace(market.name, market.cityState)} | Coldstream Exteriors`}
   {/* SERVICE_META, not lead + an office tail — that combination ran three hubs past 160. */}
   description={local?.description ?? SERVICE_META[sKey]?.(market) ?? lead}
   canonical={`/${market.slug}/${sKey}/`}
