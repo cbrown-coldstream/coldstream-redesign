@@ -51,7 +51,27 @@ export const CLAIMS = {
   /** Payment terms, e.g. "No payment is due until your project is finished." Needs sign-off. */
   paymentTerms: null,
 
-  /** Years in business, as a number. Nobody has sourced the founding year. */
+  /**
+   * Years in business, as a number. Nobody has sourced the founding year.
+   *
+   * ── ⚠ THREE SOURCES, THREE ANSWERS, FOUND 2026-08-24 ───────────────────────────────────────
+   *
+   *   "Established in 2007"   an Angi listing for the St. Louis entity  → about 19 years
+   *   "over 20 years"         an Owens Corning contractor profile and the live Facebook page
+   *   "25+ years"             the live WordPress site and the design comp
+   *
+   * NONE OF THEM IS THE BUSINESS ANSWERING THE QUESTION, and they cannot all be right. This is the
+   * same shape of problem as the review count and the GAF tier: a number that has been repeated
+   * until it reads as fact, with no origin behind it.
+   *
+   * WHAT UNLOCKS IT is one date — the year the company was founded — from someone who knows. The
+   * site then prints a figure derived from it rather than a remembered one, and it stays correct
+   * every year without anyone editing a template.
+   *
+   * ⚠ NOTE THE DIRECTION OF THE ERROR. If 2007 is right, "25+ years" is not a rounding — it is six
+   *   years of experience the company does not have, printed on roughly twenty pages of the live
+   *   site. That is the reason this is gated rather than carried across.
+   */
   experience: null,
 
   /**
@@ -135,6 +155,49 @@ export const PROFILES = [
 ];
 
 /**
+ * PROFILES FOUND BUT NOT ADDED — the queue, with what each one still needs.
+ *
+ * Kept as data rather than a comment so it survives, and separate from PROFILES so nothing here
+ * can reach a page by accident. Moving an entry up is a deliberate edit.
+ */
+export const PROFILE_CANDIDATES = [
+  { url: "https://www.yelp.com/biz/coldstream-exteriors-milford",
+    needs: "Confirm this is the company's own listing. The badge row already shows a Yelp mark, so " +
+           "the profile is presumably ours — 'presumably' is why it is here and not above." },
+  { url: "https://www.yelp.com/biz/coldstream-exteriors-st-louis-2",
+    needs: "Same. Note the `-2` suffix: Yelp appends it when a second listing exists for the same " +
+           "name, so there may be an older duplicate splitting reviews. Worth checking." },
+  { url: null, needs: "THE GOOGLE BUSINESS PROFILE, one per office. Still the highest-value missing " +
+           "signal on the site — it is the link between this domain and the map pack. It cannot be " +
+           "found from outside: it comes off the dashboard, or from Maps via Share → Copy link." },
+];
+
+/**
+ * ⚠ TWO BBB URLs EXIST FOR THE SAME PROFILE ID, found 2026-08-24.
+ *
+ *     .../us/oh/cincinnati/profile/roofing-contractors/coldstream-exteriors-0292-90017698   ← recorded above
+ *     .../us/oh/milford/profile/roofing-contractors/coldstream-exteriors-0292-90017698      ← what search returns
+ *
+ * Same ID, different city segment; Milford is the actual office address, so that is probably the
+ * canonical one and the Cincinnati form a redirect. It has NOT been changed, because BBB blocks
+ * automated requests and neither URL could be resolved to confirm which redirects to which.
+ * Open both in a browser, keep whichever does not redirect, and update `bbb.profileUrl`.
+ */
+
+/**
+ * ⚠ THE LISTINGS SAY COLDSTREAM DOES SOLAR. THIS SITE DOES NOT MENTION IT.
+ *
+ * The Owens Corning contractor profile describes "solar energy system installation, maintenance and
+ * monitoring" alongside the exteriors work. Nothing in this repo — not markets.js, not services.js,
+ * not any live-copy page — refers to solar at all.
+ *
+ * That is a question, not a gap to fill: is solar a separate brand, a discontinued line, or a real
+ * service missing from the site? It is not added on the strength of a directory listing, and a
+ * service the company sells that its own website omits is worth more than most of the SEO work in
+ * DECISIONS §44.
+ */
+
+/**
  * Opening hours, as an OpeningHoursSpecification-shaped object, or null.
  *
  * Shape: `{ dayOfWeek: ["Monday", ...], opens: "08:00", closes: "17:00" }`.
@@ -145,6 +208,20 @@ export const PROFILES = [
  * "Open now" line Google can show beside a local result, so a wrong value is wrong in public.
  *
  * Fill this in and it appears on all three market business nodes at once.
+ *
+ * ── CANDIDATE FOUND 2026-08-24, NOT ACCEPTED ─────────────────────────────────────────────────
+ *
+ * Third-party directory listings (Yelp, YellowPages, an Owens Corning contractor profile) agree on:
+ *
+ *     Mon–Fri 08:00–17:00 · Sat 08:00–13:00 · Sun closed
+ *
+ * THAT IS NOT A SOURCE BY THIS FILE'S STANDARD and it is not written in below. A directory prints
+ * whatever it was given, whenever it was given it, and none of them is the business saying so
+ * today. It is recorded here so the question can be answered with a yes/no instead of from scratch:
+ * confirm those hours and this becomes a two-line edit.
+ *
+ * The Saturday half-day is the part worth confirming rather than assuming — it is the difference
+ * between a customer driving to an office on a Saturday morning and finding it open or shut.
  */
 export const HOURS = null;
 
