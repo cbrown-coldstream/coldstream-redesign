@@ -265,3 +265,107 @@ export const SERVICE_CONTENT = {
 /** A service page clears the bar for a market only when it has copy written for that market. */
 export const hasLocalCopy = (serviceKey, marketSlug) =>
   Boolean(SERVICE_CONTENT[serviceKey]?.local?.[marketSlug]);
+
+/**
+ * NATIONAL DEPTH — the buying-decision layer the national hubs lacked (round 48).
+ *
+ * WHERE IT CAME FROM. The live site carried six pages per market on windows and gutters alone —
+ * 7,000+ pulled words per target sitting unused in live-copy/ — and the competitor benchmarks
+ * carry the same layer: what decides the choice, what fails, what good fitting looks like. Our
+ * national hubs were the thinnest indexable content pages on the site (788–1,035 words) and said
+ * nothing about any of it.
+ *
+ * WHAT WAS NOT DONE: porting the live prose. It leans on "25+ years" (gated in claims.js), reads
+ * in the banned voice ("Most Trusted", superlatives), and repeats one skeleton across six URLs.
+ * The TOPICS are the gap; the copy below is written new, as trade fact rather than company claim,
+ * which is why none of it needs the claims gate. No cities — a national page must not compete
+ * with the market hubs on a city term (see the title rule in [service].astro).
+ *
+ * Shape matches MarketDepth: { eyebrow, heading, blocks: [{ h, p: [...] }] }.
+ */
+export const NATIONAL_DEPTH = {
+  roofing: {
+    eyebrow: "What the inspection is looking for",
+    heading: "What separates a roof that lasts from one that doesn't",
+    blocks: [
+      { h: "Material is matched to the roof, not the other way round", p: [
+        "Architectural asphalt carries most homes: layered, wind-rated and economical to repair. Impact-rated shingles earn their premium where hail keeps returning. Metal trades a higher up-front cost for lifespan, and low-slope sections need membrane systems, not shingles pretending to be one.",
+        "The specification follows the inspection — pitch, exposure, and what the last roof did wrong — rather than a default.",
+      ]},
+      { h: "Ventilation is half the lifespan", p: [
+        "An attic that cannot breathe cooks shingles from underneath in summer and feeds ice dams in winter. Intake at the eaves and exhaust at the ridge work as a pair; blocking either one disables both.",
+        "Plenty of \"failed\" roofs are ventilation problems wearing a shingle costume. Replacing the shingles without fixing the airflow buys the same failure twice.",
+      ]},
+      { h: "Flashing is replaced, not caulked over", p: [
+        "Most leaks trace to transitions — chimneys, walls, valleys, pipe boots — not to the open field of the roof. Metal that has moved or rusted gets replaced. Caulk over tired flashing is a countdown, not a repair.",
+      ]},
+      { h: "The decking decides on tear-off day", p: [
+        "What is under the old shingles cannot be known from the ground or a satellite photo. Soft decking found on tear-off gets replaced before anything new goes down — which is why the quote is written after a walk on the roof, and why it holds unless the scope itself changes.",
+      ]},
+    ],
+  },
+  siding: {
+    eyebrow: "Material and fitting, weighed together",
+    heading: "Material is half the decision. Fitting is the other half.",
+    blocks: [
+      { h: "Fiber cement and vinyl solve different problems", p: [
+        "Fiber cement is heavier, fire-resistant, holds paint and takes an impact; it costs more and demands precise installation. Vinyl is lighter on budget and maintenance, never needs paint, and moves with temperature by design.",
+        "Where both fit the house we quote both, and say which one we would put on our own.",
+      ]},
+      { h: "Vinyl is hung, not nailed tight", p: [
+        "Vinyl expands and contracts with the weather. A panel nailed hard cannot move, so it buckles in summer and cracks in a cold snap. Fitted right, it hangs on its nailing slots and slides invisibly.",
+        "Most \"bad vinyl\" is bad fitting — the material takes the blame for the installation.",
+      ]},
+      { h: "Fiber cement lives and dies by its details", p: [
+        "Clearances off the roofline and the grade, flashed butt joints, sealed cut edges, the right fasteners at the right depth. Fiber cement rewards the crew that respects the spec sheet and punishes the one that improvises.",
+      ]},
+      { h: "What's behind the siding matters more than the siding", p: [
+        "Some water always gets behind cladding, so the wall underneath gets a drainage plane — housewrap lapped to shed, flashing at every opening. The siding is the umbrella; the wrap is the raincoat.",
+        "Re-siding is also the one chance to see the sheathing. Soft spots found then cost little to put right. Hidden, they cost a wall.",
+      ]},
+    ],
+  },
+  windows: {
+    eyebrow: "The decisions the estimate walks through",
+    heading: "What decides whether new windows actually perform",
+    blocks: [
+      { h: "Insert or full-frame comes first", p: [
+        "An insert replacement sets the new unit inside the existing frame — less disruption, lower cost, and the right call when that frame is square, sound and dry. A full-frame replacement strips back to the rough opening and rebuilds from there.",
+        "Which one your house needs is a measurement, not a preference. Soft sills, racked frames or staining around the casing all point full-frame; covering them with an insert seals the problem in.",
+      ]},
+      { h: "The glass does the energy work", p: [
+        "Two numbers describe most of what a window does: U-factor, how well it holds heat in, and solar heat gain, how much summer sun it lets through. Low-E coatings and gas fill between the panes move both.",
+        "A climate with real winters and real summers needs the two read together — a window chosen only to hold heat can cook a west-facing room in July. We go through the label with you, not around it.",
+      ]},
+      { h: "Fitting decides more than the brand", p: [
+        "A well-made window fitted out of square fails early: sashes drag, seals stress, water finds the sill. The parts you never see set the service life — flashing lapped the right way, shims that keep the frame true, insulation that fills the gap without bowing the jambs.",
+        "It is why every opening is measured on its own rather than averaged from a floor plan.",
+      ]},
+      { h: "When a window is actually done", p: [
+        "Fog between the panes means the seal has failed and the insulating gas is gone — that unit is finished even if the frame is fine. Sashes that will not stay up, softening sills and drafts you can feel are the same verdict in other forms.",
+        "One failed unit does not always mean a whole-house job. The inspection separates the windows that are done from the ones with years left, and the quote follows that line.",
+      ]},
+    ],
+  },
+  gutters: {
+    eyebrow: "Sizing, seams and where the water goes",
+    heading: "Sizing and detail decide whether gutters actually work",
+    blocks: [
+      { h: "Sized to the roof draining into them", p: [
+        "Capacity is a function of the roof above: its area, its pitch, and how many valleys concentrate the flow. A steep roof sheds the same storm faster, and an undersized run overflows at the inside corners first.",
+        "Often the fix is not bigger gutters but more downspouts — their count and placement move more water than the profile does.",
+      ]},
+      { h: "Seamless, because joints are where gutters fail", p: [
+        "Sectional gutters leak at their seams as the sealant ages; that is not a defect, it is what sealant does. Seamless runs are roll-formed to length on site, so the only joints left are corners and outlets.",
+      ]},
+      { h: "Guards are a trade-off, not a magic lid", p: [
+        "Guards do their best work against leaves. Shingle grit, seed pods and needles behave differently, and no cover ends maintenance — a good one turns a ladder job every season into an occasional rinse.",
+        "The honest question is what your trees drop. That picks the mesh and style better than any brochure.",
+      ]},
+      { h: "The job is where the water lands", p: [
+        "Gutters exist to move water away from the foundation. A downspout that empties beside the footing has moved the problem four feet.",
+        "Extensions, splash blocks and the grade they discharge onto are part of the design — wet basements and settled slabs are what failed drainage actually costs.",
+      ]},
+    ],
+  },
+};

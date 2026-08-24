@@ -18,8 +18,8 @@ change to every page in it.
 |---:|---|---|---|---:|---:|
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1316 |
 | 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1154 |
-| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1191 |
-| 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1296 |
+| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1297 |
+| 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1315 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 545 |
 | 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1325 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1020 |
@@ -41,14 +41,14 @@ change to every page in it.
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/commercial-roofing/` | National service | Commercial and multi-family roofing | 927 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 805 | — | noindex |
-| `/free-estimate/` | Standalone | Your free, no-obligation estimate | 401 | 11 | index |
-| `/gutters/` | National service | Seamless gutters, sized to the roof above them | 868 | — | index |
+| `/free-estimate/` | Standalone | Your free, no-obligation estimate | 572 | 11 | index |
+| `/gutters/` | National service | Seamless gutters, sized to the roof above them | 1108 | — | index |
 | `/privacy-policy/` | Standalone | Privacy policy | 399 | — | noindex |
-| `/roofing/` | National service | Roofing contractors who walk the roof first | 1099 | — | index |
+| `/roofing/` | National service | Roofing contractors who walk the roof first | 1350 | — | index |
 | `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1403 | — | index |
 | `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1435 | — | index |
 | `/service-areas/` | Service areas | Roofing and exterior service areas | 698 | — | index |
-| `/siding/` | National service | Siding, fitted by the crew that measured it | 1024 | — | index |
+| `/siding/` | National service | Siding, fitted by the crew that measured it | 1264 | — | index |
 | `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1359 | — | index |
 | `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1569 | — | index |
 | `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1378 | — | index |
@@ -56,7 +56,7 @@ change to every page in it.
 | `/storm-damage/` | Standalone | Storm damage, documented before it is argued about | 1389 | — | index |
 | `/terms/` | Standalone | Terms of use | 354 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 635 | 9 | noindex |
-| `/windows/` | National service | Replacement windows, measured opening by opening | 852 | — | index |
+| `/windows/` | National service | Replacement windows, measured opening by opening | 1176 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
@@ -175,11 +175,12 @@ these sections with this copy.
 **Standalone** — e.g. `/free-estimate/`
 
 1. Get Your Free Estimate
-2. Common questions
-3. What we hold ourselves to
-4. Services
-5. Company
-6. Markets
+2. From this form to a number in writing
+3. Common questions
+4. What we hold ourselves to
+5. Services
+6. Company
+7. Markets
 
 **Location area** — e.g. `/cincinnati/locations/east/`
 

@@ -2937,7 +2937,55 @@ names why the visitor came. "Storm damage" and "roof" are real query terms, not 
 The comparison point was Mr. Roof's home page, which leads the same way — but the line is ours,
 with the provenance recorded in national.js since the first commit.
 
-## 54. Checks
+## 54. Round 48 — the thinnest pages get the layer the live site had and we dropped
+
+The brief: look at other sites' copy and fill the gaps where our pages lack information. Measured
+first, so the targets picked themselves: **/free-estimate/ carried 336 words at sitemap priority
+0.9** — the thinnest indexable page on the site was its second most important — and the national
+hubs were next (windows 788, gutters 804), while `live-copy/` held **7,000+ pulled words per
+market** on exactly those topics that never got ported.
+
+**The live pages were read again, live, not just from the pull** — three fetched directly
+(free-estimate, gutter-guards, energy-efficient-window). They confirmed the pull: one skeleton
+repeated with the noun swapped ("Most Trusted X Contractors / The Hidden Cost of Poor Installation
+/ Our Proven Process / cost FAQ"). So the TOPICS are the gap and the prose is unusable — it leans
+on "25+ years" (gated), reads in the banned voice, and the cost FAQs print dollar figures the
+claims gate exists to keep out.
+
+**What was added — written new, as trade fact rather than company claim:**
+
+```
+NATIONAL_DEPTH (services.js), rendered by MarketDepth in the hub slot:
+  roofing   material matching · ventilation · flashing replaced not caulked · decking on tear-off
+  siding    fiber cement vs vinyl · vinyl hangs loose · Hardie's details · the wall behind it
+  windows   insert vs full-frame · U-factor and heat gain · fitting over brand · when a unit is done
+  gutters   sized to the roof · seamless vs seams · guards as a trade-off · where the water lands
+
+/free-estimate/  what happens after the form · what the written quote contains · the storm path
+                 — assembled from commitments the site already makes, nothing newly claimed
+```
+
+```
+                 before   after
+/free-estimate/    336  →   507
+/windows/          788  →  1112
+/gutters/          804  →  1044
+/roofing/        1035  →  1286
+/siding/         1024  →  1200
+```
+
+Commercial-roofing deliberately gets no block — a different buyer on a different search.
+
+Trade fact needs no source sign-off, which is why none of this waited on the business: how a
+low-E coating works is not a claim about Coldstream. Anything that WAS a claim stayed out — no
+years, no prices, no ratings.
+
+**⚠ One build broke silently on the way** — the depth import was aimed at the market template's
+path, the national one imports differently, and `npm run build >/dev/null` swallowed the error;
+verify then failed loudly with 573 dead links. The lesson is old but re-earned: never silence the
+build, and never trust an edit that did not assert its match.
+
+## 55. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

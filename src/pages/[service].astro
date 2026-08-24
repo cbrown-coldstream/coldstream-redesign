@@ -28,6 +28,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import Hero from "../components/Hero.astro";
 import BadgeRow from "../components/BadgeRow.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
+import MarketDepth from "../components/MarketDepth.astro";
 import ProcessScrub from "../components/ProcessScrub.astro";
 import MarketChooser from "../components/MarketChooser.astro";
 import HowItWorks from "../components/HowItWorks.astro";
@@ -37,7 +38,7 @@ import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/markets.js";
-import { SERVICE_CONTENT } from "../data/services.js";
+import { SERVICE_CONTENT, NATIONAL_DEPTH } from "../data/services.js";
 import { PROCESS, PROCESS_INTRO } from "../data/process.js";
 import { orgRef } from "../data/seo.js";
 import { placeNode } from "../data/seo.js";
@@ -166,6 +167,12 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     intro={INTRO[service]}
     cards={svc.sections}
   />
+
+  {/* NATIONAL DEPTH — same slot the market template gives MarketDepth: straight after the cards
+      that say what the work is, before anything about us. A reader weighing materials should hit
+      the material argument next, not the trust band. Renders nothing for a service with no block
+      (commercial-roofing, by design — a different buyer on a different search). */}
+  <MarketDepth market={market} depth={NATIONAL_DEPTH[service]} />
 
   {/* Below the fold, after the detail cards that describe the work and before the FAQ — the same
       position it holds in [market]/[service].astro. Never behind hero copy: verify-build's fixed

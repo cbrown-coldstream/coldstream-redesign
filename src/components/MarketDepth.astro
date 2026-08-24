@@ -33,11 +33,11 @@ const { market, depth } = Astro.props;
 const show = depth?.blocks?.length > 0;
 ---
 {show && (
-  <section class="mdepth" aria-labelledby={`mdepth-${market.slug}`}>
+  <section class="mdepth" aria-labelledby={`mdepth-${market.slug ?? "national"}`}>
     <div class="wrap">
       <div class="shead">
         <span class="eyebrow">{depth.eyebrow ?? `Working on ${market.region} homes`}</span>
-        <h2 id={`mdepth-${market.slug}`}>{depth.heading}</h2>
+        <h2 id={`mdepth-${market.slug ?? "national"}`}>{depth.heading}</h2>
         {depth.intro && <p>{depth.intro}</p>}
       </div>
       <div class="mdepth-blocks" data-reveal="stagger">
