@@ -26,7 +26,7 @@ change to every page in it.
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 741 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 586 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 549 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1315 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1309 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 695 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 698 |
 
@@ -36,7 +36,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Storm damage or an aging roof — either way, start here | 1315 | — | index |
+| `/` | National home | Storm damage or an aging roof — either way, start here | 1309 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 951 | — | noindex |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/commercial-roofing/` | National service | Commercial and multi-family roofing | 927 | — | index |

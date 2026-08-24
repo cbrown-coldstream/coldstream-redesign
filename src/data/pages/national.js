@@ -39,7 +39,10 @@ export const national = {
   // cannibalisation round 43 removed from the national service hubs. The headline now speaks to
   // why the visitor is here; the eyebrow keeps the category so the hero still names what we do.
   hero: {
-    eyebrow: "Roofing, siding, windows and gutters — Cincinnati, Columbus and St. Louis",
+    // "Experts" cleared against voice-spec: the ban is on vague superlative PHRASES ("expert
+    // solutions", "world-class"), not the word. The trades and cities left the eyebrow with this
+    // edit — they still live in the description, the schema and the sub line's "three metros".
+    eyebrow: "Roofing and Home Exterior Experts",
     headline: "Storm damage or an aging roof — either way, start here",
     sub: "Three metros, three local crews, one standard of work. Free inspections, a written quote before anything starts, and a 25-year workmanship warranty behind it.",
   },
