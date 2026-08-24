@@ -391,6 +391,18 @@ const wpBody = `
       <h3>Stop WordPress routing these paths</h3>
       <p>WordPress must not attempt to serve any URL in the sitemap. If a WP page exists on the same slug, it wins on a
       misconfigured host and you get the old thin page back at the new URL — with the redirect pointing at it.</p>
+      <div class="note stop"><p><b>⚠ <code>/blog/</code> IS THE ONE PATH WHERE THIS CUTS THE OTHER WAY, AND IT NEEDS A
+      DECISION BEFORE CUTOVER.</b> WordPress currently serves a real blog at <code>/blog/</code> with 45 live posts under it.
+      This build also produces a <code>/blog/</code> — an empty index, noindex, absent from the sitemap, and linked as
+      "Advice" from the footer of all ${stats.pages} pages. Upload it as-is and it replaces a working blog with an empty page,
+      taking 45 indexed posts out of the site in one move.</p>
+      <p><b>Until the blog migration is decided, do this:</b> leave <code>/blog/</code> and everything under it with
+      WordPress, and do <b>not</b> upload <code>dist/blog/</code>. The footer link then lands on the existing WordPress blog,
+      which is unstyled against the new site but alive and indexed. That is the right trade — an ugly page that ranks beats a
+      tidy page that does not exist.</p>
+      <p>The blog is the only <code>PENDING</code> block in the 301 map, for the reason set out on the redirects page:
+      no post gets folded, kept or killed from a guess. It needs the per-post traffic and backlink export
+      (<code>site/data/live-urls.txt</code>), which does not exist in the repo yet.</p></div>
     </li>
     <li>
       <h3>Cut over, then submit the sitemap</h3>
@@ -539,6 +551,8 @@ const wpBody = `
     <li>The form submits and lands on <code>/thank-you/</code>.</li>
     <li>Nothing on the site prints a star rating, a review count, a BBB claim, a financing figure or a promotion. All of
     it is gated until sourced, and it should still be gated after the migration.</li>
+    <li><code>/blog/</code> still serves the WordPress blog and its 45 posts — <b>not</b> this build's empty index. See
+    the warning in step 3.</li>
     <li><code>robots.txt</code> reads <code>Allow: /</code> and names the sitemap. If it reads <code>Disallow: /</code>,
     the staging file was uploaded — stop and fix it before anything else on this list matters.</li>
     <li><code>/og-default.jpg</code>, the four icon files and <code>/llms.txt</code> all return 200. Paste the home page URL

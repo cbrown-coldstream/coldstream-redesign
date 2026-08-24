@@ -2871,7 +2871,57 @@ year, job photographs, lender terms — each with **what it unlocks and which fi
 one is gated rather than missing: fill the value in one place and it appears everywhere it belongs
 on the next build.
 
-## 51. Checks
+## 52. Round 46 — /blog/ collides at cutover, and nothing said so
+
+Measured while answering "should we do a blog, given SWORD have 69 posts". The answer to that is a
+strategy note, not a code change. **This is the thing found on the way to it, and it is a real
+cutover defect.**
+
+```
+WordPress serves today   /blog/  → a live index with 45 unique posts beneath it
+This build produces      /blog/  → an empty index, noindex, not in the sitemap,
+                                   and linked as "Advice" from all 75 footers
+```
+
+Upload `dist/blog/` at cutover and an empty page replaces a working blog. **45 indexed posts leave
+the site in a single move**, and every one of them is currently the only informational content the
+domain has.
+
+Nothing in the handoff said so. Step 3 said "WordPress must not attempt to serve any URL in the
+sitemap" — correct, and it does not cover this case, because `/blog/` is deliberately *absent* from
+the sitemap. The one path where the rule runs backwards was the one path with no note on it.
+
+**The instruction, now in the handoff and on the pre-cutover checklist:** leave `/blog/` and
+everything under it with WordPress, and do not upload `dist/blog/`. The footer link lands on the
+existing WordPress blog — unstyled against the new site, but alive and indexed. An ugly page that
+ranks beats a tidy page that does not exist.
+
+### What the live blog actually contains, since it had never been counted
+
+Read out of `src/data/live-copy/blog.json`, which has been in the repo since the copy pull:
+
+```
+47 entries on the index · 45 unique · 2 published twice
+     "How Much Do Seamless Gutters Cost in Cincinnati, Ohio?"
+     "Which Roof Color Makes a House Look Bigger?"
+
+by market   Cincinnati 8 · St. Louis 6 · Columbus 3 · not market-specific 28
+by topic    materials 15 · storm and insurance 14 · cost 6 · maintenance 4
+```
+
+**The six cost posts are the highest-intent pages the domain owns and the ones the claims gate will
+refuse.** "How Much Does an Asphalt Roof Replacement Cost in Cincinnati, OH?" is exactly the query
+this business wants, and the live version of that page almost certainly prints the figures
+`src/data/claims.js` exists to keep out. Porting them is not a copy-paste: each one either sources
+its numbers or is rewritten to explain what drives the price without quoting one. That is a
+decision to take deliberately, before the port, not during it.
+
+`BLOG.count` in redirects.js says 48 and the index lists 47. Both are left as they are — the count
+came from the build order and the index was pulled from the live page; reconciling them is what the
+URL export is for, and inventing a number to make them agree is the failure this repo is built
+against.
+
+## 53. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
