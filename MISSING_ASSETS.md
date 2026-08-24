@@ -8,7 +8,7 @@ be mistaken for it.
 
 | Asset | Destination | Blocking | Notes |
 |---|---|---|---|
-| BBB seal file | `brand/logos/bbb-a-plus.png` (raster, ≥1000px long edge) | `CLAIMS.bbbLogo` in `src/data/claims.js` | The badge row meanwhile renders **BBB's own hosted seal** (`public/badges/bbb-accredited-seal.svg`, linked to the accreditation record — DECISIONS §41), which is stronger than the brief's interim text lockup. Craig's file replaces it when supplied. Not to be sourced from the live WordPress uploads. |
+| BBB seal file | `brand/logos/bbb-a-plus.png` (raster, ≥1000px long edge) | `CLAIMS.bbbLogo` in `src/data/claims.js` | **An AI-generated recreation of the seal was offered 2026-08-24 and declined**: the BBB mark is a licensed trademark and only BBB's own artwork, downloaded from the accreditation account, may ship — an imitation could jeopardize the accreditation it advertises. The badge row meanwhile renders **BBB's own hosted seal** (`public/badges/bbb-accredited-seal.svg`, linked to the accreditation record — DECISIONS §41), which is stronger than the brief's interim text lockup. Craig's file replaces it when supplied. Not to be sourced from the live WordPress uploads. |
 
 ## Awaited from the Contractors Cloud job pull
 
