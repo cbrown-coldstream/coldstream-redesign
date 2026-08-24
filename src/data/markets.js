@@ -60,7 +60,15 @@ export const MARKETS = {
       label: "Cincinnati Office",
       street: "1308 US-50 Suite 100",
       city: "Milford", state: "OH", zip: "45150",
-      // Placeholder until the GBP listing is confirmed — footer NAP must match Google exactly.
+      // ── mapUrl WAS A PLACEHOLDER AND IS NOW A POINTER ──────────────────────────────────────
+      // The Google Business Profile it was waiting for arrived 2026-08-24 and lives in
+      // data/claims.js as MARKET_PROFILES, keyed by slug. It is NOT copied here.
+      //
+      // WHY NOT, GIVEN THIS FILE OWNS EVERYTHING ELSE ABOUT A MARKET. A profile URL is an
+      // assertion that a particular Google listing is this particular business — a claim, and
+      // claims live behind the gate, with the note recording who supplied it and when. Copying it
+      // into this file would put the same URL in two places and lose the provenance from one of
+      // them. `gbpFor(slug)` is the accessor.
       mapUrl: null,
     },
     // CREDENTIALS SHOWN IN THIS MARKET'S BADGE ROW — keys resolve against badges.js.

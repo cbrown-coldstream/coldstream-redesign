@@ -4,12 +4,22 @@
 // factor, which is why the address comes from the market config and is never retyped.
 import { MARKET_LIST, servicesFor, serviceHref, estimateHref, aboutHref } from "../data/markets.js";
 import { marketsWithGallery } from "../data/locations.js";
-import { marketsWithReviews } from "../data/claims.js";
+import { marketsWithReviews, gbpFor } from "../data/claims.js";
 const { market } = Astro.props;
 // servicesFor, NOT homeownerServicesFor — the footer is where the commercial hub gets its
 // site-wide link, so it is reachable from every page rather than orphaned.
 const services = servicesFor(market);
 const o = market.office;
+// THE FOOTER ADDRESS NOW LINKS TO THE OFFICE'S GOOGLE LISTING, which is what the `mapUrl` slot in
+// markets.js was reserved for since round 1 and could not be filled until 2026-08-24.
+//
+// It is the human half of the same statement the schema makes. The header comment above says the
+// footer NAP must match the Google Business Profile exactly — this makes that checkable by anyone
+// reading the page rather than only by whoever compares two tabs, and it hands a visitor the route
+// to directions and reviews in one click.
+//
+// Null on the national footer, and null for any market without a listing. Nothing renders then.
+const gbp = market.slug ? gbpFor(market.slug) : null;
 const year = 2026;
 
 // Reviews and Gallery are in the plan's page system and are BUILT — as templates gated on real
@@ -33,6 +43,14 @@ const extras = market.slug
             <strong style="color:var(--cs-paper)">{o.label}</strong><br />
             {o.street}<br />{o.city}, {o.state} {o.zip}<br />
             <a href={market.telHref}>{market.phone}</a>
+            {gbp && (
+              <a class="gmaps" href={gbp} target="_blank" rel="noopener">
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M8 1.2a4.4 4.4 0 0 0-4.4 4.4c0 3.3 4.4 9.2 4.4 9.2s4.4-5.9 4.4-9.2A4.4 4.4 0 0 0 8 1.2m0 6.2a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6"/>
+                </svg>
+                View on Google Maps
+              </a>
+            )}
           </address>
         ) : (
           <address class="addr" style="font-style:normal">

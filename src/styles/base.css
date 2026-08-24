@@ -478,6 +478,15 @@ footer{background:var(--cs-text);color:var(--cs-mist);padding:52px 0 24px;font-s
 footer .cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:30px;padding-bottom:32px;border-bottom:1px solid color-mix(in srgb, var(--cs-paper) 10%, transparent)}
 footer .cols h2{color:var(--cs-paper);font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;margin-bottom:14px;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight)}
 footer a{color:var(--cs-mist);text-decoration:none;display:block;padding:4px 0}
+/* The office's Google listing, beside the number. Quieter than the number deliberately — the
+   phone is the action, this is the corroboration.
+   ⚠ `footer .addr .gmaps`, NOT `footer .gmaps`. The rule two lines up, `footer .addr a`, paints
+   every link in the address block accent-orange at specificity (0,1,2); a plainer selector loses
+   to it and the link renders as a second, competing call-to-action. Measured on screen, not
+   assumed — it shipped orange once. */
+footer .addr .gmaps{display:inline-flex;align-items:center;gap:5px;font-size:.84rem;font-weight:500;color:var(--cs-steel)}
+footer .addr .gmaps:hover{color:var(--cs-accent)}
+footer .addr .gmaps svg{width:12px;height:12px;flex:none;opacity:.8}
 footer a:hover{color:var(--cs-accent)}
 footer .brand img{height:38px;background:var(--cs-paper);padding:7px 10px;border-radius:8px;margin-bottom:12px}
 footer .addr{color:var(--cs-steel);line-height:1.7}

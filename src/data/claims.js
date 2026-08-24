@@ -155,6 +155,55 @@ export const PROFILES = [
 ];
 
 /**
+ * THE GOOGLE BUSINESS PROFILE FOR EACH OFFICE. One per market, keyed by slug.
+ *
+ * ── WHY THIS IS THE MOST VALUABLE ENTRY IN THIS FILE ─────────────────────────────────────────
+ *
+ * It is the declared link between this website and the map pack — the block of local results with
+ * the pins that sits above the ordinary links, and where most roofing enquiries actually start.
+ * Google can associate a site with a listing without being told, but being told is stronger and it
+ * is the only part of that association we control.
+ *
+ * SEPARATE FROM `PROFILES` ABOVE, DELIBERATELY. Those are company-wide — one Facebook page covers
+ * all three metros, and the BBB record is filed in Milford. These are per-office, and putting the
+ * Cincinnati listing on the St. Louis page would assert that a Milford business is a Missouri one.
+ * That is the entity-merging mistake `sameAs` is easiest to make, and it is why data/seo.js has
+ * always refused to copy the company list onto a market node.
+ *
+ * ── THE URL FORM, WHICH MATTERS ──────────────────────────────────────────────────────────────
+ *
+ * `https://www.google.com/maps/place/?q=place_id:ChIJ...` — the CANONICAL form, built on the Place
+ * ID. Google documents it as the stable way to reference a place. Prefer it over the two
+ * alternatives, both of which are worse for different reasons:
+ *
+ *   maps.app.goo.gl/XXXX    a share shortlink. Redirects, and can be regenerated or expire.
+ *   .../maps/place/Name/@lat,lng,17z/...  carries a name and coordinates in the path, so it breaks
+ *                                          when the business is renamed or the pin is nudged.
+ *
+ * A Place ID survives a rename, a phone change and a pin move. It is the listing's identity.
+ *
+ * SUPPLIED BY THE BUSINESS 2026-08-24, one per office, with the address each belongs to. All three
+ * resolve. This is the item that had been at the top of every outstanding list since round 42.
+ */
+export const MARKET_PROFILES = {
+  cincinnati: {
+    gbp: "https://www.google.com/maps/place/?q=place_id:ChIJ3w7fczqpQYgRsnyuc5zh9u4",
+    source: "Supplied by the business 2026-08-24 as the canonical profile for 1308 US-50 Ste 100, Milford, OH 45150.",
+  },
+  columbus: {
+    gbp: "https://www.google.com/maps/place/?q=place_id:ChIJpd-Lmp2ROIgRb3SgLyNG3Hc",
+    source: "Supplied by the business 2026-08-24 as the canonical profile for 5825 Fieldcrest Dr, Galloway, OH 43119.",
+  },
+  "st-louis": {
+    gbp: "https://www.google.com/maps/place/?q=place_id:ChIJo2VtiJW12IcRVxyjr7GQBCw",
+    source: "Supplied by the business 2026-08-24 as the canonical profile for 3636 S Geyer Rd #100, St. Louis, MO 63127.",
+  },
+};
+
+/** That market's Google Business Profile URL, or null. Null renders nothing, as everywhere else. */
+export const gbpFor = (slug) => MARKET_PROFILES[slug]?.gbp ?? null;
+
+/**
  * PROFILES FOUND BUT NOT ADDED — the queue, with what each one still needs.
  *
  * Kept as data rather than a comment so it survives, and separate from PROFILES so nothing here
@@ -167,9 +216,8 @@ export const PROFILE_CANDIDATES = [
   { url: "https://www.yelp.com/biz/coldstream-exteriors-st-louis-2",
     needs: "Same. Note the `-2` suffix: Yelp appends it when a second listing exists for the same " +
            "name, so there may be an older duplicate splitting reviews. Worth checking." },
-  { url: null, needs: "THE GOOGLE BUSINESS PROFILE, one per office. Still the highest-value missing " +
-           "signal on the site — it is the link between this domain and the map pack. It cannot be " +
-           "found from outside: it comes off the dashboard, or from Maps via Share → Copy link." },
+  // The Google Business Profiles were the third entry here until 2026-08-24. They are now real
+  // values in MARKET_PROFILES above rather than a wish, which is what this queue is for.
 ];
 
 /**
@@ -399,9 +447,12 @@ export const CLAIMS_PENDING = [
   !CLAIMS.experience && ["experience", "founding year, for the \"25+ years\" claim"],
   !CLAIMS.customersServed && ["customersServed", "homes served, for the \"3,000+ customers\" figure"],
   !CLAIMS.bbb && ["bbb", "accreditation status, rating and profile URL"],
-  // The single highest-value missing SEO signal — see data/seo.js. It is the link between this
-  // website and the map pack, and it is one URL per office, read off the GBP dashboard.
-  ["profiles.gbp", "the Google Business Profile URL for each of the three offices"],
+  // ✔ profiles.gbp CLEARED 2026-08-24 — all three offices supplied. See MARKET_PROFILES.
+  //   What it does NOT clear: the review figures below. A profile URL says which listing is ours;
+  //   it does not say what that listing's rating and count are today, and those still have to be
+  //   read off the profile rather than inferred from having its address.
+  ...Object.entries(MARKET_PROFILES).filter(([, p]) => !p.gbp)
+    .map(([k]) => [`profiles.gbp.${k}`, "the Google Business Profile URL for this office"]),
   !HOURS && ["hours", "opening hours, for the three offices — drives \"Open now\" in local results"],
   ...Object.entries(TESTIMONIALS)
     .filter(([, t]) => !t.length)

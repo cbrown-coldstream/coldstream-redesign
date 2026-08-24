@@ -22,7 +22,7 @@
 // Also refused: their `serviceArea` property, which schema.org superseded with `areaServed`.
 // Copying a competitor's mistake is not benchmarking.
 import { MARKET_LIST, NATIONAL, NATIONAL_PHONE, businessId, servicesFor } from "./markets.js";
-import { CLAIMS, PROFILES, HOURS } from "./claims.js";
+import { CLAIMS, PROFILES, HOURS, gbpFor } from "./claims.js";
 import LASTMOD from "./generated/lastmod.json" with { type: "json" };
 
 export const SITE = "https://coldstreamexteriors.com";
@@ -308,14 +308,19 @@ export const businessNode = (market) => ({
     streetAddress: market.office.street, addressLocality: market.office.city,
     addressRegion: market.office.state, postalCode: market.office.zip, addressCountry: "US",
   },
-  // NO `sameAs` ON A MARKET NODE, DELIBERATELY. The profiles in claims.js belong to the company:
-  // the BBB record is filed in Cincinnati, and one Facebook page covers all three metros. Copying
-  // the company's list onto the St. Louis office would assert that a Cincinnati BBB profile is the
-  // St. Louis business, which is the entity-merging mistake `sameAs` is easiest to make. The
-  // parentOrganization link above already tells a crawler where to find them.
+  // THE COMPANY'S OWN PROFILES ARE STILL NOT COPIED HERE, and that ruling is unchanged: the BBB
+  // record is filed in Milford and one Facebook page covers all three metros, so putting the
+  // company list on the St. Louis office would assert that an Ohio record is a Missouri business.
+  // The parentOrganization link above is how a crawler reaches them.
   //
-  // What DOES belong here is each market's own Google Business Profile URL, one per office. Those
-  // are the missing piece — see claims.js PROFILES.
+  // WHAT BELONGS HERE IS THIS OFFICE'S OWN LISTING, and as of 2026-08-24 it exists. One Google
+  // Business Profile per market, keyed by slug in claims.js — the declared link between this page
+  // and the map pack, which is where a local roofing search actually resolves.
+  //
+  // `sameAs` says "that listing IS this business". `hasMap` says "and here is where it is on a
+  // map". They are the same URL doing two different jobs, and schema.org has a property for each;
+  // emitting only one of them leaves half the statement unmade.
+  ...(gbpFor(market.slug) ? { sameAs: [gbpFor(market.slug)], hasMap: gbpFor(market.slug) } : {}),
   ...hoursNode(),
   areaServed: servedPlaces(market),
   ...(stateNode(market) ? { containedInPlace: stateNode(market) } : {}),

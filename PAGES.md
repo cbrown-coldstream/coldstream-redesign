@@ -16,18 +16,18 @@ change to every page in it.
 
 | Pages | Lane | Template | Index | 301s in | Avg words |
 |---:|---|---|---|---:|---:|
-| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1312 |
-| 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1149 |
+| 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 135 | 1316 |
+| 15 | Service hub | `src/pages/[market]/[service].astro` | 15 / 0 noindex | 81 | 1153 |
 | 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1191 |
 | 9 | Standalone | `src/pages/about-us.astro` | 2 / 7 noindex | 20 | 1296 |
-| 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 541 |
-| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1321 |
-| 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1016 |
-| 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 737 |
-| 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 582 |
-| 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 545 |
+| 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 545 |
+| 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1325 |
+| 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1020 |
+| 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 741 |
+| 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 586 |
+| 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 549 |
 | 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1315 |
-| 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 691 |
+| 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 695 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 698 |
 
 ## Every page
@@ -62,69 +62,69 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 1262 | 10 | index |
-| `/cincinnati/about/` | Market about | The Coldstream Crew in Cincinnati | 1003 | — | index |
-| `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 1035 | 2 | index |
-| `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 725 | — | index |
-| `/cincinnati/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Cincinnati | 567 | — | noindex |
-| `/cincinnati/gutters/` | Service hub | Gutters in Cincinnati | 1008 | 10 | index |
-| `/cincinnati/locations/east/` | Location area | Roofing and Exteriors in Cincinnati East | 526 | — | index |
-| `/cincinnati/locations/west/` | Location area | Roofing and Exteriors in Cincinnati West | 510 | — | index |
-| `/cincinnati/reviews/` | Reviews | What Cincinnati Homeowners Say | 541 | — | noindex |
-| `/cincinnati/roofing/` | Service hub | Roofing in Cincinnati | 1371 | 10 | index |
-| `/cincinnati/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Cincinnati | 1263 | 15 | index |
-| `/cincinnati/roofing/roof-repair/` | Sub-service | Roof Repair in Cincinnati | 1364 | 12 | index |
-| `/cincinnati/roofing/roof-replacement/` | Sub-service | Roof Replacement in Cincinnati | 1368 | 3 | index |
-| `/cincinnati/siding/` | Service hub | Siding in Cincinnati | 1270 | 4 | index |
-| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1312 | 6 | index |
-| `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 1294 | 6 | index |
-| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1287 | 3 | index |
-| `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 1001 | 1 | index |
+| `/cincinnati/` | Market landing | Roofing, Siding, Window & Gutter Services in Cincinnati | 1266 | 10 | index |
+| `/cincinnati/about/` | Market about | The Coldstream Crew in Cincinnati | 1007 | — | index |
+| `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 1039 | 2 | index |
+| `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 729 | — | index |
+| `/cincinnati/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Cincinnati | 571 | — | noindex |
+| `/cincinnati/gutters/` | Service hub | Gutters in Cincinnati | 1012 | 10 | index |
+| `/cincinnati/locations/east/` | Location area | Roofing and Exteriors in Cincinnati East | 530 | — | index |
+| `/cincinnati/locations/west/` | Location area | Roofing and Exteriors in Cincinnati West | 514 | — | index |
+| `/cincinnati/reviews/` | Reviews | What Cincinnati Homeowners Say | 545 | — | noindex |
+| `/cincinnati/roofing/` | Service hub | Roofing in Cincinnati | 1375 | 10 | index |
+| `/cincinnati/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Cincinnati | 1267 | 15 | index |
+| `/cincinnati/roofing/roof-repair/` | Sub-service | Roof Repair in Cincinnati | 1368 | 12 | index |
+| `/cincinnati/roofing/roof-replacement/` | Sub-service | Roof Replacement in Cincinnati | 1372 | 3 | index |
+| `/cincinnati/siding/` | Service hub | Siding in Cincinnati | 1274 | 4 | index |
+| `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1316 | 6 | index |
+| `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 1298 | 6 | index |
+| `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1291 | 3 | index |
+| `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 1005 | 1 | index |
 
 ### Columbus — 17 pages (15 indexable, 2 noindex)
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 1305 | 11 | index |
-| `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 996 | — | index |
-| `/columbus/commercial-roofing/` | Service hub | Commercial Roofing in Columbus | 1027 | 2 | index |
-| `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 717 | — | index |
-| `/columbus/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Columbus | 564 | — | noindex |
-| `/columbus/gutters/` | Service hub | Gutters in Columbus | 1002 | 10 | index |
-| `/columbus/locations/` | Locations index | Areas We Serve in Columbus | 691 | 4 | index |
-| `/columbus/reviews/` | Reviews | What Columbus Homeowners Say | 540 | — | noindex |
-| `/columbus/roofing/` | Service hub | Roofing in Columbus | 1358 | 10 | index |
-| `/columbus/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Columbus | 1245 | 15 | index |
-| `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 1305 | 12 | index |
-| `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 1316 | 3 | index |
-| `/columbus/siding/` | Service hub | Siding in Columbus | 1262 | 4 | index |
-| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1304 | 6 | index |
-| `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 1262 | 6 | index |
-| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1274 | 3 | index |
-| `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 998 | 1 | index |
+| `/columbus/` | Market landing | Roofing and Exteriors Built for Central Ohio Weather | 1309 | 11 | index |
+| `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 1000 | — | index |
+| `/columbus/commercial-roofing/` | Service hub | Commercial Roofing in Columbus | 1031 | 2 | index |
+| `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 721 | — | index |
+| `/columbus/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Columbus | 568 | — | noindex |
+| `/columbus/gutters/` | Service hub | Gutters in Columbus | 1006 | 10 | index |
+| `/columbus/locations/` | Locations index | Areas We Serve in Columbus | 695 | 4 | index |
+| `/columbus/reviews/` | Reviews | What Columbus Homeowners Say | 544 | — | noindex |
+| `/columbus/roofing/` | Service hub | Roofing in Columbus | 1362 | 10 | index |
+| `/columbus/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in Columbus | 1249 | 15 | index |
+| `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 1309 | 12 | index |
+| `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 1320 | 3 | index |
+| `/columbus/siding/` | Service hub | Siding in Columbus | 1266 | 4 | index |
+| `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1308 | 6 | index |
+| `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 1266 | 6 | index |
+| `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1278 | 3 | index |
+| `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 1002 | 1 | index |
 
 ### St. Louis — 18 pages (16 indexable, 2 noindex)
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 1395 | 11 | index |
-| `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 1050 | — | index |
-| `/st-louis/commercial-roofing/` | Service hub | Commercial Roofing in St. Louis | 1076 | 2 | index |
-| `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 769 | — | index |
-| `/st-louis/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in St. Louis | 614 | — | noindex |
-| `/st-louis/gutters/` | Service hub | Gutters in St. Louis | 1048 | 10 | index |
-| `/st-louis/locations/north/` | Location area | Roofing and Exteriors in West County and North County | 561 | — | index |
-| `/st-louis/locations/south/` | Location area | Roofing and Exteriors in South County and South City | 565 | — | index |
-| `/st-louis/reviews/` | Reviews | What St. Louis Homeowners Say | 553 | — | noindex |
-| `/st-louis/roofing/` | Service hub | Roofing in St. Louis | 1410 | 10 | index |
-| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1296 | 15 | index |
-| `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1347 | 12 | index |
-| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1372 | 3 | index |
-| `/st-louis/siding/` | Service hub | Siding in St. Louis | 1313 | 4 | index |
-| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1360 | 6 | index |
-| `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1328 | 6 | index |
-| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1327 | 3 | index |
-| `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1049 | 1 | index |
+| `/st-louis/` | Market landing | Roofing, Siding and Exteriors Across Greater St. Louis | 1399 | 11 | index |
+| `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 1054 | — | index |
+| `/st-louis/commercial-roofing/` | Service hub | Commercial Roofing in St. Louis | 1080 | 2 | index |
+| `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 773 | — | index |
+| `/st-louis/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in St. Louis | 618 | — | noindex |
+| `/st-louis/gutters/` | Service hub | Gutters in St. Louis | 1052 | 10 | index |
+| `/st-louis/locations/north/` | Location area | Roofing and Exteriors in West County and North County | 565 | — | index |
+| `/st-louis/locations/south/` | Location area | Roofing and Exteriors in South County and South City | 569 | — | index |
+| `/st-louis/reviews/` | Reviews | What St. Louis Homeowners Say | 557 | — | noindex |
+| `/st-louis/roofing/` | Service hub | Roofing in St. Louis | 1414 | 10 | index |
+| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1300 | 15 | index |
+| `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1351 | 12 | index |
+| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1376 | 3 | index |
+| `/st-louis/siding/` | Service hub | Siding in St. Louis | 1317 | 4 | index |
+| `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1364 | 6 | index |
+| `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1332 | 6 | index |
+| `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1331 | 3 | index |
+| `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1053 | 1 | index |
 
 ## Section order per lane
 
