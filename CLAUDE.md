@@ -101,7 +101,9 @@ npm run llms         # regenerate public/llms.txt from markets/claims/sitemap
 
 ## What is done, and what is not
 
-**Done:** all 67 pages build and pass every gate. Copy consolidated from the live site. Design
+**Done:** all 75 pages build and pass all 31 gates. **The technical SEO and AI-readability layer
+is finished** — rounds 41–46, DECISIONS §42–§52. What remains on that front is content and business
+inputs, not engineering. Copy consolidated from the live site. Design
 language matched to the prototype. Real partner logos on a rotating strip. National service pages
 and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
 
@@ -114,17 +116,34 @@ and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
 2. **Gallery and reviews pages are empty and noindex** — waiting on the Contractors Cloud job pull
    (photos with consent) and the Google Business Profile review pull. `src/data/contracts.js` has
    the shapes both must satisfy. Nothing is invented in the meantime and nothing should be.
-3. **Layout and motion pass** — a gallery lightbox is the obvious missing modal.
-4. ~~**Mobile overflow at 390px.**~~ **FIXED (round 35, 2026-08-19)** — measured scrollWidth 390
+3. **The blog — 45 real posts sit on the live WordPress site and none of them is here.** They are
+   the only informational content the domain owns, they cover the highest-intent queries in the
+   trade ("how much does a roof replacement cost in Cincinnati"), and the competitor benchmark has
+   69. Blocked on `site/data/live-urls.txt` — per-post traffic and backlinks — which is also the
+   last `PENDING` in the 301 map. **⚠ `/blog/` COLLIDES AT CUTOVER**: this build ships an empty
+   index at the same path WordPress serves 45 posts from. Leave `/blog/` with WordPress and do not
+   upload `dist/blog/`. See DECISIONS §52.
+4. **Layout and motion pass** — a gallery lightbox is the obvious missing modal.
+5. ~~**Mobile overflow at 390px.**~~ **FIXED (round 35, 2026-08-19)** — measured scrollWidth 390
    against clientWidth 390 in headless Chrome at a true 390px viewport. The H1 was never the cause:
    the estimate CTA sat in the header row at ~200px, putting the row's minimum content at ~417px
    with no flex-wrap, so the document grew wider than the viewport and every section inherited it.
    The CTA moved into the mobile drawer. See DECISIONS §36.
-5. **Open questions:** the Cincinnati number reads (513) 717-5462 in the prototype and
+6. **Open questions:** the Cincinnati number reads (513) 717-5462 in the prototype and
    (513) 258-0450 in the data. Round 42 found the public Facebook page printing (513) 258-0450 —
    a third source agreeing with the data against the prototype. Still not a formal sign-off,
    but nothing now backs the prototype number. The GAF certification tier has three conflicting
    sources. The hero video button was added but never formally approved.
+
+   **Added 2026-08-24, from a public search while chasing the GBP URLs — all in `claims.js`:**
+   **⚠ THE FOUNDING YEAR HAS THREE ANSWERS.** An Angi listing says established 2007, an Owens
+   Corning profile says "over 20 years", the live site says "25+ years". If 2007 is right, "25+
+   years" overstates by six years across ~20 live pages. **⚠ THE LISTINGS SAY COLDSTREAM DOES
+   SOLAR** — installation, maintenance and monitoring — and nothing in this repo mentions solar at
+   all. That is a question about the business, not a gap to fill from a directory. Also: two BBB
+   URLs exist for the same profile ID (`/oh/cincinnati/` recorded, `/oh/milford/` returned by
+   search), and the St. Louis Yelp listing carries a `-2` suffix, which is what Yelp does when a
+   duplicate exists.
 
 ## The handoff
 
