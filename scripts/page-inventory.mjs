@@ -16,13 +16,17 @@ if (!existsSync(dist)) { console.error("  ✗ no dist/ — run npm run build fir
 // ── the inventory, transcribed ───────────────────────────────────────────────────────────────
 const SITEWIDE = ["/", "/about-us/", "/free-estimate/", "/thank-you/", "/blog/"];
 
-/** The sixteen every market carries. */
+/** The sixteen every market carries — minus commercial where the owner scoped it out. */
 const SIXTEEN = [
   "", "roofing/", "roofing/roof-replacement/", "roofing/roof-repair/",
   "roofing/insurance-storm-damage/", "commercial-roofing/", "siding/",
   "siding/siding-replacement/", "siding/james-hardie-siding/", "siding/vinyl-siding/",
   "windows/", "gutters/", "reviews/", "gallery/", "about/", "free-estimate/",
 ];
+// Owner brief 2026-08-25: "Commercial and multi are Cincinnati and Columbus only." The second
+// reversal on this flag (round 6 restored it to St. Louis); the written instruction wins, so the
+// transcribed plan records the exception rather than the build quietly disagreeing with it.
+const NOT_IN_MARKET = { "st-louis": new Set(["commercial-roofing/"]) };
 
 /** Locations differ by market: two areas each in Cincinnati and St. Louis, one metro in Columbus. */
 const LOCATIONS = {
@@ -33,7 +37,7 @@ const LOCATIONS = {
 
 const want = new Set(SITEWIDE);
 for (const [m, locs] of Object.entries(LOCATIONS)) {
-  for (const p of SIXTEEN) want.add(`/${m}/${p}`);
+  for (const p of SIXTEEN) if (!NOT_IN_MARKET[m]?.has(p)) want.add(`/${m}/${p}`);
   for (const p of locs) want.add(`/${m}/${p}`);
 }
 

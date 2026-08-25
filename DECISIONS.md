@@ -3129,7 +3129,68 @@ and the rule count went 273 → 378.
 of all 443 and FAILS on any URL matched by neither a rule nor a named decision. The blog and
 windows absences report as the decisions they are, not as noise.
 
-## 57. Checks
+## 57. Round 51 — the 2026-08-25 update round
+
+The owner brief, item by item. Where the brief said "may already be done, check first," it was
+checked; the already-done and the newly-done are both named in the report.
+
+### Two sitewide language reversals, both owner-directed
+
+**"We walk the roof" is gone (15 places)** — "we don't do that." Every inspection sentence now
+reads "a thorough inspection" or equivalent, including the national roofing H1 ("Roofing
+contractors who inspect before they quote") and the why-card. The satellite-imagery denial
+STAYS — that part was reaffirmed only a round ago; what changed is who is claimed to be standing
+on what.
+
+**"25-year" is gone from customer-facing copy (33 places)** — replaced with the approved
+"industry-leading warranties" positioning per the brief's "all pages." ⚠ RECORDED TENSION: the
+superlative exception (§55) was granted on condition the CONCRETE 25-year figure substantiated
+it, and this brief removes the figure. The certification clause ("our certifications with the
+manufacturers we install let us extend coverage") remains as the substantiation everywhere the
+phrase appears. voice-spec.json still lists the 25-year warranty as a true claim — it IS true;
+the site just no longer prints the number. If a future reviewer wonders why the copy and the
+voice-spec disagree: this entry.
+
+### Claims: paymentTerms cleared
+
+"Zero risk · no deposits necessary · no payments until completion" on the pricing card is the
+sign-off `CLAIMS.paymentTerms` had been waiting for since round 1. Set, with provenance; the
+hero-bullet builder picks it up automatically.
+
+### Homepage
+
+What We Do's roofing card reads **Roof Replacement and Repair**. WhyTrust restyled (ghost
+numerals, sky top-rules that turn accent on hover, lift) — the numeral is a CSS counter so
+reordering the data renumbers the cards. **Offers & Promotions retired after one round** for
+"our proven process" — ⚠ **"CINCH" IS UNCONFIRMED**: the word appears nowhere on the live site,
+so `PROCESS_NAME` in ProvenProcess.astro is a slot, rendered generic until Craig confirms. The
+offers SHELL and its Reg Z gate survive untouched in offers.js.
+
+### The team, ported from the live about pages
+
+Jon Davis (Founder · Cincinnati), Greg Morse (Co-Owner · St. Louis), Tyler Brooks (Co-Owner ·
+Columbus) — bios verbatim from the live site, photos with their live filenames. National about
+shows all three above "What we do"; Cincinnati shows Jon; Columbus shows Jon and Tyler — the rule
+is data (`team.js`). **St. Louis was not in the brief and shows nobody**; adding Greg there is a
+one-line data edit when asked. A leftover "nobody hands your address to a subcontractor" line on
+the market about template — missed by the §55 sweep — went with this round.
+
+### Roofing
+
+`/roofing/` carries the live Cincinnati residential-roofing service set as seven icon hover-cards
+with Learn-more links — replacement, repair, storm, hail, wind, insurance claims, and Commercial &
+Multi-Family, which stays on the page and links out to `/commercial-roofing/` naming its two
+markets. **Commercial scoped to Cincinnati and Columbus**: St. Louis lost the service — the SECOND
+reversal on that flag (round 6 restored it) — its page folds to `/st-louis/roofing/` via the
+existing fallback, and the transcribed inventory records the exception (57 required now).
+Commercial Roofing joined the Roofing dropdown, market-aware.
+
+### Estimate page
+
+"What happens next" holds the inspection and the written quote only; the storm block came out —
+the storm path has its own page and nav item.
+
+## 58. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

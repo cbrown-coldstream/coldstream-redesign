@@ -25,9 +25,9 @@
 export const WHAT_WE_DO = [
   {
     key: "residential-roofing",
-    label: "Residential Roofing",
-    benefit: "Replacement and repair, specified after a walk on the roof",
-    body: "Architectural asphalt and impact-resistant roofs, replaced and repaired. Specified on the roof itself — never from a photo — and backed by a 25-year workmanship warranty.",
+    label: "Roof Replacement and Repair",
+    benefit: "Replacement and repair, specified after a thorough inspection",
+    body: "Architectural asphalt and impact-resistant roofs, replaced and repaired. Specified after a thorough inspection — never from a photo — and backed by industry-leading warranties.",
     href: "/roofing/",
     subs: [
       { label: "Roof replacement", href: "/roofing/replacement/" },

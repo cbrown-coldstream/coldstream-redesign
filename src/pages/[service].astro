@@ -66,7 +66,7 @@ const LEAD = {
 
 const INTRO = {
   "commercial-roofing": "A commercial roof is a different job from a residential one in every way that matters: the deck, the drainage, the phasing and who has to sign it off. We survey it, write the scope so a board or an owner can read it, and schedule around the building staying occupied rather than around our own convenience.",
-  roofing: "Roofing is the core of the business and the reason most people call us first. The same crews work all three metros, the same 25-year workmanship warranty covers the work in each, and every job starts with someone walking the roof rather than pricing it off a satellite image.",
+  roofing: "Roofing is the core of the business and the reason most people call us first. The same crews work all three metros, the same industry-leading warranties cover the work in each, and every job starts with someone walking the roof rather than pricing it off a satellite image.",
   siding: "Siding is where most of the complaints in this trade come from, and almost none of them are about the material — they are about how it was fitted. We install Hardie and vinyl to the manufacturer's specification, and we take the old course off so the sheathing underneath gets looked at.",
   windows: "A window job is measured opening by opening, because the openings in a house that predates 1970 are not the same size as each other. We fit insert and full-frame replacements across all three metros, and we will tell you when a repair is the honest answer instead.",
   gutters: "Gutters are the smallest line on an exterior quote and the one that does the most damage when it fails, because everything it fails onto costs more than they did. We roll seamless lengths on site in all three metros and size them to the roof that is draining into them.",
@@ -84,7 +84,7 @@ const title = {
 }[service];
 
 const description = {
-  roofing: "Roof replacement, repair and storm damage work — free inspections, a written quote first, and a 25-year workmanship warranty on every job.",
+  roofing: "Roof replacement, repair and storm damage work — free inspections, a written quote first, and industry-leading warranties on every job.",
   siding: "James Hardie fiber cement and vinyl siding, installed to the manufacturer's specification — with a free inspection first.",
   windows: "Energy-efficient replacement windows — insert and full-frame, measured opening by opening rather than averaged from a plan.",
   gutters: "Seamless gutters, gutter guards and downspouts, sized to the roof draining into them.",
@@ -101,8 +101,22 @@ const description = {
 //
 // The cities remain in the meta description, which is where round 41 decided they belong: it is
 // read by a person deciding whether to click, not weighed as a heading.
+
+// THE ROOFING SERVICE CARDS (owner brief 2026-08-25): the live Cincinnati residential-roofing
+// page's service set, ported as icon cards in the site's hover system, each with a Learn-more
+// into the page that now owns that content. Commercial & multi-family stays on this page as the
+// brief asks, as the card that links out — and it names its two markets honestly.
+const ROOFING_SERVICES = [
+  { icon: "▲", t: "Roof Replacement", d: "Full tear-off to the deck, decking inspected, new flashing throughout.", href: "/roofing/replacement/" },
+  { icon: "⚒", t: "Roof Repair", d: "Leak tracing, flashing and storm repairs — and an honest answer when repair beats replacement.", href: "/roofing/repair/" },
+  { icon: "⛈", t: "Storm Damage Repair", d: "Same-day or next-day attention for anything actively letting water in.", href: "/storm-damage/" },
+  { icon: "❄", t: "Hail Damage", d: "Bruised shingles and cracked mats, documented before they are argued about.", href: "/storm-damage/" },
+  { icon: "〰", t: "Wind Damage", d: "Lifted tabs and creased shingles caught before the next storm finds them.", href: "/storm-damage/" },
+  { icon: "🗎", t: "Insurance Claim Assistance", d: "Photographed, measured and written up the way an adjuster needs it.", href: "/storm-damage/" },
+  { icon: "▦", t: "Commercial & Multi-Family", d: "TPO, EPDM and coatings for flat and low-slope buildings — Cincinnati and Columbus.", href: "/commercial-roofing/" },
+];
 const h1 = {
-  roofing: "Roofing contractors who walk the roof first",
+  roofing: "Roofing contractors who inspect before they quote",
   siding: "Siding, fitted by the crew that measured it",
   windows: "Replacement windows, measured opening by opening",
   gutters: "Seamless gutters, sized to the roof above them",
@@ -168,6 +182,30 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     cards={svc.sections}
   />
 
+
+  {/* Roofing only: the ported live-service grid. Same degrade rules as the What We Do cards —
+      pure CSS hover/focus, static on touch, everything in the DOM for crawlers. */}
+  {service === "roofing" && (
+    <section class="rsvc">
+      <div class="wrap">
+        <div class="shead" data-reveal>
+          <span class="eyebrow">Roofing, end to end</span>
+          <h2>Every roofing service under one number</h2>
+        </div>
+        <div class="rsvc-grid" data-reveal="stagger">
+          {ROOFING_SERVICES.map((c) => (
+            <a class="rsvc-card" href={c.href}>
+              <span class="rsvc-ic" aria-hidden="true">{c.icon}</span>
+              <h3>{c.t}</h3>
+              <p>{c.d}</p>
+              <span class="rsvc-more">Learn more <span aria-hidden="true">→</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   {/* NATIONAL DEPTH — same slot the market template gives MarketDepth: straight after the cards
       that say what the work is, before anything about us. A reader weighing materials should hit
       the material argument next, not the trust band. Renders nothing for a service with no block
@@ -211,7 +249,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     cards={[
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
+      { title: "Backed by industry-leading warranties", body: "Industry-leading warranties, fully insured, and one team for the whole exterior." },
     ]}
   />
 
@@ -233,3 +271,25 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
 {/* The scoped .ns-* styles that were here belonged to the bespoke market grid this page no
     longer renders. Its replacement, MarketChooser, carries its own styles in base.css. */}
 
+<style>
+  .rsvc { background: var(--cs-paper); }
+  .rsvc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .rsvc-card {
+    display: flex; flex-direction: column; gap: 6px; text-decoration: none;
+    background: var(--cs-mist); border: 1px solid var(--cs-line); border-radius: 12px;
+    padding: 20px 20px 16px; color: var(--cs-text);
+    transition: transform .14s ease-out, box-shadow .14s ease-out, border-color .14s;
+  }
+  .rsvc-card:hover, .rsvc-card:focus-visible {
+    transform: translateY(-3px); border-color: var(--cs-web-hero-accent);
+    box-shadow: 0 12px 26px rgba(16, 25, 34, .13);
+  }
+  .rsvc-card:focus-visible { outline: 2px solid var(--cs-ui-focus); outline-offset: 2px; }
+  .rsvc-ic { font-size: 1.5rem; line-height: 1; color: var(--cs-primary-deep); }
+  .rsvc-card h3 { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: 1.02rem; margin: 2px 0 0; }
+  .rsvc-card p { margin: 0; font-size: .88rem; color: var(--cs-text-muted); line-height: 1.55; flex: 1; }
+  .rsvc-more { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight); font-size: .85rem; color: var(--cs-primary-deep); opacity: 0; transition: opacity .14s; }
+  .rsvc-card:hover .rsvc-more, .rsvc-card:focus-visible .rsvc-more { opacity: 1; }
+  @media (hover: none) { .rsvc-more { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .rsvc-card, .rsvc-more { transition: none; } .rsvc-card:hover { transform: none; } }
+</style>

@@ -7,7 +7,7 @@
 export const columbus = {
   title: "Roofing & Exteriors in Columbus, OH | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Central Ohio, from Dublin to Gahanna. Free, no-obligation inspections and a 25-year workmanship warranty.",
+    "Roofing, siding, windows and gutters across Central Ohio, from Dublin to Gahanna. Free, no-obligation inspections and industry-leading warranties.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
@@ -16,7 +16,7 @@ export const columbus = {
   hero: {
     eyebrow: "Central Ohio Roofing and Exteriors",
     headline: "Roofing and Exteriors Built for Central Ohio Weather",
-    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Galloway office and a 25-year workmanship warranty.",
+    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Galloway office and industry-leading warranties.",
     // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
     cta: "Get my free Columbus estimate →",
   },
@@ -29,7 +29,7 @@ export const columbus = {
     cards: [
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
+      { title: "Backed by industry-leading warranties", body: "Industry-leading warranties, fully insured, and one team for the whole exterior." },
     ],
   },
   roofing: {
@@ -52,7 +52,7 @@ export const columbus = {
     intro: "Feedback from Columbus-area homeowners who trusted us with their roofing, siding and exterior projects.",
   },
   faq: [
-    { q: "How much does a new roof cost in Columbus?", a: "It depends on size, pitch and material. We walk the roof, then give you an exact, no-obligation quote — not a number from a satellite image." },
+    { q: "How much does a new roof cost in Columbus?", a: "It depends on size, pitch and material. We carry out a thorough inspection, then give you an exact, no-obligation quote — not a number from a satellite image." },
     { q: "Do you handle hail claims in Central Ohio?", a: "Yes. Spring hail is the most common reason Columbus homeowners call us. We inspect, document the damage properly, and work directly with your adjuster." },
     { q: "Which areas around Columbus do you cover?", a: "From our Galloway office we cover the metro and the ring suburbs — Dublin, Westerville, Gahanna, Hilliard, Grove City, New Albany, Upper Arlington and Worthington among them. The full list is above." },
     { q: "How long does a roof replacement take?", a: "Most homes are finished in a single day. We'll give you a clear timeline up front and leave the property clean." },

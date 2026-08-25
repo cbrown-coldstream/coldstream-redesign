@@ -51,6 +51,13 @@ export const NAV = [
     children: [
       { key: "roof-replacement", label: "Roof Replacement", national: "replacement" },
       { key: "roof-repair", label: "Roof Repair", national: "repair" },
+      // Commercial joins the Roofing dropdown (owner brief 2026-08-25, "add it in a dropdown").
+      // Its page is a sibling hub, not a nested sub-service, so it carries its own href — the
+      // market's commercial page where the market runs the line (Cincinnati, Columbus), the
+      // national page everywhere else, St. Louis included since the same brief scoped it out.
+      { key: "commercial-roofing", label: "Commercial Roofing",
+        href: (m) => (m?.slug && (m.services ?? []).includes("commercial-roofing")
+          ? `/${m.slug}/commercial-roofing/` : "/commercial-roofing/") },
     ],
   },
   {
@@ -95,6 +102,7 @@ export const navHref = (item, market) => {
  * market spelling of the slug; national uses `national` if the child overrides it, else `key`.
  */
 export const childHref = (parent, child, market) => {
+  if (typeof child.href === "function") return child.href(market);
   if (child.nationalOnly) return `/${parent.key}/${child.key}/`;
   if (market?.slug) return `/${market.slug}/${parent.key}/${child.key}/`;
   return `/${parent.key}/${child.national ?? child.key}/`;

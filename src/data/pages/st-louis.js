@@ -5,7 +5,7 @@
 export const stLouis = {
   title: "Roofing & Exteriors in St. Louis, MO | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows, gutters and garage doors across Greater St. Louis. Free, no-obligation inspections and a 25-year workmanship warranty.",
+    "Roofing, siding, windows, gutters and garage doors across Greater St. Louis. Free, no-obligation inspections and industry-leading warranties.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
@@ -14,7 +14,7 @@ export const stLouis = {
   hero: {
     eyebrow: "Greater St. Louis Roofing and Exteriors",
     headline: "Roofing, Siding and Exteriors Across Greater St. Louis",
-    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Geyer Road office and a 25-year workmanship warranty.",
+    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates from our Geyer Road office and industry-leading warranties.",
     // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
     cta: "Get my free St. Louis estimate →",
   },
@@ -27,7 +27,7 @@ export const stLouis = {
     cards: [
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
+      { title: "Backed by industry-leading warranties", body: "Industry-leading warranties, fully insured, and one team for the whole exterior." },
     ],
   },
   roofing: {

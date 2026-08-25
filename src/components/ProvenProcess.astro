@@ -1,0 +1,78 @@
+---
+// THE PROVEN PROCESS — replaces Offers & Promotions on the homepage (owner brief 2026-08-25).
+//
+// ── THE NAME IS A SLOT, BECAUSE "CINCH" IS UNCONFIRMED ───────────────────────────────────────
+// The brief asks for "our proven Cinch process" with an explicit "(Confirm 'Cinch' is the right
+// name)". The word appears NOWHERE on the live site — every scraped page was checked 2026-08-25 —
+// so it cannot be confirmed from any source we hold. PROCESS_NAME below renders when set; until
+// then the section runs under the generic heading. Set it to "Cinch" the moment Craig confirms
+// and the eyebrow, heading and copy pick it up in one edit.
+//
+// The four steps are the same commitments the site already makes (inspection, written quote,
+// build, walkthrough) — nothing new is claimed, so nothing here needed the claims gate. The
+// Offers SHELL survives in src/data/offers.js with its Reg Z gate intact; only the homepage
+// section retired. See DECISIONS.
+import { estimateHref } from "../data/markets.js";
+const { market } = Astro.props;
+
+const PROCESS_NAME = null;   // ← "Cinch", once Craig confirms the name
+const name = PROCESS_NAME ? `The ${PROCESS_NAME} process` : "Our proven process";
+
+const STEPS = [
+  { t: "Thorough inspection", d: "A project manager comes to the property and inspects what is actually there — free, and with no obligation attached." },
+  { t: "A written quote", d: "The scope, the materials and the number, in writing. Zero risk: no deposits necessary, and no payments until completion." },
+  { t: "The build", d: "Materials arrive ahead of the crew, the work runs to the written scope, and weather moves the schedule rather than the standard." },
+  { t: "Walkthrough and warranty", d: "A magnet run for nails, a walk of the finished work with you, and industry-leading warranties behind it." },
+];
+---
+<section class="proc" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="shead" data-reveal>
+      <span class="eyebrow">{name}</span>
+      <h2 id="proc-h">The same four steps, every trade</h2>
+      <p>Roof replacement, siding, windows and gutters all run the same way — so you always know what happens next.</p>
+    </div>
+    <ol class="proc-steps" data-reveal="stagger">
+      {STEPS.map((s) => (
+        <li class="proc-step">
+          <h3>{s.t}</h3>
+          <p>{s.d}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="proc-cta"><a class="btn btn-orange" href={estimateHref(market)}>Start with the free inspection →</a></p>
+  </div>
+</section>
+
+<style>
+  .proc { background: var(--cs-mist); }
+  .proc-steps {
+    list-style: none; margin: 0; padding: 0; counter-reset: st;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px;
+  }
+  .proc-step {
+    counter-increment: st; position: relative;
+    background: var(--cs-paper); border: 1px solid var(--cs-line); border-radius: 12px;
+    padding: 58px 20px 18px;
+  }
+  .proc-step::before {
+    content: counter(st); position: absolute; top: 14px; left: 18px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--cs-primary-deep); color: #fff;
+    font-family: var(--cs-web-display); font-weight: 800; font-size: .95rem;
+    display: grid; place-items: center;
+  }
+  /* The connector line between steps — hidden on the last and on single-column layouts. */
+  .proc-step::after {
+    content: ""; position: absolute; top: 30px; left: 58px; right: -8px; height: 2px;
+    background: color-mix(in srgb, var(--cs-web-hero-accent) 55%, transparent);
+  }
+  .proc-step:last-child::after { display: none; }
+  @media (max-width: 560px) { .proc-step::after { display: none; } }
+  .proc-step h3 {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: 1.05rem; margin: 0 0 6px;
+  }
+  .proc-step p { margin: 0; color: var(--cs-text-muted); font-size: .93rem; line-height: 1.6; }
+  .proc-cta { margin: 26px 0 0; text-align: center; }
+</style>

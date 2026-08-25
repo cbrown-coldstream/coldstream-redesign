@@ -66,7 +66,7 @@ li::before{content:"✓";color:${tokens.hero_accent};margin-right:11px;font-weig
   <img src="data:image/png;base64,${logo}" alt="">
   <h1>Roofing, siding, windows<br>and <em>gutters</em></h1>
   <p>Cincinnati · Columbus · St. Louis</p>
-  <ul><li>Licensed and insured</li><li>Free inspections</li><li>25-year workmanship warranty</li></ul>
+  <ul><li>Licensed and insured</li><li>Free inspections</li><li>Industry-leading warranties</li></ul>
 </div></div>`;
 
 const tmpHtml = resolve(root, ".og-card.html");

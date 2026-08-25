@@ -55,7 +55,7 @@
 const commonFaq = () => [
   { q: "Is the inspection really free?", a: "Yes. The inspection and the written quote are free and carry no obligation, and nobody will lean on you afterwards." },
   { q: "Who actually does the work?", a: "Coldstream crews in every market we run — and the person who quotes the job stays on the job from the first walk-through to the final cleanup." },
-  { q: "What does the warranty cover?", a: "A 25-year workmanship warranty on what we install, alongside whatever the manufacturer warrants on the material itself. Licensed and insured in every market we work in." },
+  { q: "What does the warranty cover?", a: "Industry-leading warranties on what we install, alongside whatever the manufacturer warrants on the material itself. Licensed and insured in every market we work in." },
 ];
 
 export const NATIONAL_SUBSERVICES = {
@@ -65,7 +65,7 @@ export const NATIONAL_SUBSERVICES = {
       label: "Roof Replacement",
       marketService: "roofing/roof-replacement",
       title: "Roof Replacement | Coldstream Exteriors",
-      description: "Full tear-off roof replacement. Decking inspected, ventilation balanced, new flashing throughout, and a 25-year workmanship warranty.",
+      description: "Full tear-off roof replacement. Decking inspected, ventilation balanced, new flashing throughout, and industry-leading warranties.",
       h1: "Roof replacement, taken back to the boards",
       lead: "A full tear-off, a deck somebody actually looked at, and a written quote after a free inspection — not a price off a satellite image.",
       intro: "A roof replacement is sold as shingles and delivered as everything underneath them. The covering is the part you can see and the smallest part of whether the job lasts: the decking it is nailed to, the ventilation moving air beneath it, and the flashing at every place the roof meets something else are what decide that. We quote a replacement after walking the roof, because two houses built the same year on the same street routinely need different work once the old layers come off.",
@@ -95,7 +95,7 @@ export const NATIONAL_SUBSERVICES = {
         ],
       },
       process: [
-        { title: "Free inspection", body: "We walk the roof, photograph what we find, and check decking, flashing and ventilation rather than pricing off an aerial image." },
+        { title: "Free inspection", body: "A thorough inspection — photographs of what we find, and a check of decking, flashing and ventilation rather than pricing off an aerial image." },
         { title: "Written scope and quote", body: "Materials, tear-off, ventilation and the number, in writing, before anything is ordered." },
         { title: "Tear-off and installation", body: "Our own crew, on the day we said. Most homes are stripped and re-covered inside a day." },
         { title: "Clean-up and walkthrough", body: "A magnet run over the property for nails, then a walk of the finished job with you." },

@@ -68,7 +68,7 @@ export const SUBSERVICES = {
       // what a local search actually matches on.
       seo: {
         title: (m) => `Roof Replacement in ${m.cityState}`,
-        description: (m, c) => `Full tear-off roof replacement across ${m.region}. Decking checked, ventilation balanced, and a 25-year workmanship warranty. Free inspection.`,
+        description: (m, c) => `Full tear-off roof replacement across ${m.region}. Decking checked, ventilation balanced, and industry-leading warranties. Free inspection.`,
       },
       h1: (m) => `Roof Replacement in ${m.name}`,
       lead: (m) => `Full tear-off and replacement across ${m.region}, priced after someone has walked your roof — not from a satellite image.`,

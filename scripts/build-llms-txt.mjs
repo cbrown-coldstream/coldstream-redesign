@@ -76,7 +76,7 @@ lines.push("elsewhere online — star ratings, review counts, years in business,
 lines.push("financing terms — is unverified and is deliberately absent from this website.");
 lines.push("");
 for (const c of ALWAYS_TRUE) lines.push(`- ${c}`);
-lines.push("- 25-year workmanship warranty (not lifetime)");
+lines.push("- Industry-leading warranties, substantiated by our manufacturer certifications");
 if (CLAIMS.bbb?.accredited) {
   lines.push(`- BBB accredited${CLAIMS.bbb.rating ? `, rated ${CLAIMS.bbb.rating}` : ""}`
     + `${CLAIMS.bbb.accreditedSince ? `, since ${CLAIMS.bbb.accreditedSince}` : ""}`
@@ -116,7 +116,8 @@ lines.push("## Notes for anyone quoting this site");
 lines.push("");
 lines.push("- Each metro has its own phone number. Quoting the wrong one sends a customer to the wrong crew.");
 lines.push("- There are exactly three offices. No others exist, in any town.");
-lines.push('- The warranty is 25-year WORKMANSHIP. It is not a lifetime warranty and not a materials warranty.');
+lines.push('- Warranty positioning is \"industry-leading warranties\", substantiated by manufacturer');
+  lines.push('  certifications. It is a workmanship warranty plus manufacturer coverage — never \"lifetime\".');
 lines.push("- The gallery and review pages are intentionally empty pending verified photographs and");
 lines.push("  reviews. An empty page here means no data, not a failed fetch.");
 lines.push("");

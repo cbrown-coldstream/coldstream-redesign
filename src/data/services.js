@@ -99,7 +99,7 @@ export const localFor = (key, marketSlug, market) => {
  * the line a searcher actually reads under the title.
  */
 export const SERVICE_META = {
-  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, a written quote first, and a 25-year workmanship warranty.`,
+  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, a written quote first, and industry-leading warranties.`,
   siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed to the manufacturer's specification. Free inspection and a written quote first.`,
   windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
   gutters: (m) => `Seamless gutters, guards and downspouts across ${m.region}, sized to the roof draining into them. Free inspection.`,
@@ -126,7 +126,7 @@ export const SERVICE_CONTENT = {
       { title: "Commercial and Multi-Family", body: "Flat, TPO, EPDM and coatings for apartment blocks, HOA properties and commercial buildings.", service: "commercial-roofing", requiresService: true, linkText: "See commercial roofing" },
     ],
     process: [
-      { title: "Free inspection", body: "We walk the roof, photograph what we find and check the decking, flashing and ventilation — not a satellite image of it." },
+      { title: "Free inspection", body: "A thorough inspection — we photograph what we find and check the decking, flashing and ventilation — not a satellite image of it." },
       { title: "Written scope and quote", body: "Materials, tear-off, ventilation and the number, in writing before anything is ordered." },
       { title: "Tear-off and installation", body: "Our own crew, on the day we said. Most homes are stripped and re-covered inside one day." },
       { title: "Clean-up and walkthrough", body: "A magnet run over the whole property for nails, a walk of the job with you, and nothing due until it is finished." },
@@ -303,7 +303,7 @@ export const NATIONAL_DEPTH = {
         "Most leaks trace to transitions — chimneys, walls, valleys, pipe boots — not to the open field of the roof. Metal that has moved or rusted gets replaced. Caulk over tired flashing is a countdown, not a repair.",
       ]},
       { h: "The decking decides on tear-off day", p: [
-        "What is under the old shingles cannot be known from the ground or a satellite photo. Soft decking found on tear-off gets replaced before anything new goes down — which is why the quote is written after a walk on the roof, and why it holds unless the scope itself changes.",
+        "What is under the old shingles cannot be known from the ground or a satellite photo. Soft decking found on tear-off gets replaced before anything new goes down — which is why the quote is written after a thorough inspection, and why it holds unless the scope itself changes.",
       ]},
       { h: "Repair or replace — how the call actually gets made", p: [
         "Three things decide it: the age of the shingles, the state of the decking, and how widespread the damage is. A ten-year-old roof with one lifted valley is a repair; a twenty-year-old roof leaking in three places is a replacement being paid for in installments.",
@@ -314,7 +314,7 @@ export const NATIONAL_DEPTH = {
         "Cleanup is part of the job: magnet runs for nails, and a walk of the finished work with you before the crew leaves.",
       ]},
       { h: "How the job runs", p: [
-        "A project manager walks the roof and writes the quote. Materials arrive ahead of the crew, most homes are finished in a single day, and weather moves the schedule rather than the standard — we tell you when it does.",
+        "A project manager carries out a thorough inspection and writes the quote. Materials arrive ahead of the crew, most homes are finished in a single day, and weather moves the schedule rather than the standard — we tell you when it does.",
       ]},
     ],
   },

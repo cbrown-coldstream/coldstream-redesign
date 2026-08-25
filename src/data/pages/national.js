@@ -27,7 +27,7 @@
 export const national = {
   title: "Roofing, Siding, Windows & Gutters | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, one team for every exterior need, and a 25-year warranty.",
+    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, one team for every exterior need, industry-leading warranties.",
 
   // 1 — HERO. The situation line LEADS and the service list supports, swapped 2026-08-24.
   //
@@ -130,7 +130,7 @@ export const national = {
       "Locally owned and operated in each market",
       "One team for every exterior need",
       "Licensed and insured in Ohio, Kentucky and Missouri",
-      "A 25-year workmanship warranty behind the work",
+      "Industry-leading warranties behind the work",
     ],
   },
 
@@ -177,11 +177,11 @@ export const national = {
     //     bare puffery, and that condition is what the superlative exception was granted on.
     cards: [
       { id: "satisfied", title: null, match: ["recommend","happy","satisfied","again"], body: "Across three markets and every trade we run, homeowners who have had us out once call us back for the next job. That number is the record the rest of this list has to live up to." },
-      { title: "Free inspection within 24 hours", match: ["inspection","inspect","came out","next day","same day","quick"], body: "A Coldstream project manager comes to the property and walks the roof in person. We do not rely on satellite imagery — what is under the last layer decides the job, and a photo from orbit cannot see soft decking." },
-      { title: "Clear pricing, up front", match: ["price","pricing","quote","estimate","honest","upfront","no pressure"], body: "A written quote with the scope, the materials and the number, before anything begins. No deposit to book an inspection and no pressure afterwards." },
+      { title: "Free inspection within 24 hours", match: ["inspection","inspect","came out","next day","same day","quick"], body: "A Coldstream project manager comes to the property for a thorough, in-person inspection. We do not rely on satellite imagery — what is under the last layer decides the job, and a photo from orbit cannot see it." },
+      { title: "Clear pricing, up front", match: ["price","pricing","quote","estimate","honest","upfront","no pressure"], body: "A written quote with the scope, the materials and the number, before anything begins. Zero risk: no deposits necessary, and no payments until completion." },
       { title: "Filing a claim made easy", match: ["insurance","insurer","adjuster","claim"], body: "For storm damage we inspect, photograph and document the damage the way an adjuster needs it, then talk to them directly so you are not relaying messages between two parties who do this for a living." },
       { title: "Job-specific materials", match: ["shingle","material","hail","storm","tpo","siding"], body: "Materials are specified for the actual roof — its pitch, its exposure and this climate — not pulled from a single default package. Impact-resistant shingles where hail keeps returning, membrane systems on low-slope, fiber cement or vinyl matched to the wall." },
-      { id: "warranty", title: null, match: ["warranty","stood behind","came back","fixed it"], body: "Our certifications with the manufacturers we install let us extend coverage beyond a standard installer warranty — on top of our own 25-year workmanship warranty. If something is wrong, you call the same office that did the job." },
+      { id: "warranty", title: null, match: ["warranty","stood behind","came back","fixed it"], body: "Our certifications with the manufacturers we install let us extend coverage beyond a standard installer warranty — on top of our own workmanship warranty. If something is wrong, you call the same office that did the job." },
     ],
   },
 

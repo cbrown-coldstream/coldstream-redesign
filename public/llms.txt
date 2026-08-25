@@ -11,7 +11,7 @@ financing terms — is unverified and is deliberately absent from this website.
 - Locally owned and operated
 - Licensed and insured
 - Free, no-obligation inspections
-- 25-year workmanship warranty (not lifetime)
+- Industry-leading warranties, substantiated by our manufacturer certifications
 - BBB accredited, rated A+, since 2017-03-27 — https://www.bbb.org/us/oh/cincinnati/profile/roofing-contractors/coldstream-exteriors-0292-90017698
 
 Coldstream does not publish prices. A quote follows a free inspection of the actual roof
@@ -39,7 +39,7 @@ or wall, and no figure is given before that.
 - Address: 3636 S Geyer Rd #100, St. Louis, MO 63127
 - Phone: (314) 380-8111
 - Region served: Greater St. Louis
-- Trades: Roofing, Siding, Windows, Gutters, Commercial Roofing
+- Trades: Roofing, Siding, Windows, Gutters
 - Towns served: Affton, Arnold, Berkeley, Chesterfield, Clayton, Concord, Crestwood, Creve Coeur, Des Peres, Ellisville, Fenton, Green Park, House Springs, Kirkwood, Lemay, Maplewood, Maryland Heights, Mehlville, Murphy, Oakville, Richmond Heights, Sunset Hills, The Hill, Tower Grove, Town and Country, Valley Park, Webster Groves
 - Page: https://coldstreamexteriors.com/st-louis/
 
@@ -111,7 +111,6 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/st-louis/siding/vinyl-siding/](https://coldstreamexteriors.com/st-louis/siding/vinyl-siding/) — siding · vinyl siding in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/windows/](https://coldstreamexteriors.com/st-louis/windows/) — windows in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/gutters/](https://coldstreamexteriors.com/st-louis/gutters/) — gutters in St. Louis.
-- [https://coldstreamexteriors.com/st-louis/commercial-roofing/](https://coldstreamexteriors.com/st-louis/commercial-roofing/) — commercial roofing in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/locations/south/](https://coldstreamexteriors.com/st-louis/locations/south/) — locations · south in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/locations/north/](https://coldstreamexteriors.com/st-louis/locations/north/) — locations · north in St. Louis.
 
@@ -119,7 +118,8 @@ Company-wide number: (844) 426-8222
 
 - Each metro has its own phone number. Quoting the wrong one sends a customer to the wrong crew.
 - There are exactly three offices. No others exist, in any town.
-- The warranty is 25-year WORKMANSHIP. It is not a lifetime warranty and not a materials warranty.
+- Warranty positioning is "industry-leading warranties", substantiated by manufacturer
+  certifications. It is a workmanship warranty plus manufacturer coverage — never "lifetime".
 - The gallery and review pages are intentionally empty pending verified photographs and
   reviews. An empty page here means no data, not a failed fetch.
 

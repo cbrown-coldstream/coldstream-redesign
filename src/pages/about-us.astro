@@ -13,6 +13,8 @@ import PageShell from "../layouts/PageShell.astro";
 import { MARKET_LIST, NATIONAL, servicesFor } from "../data/markets.js";
 import { CLAIMS } from "../data/claims.js";
 import { organizationNode } from "../data/seo.js";
+import TeamProfiles from "../components/TeamProfiles.astro";
+import { TEAM } from "../data/team.js";
 
 // The same Organization node the home page uses — see data/seo.js. It was a third hand-written
 // copy until round 42, and the copies had already drifted.
@@ -30,6 +32,12 @@ const org = organizationNode();
   heading="Three metros. Our own crew in each."
   intro="We do roofs, siding, windows and gutters. We do them with our own people, out of a real office in each market — not a call centre with a map on the wall."
 >
+  {/* THE OWNERS, ABOVE EVERYTHING ELSE (owner brief 2026-08-25): Jon, Greg and Tyler, ported
+      from the live about page — same info, same images. An about page whose first section is
+      three real people is also the strongest possible answer to the page's noindex reason: the
+      company story is no longer entirely unsourced, it is bylined. */}
+  <TeamProfiles people={TEAM} />
+
   <section>
     <div class="wrap prose">
       <h2>What we do</h2>
@@ -78,7 +86,7 @@ const org = organizationNode();
       </p>
       <p>
         At the end we walk it with you, run a magnet over the drive and take the debris with us.
-        Our workmanship carries a 25-year warranty and a claim on it goes to the same office that
+        Our workmanship carries its own warranty and a claim on it goes to the same office that
         did the work.
       </p>
 

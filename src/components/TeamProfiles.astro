@@ -1,0 +1,65 @@
+---
+// THE TEAM PROFILES — Jon, Greg, Tyler, ported from the live about pages (owner brief 2026-08-25).
+// Data and the market rules live in data/team.js; this only lays them out. Alternating photo/text
+// rows on desktop, stacked on mobile; the photos keep their live filenames (provenance rule).
+const { people = [], eyebrow = "Who you are dealing with", heading = "The people behind the name" } = Astro.props;
+const src = (p, ext) => `/photos/team/${p.base}.${ext}`;
+---
+{people.length > 0 && (
+<section class="team" aria-labelledby="team-h">
+  <div class="wrap">
+    <div class="shead" data-reveal>
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 id="team-h">{heading}</h2>
+    </div>
+    <div class="team-rows" data-reveal="stagger">
+      {people.map((t) => (
+        <article class="tp">
+          <div class="tp-media">
+            <picture>
+              <source type="image/avif" srcset={src(t.photo, "avif")} />
+              <source type="image/webp" srcset={src(t.photo, "webp")} />
+              <img src={src(t.photo, "jpg")} alt={t.photo.alt}
+                   width={t.photo.w} height={t.photo.h} loading="lazy" decoding="async" />
+            </picture>
+          </div>
+          <div class="tp-copy">
+            <h3>{t.name}</h3>
+            <p class="tp-role">{t.role} · {t.home}</p>
+            <p class="tp-bio">{t.bio}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+)}
+
+<style>
+  .team { background: var(--cs-paper); }
+  .team-rows { display: grid; gap: 26px; }
+  .tp {
+    display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 22px; align-items: start;
+    background: var(--cs-mist); border: 1px solid var(--cs-line); border-radius: 14px; padding: 22px;
+  }
+  .tp:nth-child(even) { grid-template-columns: 1fr minmax(220px, 340px); }
+  .tp:nth-child(even) .tp-media { order: 2; }
+  .tp-media img {
+    width: 100%; height: auto; display: block; border-radius: 10px;
+    border: 1px solid var(--cs-line);
+  }
+  .tp-copy h3 {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: 1.35rem; margin: 0 0 2px;
+  }
+  .tp-role {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight);
+    font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--cs-primary-deep); margin: 0 0 12px;
+  }
+  .tp-bio { margin: 0; color: var(--cs-text-muted); line-height: 1.7; max-width: 68ch; }
+  @media (max-width: 700px) {
+    .tp, .tp:nth-child(even) { grid-template-columns: 1fr; }
+    .tp:nth-child(even) .tp-media { order: 0; }
+  }
+</style>

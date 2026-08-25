@@ -29,7 +29,7 @@ import MarketNotice from "../components/MarketNotice.astro";
 import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
 import WhatWeDo from "../components/WhatWeDo.astro";
-import OffersSection from "../components/OffersSection.astro";
+import ProvenProcess from "../components/ProvenProcess.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import ReviewsByMarket from "../components/ReviewsByMarket.astro";
 import Reviews from "../components/Reviews.astro";
@@ -154,11 +154,11 @@ const org = organizationNode();
       placeholder: the prototype's three invented testimonials are the reason this gate exists. */}
   <ReviewsByMarket />
 
-  {/* OFFERS & PROMOTIONS replaces the standing roofing ServiceDetail block (owner brief §8) —
-      the roofing depth lives on /roofing/, where round 48 put it; the homepage slot now carries
-      the offer shell, which renders the evergreen free-inspection card until real offers land in
-      src/data/offers.js. Reg Z gate in verify-build. */}
-  <OffersSection market={market} />
+  {/* THE PROVEN PROCESS replaced Offers & Promotions here (owner brief 2026-08-25) — one round
+      after Offers replaced the roofing block. The offers SHELL and its Reg Z gate survive in
+      src/data/offers.js, unrendered, so a confirmed promotion is a data edit away. "Cinch" is
+      unconfirmed and slotted, not hardcoded — see ProvenProcess.astro. */}
+  <ProvenProcess market={market} />
 
   {/* THE #locations BLOCK WAS HERE AND IS GONE. It asked the same question MarketChooser asks
       directly under the badge row — "which of the three is near me" — and answering it twice on one

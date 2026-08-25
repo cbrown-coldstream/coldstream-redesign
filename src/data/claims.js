@@ -48,8 +48,12 @@ export const CLAIMS = {
    */
   financing: null,
 
-  /** Payment terms, e.g. "No payment is due until your project is finished." Needs sign-off. */
-  paymentTerms: null,
+  /**
+   * Payment terms. APPROVED BY CRAIG (OWNER) 2026-08-25 — the update-round brief instructs the
+   * pricing card to carry "zero risk · no deposits necessary · no payments until completion",
+   * which is the sign-off this field was waiting for.
+   */
+  paymentTerms: "No payments until completion",
 
   /**
    * Years in business, as a number. Nobody has sourced the founding year.
@@ -93,7 +97,7 @@ export const CLAIMS = {
    * ⚠ THIS IS A SUPERLATIVE AND voice-spec.json BANS SUPERLATIVES. It ships anyway because the
    * owner approved it as a NAMED EXCEPTION, on the condition that body copy carries the
    * substantiation wherever the phrase appears: manufacturer certification tiers let us extend
-   * coverage beyond a standard installer warranty, on top of the 25-year workmanship warranty.
+   * coverage beyond a standard installer warranty, on top of our own workmanship warranty.
    * The phrase without that substantiation is bare puffery — do not print it alone. Logged in
    * DECISIONS.md so a future reviewer does not "correct" it back out.
    */
@@ -441,7 +445,7 @@ export const heroBullets = () => {
   const out = ["Free, no-obligation inspection"];
   if (CLAIMS.financing) out.push(`Financing available — as low as ${CLAIMS.financing.from}`);
   if (CLAIMS.paymentTerms) out.push(CLAIMS.paymentTerms);
-  out.push("25-year workmanship warranty", "Licensed and insured");
+  out.push("Industry-leading warranties", "Licensed and insured");
   return out.slice(0, 3);
 };
 
@@ -468,7 +472,7 @@ export const heroBullets = () => {
 export const cardAssurances = () => [
   "Licensed and insured",
   "Free, no-obligation inspections",
-  "25-year workmanship warranty",
+  "Industry-leading warranties",
   "Locally owned",
   // "Our own crews" REMOVED 2026-08-24 and "Factory-certified installers" REMOVED 2026-08-25 —
   // Craig retired both crew-credential phrasings. The manufacturer certifications themselves
@@ -483,7 +487,7 @@ export const offerChip = () => (CLAIMS.offer ? CLAIMS.offer.chip : null);
 export const CLAIMS_PENDING = [
   !CLAIMS.offer && ["offer", "the $1,000-off promotion — confirm it is running, and its end date"],
   !CLAIMS.financing && ["financing", "lender, advertised monthly payment, APR and terms (Reg Z)"],
-  !CLAIMS.paymentTerms && ["paymentTerms", "\"no payment until complete\" — confirm it is policy"],
+  // ✔ paymentTerms CLEARED 2026-08-25 — owner-approved via the update-round brief.
   !CLAIMS.experience && ["experience", "founding year, for the \"25+ years\" claim"],
   // ✔ customersServed CLEARED 2026-08-24 as `satisfiedCustomers` — owner-attested 11,000.
   !CLAIMS.bbbLogo && ["bbbLogo", "Craig's BBB seal file → brand/logos/bbb-a-plus.png (badge row meanwhile renders BBB's own seal)"],

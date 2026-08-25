@@ -110,7 +110,6 @@
 /st-louis/service-area/:hood/siding/  /st-louis/siding/  301
 /st-louis/service-area/:hood/windows/  /st-louis/windows/  301
 /st-louis/service-area/:hood/gutters/  /st-louis/gutters/  301
-/st-louis/service-area/:hood/commercial-roofing/  /st-louis/commercial-roofing/  301
 /st-louis/service-area/:hood/residential-roofing/  /st-louis/roofing/  301
 /st-louis/service-area/:hood/roofing-services/  /st-louis/roofing/  301
 /st-louis/service-area/:hood/roof-types/  /st-louis/roofing/  301
@@ -124,6 +123,7 @@
 /st-louis/service-area/:hood/hail-damage/  /st-louis/roofing/insurance-storm-damage/  301
 /st-louis/service-area/:hood/wind-damage/  /st-louis/roofing/insurance-storm-damage/  301
 /st-louis/service-area/:hood/insurance-claims/  /st-louis/roofing/insurance-storm-damage/  301
+/st-louis/service-area/:hood/commercial-roofing/  /st-louis/roofing/  301
 /st-louis/service-area/:hood/siding-installation-replacement/  /st-louis/siding/  301
 /st-louis/service-area/:hood/siding-replacement/  /st-louis/siding/siding-replacement/  301
 /st-louis/service-area/:hood/siding-installation/  /st-louis/siding/siding-replacement/  301
@@ -343,7 +343,8 @@
 /st-louis/insurance-claims/  /st-louis/roofing/insurance-storm-damage/  301
 /st-louis/insurance-claims/*  /st-louis/roofing/insurance-storm-damage/  301
 /st-louis/roofing/commercial-roofing/  /st-louis/roofing/  301
-/st-louis/commercial-roofing/:sub/  /st-louis/commercial-roofing/  301
+/st-louis/commercial-roofing/  /st-louis/roofing/  301
+/st-louis/commercial-roofing/*  /st-louis/roofing/  301
 /st-louis/siding/siding-installation-replacement/  /st-louis/siding/  301
 /st-louis/siding-installation-replacement/  /st-louis/siding/  301
 /st-louis/siding-installation-replacement/*  /st-louis/siding/  301

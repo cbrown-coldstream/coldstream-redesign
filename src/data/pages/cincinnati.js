@@ -28,7 +28,7 @@
 export const cincinnati = {
   title: "Roofing & Exteriors in Cincinnati, OH | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across greater Cincinnati, from our Milford office. Free, no-obligation inspections and a 25-year workmanship warranty.",
+    "Roofing, siding, windows and gutters across greater Cincinnati, from our Milford office. Free, no-obligation inspections and industry-leading warranties.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
@@ -37,7 +37,7 @@ export const cincinnati = {
   hero: {
     eyebrow: "Cincinnati's Trusted Roofing Contractors",
     headline: "Roofing, Siding, Window & Gutter Services in Cincinnati",
-    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates, honest pricing, and a 25-year workmanship warranty.",
+    sub: "One project manager runs your job from the first walk-through to the last nail — the same person, start to finish, not a salesperson who hands you off after you sign. Free estimates, honest pricing, and industry-leading warranties.",
     // Market-scoped CTA — see Hero.astro. Edited here, not in the component.
     cta: "Get my free Cincinnati estimate →",
   },
@@ -52,7 +52,7 @@ export const cincinnati = {
     cards: [
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
+      { title: "Backed by industry-leading warranties", body: "Industry-leading warranties, fully insured, and one team for the whole exterior." },
     ],
   },
 
@@ -80,7 +80,7 @@ export const cincinnati = {
 
 
   faq: [
-    { q: "How much does a new roof cost in Cincinnati?", a: "It depends on size, pitch and material. We walk the roof, then give you an exact, no-obligation quote — not a number from a satellite image." },
+    { q: "How much does a new roof cost in Cincinnati?", a: "It depends on size, pitch and material. We carry out a thorough inspection, then give you an exact, no-obligation quote — not a number from a satellite image." },
     { q: "Can you help with a storm or insurance claim?", a: "Yes. We inspect and document the damage, then work directly with your adjuster to make the claim as smooth as possible." },
     { q: "How long does a roof replacement take?", a: "Most homes are finished in a single day. We'll give you a clear timeline up front and leave the property clean." },
   ],

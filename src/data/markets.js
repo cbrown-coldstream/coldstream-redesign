@@ -169,7 +169,11 @@ export const MARKETS = {
     // Note that James Hardie stays in this market's `credentials` above — an Alliance Elite
     // CERTIFICATION and a product line we stock are different claims, and only the second one
     // is what this strip is about.
-    partners: ["malarkey", "provia", "royal", "owens-corning", "certainteed", "gaf"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+    partners: ["malarkey", "provia", "royal", "owens-corning", "certainteed", "gaf"],    // commercial-roofing REMOVED 2026-08-25 — owner brief: "Commercial and multi are Cincinnati
+    // and Columbus only." This is the SECOND reversal on this flag (round 6 restored it); the
+    // owner's written instruction wins. The redirect generator refolds the live St. Louis
+    // commercial URLs into /st-louis/roofing/ automatically via the SLUG_MAP fallback.
+    services: ["roofing", "siding", "windows", "gutters"],
     reviews: null,          // PENDING
     servedAreas: [
       "Affton", "Arnold", "Berkeley", "Chesterfield", "Clayton", "Concord", "Crestwood",
