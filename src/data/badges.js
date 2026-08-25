@@ -76,6 +76,8 @@
 // linked seal, so it has to come from the accreditation account. The slot renders a labelled
 // placeholder rather than a fabricated seal.
 
+import { CLAIMS } from "./claims.js";
+
 export const BADGES = [
   {
     key: "homeadvisor",
@@ -175,11 +177,18 @@ export const BADGES = [
     //
     // The href resolves from CLAIMS.bbb.profileUrl rather than sitting here, because the URL is the
     // evidence for the claim and evidence belongs with the claim. See BadgeRow's hrefFor.
+    // ── CRAIG'S SEAL, 2026-08-25, GATED ON CLAIMS.bbbLogo ────────────────────────────────────
+    // When bbbLogo is set the row renders the owner-supplied artwork (an AI recreation — the
+    // concern is on record in claims.js and DECISIONS; the owner overrode it). Clear bbbLogo and
+    // the row falls back to BBB's own hosted seal below, which never leaves the repo.
     alt: null,
-    file: "/badges/bbb-accredited-seal.svg",
-    w: 962, h: 369,
+    file: CLAIMS.bbbLogo ? CLAIMS.bbbLogo.replace(/\.png$/, ".webp") : "/badges/bbb-accredited-seal.svg",
+    fallback: CLAIMS.bbbLogo ?? undefined,
+    w: CLAIMS.bbbLogo ? 473 : 962, h: CLAIMS.bbbLogo ? 600 : 369,
     href: null,             // resolved from CLAIMS.bbb.profileUrl — see BadgeRow
-    source: "https://m.bbb.org/brand/seals/Accredited_Business_Seal_NoRating_RGB.svg — BBB's own seal artwork",
+    source: CLAIMS.bbbLogo
+      ? "owner-supplied artwork 2026-08-25 (brand/logos/bbb-a-plus.png) — see claims.js bbbLogo"
+      : "https://m.bbb.org/brand/seals/Accredited_Business_Seal_NoRating_RGB.svg — BBB's own seal artwork",
   },
 ];
 

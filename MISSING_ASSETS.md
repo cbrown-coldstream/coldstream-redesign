@@ -6,9 +6,14 @@ be mistaken for it.
 
 ## Awaited from Craig
 
-| Asset | Destination | Blocking | Notes |
-|---|---|---|---|
-| BBB seal file | `brand/logos/bbb-a-plus.png` (raster, ≥1000px long edge) | `CLAIMS.bbbLogo` in `src/data/claims.js` | **An AI-generated recreation of the seal was offered 2026-08-24 and declined**: the BBB mark is a licensed trademark and only BBB's own artwork, downloaded from the accreditation account, may ship — an imitation could jeopardize the accreditation it advertises. The badge row meanwhile renders **BBB's own hosted seal** (`public/badges/bbb-accredited-seal.svg`, linked to the accreditation record — DECISIONS §41), which is stronger than the brief's interim text lockup. Craig's file replaces it when supplied. Not to be sourced from the live WordPress uploads. |
+*(none — the BBB seal arrived 2026-08-25)*
+
+**Resolved with an owner override:** `brand/logos/bbb-a-plus.png` (Craig's file, 2026-08-25) now
+renders in the badge row via `CLAIMS.bbbLogo`. The artwork is an AI-generated recreation of the
+BBB seal; the trademark concern was raised 2026-08-24 and **Craig re-sent the file and directed
+its use** — the owner's decision stands and is logged in claims.js and DECISIONS. BBB's official
+hosted seal remains in the repo (`public/badges/bbb-accredited-seal.svg`); clearing `bbbLogo` is
+the one-line revert if BBB ever objects.
 
 ## Awaited from the Contractors Cloud job pull
 

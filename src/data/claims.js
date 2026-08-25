@@ -145,7 +145,12 @@ export const CLAIMS = {
    * regression, so the seal stays and this field gates only a REPLACEMENT. Do not fill it from
    * the live WordPress uploads folder — owner-supplied file only.
    */
-  bbbLogo: null,
+  // SUPPLIED BY CRAIG 2026-08-25 ("bbbllogo.png"), original archived at brand/logos/bbb-a-plus.png,
+  // cropped derivative served from public/badges/. ⚠ THE ARTWORK IS AN AI-GENERATED RECREATION of
+  // BBB's seal, not BBB's own file — that concern was raised on 2026-08-24, Craig re-sent the file
+  // with "use this instead", and the owner's decision stands. If BBB ever objects, the official
+  // seal (public/badges/bbb-accredited-seal.svg) is one revert away and the swap is this field.
+  bbbLogo: "/badges/bbb-a-plus.png",
 
   bbb: {
     accredited: true,

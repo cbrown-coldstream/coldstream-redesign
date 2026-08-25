@@ -3094,6 +3094,15 @@ testimonials. Cost ranges. New pages for the SEO gaps — SEO-GAP.md lists them 
 approval instead. The hover-3D/satellite section — Craig has said we do not estimate from
 satellite imagery; if it ever returns it must be framed as post-inspection visualisation.
 
+### §55 addendum, 2026-08-25 — the BBB seal, supplied and overridden
+
+Craig supplied the seal file. It is an AI-generated recreation of BBB's mark, not BBB's artwork;
+the trademark concern was raised on 2026-08-24 and the file was declined — **Craig re-sent it the
+next day with "use this instead", which is the owner's decision and it stands.** Original archived
+at `brand/logos/bbb-a-plus.png`, cropped derivative in `public/badges/`, gated on
+`CLAIMS.bbbLogo`. The badge still links to the accreditation record. THE REVERT IS ONE LINE —
+clear `bbbLogo` and the row falls back to BBB's own hosted seal, which never left the repo.
+
 ## 56. Checks
 
 ```
