@@ -3103,7 +3103,33 @@ at `brand/logos/bbb-a-plus.png`, cropped derivative in `public/badges/`, gated o
 `CLAIMS.bbbLogo`. The badge still links to the accreditation record. THE REVERT IS ONE LINE —
 clear `bbbLogo` and the row falls back to BBB's own hosted seal, which never left the repo.
 
-## 56. Checks
+## 56. Round 50 — the live sitemap diff: 26 URLs were heading for 404, and the count is now checked
+
+Asked "are there any other live pages worth carrying over", the honest first step was to stop
+working from the audit and pull the live sitemaps again. **The live site was restructured in
+November 2025** — after the audit this repo's redirect map was written against — into nested
+`/{market}/{hub}/{sub}/` URLs. Diffing all 443 current live URLs against the build and the map:
+
+```
+443 live URLs   →   43 served by the build at the same path
+                    302 redirect-covered
+                    98 covered by NOTHING
+```
+
+Of the 98: 47 blog (PENDING by decision), 25 windows (UNDECIDED by decision, now including the
+restructure's new spellings), and **26 genuine holes** — the gutters and siding sub-pages in their
+new nested shape (`/{m}/gutters/gutter-guards/`, `/{m}/siding/fiber-cement-siding/`, …). The fold
+decisions for almost all of them were already recorded in SLUG_MAP; the RULES simply predated the
+shape. The generator now emits a hub-nested rule per variant, four new slugs joined the map with
+their siblings' targets (downspouts, gutter-replacement, siding-repair, soffit-fascia-services),
+and the rule count went 273 → 378.
+
+**And the check is now permanent:** the live export the generator always wanted exists at
+`data/live-urls.txt` (pulled from the live sitemaps 2026-08-25), so every build verifies coverage
+of all 443 and FAILS on any URL matched by neither a rule nor a named decision. The blog and
+windows absences report as the decisions they are, not as noise.
+
+## 57. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

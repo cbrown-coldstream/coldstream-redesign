@@ -84,6 +84,12 @@ for (const [m, market] of Object.entries(MARKETS)) {
   const canonical = new Set(servicesFor(market).map((s) => s.key));
   for (const [variant, to] of Object.entries(SLUG_MAP)) {
     const target = to === "" ? `/${m}/` : `/${m}/${to}/`;
+    // THE NOV-2025 LIVE SHAPE: variants now ALSO live nested under their hub
+    // (/{m}/gutters/gutter-guards/), which the flat rules below never matched — the 2026-08-25
+    // sitemap diff found 26 such URLs heading for 404 at cutover. One derived rule per variant
+    // covers the shape; the self-redirect guard in add() drops the ones that are real pages.
+    const hub = to.split("/")[0];
+    if (hub && TARGETS.has(target)) add(`/${m}/${hub}/${variant}/`, target);
     if (canonical.has(variant)) {
       // The variant IS a page in this market — it serves itself, and must not be redirected.
       // Its old sub-pages still have to land somewhere, though: /{market}/commercial-roofing/
@@ -156,10 +162,23 @@ if (!existsSync(inventory)) {
     .map((l) => l.trim()).filter(Boolean)
     .map((l) => l.replace(/^https?:\/\/[^/]+/, ""));
   const unmatched = paths.filter((p) => !matchers.some((r) => r.test(p)) && !TARGETS.has(p));
+  // Unmatched is not one bucket. Two absences are DECISIONS with names on them — the blog block
+  // (PENDING until the per-post traffic export) and the windows set (UNDECIDED until ranking
+  // data) — and the build should report them as such. Anything else is a hole, and fails.
+  const isWindows = (p) => UNDECIDED.slugs.some((s) => p.endsWith(`/${s}/`));
+  // Live URLs the BUILD ITSELF serves at the same path, which TARGETS (redirect targets) does
+  // not know about. /sitemap/ is the one case: the live HTML sitemap's URL now serves the
+  // internal review board — a 200, noindex, so no rule is needed and none is legal (self-loop).
+  const SERVED_BY_BUILD = new Set(["/sitemap/"]);
+  const pendingBlog = unmatched.filter((p) => p.startsWith("/blog/"));
+  const pendingWin = unmatched.filter((p) => !p.startsWith("/blog/") && isWindows(p));
+  const holes = unmatched.filter((p) => !p.startsWith("/blog/") && !isWindows(p) && !SERVED_BY_BUILD.has(p));
   console.log(`\n  → ${paths.length} live URLs checked, ${paths.length - unmatched.length} matched`);
-  if (unmatched.length) {
-    console.log(`  ⚠ ${unmatched.length} LIVE URLs MATCH NO RULE — they would 404 on migration:`);
-    for (const u of unmatched) console.log(`    · ${u}`);
+  if (pendingBlog.length) console.log(`    · ${pendingBlog.length} blog URLs — PENDING by decision (see BLOG in redirects.js)`);
+  if (pendingWin.length) console.log(`    · ${pendingWin.length} windows URLs — UNDECIDED by decision (awaiting ranking data)`);
+  if (holes.length) {
+    console.log(`  ⚠ ${holes.length} LIVE URLs MATCH NO RULE AND NO DECISION — they would 404 on migration:`);
+    for (const u of holes) console.log(`    · ${u}`);
     process.exitCode = 1;
   }
   console.log("");

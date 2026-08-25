@@ -65,10 +65,19 @@ export const SLUG_MAP = {
   "james-hardie": "siding/james-hardie-siding",
   "fiber-cement-siding": "siding/james-hardie-siding",
   "vinyl-siding": "siding/vinyl-siding",
-  // Gutters — three spellings.
+  // Gutters — five spellings. downspouts and gutter-replacement surfaced in the 2026-08-25 live
+  // sitemap diff: the live site was RESTRUCTURED (Nov 2025) into /{market}/gutters/{sub}/ nesting
+  // after the audit this map was written against, so the new shapes matched nothing. The fold
+  // decision was already recorded for their siblings; these join it.
   "seamless-gutters": "gutters",
   "gutter-guards": "gutters",
   "gutter-installation": "gutters",
+  "gutter-replacement": "gutters",
+  "downspouts": "gutters",
+  // Siding repair and soffit/fascia — same diff, same reasoning. Both fold into the replacement
+  // page, whose depth copy already carries the trim/soffit/fascia and repair-vs-replace content.
+  "siding-repair": "siding/siding-replacement",
+  "soffit-fascia-services": "siding/siding-replacement",
   // GARAGE DOORS HAS NO PAGE IN THE INVENTORY. It is a real St. Louis service and it is on the
   // live site, so these do not 404 — they land on the St. Louis market page, where the service is
   // described as a section. Flagged in DECISIONS.md as the one inventory/live-site conflict.
@@ -90,6 +99,10 @@ export const UNDECIDED = {
     "windows-replacement", "replacement-windows", "window-installation",
     "bay-windows", "bow-windows", "slider-windows", "picture-windows",
     "double-hung-windows", "casement-windows", "energy-efficient-windows",
+    // The Nov-2025 live restructure's spellings for the same pages, from the 2026-08-25 sitemap
+    // diff — still the same open decision, so still no rules, but now ACCOUNTED for by name.
+    "window-replacement", "window-installations", "vinyl-windows",
+    "energy-efficient-window", "bay-bow-windows", "provia-windows",
   ],
 };
 
