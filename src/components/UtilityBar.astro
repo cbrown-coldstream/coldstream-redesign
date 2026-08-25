@@ -59,7 +59,10 @@ const chosen = Boolean(market.slug);
 <div class="util" data-resolved-from={resolvedFrom}>
   <div class="wrap">
     <div class="left">
-      <label for="mkt">Select location</label>
+      {/* MR. ROOF PATTERN (owner request 2026-08-25): no visible label — the pill itself reads
+          "Select Your Location" until a market is chosen, with a map pin baked into the control.
+          The label survives for screen readers only. */}
+      <label for="mkt" class="visually-hidden">Select your location</label>
       <form method="get" action="/" id="mktForm">
         {/* `is-chosen` is what makes a selected market read as chosen rather than defaulted — see
             base.css. It is set here for the server-rendered state and maintained by the script. */}
@@ -67,7 +70,9 @@ const chosen = Boolean(market.slug);
           {MARKET_LIST.map((m) => (
             <option value={m.slug} selected={market.slug === m.slug}>{m.cityState}</option>
           ))}
-          <option value="" selected={!market.slug}>Other / not sure</option>
+          {/* The empty value doubles as the placeholder, Mr. Roof style. Behaviour is unchanged:
+              choosing it is still the national default the router already handles. */}
+          <option value="" selected={!market.slug}>Select Your Location</option>
         </select>
         <noscript><button type="submit" class="util-go">Go</button></noscript>
       </form>
