@@ -127,7 +127,10 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
 <style>
   /* The deep navy band — --cs-web-hero-base ground, white elevated cards, accent name rule. */
   .revband { background: var(--cs-web-hero-base, #101922); }
-  .revband .shead .eyebrow { color: var(--cs-web-hero-accent, #8fc0ea); }
+  /* Eyebrow stays ACCENT ORANGE on the navy band — the "bolder" ask of 2026-08-25. It is the
+     section's one loud element besides the stars; the name rule and controls stay sky so orange
+     remains an icon-and-eyebrow colour rather than the section's voice. */
+  .revband .shead .eyebrow { color: var(--cs-accent); }
   .revband .shead h2 { color: #fff; }
   .revband .shead p { color: var(--cs-web-hero-sub, #c8d8e7); }
 
@@ -136,39 +139,55 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
     transition: transform .35s ease-out;
   }
-  /* Carousel mode: pages of three, side by side. */
+  /* Carousel mode: pages of three, side by side.
+     ⚠ template-columns MUST be cleared here. Left in place, the base rule's three 1fr tracks
+     fight the auto-flow columns: the implicit columns overflow the container, the free space
+     goes negative, and the three template tracks collapse to min-content — page one renders as
+     three squeezed slivers next to full-width implicit cards. Seen on screen, not deduced. */
   .rev-shell.is-carousel .rev-track {
-    display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 36px) / 3);
+    display: grid; grid-template-columns: none;
+    grid-auto-flow: column; grid-auto-columns: calc((100% - 36px) / 3);
   }
   @media (max-width: 760px) {
     .rev-track { grid-template-columns: 1fr; }
-    .rev-shell.is-carousel .rev-track { grid-auto-columns: 100%; }
+    .rev-shell.is-carousel .rev-track { grid-template-columns: none; grid-auto-columns: 100%; }
   }
   @media (prefers-reduced-motion: reduce) { .rev-track { transition: none; } }
 
   .rev-card {
-    margin: 0; background: var(--cs-paper); border-radius: 12px;
-    padding: 24px 24px 20px; display: flex; flex-direction: column; gap: 12px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
+    margin: 0; position: relative; background: var(--cs-paper); border-radius: 12px;
+    padding: 26px 24px 20px; display: flex; flex-direction: column; gap: 12px;
+    border-top: 4px solid var(--cs-accent);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+  }
+  /* Oversized quote glyph in the hero accent — decoration, so it is aria-free markup-free:
+     a pseudo-element that never enters the accessibility tree. */
+  .rev-card::before {
+    content: "\201C"; position: absolute; top: 2px; right: 16px;
+    font-family: var(--cs-web-display); font-weight: 900; font-size: 4.4rem; line-height: 1;
+    color: var(--cs-web-hero-accent, #8fc0ea); opacity: .38; pointer-events: none;
   }
   /* Orange stars — the logged exception. Conventionally warm; light blue read as inactive. */
-  .rev-stars { color: var(--cs-accent); letter-spacing: 2px; font-size: 1.02rem; }
+  .rev-stars { color: var(--cs-accent); letter-spacing: 2.5px; font-size: 1.28rem; }
   .rev-card blockquote { margin: 0; flex: 1; }
   .rev-card blockquote p { margin: 0; font-size: .96rem; line-height: 1.6; color: var(--cs-text); }
   .rev-card figcaption {
     border-top: 2px solid var(--cs-web-hero-accent, #8fc0ea);
     padding-top: 10px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
   }
-  .rev-name { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: .95rem; }
+  .rev-name { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: 1.02rem; }
   .rev-date { font-size: .8rem; color: var(--cs-text-muted); }
 
-  .rev-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 22px; }
-  .rev-btn {
-    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  /* ⚠ :global(), NECESSARILY. The nav is injected by the inline script, and runtime-created
+     nodes never receive Astro's scoping attribute — scoped selectors simply do not match them.
+     The controls rendered as bare default buttons until this was seen on screen. */
+  .rev-shell :global(.rev-nav) { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 26px; }
+  .rev-shell :global(.rev-btn) {
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
     background: transparent; color: var(--cs-web-hero-accent, #8fc0ea);
-    border: 2px solid var(--cs-web-hero-accent, #8fc0ea); font-size: 1.05rem;
+    border: 2px solid var(--cs-web-hero-accent, #8fc0ea); font-size: 1.1rem; line-height: 1;
   }
-  .rev-btn:hover { background: color-mix(in srgb, var(--cs-web-hero-accent, #8fc0ea) 18%, transparent); }
-  .rev-btn:focus-visible { outline: 3px solid var(--cs-ui-focus); outline-offset: 2px; }
-  .rev-pos { color: var(--cs-web-hero-sub, #c8d8e7); font-size: .88rem; font-variant-numeric: tabular-nums; }
+  .rev-shell :global(.rev-btn:hover) { background: color-mix(in srgb, var(--cs-web-hero-accent, #8fc0ea) 18%, transparent); }
+  .rev-shell :global(.rev-btn:focus-visible) { outline: 3px solid var(--cs-ui-focus); outline-offset: 2px; }
+  .rev-shell :global(.rev-pos) { color: var(--cs-web-hero-sub, #c8d8e7); font-size: .9rem; font-variant-numeric: tabular-nums; }
 </style>

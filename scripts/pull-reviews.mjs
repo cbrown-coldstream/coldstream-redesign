@@ -56,10 +56,15 @@ import { resolve, dirname } from "node:path";
 const OUT = resolve(process.cwd(), "src/data/generated/reviews.json");
 
 const KEY = process.env.GOOGLE_PLACES_API_KEY;
+// Place IDs default from MARKET_PROFILES — the canonical GBP links Craig supplied 2026-08-24
+// carry the place_id in the URL, so the pull no longer waits on env vars for them. An env var
+// still overrides, for the day a listing is replaced. The API key remains the one missing input.
+const idFrom = (slug) =>
+  (MARKET_PROFILES[slug]?.gbp?.match(/place_id:([A-Za-z0-9_-]+)/) ?? [])[1] ?? null;
 const PLACES = {
-  cincinnati: process.env.GOOGLE_PLACE_ID_CINCINNATI,
-  columbus: process.env.GOOGLE_PLACE_ID_COLUMBUS,
-  "st-louis": process.env.GOOGLE_PLACE_ID_ST_LOUIS,
+  cincinnati: process.env.GOOGLE_PLACE_ID_CINCINNATI ?? idFrom("cincinnati"),
+  columbus: process.env.GOOGLE_PLACE_ID_COLUMBUS ?? idFrom("columbus"),
+  "st-louis": process.env.GOOGLE_PLACE_ID_ST_LOUIS ?? idFrom("st-louis"),
 };
 
 const die = (msg) => {
