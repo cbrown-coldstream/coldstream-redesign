@@ -470,10 +470,10 @@ export const cardAssurances = () => [
   "Free, no-obligation inspections",
   "25-year workmanship warranty",
   "Locally owned",
-  // "Our own crews" REMOVED 2026-08-24 — Craig dropped the never-subcontracted positioning this
-  // round (homepage brief §6). It was one of the three ungated true claims; if a future round
-  // wants it back, the wording that was here was "Our own crews". See DECISIONS.
-  "Factory-certified installers",
+  // "Our own crews" REMOVED 2026-08-24 and "Factory-certified installers" REMOVED 2026-08-25 —
+  // Craig retired both crew-credential phrasings. The manufacturer certifications themselves
+  // remain evidenced (badge row) and still substantiate the warranty positioning; it is the
+  // crew phrase that is gone. Wordings preserved here for any future round.
 ].filter(Boolean);
 
 /** The hero offer chip, or null. Hero already omits the chip when this is null. */

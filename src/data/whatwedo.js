@@ -27,7 +27,7 @@ export const WHAT_WE_DO = [
     key: "residential-roofing",
     label: "Residential Roofing",
     benefit: "Replacement and repair, specified after a walk on the roof",
-    body: "Architectural asphalt and impact-resistant roofs, replaced and repaired by factory-certified crews. Specified on the roof itself, and backed by a 25-year workmanship warranty.",
+    body: "Architectural asphalt and impact-resistant roofs, replaced and repaired. Specified on the roof itself — never from a photo — and backed by a 25-year workmanship warranty.",
     href: "/roofing/",
     subs: [
       { label: "Roof replacement", href: "/roofing/replacement/" },
@@ -73,7 +73,7 @@ export const WHAT_WE_DO = [
     key: "james-hardie",
     label: "James Hardie Siding",
     benefit: "Fiber cement, installed to Hardie's own specification",
-    body: "James Hardie fiber cement siding installed by certified crews to Hardie's own specification — clearances, flashed joints, sealed edges. Fire-resistant, impact-tough, and it holds its finish.",
+    body: "James Hardie fiber cement siding installed to Hardie's own specification — clearances, flashed joints, sealed edges. Fire-resistant, impact-tough, and it holds its finish.",
     href: "/siding/james-hardie-siding/",
     subs: [
       { label: "All siding", href: "/siding/" },

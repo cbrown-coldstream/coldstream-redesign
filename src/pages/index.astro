@@ -47,8 +47,9 @@ import { TESTIMONIALS, ALWAYS_TRUE, CLAIMS } from "../data/claims.js";
 const satisfied = CLAIMS.satisfiedCustomers.toLocaleString("en-US");
 const heroSub =
   "Roof replacement and repair, James Hardie and vinyl siding, seamless gutters, replacement " +
-  "windows and storm damage restoration. Factory-certified crews, " +
-  CLAIMS.warrantyPositioning.toLowerCase() + ", and over " + satisfied + " satisfied homeowners.";
+  "windows and storm damage restoration. One team for every exterior need — " +
+  CLAIMS.warrantyPositioning.toLowerCase() + ", and a track record of over " + satisfied +
+  " satisfied homeowners.";
 // Two why-cards take their titles from claims.js — the satisfied count and the warranty
 // positioning phrase — formatted here, at the point of display, per the brief.
 const whyCards = page.why.cards.map((c) =>

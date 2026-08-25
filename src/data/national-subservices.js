@@ -54,7 +54,7 @@
  */
 const commonFaq = () => [
   { q: "Is the inspection really free?", a: "Yes. The inspection and the written quote are free and carry no obligation, and nobody will lean on you afterwards." },
-  { q: "Who actually does the work?", a: "Factory-certified crews, in every market we run — and the person who quotes the job stays on the job from the first walk-through to the final cleanup." },
+  { q: "Who actually does the work?", a: "Coldstream crews in every market we run — and the person who quotes the job stays on the job from the first walk-through to the final cleanup." },
   { q: "What does the warranty cover?", a: "A 25-year workmanship warranty on what we install, alongside whatever the manufacturer warrants on the material itself. Licensed and insured in every market we work in." },
 ];
 
@@ -65,7 +65,7 @@ export const NATIONAL_SUBSERVICES = {
       label: "Roof Replacement",
       marketService: "roofing/roof-replacement",
       title: "Roof Replacement | Coldstream Exteriors",
-      description: "Full tear-off roof replacement by factory-certified crews. Decking inspected, ventilation balanced, new flashing throughout, and a 25-year workmanship warranty.",
+      description: "Full tear-off roof replacement. Decking inspected, ventilation balanced, new flashing throughout, and a 25-year workmanship warranty.",
       h1: "Roof replacement, taken back to the boards",
       lead: "A full tear-off, a deck somebody actually looked at, and a written quote after a free inspection — not a price off a satellite image.",
       intro: "A roof replacement is sold as shingles and delivered as everything underneath them. The covering is the part you can see and the smallest part of whether the job lasts: the decking it is nailed to, the ventilation moving air beneath it, and the flashing at every place the roof meets something else are what decide that. We quote a replacement after walking the roof, because two houses built the same year on the same street routinely need different work once the old layers come off.",
@@ -165,7 +165,7 @@ export const NATIONAL_SUBSERVICES = {
       label: "Vinyl Siding",
       marketService: "siding/vinyl-siding",
       title: "Vinyl Siding Installation | Coldstream Exteriors",
-      description: "Vinyl siding installed so it can move, over a water barrier that was actually inspected, by certified installers.",
+      description: "Vinyl siding installed so it can move, over a water barrier that was actually inspected.",
       h1: "Vinyl siding, installed so it can move",
       lead: "Installed so it can move, over a wall somebody actually looked at.",
       intro: "Vinyl has a reputation it mostly does not deserve. Nearly every vinyl complaint we are called to look at is an installation fault rather than a material one: panels nailed tight so they cannot expand, no room left at the ends of a run, or a water barrier behind them that was never taped. Fitted properly, over a wall somebody inspected, vinyl gives decades of service for less money than anything else on the wall. Fitted badly, it buckles in its first hot summer and nothing will straighten it afterwards.",

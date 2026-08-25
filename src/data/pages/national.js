@@ -27,7 +27,7 @@
 export const national = {
   title: "Roofing, Siding, Windows & Gutters | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, factory-certified crews, and a 25-year workmanship warranty.",
+    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, one team for every exterior need, and a 25-year warranty.",
 
   // 1 — HERO. The situation line LEADS and the service list supports, swapped 2026-08-24.
   //
@@ -128,7 +128,7 @@ export const national = {
     ],
     points: [
       "Locally owned and operated in each market",
-      "Factory-certified crews on every job",
+      "One team for every exterior need",
       "Licensed and insured in Ohio, Kentucky and Missouri",
       "A 25-year workmanship warranty behind the work",
     ],

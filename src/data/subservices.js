@@ -254,7 +254,7 @@ export const SUBSERVICES = {
       // what a local search actually matches on.
       seo: {
         title: (m) => `Storm Damage Repair in ${m.cityState}`,
-        description: (m, c) => `Hail and wind damage across ${m.region}, documented the way an adjuster needs it and repaired by factory-certified crews. Free inspection.`,
+        description: (m, c) => `Hail and wind damage across ${m.region}, documented the way an adjuster needs it and repaired start to finish. Free inspection.`,
       },
       h1: (m) => `Storm Damage and Insurance Claims in ${m.name}`,
       lead: (m) => `Hail and wind damage documented the way an adjuster needs it documented, then handled with them directly.`,
@@ -351,7 +351,7 @@ export const SUBSERVICES = {
         description: (m, c) => `Full re-siding across ${m.region} — old siding off, sheathing checked, flashing done properly. Free inspection and a written quote.`,
       },
       h1: (m) => `Siding Replacement in ${m.name}`,
-      lead: (m) => `Full re-siding across ${m.region}, installed by factory-certified crews — most projects finished inside a week.`,
+      lead: (m) => `Full re-siding across ${m.region}, installed to the manufacturer's specification — most projects finished inside a week.`,
       intro: (m, c) =>
         `Siding fails from the bottom and from behind. The base course takes years of splash-back off the ground, and water that gets behind a poorly flashed window has nowhere to go. ${c.stock} We take the old siding off, look at the sheathing and the water barrier underneath, and fix what we find before anything new goes on — which is the step that decides whether the new siding lasts.`,
       sections: [

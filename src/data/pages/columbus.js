@@ -29,7 +29,7 @@ export const columbus = {
     cards: [
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and factory-certified installers." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
     ],
   },
   roofing: {

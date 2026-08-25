@@ -99,8 +99,8 @@ export const localFor = (key, marketSlug, market) => {
  * the line a searcher actually reads under the title.
  */
 export const SERVICE_META = {
-  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, factory-certified crews, and a 25-year workmanship warranty.`,
-  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed by factory-certified crews. Free inspection and a written quote before anything starts.`,
+  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, a written quote first, and a 25-year workmanship warranty.`,
+  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed to the manufacturer's specification. Free inspection and a written quote first.`,
   windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
   gutters: (m) => `Seamless gutters, guards and downspouts across ${m.region}, sized to the roof draining into them. Free inspection.`,
   "commercial-roofing": (m) => `Flat and low-slope roofing for commercial, HOA and multi-family properties across ${m.region}. Surveyed and scoped in writing.`,
@@ -148,7 +148,7 @@ export const SERVICE_CONTENT = {
   siding: {
     label: "Siding",
     h1: (m) => `Siding in ${m.name}`,
-    lead: "James Hardie fiber cement and vinyl siding, installed and repaired by factory-certified crews.",
+    lead: "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
     sections: [
       { title: "James Hardie Fiber Cement", body: "The premium option: holds paint far longer than vinyl and stands up to impact. We are an Alliance Elite contractor." },
       { title: "Vinyl Siding", body: "The value option, and a good one when it is installed properly. Most siding complaints trace back to installation, not material." },
@@ -227,7 +227,7 @@ export const SERVICE_CONTENT = {
   "commercial-roofing": {
     label: "Commercial Roofing",
     h1: (m) => `Commercial Roofing in ${m.name}`,
-    lead: "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by certified commercial crews.",
+    lead: "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired.",
     sections: [
       { title: "Flat and Low-Slope Systems", body: "TPO, EPDM and modified bitumen, specified against the deck, the drainage and what the building is used for — not against a default." },
       { title: "Roof Coatings and Restoration", body: "Where the deck is sound, a coating buys years for a fraction of a tear-off. We will tell you when it is the honest answer and when it is only postponing one." },

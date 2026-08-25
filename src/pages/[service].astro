@@ -57,9 +57,9 @@ const svc = SERVICE_CONTENT[service];
 const market = NATIONAL;
 
 const LEAD = {
-  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired by certified commercial crews.",
+  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties — installed, restored and repaired.",
   roofing: "Replacement, repair and storm work — asphalt, metal and flat systems, quoted after a free inspection.",
-  siding: "James Hardie fiber cement and vinyl siding, installed and repaired by factory-certified crews.",
+  siding: "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
   windows: "Energy-efficient replacement windows, measured and installed by trained crews.",
   gutters: "Seamless gutters, guards and downspouts, sized to the roof they are draining.",
 };
@@ -67,7 +67,7 @@ const LEAD = {
 const INTRO = {
   "commercial-roofing": "A commercial roof is a different job from a residential one in every way that matters: the deck, the drainage, the phasing and who has to sign it off. We survey it, write the scope so a board or an owner can read it, and schedule around the building staying occupied rather than around our own convenience.",
   roofing: "Roofing is the core of the business and the reason most people call us first. The same crews work all three metros, the same 25-year workmanship warranty covers the work in each, and every job starts with someone walking the roof rather than pricing it off a satellite image.",
-  siding: "Siding is where most of the complaints in this trade come from, and almost none of them are about the material — they are about how it was fitted. We install Hardie and vinyl with factory-certified crews, and we take the old course off so the sheathing underneath gets looked at.",
+  siding: "Siding is where most of the complaints in this trade come from, and almost none of them are about the material — they are about how it was fitted. We install Hardie and vinyl to the manufacturer's specification, and we take the old course off so the sheathing underneath gets looked at.",
   windows: "A window job is measured opening by opening, because the openings in a house that predates 1970 are not the same size as each other. We fit insert and full-frame replacements across all three metros, and we will tell you when a repair is the honest answer instead.",
   gutters: "Gutters are the smallest line on an exterior quote and the one that does the most damage when it fails, because everything it fails onto costs more than they did. We roll seamless lengths on site in all three metros and size them to the roof that is draining into them.",
 };
@@ -84,8 +84,8 @@ const title = {
 }[service];
 
 const description = {
-  roofing: "Roof replacement, repair and storm damage work — free inspections, factory-certified crews, and a 25-year workmanship warranty on every job.",
-  siding: "James Hardie fiber cement and vinyl siding, installed by factory-certified crews — with a free inspection first.",
+  roofing: "Roof replacement, repair and storm damage work — free inspections, a written quote first, and a 25-year workmanship warranty on every job.",
+  siding: "James Hardie fiber cement and vinyl siding, installed to the manufacturer's specification — with a free inspection first.",
   windows: "Energy-efficient replacement windows — insert and full-frame, measured opening by opening rather than averaged from a plan.",
   gutters: "Seamless gutters, gutter guards and downspouts, sized to the roof draining into them.",
   "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties in Cincinnati and Columbus. TPO, EPDM, coatings and scheduled maintenance.",
@@ -211,7 +211,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     cards={[
       { title: "Honest, upfront pricing", body: "A clear quote after a free inspection — no surprises, no pressure, no games on price." },
       { title: "One project manager, start to finish", body: "The person who quotes the job runs the job, and is the person you call afterwards." },
-      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and factory-certified installers." },
+      { title: "Backed by a 25-year warranty", body: "A 25-year workmanship warranty, fully insured, and one team for the whole exterior." },
     ]}
   />
 
