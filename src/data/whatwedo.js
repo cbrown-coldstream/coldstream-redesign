@@ -1,7 +1,9 @@
 // WHAT WE DO — the homepage's eight service cards (owner brief 2026-08-24, §5).
 //
 // ORDER IS SPECIFIED AND LOAD-BEARING: James Hardie sits directly beside Siding, as requested.
-// Body copy is 2–3 sentences per card, unique per card, written to rank on the service term plus
+// Body copy is TWO TIGHT sentences per card (~25 words — trimmed 2026-08-25 after the longer
+// versions overflowed the hover overlay on screen), unique per card, written to rank on the
+// service term plus
 // expertise language — the substance ported from the live pages, the prose written fresh because
 // the live prose leans on gated claims and the banned voice. NOT one sentence with the noun
 // swapped; that is the exact failure the rebuild exists to fix.
@@ -25,7 +27,7 @@ export const WHAT_WE_DO = [
     key: "residential-roofing",
     label: "Residential Roofing",
     benefit: "Replacement and repair, specified after a walk on the roof",
-    body: "Architectural asphalt and impact-resistant shingle roofs, replaced and repaired by factory-certified crews. Every job starts with a project manager on the roof itself — decking checked, ventilation balanced, new flashing throughout — and carries a 25-year workmanship warranty.",
+    body: "Architectural asphalt and impact-resistant roofs, replaced and repaired by factory-certified crews. Specified on the roof itself, and backed by a 25-year workmanship warranty.",
     href: "/roofing/",
     subs: [
       { label: "Roof replacement", href: "/roofing/replacement/" },
@@ -42,7 +44,7 @@ export const WHAT_WE_DO = [
     key: "storm-damage",
     label: "Storm Damage Restoration",
     benefit: "Documented the way an adjuster needs it, then repaired",
-    body: "Hail and wind damage inspected, photographed and written up the way an insurance adjuster needs it, then repaired across roofing, siding and gutters. Anything actively letting water in gets same-day or next-day attention.",
+    body: "Hail and wind damage documented the way an insurance adjuster needs it, then repaired across roofing, siding and gutters. Active leaks get same-day or next-day attention.",
     href: "/storm-damage/",
     subs: [
       { label: "Roof repair", href: "/roofing/repair/" },
@@ -54,7 +56,7 @@ export const WHAT_WE_DO = [
     key: "siding",
     label: "Siding",
     benefit: "Fiber cement and vinyl, over a wall that was actually inspected",
-    body: "Siding installation and replacement in fiber cement and vinyl, fitted over a drainage plane that sheds water instead of trapping it. The old cladding comes off so the sheathing underneath gets looked at before anything new goes on.",
+    body: "Fiber cement and vinyl siding, fitted over a drainage plane that sheds water. The old cladding comes off, so the sheathing gets inspected before anything new goes on.",
     href: "/siding/",
     subs: [
       { label: "James Hardie", href: "/siding/james-hardie-siding/" },
@@ -71,7 +73,7 @@ export const WHAT_WE_DO = [
     key: "james-hardie",
     label: "James Hardie Siding",
     benefit: "Fiber cement, installed to Hardie's own specification",
-    body: "James Hardie fiber cement siding installed by certified crews to Hardie's own specification — the clearances, flashed joints and sealed cut edges the material demands. Fire-resistant, impact-tough, and it holds its finish for years.",
+    body: "James Hardie fiber cement siding installed by certified crews to Hardie's own specification — clearances, flashed joints, sealed edges. Fire-resistant, impact-tough, and it holds its finish.",
     href: "/siding/james-hardie-siding/",
     subs: [
       { label: "All siding", href: "/siding/" },
@@ -83,7 +85,7 @@ export const WHAT_WE_DO = [
     key: "vinyl-siding",
     label: "Vinyl Siding",
     benefit: "Hung so it can move with the weather, not against it",
-    body: "Vinyl siding hung on its nailing slots so it expands and contracts with the weather instead of buckling against it. The economical way to re-side a whole elevation — installed over an inspected water barrier, with a clean finish at every opening.",
+    body: "Vinyl siding hung so it moves with the weather instead of buckling against it — the economical way to re-side a whole elevation, over an inspected water barrier.",
     href: "/siding/vinyl-siding/",
     subs: [
       { label: "All siding", href: "/siding/" },
@@ -102,7 +104,7 @@ export const WHAT_WE_DO = [
     key: "windows",
     label: "Replacement Windows",
     benefit: "Measured opening by opening, never averaged from a plan",
-    body: "Insert and full-frame replacement windows, measured opening by opening rather than averaged from a floor plan. Low-E glass and proper flashing decide the energy performance — we go through the label with you, not around it.",
+    body: "Insert and full-frame replacement windows, measured opening by opening. Low-E glass and proper flashing decide the performance — we go through the label with you.",
     href: "/windows/",
     subs: [
       { label: "Free estimate", href: "/free-estimate/" },
@@ -114,7 +116,7 @@ export const WHAT_WE_DO = [
     key: "gutters",
     label: "Seamless Gutters",
     benefit: "Roll-formed on site, sized to the roof above them",
-    body: "Seamless gutters roll-formed to length on site and sized to the roof actually draining into them, with downspouts placed where the water needs to go. Gutter guards fitted to what your trees drop, not to a brochure.",
+    body: "Seamless gutters roll-formed on site and sized to the roof draining into them, with downspouts where the water needs to go. Guards fitted to what your trees drop.",
     href: "/gutters/",
     subs: [
       { label: "Free estimate", href: "/free-estimate/" },
@@ -126,7 +128,7 @@ export const WHAT_WE_DO = [
     key: "commercial-roofing",
     label: "Commercial Roofing",
     benefit: "Flat and low-slope systems for buildings that work for a living",
-    body: "TPO, EPDM and coating systems for flat and low-slope roofs — multi-family, HOA and commercial buildings. Restoration where the membrane has life left in it, full replacement where it does not, and an honest answer about which is which.",
+    body: "TPO, EPDM and coating systems for flat and low-slope buildings — multi-family, HOA and commercial. Restoration where the membrane has life left, replacement where it does not.",
     href: "/commercial-roofing/",
     subs: [
       { label: "Free assessment", href: "/free-estimate/" },

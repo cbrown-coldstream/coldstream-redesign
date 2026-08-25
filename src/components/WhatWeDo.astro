@@ -50,15 +50,16 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
             <p>{s.benefit}</p>
           </div>
 
+          {/* No repeated title up top — the CTA at the bottom already carries the name in accent,
+              and the duplicate heading was half of what pushed long cards past their box. */}
           <div class="wwd-over">
-            <p class="wwd-over-h" aria-hidden="true">{s.label}</p>
             <p class="wwd-body">{s.body}</p>
             {s.subs.length > 0 && (
               <ul class="wwd-subs">
                 {s.subs.map((x) => <li><a href={x.href}>{x.label}</a></li>)}
               </ul>
             )}
-            <a class="wwd-cta" href={s.href}>{s.label} <span aria-hidden="true">→</span></a>
+            <a class="wwd-cta" href={s.href}>{s.label}&nbsp;<span aria-hidden="true">→</span></a>
           </div>
         </article>
       ))}
@@ -93,18 +94,20 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
   /* Overlay: same 105deg direction as the hero scrim, accent per the brief. */
   .wwd-over {
     position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
-    gap: 10px; padding: 20px; color: #fff;
+    gap: 9px; padding: 18px; color: #fff;
     background: linear-gradient(105deg, rgba(11,20,30,.94) 0%, rgba(15,32,52,.9) 46%, rgba(20,45,73,.82) 100%);
     opacity: 0; visibility: hidden; transition: opacity .2s ease-out, visibility .2s;
   }
   .wwd-card:hover .wwd-over, .wwd-card:focus-within .wwd-over { opacity: 1; visibility: visible; }
   .wwd-card:hover .wwd-face, .wwd-card:focus-within .wwd-face { opacity: 0; }
-  .wwd-over-h {
-    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
-    font-size: 1.3rem; letter-spacing: var(--cs-web-display-ls); margin: 0;
-    color: var(--cs-web-hero-accent, #8fc0ea);
+  /* Clamp is the FENCE, not the plan: bodies are written to fit (~25 words), and if a future
+     edit runs long the card clips it at seven lines instead of shoving the content off the top
+     of the box — which is exactly what happened before the trim. Touch layout lifts the clamp:
+     there the overlay is static flow, so long text just makes the card taller. */
+  .wwd-body {
+    margin: 0; font-size: .87rem; line-height: 1.55; color: #e7eff7;
+    display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden;
   }
-  .wwd-body { margin: 0; font-size: .88rem; line-height: 1.55; color: #e7eff7; }
   .wwd-subs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; }
   .wwd-subs a {
     display: inline-block; font-size: .8rem; font-weight: 600; color: #fff; text-decoration: none;
@@ -126,6 +129,7 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
     .wwd-media img { aspect-ratio: 3 / 2; height: auto; }
     .wwd-face { display: none; }
     .wwd-over { position: relative; opacity: 1; visibility: visible; background: var(--cs-primary-deep); }
+    .wwd-body { display: block; -webkit-line-clamp: unset; overflow: visible; }
   }
   @media (prefers-reduced-motion: reduce) {
     .wwd-face, .wwd-over { transition: none; }
