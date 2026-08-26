@@ -30,7 +30,6 @@ import BadgeRow from "../components/BadgeRow.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
 import MarketDepth from "../components/MarketDepth.astro";
 import ProcessScrub from "../components/ProcessScrub.astro";
-import MarketChooser from "../components/MarketChooser.astro";
 import HowItWorks from "../components/HowItWorks.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
@@ -222,19 +221,10 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     steps={scrubSteps}
   />
 
-  {/* WAS a bespoke .ns-pick grid. Same question the home page asks, so it is the same component
-      now — see MarketChooser.astro. It keeps the deep link this page always had: the cards go to
-      that market's page for THIS service, not to the market landing, because someone reading the
-      national siding page wants Columbus siding rather than Columbus. */}
-  <MarketChooser
-    heading={`Who does this where you are`}
-    intro="Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover."
-    markets={markets}
-    service={service}
-    note={markets.length < MARKET_LIST.length
-      ? "Not offered in every market — the ones listed are the ones that run this service line."
-      : null}
-  />
+  {/* THE METRO LISTING IS GONE FROM THIS PAGE (owner, 2026-08-26). The deep links these cards
+      carried (national service → that market's page for THIS service) survive elsewhere: the
+      utility-bar selector routes, and every market page's own hub links remain. /service-areas/
+      is the one intended home for the three-market listing. */}
 
   {svc.process && (
     <HowItWorks
@@ -269,7 +259,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
 </BaseLayout>
 
 {/* The scoped .ns-* styles that were here belonged to the bespoke market grid this page no
-    longer renders. Its replacement, MarketChooser, carries its own styles in base.css. */}
+    longer renders; the MarketChooser that replaced it was itself removed 2026-08-26. */}
 
 <style>
   .rsvc { background: var(--cs-paper); }

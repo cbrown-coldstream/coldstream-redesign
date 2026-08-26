@@ -27,7 +27,6 @@ import BadgeRow from "../../components/BadgeRow.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
 import MarketDepth from "../../components/MarketDepth.astro";
 import HowItWorks from "../../components/HowItWorks.astro";
-import MarketChooser from "../../components/MarketChooser.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
 import PartnerStrip from "../../components/PartnerStrip.astro";
 import FAQ from "../../components/FAQ.astro";
@@ -119,18 +118,7 @@ const schema = {
     steps={svc.process}
   />
 
-  {/* Deep-linked to this market's version of THIS sub-service, not to the market landing — someone
-      reading the national vinyl page wants Columbus vinyl rather than Columbus. Stone veneer has
-      no market page, so `marketService` sends it to the siding hub and `marketNote` says why. */}
-  <MarketChooser
-    heading="Who does this where you are"
-    intro="Each metro is its own office, crew and number. The market page carries the local detail — the building stock, the weather, and the areas we cover."
-    markets={markets}
-    service={svc.marketService}
-    note={svc.marketNote ?? (markets.length < MARKET_LIST.length
-      ? "Not offered in every market — the ones listed are the ones that run this service line."
-      : null)}
-  />
+  {/* Metro listing removed 2026-08-26 — /service-areas/ owns it; the utility bar routes. */}
 
   <WhyTrust
     heading="Straightforward from quote to cleanup"

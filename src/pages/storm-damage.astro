@@ -36,7 +36,6 @@ import BadgeRow from "../components/BadgeRow.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
 import MarketDepth from "../components/MarketDepth.astro";
 import HowItWorks from "../components/HowItWorks.astro";
-import MarketChooser from "../components/MarketChooser.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
@@ -162,12 +161,7 @@ const FAQS = [
     steps={STEPS}
   />
 
-  <MarketChooser
-    heading="Who does this where you are"
-    intro="Each metro is its own office, crew and number, and each one carries its own storm history — the hail, the wind, and how the local adjusters work."
-    markets={markets}
-    service="roofing/insurance-storm-damage"
-  />
+  {/* Metro listing removed 2026-08-26 — /service-areas/ owns it now. */}
 
   <WhyTrust
     heading="Straightforward from inspection to cleanup"

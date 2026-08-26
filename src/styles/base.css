@@ -943,40 +943,23 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
    Sits directly under the badge row, which is the first place a visitor is deciding whether this
    company covers them. Static output cannot detect an area, so the page asks instead of guessing;
    see MarketChooser.astro for why that is a constraint rather than a preference. */
-.mchoose{background:var(--cs-surface);border-bottom:1px solid var(--cs-line)}
-.mchoose .shead{margin-bottom:26px}
-.mchoose-grid{list-style:none;margin:0;padding:0;
   display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.mchoose-grid>li{display:flex;flex-direction:column;gap:8px}
-.mchoose-card{display:flex;flex-direction:column;gap:5px;flex:1;
   background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-primary);
   border-radius:12px;padding:20px 22px;text-decoration:none;
   transition:transform .18s ease-out,border-color .18s ease-out,box-shadow .18s ease-out}
-.mchoose-card:hover,.mchoose-card:focus-visible{transform:translateY(-2px);border-color:var(--cs-primary);
   box-shadow:0 14px 30px color-mix(in srgb, var(--cs-primary) 16%, transparent)}
-.mchoose-card strong{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
   font-size:1.3rem;color:var(--cs-text);letter-spacing:var(--cs-web-display-ls)}
-.mchoose-city{font-size:.9rem;color:var(--cs-text-muted)}
-.mchoose-phone{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
   font-size:1.12rem;color:var(--cs-primary-deep);margin-top:2px}
-.mchoose-go{margin-top:auto;padding-top:10px;font-family:var(--cs-web-display);
   font-weight:var(--cs-web-display-weight);font-size:.92rem;color:var(--cs-primary)}
-.mchoose-card:hover .mchoose-go{color:var(--cs-accent)}
 /* The call link is a SEPARATE target from the card. A card that both navigates and dials is a card
    that dials by accident on a phone. */
-.mchoose-tel{display:block;text-align:center;padding:11px 14px;min-height:44px;
   border:1px solid var(--cs-line);border-radius:10px;background:var(--cs-paper);
   font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;
   color:var(--cs-primary-deep);text-decoration:none;
   transition:background-color .18s ease-out,border-color .18s ease-out}
-.mchoose-tel:hover,.mchoose-tel:focus-visible{background:var(--cs-surface);border-color:var(--cs-primary)}
 
-/* The .mchoose-hint rules that were here went with the "Looking for X?" prompt they styled —
    see MarketChooser.astro. */
-@media(max-width:820px){.mchoose-grid{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){
-  .mchoose-card{transition:none!important}
-  .mchoose-card:hover{transform:none!important}
 }
 
 /* ── TRUST BAND — national page, directly under the hero ─────────────────────────────────────
@@ -1059,7 +1042,6 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
 }
 /* Shown on a service chooser when the line does not run in every market — the shorter list is
    explained rather than reading as an omission. */
-.mchoose-note{margin:16px 0 0;text-align:center;color:var(--cs-text-muted);font-size:.92rem}
 
 /* The public /sitemap/ styles were removed when that page became the internal review board — it
    deliberately does not use the web design system, and carries its own CSS. See sitemap.astro. */
