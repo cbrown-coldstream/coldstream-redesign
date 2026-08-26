@@ -18,8 +18,8 @@ change to every page in it.
 |---:|---|---|---|---:|---:|
 | 18 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 18 / 0 noindex | 192 | 1307 |
 | 14 | Service hub | `src/pages/[market]/[service].astro` | 14 / 0 noindex | 130 | 1180 |
-| 10 | Standalone | `src/pages/about-us.astro` | 3 / 7 noindex | 20 | 1304 |
-| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1332 |
+| 10 | Standalone | `src/pages/about-us.astro` | 3 / 7 noindex | 20 | 1297 |
+| 10 | National service | `src/pages/[service].astro` | 10 / 0 noindex | 0 | 1259 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 514 |
 | 3 | Market landing | `src/pages/[market]/index.astro` | 3 / 0 noindex | 32 | 1284 |
 | 3 | Market about | `src/pages/[market]/about.astro` | 3 / 0 noindex | 0 | 1128 |
@@ -39,25 +39,25 @@ change to every page in it.
 | `/` | National home | Roofing, siding and gutter experts | 1503 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 1479 | — | index |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 403 | — | noindex |
-| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 917 | — | index |
+| `/commercial-roofing/` | National service | Commercial and multi-family roofing | 844 | — | index |
 | `/financing/` | Standalone | Paying for the work over time | 800 | — | noindex |
 | `/free-estimate/` | Standalone | Your free, no-obligation estimate | 510 | 11 | index |
-| `/gutters/` | National service | Seamless gutters, sized to the roof above them | 1099 | — | index |
+| `/gutters/` | National service | Seamless gutters, sized to the roof above them | 1029 | — | index |
 | `/instant-roof-quote/` | Standalone | Instant roof quote | 289 | — | noindex |
 | `/privacy-policy/` | Standalone | Privacy policy | 401 | — | noindex |
-| `/roofing/` | National service | Roofing contractors who inspect before they quote | 1824 | — | index |
-| `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1387 | — | index |
-| `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1422 | — | index |
+| `/roofing/` | National service | Roofing contractors who inspect before they quote | 1754 | — | index |
+| `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1317 | — | index |
+| `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1352 | — | index |
 | `/service-areas/` | Service areas | Roofing and exterior service areas | 700 | — | index |
-| `/siding/` | National service | Siding, fitted by the crew that measured it | 1251 | — | index |
-| `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1343 | — | index |
-| `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1553 | — | index |
-| `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1362 | — | index |
+| `/siding/` | National service | Siding, fitted by the crew that measured it | 1181 | — | index |
+| `/siding/james-hardie-siding/` | National service | James Hardie fiber cement siding | 1273 | — | index |
+| `/siding/stone-veneer/` | National service | Stone veneer, installed as a drained wall | 1455 | — | index |
+| `/siding/vinyl-siding/` | National service | Vinyl siding, installed so it can move | 1292 | — | index |
 | `/sitemap/` | Standalone | Page review board | 6789 | — | noindex |
-| `/storm-damage/` | Standalone | Storm damage, documented before it is argued about | 1382 | — | index |
+| `/storm-damage/` | Standalone | Storm damage, documented before it is argued about | 1311 | — | index |
 | `/terms/` | Standalone | Terms of use | 356 | — | noindex |
 | `/thank-you/` | Standalone | Thanks — that's all we need for now. | 630 | 9 | noindex |
-| `/windows/` | National service | Replacement windows, measured opening by opening | 1166 | — | index |
+| `/windows/` | National service | Replacement windows, measured opening by opening | 1096 | — | index |
 
 ### Cincinnati — 18 pages (16 indexable, 2 noindex)
 
@@ -177,15 +177,14 @@ these sections with this copy.
 
 1. Get Your Free Estimate
 2. What a commercial roofing job covers
-3. Who does this where you are
-4. How a commercial roofing job runs
-5. Straightforward from quote to cleanup
-6. Materials from manufacturers who stand behind them
-7. Common questions
-8. Ready for a free, no-pressure estimate?
-9. Services
-10. Company
-11. Markets
+3. How a commercial roofing job runs
+4. Straightforward from quote to cleanup
+5. Materials from manufacturers who stand behind them
+6. Common questions
+7. Ready for a free, no-pressure estimate?
+8. Services
+9. Company
+10. Markets
 
 **Location area** — e.g. `/cincinnati/locations/east/`
 

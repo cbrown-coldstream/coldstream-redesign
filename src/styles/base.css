@@ -939,29 +939,6 @@ html.cs-reveal [data-reveal="stagger"]:not(.in)>*{opacity:0;transform:translateY
   .pscrub-media video{display:none}
 }
 
-/* ── MARKET CHOOSER — national pages ─────────────────────────────────────────────────────────
-   Sits directly under the badge row, which is the first place a visitor is deciding whether this
-   company covers them. Static output cannot detect an area, so the page asks instead of guessing;
-   see MarketChooser.astro for why that is a constraint rather than a preference. */
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  background:var(--cs-paper);border:1px solid var(--cs-line);border-left:4px solid var(--cs-primary);
-  border-radius:12px;padding:20px 22px;text-decoration:none;
-  transition:transform .18s ease-out,border-color .18s ease-out,box-shadow .18s ease-out}
-  box-shadow:0 14px 30px color-mix(in srgb, var(--cs-primary) 16%, transparent)}
-  font-size:1.3rem;color:var(--cs-text);letter-spacing:var(--cs-web-display-ls)}
-  font-size:1.12rem;color:var(--cs-primary-deep);margin-top:2px}
-  font-weight:var(--cs-web-display-weight);font-size:.92rem;color:var(--cs-primary)}
-/* The call link is a SEPARATE target from the card. A card that both navigates and dials is a card
-   that dials by accident on a phone. */
-  border:1px solid var(--cs-line);border-radius:10px;background:var(--cs-paper);
-  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight);font-size:.94rem;
-  color:var(--cs-primary-deep);text-decoration:none;
-  transition:background-color .18s ease-out,border-color .18s ease-out}
-
-   see MarketChooser.astro. */
-@media (prefers-reduced-motion:reduce){
-}
-
 /* ── TRUST BAND — national page, directly under the hero ─────────────────────────────────────
    Three claims, and only ever the three in claims.js ALWAYS_TRUE. It is a band rather than cards
    because it is a statement of fact, not a sales section: one line, read in a second, then out of
