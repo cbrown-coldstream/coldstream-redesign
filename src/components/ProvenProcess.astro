@@ -1,21 +1,18 @@
 ---
 // THE PROVEN PROCESS — replaces Offers & Promotions on the homepage (owner brief 2026-08-25).
 //
-// ── THE NAME IS A SLOT, BECAUSE "CINCH" IS UNCONFIRMED ───────────────────────────────────────
-// The brief asks for "our proven Cinch process" with an explicit "(Confirm 'Cinch' is the right
-// name)". The word appears NOWHERE on the live site — every scraped page was checked 2026-08-25 —
-// so it cannot be confirmed from any source we hold. PROCESS_NAME below renders when set; until
-// then the section runs under the generic heading. Set it to "Cinch" the moment Craig confirms
-// and the eyebrow, heading and copy pick it up in one edit.
-//
-// The four steps are the same commitments the site already makes (inspection, written quote,
-// build, walkthrough) — nothing new is claimed, so nothing here needed the claims gate. The
-// Offers SHELL survives in src/data/offers.js with its Reg Z gate intact; only the homepage
-// section retired. See DECISIONS.
+// ── THE NAME, RESOLVED 2026-08-26 ────────────────────────────────────────────────────────────
+// "Cinch" in the 08-25 brief was a typo for "Cincy" — the owner meant THE PROCESS FROM THE
+// CINCINNATI LIVE PAGES ("Our Proven Cincinnati Roofing Installation Process"), not a brand
+// name. So there is no branded name: the section runs as "Our proven process", which is what
+// those live sections describe once the city is dropped — and the city must be dropped, because
+// this renders on the national page and a Cincinnati-named process on national would violate
+// the market rule (§2, gated). PROCESS_NAME stays as a slot in case a real brand name ever
+// arrives, but nothing is awaited.
 import { estimateHref } from "../data/markets.js";
 const { market } = Astro.props;
 
-const PROCESS_NAME = null;   // ← "Cinch", once Craig confirms the name
+const PROCESS_NAME = null;   // no branded name — see the note above
 const name = PROCESS_NAME ? `The ${PROCESS_NAME} process` : "Our proven process";
 
 const STEPS = [

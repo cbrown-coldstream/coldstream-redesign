@@ -24,6 +24,9 @@ export const urls = () => {
   const out = [
     { path: "/", index: true, priority: "1.0" },
     { path: "/free-estimate/", index: true, priority: "0.9" },
+    // Indexed 2026-08-26 — the owner-bylined team content ported from the live site is the
+    // sourced company story the noindex was waiting for. See about-us.astro's header.
+    { path: "/about-us/", index: true, priority: "0.6" },
     // The national service pages the header links to, and the one page that answers "do you cover
     // my town". Added in round 12 — before it, four nav items pointed at `/#services` and there
     // was no service-areas page at all.

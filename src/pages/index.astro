@@ -22,7 +22,6 @@ import UtilityBar from "../components/UtilityBar.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import Hero from "../components/Hero.astro";
 import BadgeRow from "../components/BadgeRow.astro";
-import MarketChooser from "../components/MarketChooser.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
 import GeoRedirect from "../components/GeoRedirect.astro";
 import MarketNotice from "../components/MarketNotice.astro";
@@ -179,9 +178,10 @@ const org = organizationNode();
   <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} />
   <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
 
-  {/* FIND YOUR AREA — moved here from under the badge row (owner brief §4): last thing before
-      the final CTA, so the page closes on "which office is mine" right where the ask is made. */}
-  <MarketChooser />
+  {/* THE MARKET CHOOSER IS GONE FROM THIS PAGE (owner, 2026-08-26: "remove three markets at the
+      bottom") — one round after §4 moved it here, two after an earlier round argued it belonged
+      under the badge row. Logged as the third move, this time off the page. The routes the market
+      rule allows remain: the utility-bar selector, the footer's Markets column, /service-areas/. */}
   <CTABand market={market} heading={page.cta.heading} body={page.cta.body} />
 
   <GeoRedirect markets={GEO} />

@@ -108,7 +108,9 @@ language matched to the prototype. Real partner logos on a rotating strip. Natio
 and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
 
 **Not done, in rough priority order:**
-1. **Copy port — `/about` and the conversion pages are what is left.** `src/data/live-copy/` holds
+1. **Copy port — the conversion pages are what is left.** `/about-us/` was BUILT AND INDEXED
+   2026-08-26: the three owners' profiles ported verbatim from the live site (team.js), values and
+   the Hover note added, noindex lifted. `src/data/live-copy/` holds
    ~150k words pulled from the live site (`npm run live:pull`). Done since this list was written:
    the service hubs, the market landings (round 32) and all six sub-services, which now carry depth
    blocks — vinyl and Hardie shared, the other four per-market (rounds 33 and 37). `/about` and the

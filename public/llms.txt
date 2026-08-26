@@ -49,6 +49,7 @@ Company-wide number: (844) 426-8222
 
 - [https://coldstreamexteriors.com/](https://coldstreamexteriors.com/) — Home — the company, the four trades, and the three metros.
 - [https://coldstreamexteriors.com/free-estimate/](https://coldstreamexteriors.com/free-estimate/) — Request a free, no-obligation inspection and written quote.
+- [https://coldstreamexteriors.com/about-us/](https://coldstreamexteriors.com/about-us/)
 - [https://coldstreamexteriors.com/service-areas/](https://coldstreamexteriors.com/service-areas/) — Every town served, listed by metro, with a map.
 - [https://coldstreamexteriors.com/roofing/](https://coldstreamexteriors.com/roofing/) — Roofing: replacement, repair, storm work, materials.
 - [https://coldstreamexteriors.com/siding/](https://coldstreamexteriors.com/siding/) — Siding: James Hardie fiber cement and vinyl.
@@ -123,5 +124,5 @@ Company-wide number: (844) 426-8222
 - The gallery and review pages are intentionally empty pending verified photographs and
   reviews. An empty page here means no data, not a failed fetch.
 
-Last content change: 2026-08-25T11:14:54-04:00
+Last content change: 2026-08-25T15:22:54-04:00
 Sitemap: https://coldstreamexteriors.com/sitemap.xml

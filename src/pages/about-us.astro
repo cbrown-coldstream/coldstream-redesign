@@ -1,14 +1,11 @@
 ---
-// /about-us/ — noindex until the company story is sourced.
+// /about-us/ — INDEXED as of 2026-08-26 (owner: "about page needs to be built").
 //
-// An about page is mostly company-history claims, and Coldstream's are not on file anywhere in
-// this repo: founding year, ownership, crew size, how long each market has been open. The
-// prototype's "25+ years" came from the same design comp as the fake phone numbers, so it is
-// gated in data/claims.js with everything else.
-//
-// What is below is only what is verifiable today: three real offices, the services each market
-// runs, and the three pre-approved claims. That is a real page, but it is not yet a page that
-// earns the About search — so it carries a noindex and the build names what it needs.
+// The noindex existed because the company story was unsourced. It no longer is: the page opens
+// on three bylined owners ported verbatim from the live site — names, roles, histories, faces —
+// which is more sourced story than most contractor about pages ever carry. What remains gated
+// stays gated (founding year, crew counts); a page does not need every fact to be a real page,
+// it needs the facts it prints to be real.
 import PageShell from "../layouts/PageShell.astro";
 import { MARKET_LIST, NATIONAL, servicesFor } from "../data/markets.js";
 import { CLAIMS } from "../data/claims.js";
@@ -26,7 +23,6 @@ const org = organizationNode();
   title="About Coldstream Exteriors | Ohio & Missouri Roofers"
   description="Coldstream Exteriors runs three offices — Milford and Galloway in Ohio, and Geyer Road in St. Louis — with a local team in each. Licensed and insured."
   canonical="/about-us/"
-  noindex={true}
   schema={[org]}
   eyebrow="About us"
   heading="Three metros. Our own crew in each."
@@ -37,6 +33,25 @@ const org = organizationNode();
       three real people is also the strongest possible answer to the page's noindex reason: the
       company story is no longer entirely unsourced, it is bylined. */}
   <TeamProfiles people={TEAM} />
+
+  <section class="mist">
+    <div class="wrap prose">
+      <h2>How we run the company</h2>
+      <p>
+        Three local businesses under one name, each run by an owner who lives where he works —
+        the values are the ones you just read: faith, family, honest craftsmanship, and giving
+        back to the communities that hire us, from Ronald McDonald House volunteer work in
+        Cincinnati to Children's Hospital initiatives in Columbus.
+      </p>
+      {/* HOVER, REFRAMED PER SEO-GAP: the live site sold it ambiguously; here it is explicitly a
+          visualisation aid AFTER the in-person inspection, never a substitute for one. */}
+      <p>
+        Our partnership with Hover lets us turn photos of your home into a customizable 3D
+        rendering, so you can preview products and color combinations before deciding — after the
+        thorough in-person inspection, never instead of it.
+      </p>
+    </div>
+  </section>
 
   <section>
     <div class="wrap prose">

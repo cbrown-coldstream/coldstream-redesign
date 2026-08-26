@@ -40,12 +40,6 @@ export const GLOBAL_PENDING = [
       "every instant-quote CTA points at /free-estimate/ and the live URLs keep their 301s there.",
   },
   {
-    path: "/about-us/",
-    needs:
-      "founding year, ownership, crew size, markets-served history — every company-story fact. " +
-      "The page ships with only what is verifiable today.",
-  },
-  {
     path: "/financing/",
     needs:
       "lender, advertised monthly payment, APR, term and approval criteria. Advertising a " +

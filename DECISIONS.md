@@ -3190,7 +3190,31 @@ Commercial Roofing joined the Roofing dropdown, market-aware.
 "What happens next" holds the inspection and the written quote only; the storm block came out —
 the storm path has its own page and nav item.
 
-## 58. Checks
+## 58. Round 52 — about goes live, Cinch resolves to Cincy, the reviews rotate
+
+**/about-us/ is INDEXED.** The noindex existed because the company story was unsourced; three
+bylined owners ported verbatim from the live site ended that. Values and community-work lines
+drawn from the bios themselves; the Hover 3D partnership added WITH the SEO-GAP reframe stated
+on the page — a visualisation aid after the in-person inspection, never a substitute. Founding
+year stays gated; a page needs its printed facts real, not every fact printed. Sitemap holds at
+61 (St. Louis commercial out, about in).
+
+**"Cinch" was a typo for "Cincy."** So there is no branded process name — the owner meant the
+process from the live Cincinnati pages ("Our Proven Cincinnati Roofing Installation Process").
+The section stays "Our proven process", city dropped, because it renders nationally and a
+Cincinnati-named process there would trip the market gate. The name slot remains; nothing is
+awaited.
+
+**The reviews are a marquee now** — the 08-25 paged carousel lasted a day. Two server-rendered
+runs sliding continuously, the partner strip's own idiom so the site has one rotation mechanism;
+pause on hover and focus; reduced-motion gets a static grid; still zero JavaScript and still
+NOTHING renders without pulled reviews. The band went vibrant per the ask: the hero's gradient
+with its scrim, orange eyebrow and stars, glowing white cards.
+
+**The market chooser left the homepage** — its third move (under the badges → bottom of page →
+off). The allowed routes remain: the utility-bar selector, the footer, /service-areas/.
+
+## 59. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
