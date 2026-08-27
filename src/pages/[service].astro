@@ -188,10 +188,10 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     <section class="rsvc">
       <div class="wrap">
         <div class="shead" data-reveal>
-          {/* Was "Every roofing service under one number" — owner, 2026-08-27: unclear what it
-              means. Plain now: the eyebrow carries the SEO term, the heading says the range. */}
+          {/* Third title in a day, by request — plain and confident this time. The eyebrow keeps
+              the SEO term; the heading talks to the homeowner. */}
           <span class="eyebrow">Our roofing services</span>
-          <h2>From small repairs to full replacement</h2>
+          <h2>If it's on your roof, we handle it</h2>
         </div>
         <div class="rsvc-grid" data-reveal="stagger">
           {ROOFING_SERVICES.map((c) => (
@@ -264,24 +264,50 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     longer renders; the MarketChooser that replaced it was itself removed 2026-08-26. */}
 
 <style>
-  .rsvc { background: var(--cs-paper); }
-  .rsvc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .rsvc { background: var(--cs-mist); }
+  .rsvc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  /* RESTYLED 2026-08-27 (owner: "plain, visually dull"). White cards with a gradient icon disc,
+     and the whole card flips to the hero gradient on hover/focus — the same navy the What We Do
+     overlays use, so the two grids speak one language. Touch gets the arrow always-on and no
+     flip; reduced motion keeps the states without the movement. */
   .rsvc-card {
-    display: flex; flex-direction: column; gap: 6px; text-decoration: none;
-    background: var(--cs-mist); border: 1px solid var(--cs-line); border-radius: 12px;
-    padding: 20px 20px 16px; color: var(--cs-text);
-    transition: transform .14s ease-out, box-shadow .14s ease-out, border-color .14s;
+    display: flex; flex-direction: column; gap: 8px; text-decoration: none;
+    background: var(--cs-paper); border: 1px solid var(--cs-line); border-radius: 14px;
+    padding: 22px 22px 18px; color: var(--cs-text); position: relative; overflow: hidden;
+    transition: transform .16s ease-out, box-shadow .16s ease-out, background .16s, border-color .16s;
   }
   .rsvc-card:hover, .rsvc-card:focus-visible {
-    transform: translateY(-3px); border-color: var(--cs-web-hero-accent);
-    box-shadow: 0 12px 26px rgba(16, 25, 34, .13);
+    transform: translateY(-4px);
+    background: var(--cs-web-hero-ground, linear-gradient(135deg, #2f80c4 0%, #256199 55%, #1c4c78 100%));
+    border-color: transparent;
+    box-shadow: 0 18px 34px rgba(16, 25, 34, .28);
   }
-  .rsvc-card:focus-visible { outline: 2px solid var(--cs-ui-focus); outline-offset: 2px; }
-  .rsvc-ic { font-size: 1.5rem; line-height: 1; color: var(--cs-primary-deep); }
-  .rsvc-card h3 { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: 1.02rem; margin: 2px 0 0; }
-  .rsvc-card p { margin: 0; font-size: .88rem; color: var(--cs-text-muted); line-height: 1.55; flex: 1; }
-  .rsvc-more { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight); font-size: .85rem; color: var(--cs-primary-deep); opacity: 0; transition: opacity .14s; }
-  .rsvc-card:hover .rsvc-more, .rsvc-card:focus-visible .rsvc-more { opacity: 1; }
-  @media (hover: none) { .rsvc-more { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { .rsvc-card, .rsvc-more { transition: none; } .rsvc-card:hover { transform: none; } }
+  .rsvc-card:focus-visible { outline: 3px solid var(--cs-ui-focus); outline-offset: 2px; }
+  .rsvc-ic {
+    width: 46px; height: 46px; border-radius: 12px; flex: none;
+    display: grid; place-items: center; font-size: 1.35rem; line-height: 1; color: #fff;
+    background: linear-gradient(135deg, var(--cs-primary) 0%, var(--cs-primary-deep) 100%);
+    transition: background .16s, color .16s;
+  }
+  .rsvc-card:hover .rsvc-ic, .rsvc-card:focus-visible .rsvc-ic { background: #fff; color: var(--cs-primary-deep); }
+  .rsvc-card h3 { font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong); font-size: 1.06rem; margin: 6px 0 0; transition: color .16s; }
+  .rsvc-card p { margin: 0; font-size: .88rem; color: var(--cs-text-muted); line-height: 1.55; flex: 1; transition: color .16s; }
+  .rsvc-card:hover h3, .rsvc-card:focus-visible h3 { color: #fff; }
+  .rsvc-card:hover p, .rsvc-card:focus-visible p { color: #d6e6f5; }
+  .rsvc-more {
+    font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
+    font-size: .86rem; color: var(--cs-primary-deep);
+    opacity: 0; transform: translateX(-6px); transition: opacity .16s, transform .16s, color .16s;
+  }
+  .rsvc-card:hover .rsvc-more, .rsvc-card:focus-visible .rsvc-more {
+    opacity: 1; transform: none; color: var(--cs-web-hero-accent, #8fc0ea);
+  }
+  @media (hover: none) {
+    .rsvc-more { opacity: 1; transform: none; }
+    .rsvc-card:hover { background: var(--cs-paper); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rsvc-card, .rsvc-more, .rsvc-ic, .rsvc-card h3, .rsvc-card p { transition: none; }
+    .rsvc-card:hover { transform: none; }
+  }
 </style>
