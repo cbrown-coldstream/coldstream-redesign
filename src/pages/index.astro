@@ -31,7 +31,6 @@ import WhatWeDo from "../components/WhatWeDo.astro";
 import ProvenProcess from "../components/ProvenProcess.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import ReviewsByMarket from "../components/ReviewsByMarket.astro";
-import Reviews from "../components/Reviews.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
@@ -144,14 +143,9 @@ const org = organizationNode();
   <WhyTrust eyebrow={null} heading={page.why.heading} cards={whyCards}
             reviews={TESTIMONIALS.national} marketSlug="national" />
 
-  {/* DIRECTLY BELOW "Why homeowners keep calling us back", and the stacking is the point: those six
-      cards say how the work runs, this says who vouches for it. One is our claim, the other is
-      somebody else's — they answer different questions and neither replaces the other, so the six
-      cards are untouched.
-
-      Renders NOTHING until reviews are pulled. See ReviewsByMarket.astro for why there is no
-      placeholder: the prototype's three invented testimonials are the reason this gate exists. */}
-  <ReviewsByMarket />
+  {/* THE REVIEWS SECTION MOVED DOWN from this slot on 2026-08-27 — it now sits where the sample
+      marquee was, between the partner strip and the FAQ, because that is the section the owner
+      was looking at when he asked for the swap. One instance, one slot. */}
 
   {/* THE PROVEN PROCESS replaced Offers & Promotions here (owner brief 2026-08-25) — one round
       after Offers replaced the roofing block. The offers SHELL and its Reg Z gate survive in
@@ -175,7 +169,11 @@ const org = organizationNode();
       changes the phone. See PartnerStrip.astro. */}
   <PartnerStrip {...page.partners} swappable={true} />
 
-  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} placeholders={true} />
+  {/* OFFICE-BY-OFFICE REPLACED THE SAMPLE MARQUEE HERE (owner, 2026-08-27): three named Google
+      profiles beat an anonymous wall of quotes, because each column is a claim a visitor can check
+      in one click. Renders §60 sample placeholders under a "not real" banner until
+      `npm run reviews:pull` writes real data — then the real pull wins automatically. */}
+  <ReviewsByMarket placeholders={true} />
   <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
 
   {/* THE MARKET CHOOSER IS GONE FROM THIS PAGE (owner, 2026-08-26: "remove three markets at the

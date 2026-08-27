@@ -3233,7 +3233,39 @@ FTC concern was raised each time and is answered by the labeling, not ignored �
 sample card is design, the same as the five photo placeholders; a plausible fake one would not
 have shipped under any instruction.
 
-## 60. Checks
+## 60. Round 54 — the reviews section becomes office-by-office, samples and all
+
+The owner saw the fixture render of ReviewsByMarket and asked for it to replace the homepage
+sample marquee (2026-08-27): "for the new reviews section you created it needs to be swapped out
+for this section." So the swap is a promotion — the section built for real Google data takes the
+marquee's slot between the partner strip and the FAQ, and the §59 ruling extends to it: labeled
+sample placeholders over an invisible section, until `npm run reviews:pull` writes real data.
+
+What that took, and where the lines held:
+
+- **A second sample dataset, not a relaxed gate.** The FIXTURE set is gate-banned from built HTML
+  and stays banned. `src/data/fixtures/reviews-places.placeholder.js` is its deployable sibling:
+  every name starts with "Sample", every quote declares itself, `author_url`/`profileUrl` are null
+  so nothing links to a Google URL that does not exist, and the on-page "Placeholder reviews — not
+  real" banner renders in sample mode exactly as in fixture mode. `placeholders={true}` is opt-in
+  per page; only the homepage passes it. Real data always wins over the samples.
+- **The invented aggregates did not survive, and the gate is why.** The fixture set carries
+  4.8/137 and 4.9/64; the first build with them failed verify — `an unsourced claim reached the
+  built HTML: "4.8"`. The gate is right and was not touched: an invented star average against a
+  real Google profile is a checkable false claim, banner or no banner (the same guardrail §59
+  applied to the marquee header). All three sample columns render the neutral no-figures line;
+  the real aggregates light up the moment the pull writes them.
+- **`rbm-fixture` renamed `rbm-notreal`.** The banner's class name itself contained the gate-banned
+  word and shipped in sample mode — caught by grepping dist before verify even ran.
+- **The marquee left the homepage, not the repo.** Reviews.astro still serves free-estimate; the
+  homepage import is gone. The empty `<ReviewsByMarket />` placement below WhyTrust is gone too —
+  one instance, in the slot the owner was looking at when he asked.
+
+Written down as a reversal, because it is one: ReviewsByMarket's file comment said "no sample
+review anywhere in this file, nothing for a fixture to inject." That was the design, three owner
+instructions later it is the design for market pages only. The comment now says so.
+
+## 61. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

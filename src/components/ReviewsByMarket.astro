@@ -19,12 +19,12 @@
 // "Dave R.", "Priya K." — under a heading claiming they were local homeowners, on two different
 // pages. Fabricated endorsements are an FTC problem, not a copy nit.
 //
-// So: NO DATA, NO SECTION. Not a skeleton, not placeholder stars, not "reviews coming soon", not a
-// dashed frame promising something. If src/data/generated/reviews.json is absent or empty this
-// component returns nothing at all, and the page reads as complete without it. There is no sample
-// review anywhere in this file, no default prop carrying a name, and nothing for a fixture to
-// inject — `npm run verify` greps the built HTML for fixture content and this cannot trip it,
-// because there is nothing to trip it with.
+// So: NO DATA, NO SECTION — was the rule, and it PARTIALLY REVERSED on 2026-08-27 (DECISIONS §60,
+// extending §59). By default this component still returns nothing without data. But a page may
+// pass placeholders={true} to render SELF-LABELED sample cards under an on-page "not real" banner
+// — the owner reviews staging visually and ruled, three times, that labeled placeholders beat an
+// invisible section. The line that did not move: nothing UNLABELED ever renders, and the FIXTURE
+// dataset remains banned from built HTML by `npm run verify`.
 //
 // A market with reviews but no profile figures shows its reviews and no aggregate. A market with
 // nothing DROPS ITS COLUMN rather than showing a zero. Zeros are a claim too.
@@ -86,7 +86,22 @@ if (!DATA && process.env.COLDSTREAM_FIXTURES === "1") {
   DATA = SAMPLE_PLACES_REVIEWS;
 }
 
-const { heading = "What homeowners say, office by office" } = Astro.props;
+const { heading = "What homeowners say, office by office", placeholders = false } = Astro.props;
+
+// ── PLACEHOLDER MODE — THE §59 RULING, EXTENDED TO THIS SECTION (DECISIONS §60) ──────────────
+//
+// "No data, no section" (above) lost an argument with the owner three times over: he reviews
+// pending sections on staging and an invisible section reads as work not done. The compromise that
+// held for the marquee holds here — SELF-LABELED sample content may ship, unlabeled may not.
+// Every name below starts with "Sample", every quote declares itself, nothing links to a Google
+// URL that does not exist, and the banner that fixture mode renders on-page renders here too.
+// The word FIXTURE stays gate-banned; this data contains no instance of it, which is the whole
+// difference between the two files. Real data always wins: this branch is unreachable once
+// generated/reviews.json exists.
+if (!DATA && placeholders) {
+  const { SAMPLE_PLACES_PLACEHOLDERS } = await import("../data/fixtures/reviews-places.placeholder.js");
+  DATA = SAMPLE_PLACES_PLACEHOLDERS;
+}
 
 // ON-PAGE, NOT JUST IN THE TERMINAL. A build warning is seen by the person who ran the build and
 // nobody else. This section is going to be looked at by a team, screenshotted, and pasted into a
@@ -94,6 +109,7 @@ const { heading = "What homeowners say, office by office" } = Astro.props;
 // say so where the eye lands, or somebody will eventually show a client a fabricated 4.8 in good
 // faith. It is the loudest thing in the section by design.
 const IS_FIXTURE = DATA?.$fixture != null;
+const IS_SAMPLE = DATA?.$sample != null;
 
 const columns = MARKET_LIST
   .map((m) => {
@@ -134,11 +150,12 @@ const starsFor = (r) => {
         </p>
       </div>
 
-      {IS_FIXTURE && (
-        <p class="rbm-fixture" role="status">
-          <b>Placeholder reviews — not real.</b> Every name and quote below is invented, for reviewing
-          the layout only. Real reviews arrive via <code>npm run reviews:pull</code> once a Google
-          Places key exists. Do not screenshot this for a client.
+      {(IS_FIXTURE || IS_SAMPLE) && (
+        <p class="rbm-notreal" role="status">
+          <b>Placeholder reviews — not real.</b> Every name, quote, rating and count below is
+          invented, for reviewing the layout only. Real reviews arrive via
+          <code>npm run reviews:pull</code> once a Google Places key exists. Do not screenshot this
+          for a client.
         </p>
       )}
 
@@ -187,7 +204,13 @@ const starsFor = (r) => {
                              loading="lazy" decoding="async" referrerpolicy="no-referrer" />
                       )}
                       <div>
-                        <a class="rbm-name" href={r.author_url} target="_blank" rel="noopener nofollow">{r.name}</a>
+                        {/* Sample cards carry no author_url — a placeholder must not link to a
+                            Google profile that does not exist. Real pulls always have one. */}
+                        {r.author_url ? (
+                          <a class="rbm-name" href={r.author_url} target="_blank" rel="noopener nofollow">{r.name}</a>
+                        ) : (
+                          <span class="rbm-name">{r.name}</span>
+                        )}
                         {r.relative_time_description && <span class="rbm-when">{r.relative_time_description}</span>}
                       </div>
                     </div>
