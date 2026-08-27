@@ -115,9 +115,9 @@ change to every page in it.
 | `/st-louis/locations/south/` | Location area | Roofing and Exteriors in South County and South City | 535 | — | index |
 | `/st-louis/reviews/` | Reviews | What St. Louis Homeowners Say | 519 | — | noindex |
 | `/st-louis/roofing/` | Service hub | Roofing in St. Louis | 1767 | 17 | index |
-| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1302 | 20 | index |
+| `/st-louis/roofing/insurance-storm-damage/` | Sub-service | Storm Damage and Insurance Claims in St. Louis | 1300 | 20 | index |
 | `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1353 | 15 | index |
-| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1376 | 3 | index |
+| `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1375 | 3 | index |
 | `/st-louis/siding/` | Service hub | Fiber cement and vinyl siding throughout Greater St. Louis | 1252 | 5 | index |
 | `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1515 | 8 | index |
 | `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1334 | 15 | index |
