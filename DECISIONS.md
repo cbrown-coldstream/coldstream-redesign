@@ -3391,6 +3391,21 @@ On the What We Do grid and the national hub service cards, hidden server-side, r
 when the selection clears. Lesson restated from the marquee rounds: a change the owner cannot SEE
 on staging does not exist for him — ship the visible half with the mechanical half.
 
+### Round 58, third pass — the nav follows the market, and headings can too
+
+The owner's actual path finally surfaced: he browses the NATIONAL pages (the nav keeps him
+there), so the brief's "What a full siding replacement does for a {City} home" — which lives on
+the market siding pages — never crossed his screen. Two fixes:
+- The HEADER NAV joins the swap. Every nav link with a three-market variant carries data-mhref,
+  so choosing Cincinnati makes Roofing/Siding/Windows/Gutters/Storm Damage (and the dropdowns,
+  and Get Free Estimate) route to the Cincinnati pages from anywhere. The script now ships with
+  the header — site-wide by construction.
+- Headings can swap in place: data-mkt-tpl holds a template with {City}; the national /siding/
+  detail h2 becomes the brief's heading when a market is chosen and restores when cleared. The
+  static HTML (what crawlers index) is untouched — the swap only follows a visitor's own action.
+One bug shipped and was caught in the same round: the header's script instance ran at parse time,
+before the page body existed, so its queries captured only the nav. Queries moved to change time.
+
 ## 65. Checks
 
 ```

@@ -13,7 +13,7 @@
 // and a service claim in a market that cannot deliver it "generates leads nobody can close". One
 // word in that market's services array in markets.js brings every such card back.
 import { servicesFor, serviceHref } from "../data/markets.js";
-const { id = "roofing", eyebrow, heading, intro, cards = [], photo, market } = Astro.props;
+const { id = "roofing", eyebrow, heading, headingTpl = null, intro, cards = [], photo, market } = Astro.props;
 
 const offers = (key) => Boolean(market && servicesFor(market).some((s) => s.key === key));
 const shown = cards.filter((c) => !(c.requiresService && !offers(c.service)));
@@ -28,7 +28,9 @@ const linkFor = (card) => {
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow" set:html={eyebrow} />
-      <h2>{heading}</h2>
+      {/* headingTpl: the in-place market swap rewrites this h2 to the template with {City}
+          filled when the utility-bar selector picks a market (MarketVariantLinks.astro). */}
+      <h2 data-mkt-tpl={headingTpl}>{heading}</h2>
       {/* intro may be one paragraph or several — an array renders one <p> per entry. */}
       {intro && (Array.isArray(intro) ? intro : [intro]).map((para) => <p>{para}</p>)}
     </div>

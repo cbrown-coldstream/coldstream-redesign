@@ -45,6 +45,8 @@
 import { estimateHref } from "../data/markets.js";
 import { MARKET_LIST } from "../data/markets.js";
 import { NAV, NAV_RIGHT, navHref, childHref } from "../data/nav.js";
+import { MARKET_VARIANTS } from "../data/markets.js";
+import MarketVariantLinks from "./MarketVariantLinks.astro";
 const { market } = Astro.props;
 
 // ── Which nav item owns the current URL ──────────────────────────────────────────────────────
@@ -82,7 +84,7 @@ const activeKey = (() => {
         {NAV.map((item) => (
           item.children?.length ? (
             <div class:list={["navitem", "has-sub", activeKey === item.key && "is-active"]}>
-              <a href={navHref(item, market)} aria-haspopup="true"
+              <a href={navHref(item, market)} data-mhref={MARKET_VARIANTS[navHref(item, market)]} aria-haspopup="true"
                  aria-current={activeKey === item.key ? "true" : null}>
                 {item.label}
                 <svg class="caret" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
@@ -92,13 +94,13 @@ const activeKey = (() => {
               </a>
               <ul class="subnav">
                 {item.children.map((c) => (
-                  <li><a href={childHref(item, c, market)}>{c.label}</a></li>
+                  <li><a href={childHref(item, c, market)} data-mhref={MARKET_VARIANTS[childHref(item, c, market)]}>{c.label}</a></li>
                 ))}
               </ul>
             </div>
           ) : (
             <div class:list={["navitem", activeKey === item.key && "is-active"]}>
-              <a href={navHref(item, market)} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
+              <a href={navHref(item, market)} data-mhref={MARKET_VARIANTS[navHref(item, market)]} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
             </div>
           )
         ))}
@@ -109,7 +111,7 @@ const activeKey = (() => {
       <nav class="main main-right" aria-label="Secondary">
         {NAV_RIGHT.map((item) => (
           <div class:list={["navitem", activeKey === item.key && "is-active"]}>
-            <a href={navHref(item, market)} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
+            <a href={navHref(item, market)} data-mhref={MARKET_VARIANTS[navHref(item, market)]} aria-current={activeKey === item.key ? "true" : null}>{item.label}</a>
           </div>
         ))}
       </nav>
@@ -126,10 +128,11 @@ const activeKey = (() => {
         <span data-cs-phone-text>{market.phone}</span>
       </a>
 
-      <a class="btn navcta" href={estimateHref(market)}>Get Free Estimate</a>
+      <a class="btn navcta" href={estimateHref(market)} data-mhref={MARKET_VARIANTS[estimateHref(market)]}>Get Free Estimate</a>
     </div>
   </div>
 </header>
+<MarketVariantLinks />
 <script is:inline>
   (function () {
     var btn = document.getElementById("navToggle");

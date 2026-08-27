@@ -186,6 +186,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     market={market}
     eyebrow="What we do"
     heading={`What a ${svc.label.toLowerCase()} job covers`}
+    headingTpl={service === "siding" ? "What a full siding replacement does for a {City} home" : null}
     intro={INTRO[service]}
     cards={svc.sections}
   />

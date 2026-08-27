@@ -23,14 +23,23 @@ const NAMES = Object.fromEntries(MARKET_LIST.map((m) => [m.slug, m.name]));
     if (window.__csMhref) return; window.__csMhref = 1;
     var sel = document.getElementById("mkt");
     if (!sel) return;
-    var links = document.querySelectorAll("a[data-mhref]");
-    var notes = document.querySelectorAll("[data-mkt-note]");
-    if (!links.length && !notes.length) return;
+    // QUERIED AT CHANGE TIME, NOT AT PARSE TIME. This script ships with the header, which the
+    // parser reaches before the page body exists — a parse-time query would capture the nav and
+    // permanently miss every annotated element below it. That bug shipped once.
     sel.addEventListener("change", function () {
       var slug = sel.value, name = NAMES[slug];
+      var links = document.querySelectorAll("a[data-mhref]");
+      var notes = document.querySelectorAll("[data-mkt-note]");
+      var tpls = document.querySelectorAll("[data-mkt-tpl]");
       Array.prototype.forEach.call(links, function (a) {
         if (!a.dataset.nat) a.dataset.nat = a.getAttribute("href");
         a.setAttribute("href", slug && name ? "/" + slug + "/" + a.dataset.mhref : a.dataset.nat);
+      });
+      Array.prototype.forEach.call(tpls, function (el) {
+        if (!el.dataset.natText) el.dataset.natText = el.textContent;
+        el.textContent = slug && name
+          ? el.dataset.mktTpl.split("{City}").join(name)
+          : el.dataset.natText;
       });
       Array.prototype.forEach.call(notes, function (n) {
         if (slug && name) {
