@@ -1198,3 +1198,10 @@ a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
 .sublead-aside li::before{content:"✓";position:absolute;left:0;top:0;color:var(--cs-web-hero-accent,#8fc0ea);
   font-weight:700}
 @media(max-width:820px){.sublead .wrap{grid-template-columns:1fr;gap:22px}.sublead{padding-top:44px}}
+
+/* ── MARKET NOTE — the visible half of the in-place link swap (MarketVariantLinks.astro) ──────
+   Hidden until the selector picks a market; then a chip confirming where the cards now link. */
+.mkt-note{display:inline-block;margin:12px auto 0;padding:7px 16px;border-radius:999px;
+  background:var(--cs-mist);border:1px solid var(--cs-primary);color:var(--cs-primary-deep);
+  font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);font-size:.85rem}
+.mkt-note[hidden]{display:none}

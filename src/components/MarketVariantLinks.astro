@@ -6,22 +6,39 @@
 // data-mhref (see MARKET_VARIANTS in data/markets.js) points at its market's variant page the
 // moment a market is chosen, and back at the national page when the choice is cleared.
 //
+// AND IT SAYS SO OUT LOUD. Round 58 shipped the href rewrite alone and the owner reported it as
+// broken — correctly, from where he sat: an href is invisible until you click it, and the phone
+// swap he compared against is visible. Any element with data-mkt-note (rendered hidden) becomes
+// a visible "Showing Cincinnati" chip when a market is chosen. role="status" belongs on the note
+// element so the change is announced, not just painted.
+//
 // One script per page no matter how many sections include this component — the window flag
 // guards the double-include. On market pages the selector navigates instead of swapping, this
-// script finds no data-mhref anchors there, and does nothing — by design, not by accident.
+// script finds nothing to annotate, and does nothing — by design, not by accident.
+import { MARKET_LIST } from "../data/markets.js";
+const NAMES = Object.fromEntries(MARKET_LIST.map((m) => [m.slug, m.name]));
 ---
-<script is:inline>
+<script is:inline define:vars={{ NAMES }}>
   (function () {
     if (window.__csMhref) return; window.__csMhref = 1;
     var sel = document.getElementById("mkt");
     if (!sel) return;
     var links = document.querySelectorAll("a[data-mhref]");
-    if (!links.length) return;
+    var notes = document.querySelectorAll("[data-mkt-note]");
+    if (!links.length && !notes.length) return;
     sel.addEventListener("change", function () {
-      var slug = sel.value;
+      var slug = sel.value, name = NAMES[slug];
       Array.prototype.forEach.call(links, function (a) {
         if (!a.dataset.nat) a.dataset.nat = a.getAttribute("href");
-        a.setAttribute("href", slug ? "/" + slug + "/" + a.dataset.mhref : a.dataset.nat);
+        a.setAttribute("href", slug && name ? "/" + slug + "/" + a.dataset.mhref : a.dataset.nat);
+      });
+      Array.prototype.forEach.call(notes, function (n) {
+        if (slug && name) {
+          n.textContent = "Showing " + name + " — the cards below link to our " + name + " pages.";
+          n.hidden = false;
+        } else {
+          n.hidden = true;
+        }
       });
     });
   })();

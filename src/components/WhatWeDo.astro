@@ -28,6 +28,8 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
       <span class="eyebrow">What we do</span>
       <h2 id="wwd-h">Every trade on the outside of your home</h2>
       <p>Eight services, one standard of work, and a free inspection at the start of all of them.</p>
+      {/* Hidden until the utility-bar selector picks a market; MarketVariantLinks fills it. */}
+      <p class="mkt-note" data-mkt-note hidden role="status"></p>
     </div>
 
     <div class="wwd-grid" data-reveal="stagger">

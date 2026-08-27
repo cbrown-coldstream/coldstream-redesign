@@ -3381,6 +3381,16 @@ Deliberately NOT annotated: stone-veneer (national-only page) and commercial roo
 selector navigates instead of swapping, which is the correct behaviour and predates this round.
 Functionally tested headless: select Cincinnati → six links verified rewritten, clear → restored.
 
+### Round 58, second pass — the swap becomes visible
+
+The href rewrite shipped alone and the owner reported it broken. He was right from where he sat:
+an href is invisible until clicked, and the phone swap he compared against is visible. Now a chip
+appears under the section heading the moment a market is chosen — "Showing Cincinnati — the cards
+below link to our Cincinnati pages." — with role="status" so it is announced, not just painted.
+On the What We Do grid and the national hub service cards, hidden server-side, restored to hidden
+when the selection clears. Lesson restated from the marquee rounds: a change the owner cannot SEE
+on staging does not exist for him — ship the visible half with the mechanical half.
+
 ## 65. Checks
 
 ```
