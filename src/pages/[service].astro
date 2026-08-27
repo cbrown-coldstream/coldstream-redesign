@@ -188,8 +188,10 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     <section class="rsvc">
       <div class="wrap">
         <div class="shead" data-reveal>
-          <span class="eyebrow">Roofing, end to end</span>
-          <h2>Every roofing service under one number</h2>
+          {/* Was "Every roofing service under one number" — owner, 2026-08-27: unclear what it
+              means. Plain now: the eyebrow carries the SEO term, the heading says the range. */}
+          <span class="eyebrow">Our roofing services</span>
+          <h2>From small repairs to full replacement</h2>
         </div>
         <div class="rsvc-grid" data-reveal="stagger">
           {ROOFING_SERVICES.map((c) => (

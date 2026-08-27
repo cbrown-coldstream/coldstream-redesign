@@ -45,7 +45,7 @@ change to every page in it.
 | `/gutters/` | National service | Seamless gutters, sized to the roof above them | 1029 | — | index |
 | `/instant-roof-quote/` | Standalone | Instant roof quote | 289 | — | noindex |
 | `/privacy-policy/` | Standalone | Privacy policy | 401 | — | noindex |
-| `/roofing/` | National service | Roofing contractors who inspect before they quote | 1754 | — | index |
+| `/roofing/` | National service | Roofing contractors who inspect before they quote | 1753 | — | index |
 | `/roofing/repair/` | National service | Roof repair, traced to where the water gets in | 1317 | — | index |
 | `/roofing/replacement/` | National service | Roof replacement, taken back to the boards | 1352 | — | index |
 | `/service-areas/` | Service areas | Roofing and exterior service areas | 700 | — | index |
