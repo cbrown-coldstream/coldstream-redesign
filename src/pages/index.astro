@@ -30,7 +30,7 @@ import CTABand from "../components/CTABand.astro";
 import WhatWeDo from "../components/WhatWeDo.astro";
 import ProvenProcess from "../components/ProvenProcess.astro";
 import WhyTrust from "../components/WhyTrust.astro";
-import ReviewsByMarket from "../components/ReviewsByMarket.astro";
+import Reviews from "../components/Reviews.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 
 import { NATIONAL, MARKET_LIST, MARKETS, GEO, servicesFor, serviceHref, copyFor } from "../data/markets.js";
@@ -169,11 +169,12 @@ const org = organizationNode();
       changes the phone. See PartnerStrip.astro. */}
   <PartnerStrip {...page.partners} swappable={true} />
 
-  {/* OFFICE-BY-OFFICE REPLACED THE SAMPLE MARQUEE HERE (owner, 2026-08-27): three named Google
-      profiles beat an anonymous wall of quotes, because each column is a claim a visitor can check
-      in one click. Renders §60 sample placeholders under a "not real" banner until
-      `npm run reviews:pull` writes real data — then the real pull wins automatically. */}
-  <ReviewsByMarket placeholders={true} />
+  {/* THE 9-REVIEW SAMPLE CAROUSEL IS BACK (owner, 2026-08-29: "i want the same one that was
+      created earlier") — reversing the 08-27 swap to office-by-office, which is itself logged in
+      §60. Same section as before: rotating marquee, nine labeled sample reviews, replaced by the
+      real Google pull automatically once a Places key exists. ReviewsByMarket keeps its
+      placeholder mode but no page renders it for now. */}
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} placeholders={true} />
   <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
 
   {/* THE MARKET CHOOSER IS GONE FROM THIS PAGE (owner, 2026-08-26: "remove three markets at the

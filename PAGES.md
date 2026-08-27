@@ -26,7 +26,7 @@ change to every page in it.
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 733 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 550 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 513 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 2444 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1911 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 662 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 700 |
 
@@ -36,7 +36,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, siding and gutter experts | 2444 | — | index |
+| `/` | National home | Roofing, siding and gutter experts | 1911 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 1476 | — | index |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 403 | — | noindex |
 | `/financing/` | Standalone | Paying for the work over time | 800 | — | noindex |
@@ -269,7 +269,7 @@ these sections with this copy.
 3. Why homeowners trust Coldstream
 4. The same four steps, every trade
 5. Materials from manufacturers who stand behind them
-6. What homeowners say, office by office
+6. Proven. Trusted. Backed by Your Neighbors.
 7. Questions we get asked most
 8. Book a free inspection
 9. Services
