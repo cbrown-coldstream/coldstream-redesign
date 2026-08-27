@@ -29,7 +29,8 @@ const linkFor = (card) => {
     <div class="shead">
       <span class="eyebrow" set:html={eyebrow} />
       <h2>{heading}</h2>
-      {intro && <p>{intro}</p>}
+      {/* intro may be one paragraph or several — an array renders one <p> per entry. */}
+      {intro && (Array.isArray(intro) ? intro : [intro]).map((para) => <p>{para}</p>)}
     </div>
     <div class="detail">
       {shown.map((c) => {

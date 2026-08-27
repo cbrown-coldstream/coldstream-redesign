@@ -77,7 +77,12 @@ export const SUBSERVICES = {
       sections: [
         { title: "Tear-off, not an overlay", body: "Laying new shingles over old hides the decking and traps heat, which shortens the life of what you just paid for. We take it back to the boards so we can see what we are working with." },
         { title: "Decking and ventilation", body: "Soft decking gets replaced before anything goes over it. Intake and exhaust ventilation get sized while the roof is open — it is the easiest moment to fix airflow and the most expensive one to skip." },
-        { title: "Materials", body: "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and metal or a low-slope system where the roof calls for it. We quote what the roof needs." },
+        // Market fact (owner brief 2026-08-27): St. Louis is shingle and low-slope only — metal
+        // must not appear as an offering on any St. Louis page. A body may be a function of the
+        // market; the template resolves it.
+        { title: "Materials", body: (m) => m.slug === "st-louis"
+            ? "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and a low-slope system where the roof calls for it. We quote what the roof needs."
+            : "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and metal or a low-slope system where the roof calls for it. We quote what the roof needs." },
         { title: "The finish", body: "New underlayment, ice-and-water membrane at the eaves and valleys, new flashing at every penetration. Old flashing caulked back into place is the most common leak we get called out to." },
       ],
       faq: (m, c) => [

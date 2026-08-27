@@ -3310,7 +3310,48 @@ commercial redirect fallback was not repointed at Cincinnati — a legacy St. Lo
 still lands on /st-louis/roofing/ per the original fold decision, and changing that would be its
 own call.
 
-## 62. Checks
+## 62. Round 56 — the site-wide localization brief, on a branch
+
+Owner brief 2026-08-27, applied on `sitewide-local-seo` (not merged — the brief says branch).
+
+- **The brief's phone table matches the data exactly** — including (513) 258-0450 for
+  Cincinnati. That is the owner writing the number down, which CLOSES the open question CLAUDE.md
+  has carried since the prototype said (513) 717-5462. Nothing needed changing; the fourth source
+  settles it.
+- **St. Louis offers no metal roofing** (the brief's one product-scope fact). Every place metal was
+  OFFERED became market-aware — the roofing lead, the materials FAQ answer, the SERVICES blurb,
+  the roof-replacement Materials card — reading "shingle and low-slope" in St. Louis and
+  "shingle, metal and low-slope" in Ohio. Metal as flashing ("metal cut into mortar") and metal
+  as dented gutters stays on every market: those are trade facts, not offerings. Card bodies and
+  FAQ answers may now be functions of the market; the templates resolve them.
+- **Local SEO: measured first, then written.** A counter (body copy = header-to-footer text)
+  found EVERY market page already at 3+ city mentions and most above 5 — St. Louis structurally
+  so, because its region string contains its city name. So no page needed city-stuffing, and none
+  got it: the pass added the owner's town lists (Anderson Township…Blue Ash / Dublin…Upper
+  Arlington / Kirkwood…Florissant) inside new copy instead, per the brief's own
+  "specificity over repetition". Net city-mention change across all 51 market pages: zero.
+  Meta descriptions on Cincinnati and Columbus hubs now carry the city (their regions do not
+  contain it); St. Louis keeps region-only phrasing to avoid saying the name twice in a clause.
+- **The inspection section is now on the market roofing hubs**, localized: MARKET_ROOFING_DEPTH
+  carries three blocks per market under the national headings — freeze-thaw for the Ohio Valley,
+  straight-line wind for central Ohio, hail for St. Louis. All climate claims are general truths
+  of each region; no invented storms, dates or addresses. Similarity check peak: 27.6%.
+- **Siding heroes**: "Fiber cement and vinyl siding throughout Greater {City}" per the brief. The
+  derived title ran past 60 with that h1, so services can carry `titleTag` — siding's is
+  "Siding Contractors in {city, ST} | Coldstream Exteriors" (56–58 chars).
+- **The siding detail section** on market hubs: "What a full siding replacement does for a {City}
+  home", both brief paragraphs verbatim beneath it. ServiceDetail learned multi-paragraph intros.
+- **"Learn more" on the roofing service cards is visible by default** — the two-day-old slide-in
+  reveal is reversed on instruction; hover now only recolors it.
+
+Not done, and why: the brief's 3–5 mention target reads as a ceiling, and ~30 pages sit above it
+today, St. Louis worst (region name). Reducing them means rewriting existing approved copy — a
+bigger call than this branch, so they are REPORTED (the brief asks exactly that) rather than
+trimmed. National pages keep their no-city rule; the brief's per-market items were applied to
+market pages, and "What a siding job covers" survives unchanged on the national /siding/ page,
+which cannot take a {City} heading.
+
+## 63. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

@@ -131,10 +131,9 @@ and `/service-areas/` with a Google map. The handoff site at `/handoff/`.
    the estimate CTA sat in the header row at ~200px, putting the row's minimum content at ~417px
    with no flex-wrap, so the document grew wider than the viewport and every section inherited it.
    The CTA moved into the mobile drawer. See DECISIONS §36.
-6. **Open questions:** the Cincinnati number reads (513) 717-5462 in the prototype and
-   (513) 258-0450 in the data. Round 42 found the public Facebook page printing (513) 258-0450 —
-   a third source agreeing with the data against the prototype. Still not a formal sign-off,
-   but nothing now backs the prototype number. The GAF certification tier has three conflicting
+6. **Open questions:** ~~the Cincinnati number~~ **SETTLED 2026-08-27** — the owner's site-wide
+   brief lists (513) 258-0450 for Cincinnati, matching the data. The prototype's (513) 717-5462
+   is dead. The GAF certification tier has three conflicting
    sources. The hero video button was added but never formally approved.
 
    **Added 2026-08-24, from a public search while chasing the GBP URLs — all in `claims.js`:**
