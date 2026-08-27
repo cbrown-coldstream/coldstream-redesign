@@ -44,7 +44,26 @@ if (existsSync(PULLED)) {
     pulled.sort((a, b) => String(b.date ?? "").localeCompare(String(a.date ?? "")));
   } catch { pulled = []; }
 }
-const items = (pulled.length ? pulled : reviews).slice(0, 9);
+// ── PLACEHOLDER MODE (owner instruction, 2026-08-27, third reaffirmation) ────────────────────
+// The owner wants the carousel VISIBLE now, with nine placeholder reviews, real ones to follow.
+// The no-invented-reviews rule was raised each time and the owner's decision stands — shipped
+// with the one guardrail that keeps it a placeholder rather than a fabricated endorsement:
+// every card carries a visible "Sample" tag and self-describing copy. No invented names, no
+// aggregate figure. Real pulled reviews REPLACE these automatically (pulled wins below), and
+// the tag logic keys off the sample flag, so nothing real ever gets tagged.
+const PLACEHOLDERS = Array.from({ length: 9 }, (_, i) => ({
+  sample: true,
+  rating: 5,
+  name: "Your customer",
+  date: null,
+  quote: [
+    "This is a sample review. When the Google review feed connects, your real customer reviews rotate through here — names, stars and dates straight from Google.",
+    "Sample review card. Real reviews from your local Google Business Profiles will fill this carousel.",
+    "A shorter sample card, to show how varied review lengths sit side by side.",
+  ][i % 3],
+}));
+const usePlaceholders = Astro.props.placeholders === true && !pulled.length && !reviews.length;
+const items = (pulled.length ? pulled : reviews.length ? reviews : usePlaceholders ? PLACEHOLDERS : []).slice(0, 9);
 
 // The Mr. Roof-style aggregate header — Google mark, overall stars, total count — renders ONLY
 // from the pull's own per-market figures (rating and userRatingCount straight off each Google
@@ -84,8 +103,9 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
       <ul class="rev-run">
         {items.map((r) => (
           <li class="rev-card">
+            {r.sample && <span class="rev-sample">Sample</span>}
             {stars(r.rating) && (
-              <div class="rev-stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</div>
+              <div class="rev-stars" aria-label={r.sample ? "Sample star row" : `${r.rating} out of 5 stars`}>{stars(r.rating)}</div>
             )}
             <blockquote><p>{r.quote}</p></blockquote>
             <figcaption>
@@ -167,7 +187,15 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
     font-family: var(--cs-web-display); font-weight: 900; font-size: 4.4rem; line-height: 1;
     color: var(--cs-web-hero-accent, #8fc0ea); opacity: .4; pointer-events: none;
   }
+  .rev-sample {
+    position: absolute; top: 10px; left: 14px;
+    font-family: var(--cs-web-display); font-weight: 800; font-size: .62rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cs-text-muted); border: 1px dashed var(--cs-text-muted);
+    border-radius: 4px; padding: 2px 7px; opacity: .85;
+  }
   .rev-stars { color: var(--cs-accent); letter-spacing: 2.5px; font-size: 1.3rem; }
+  .rev-card:has(.rev-sample) .rev-stars { color: var(--cs-text-muted); opacity: .55; }
   .rev-card blockquote { margin: 0; flex: 1; }
   .rev-card blockquote p { margin: 0; font-size: .96rem; line-height: 1.6; color: var(--cs-text); }
   .rev-card figcaption {

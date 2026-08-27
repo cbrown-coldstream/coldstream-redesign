@@ -3214,7 +3214,26 @@ with its scrim, orange eyebrow and stars, glowing white cards.
 **The market chooser left the homepage** — its third move (under the badges → bottom of page →
 off). The allowed routes remain: the utility-bar selector, the footer, /service-areas/.
 
-## 59. Checks
+## 59. Round 53 — placeholder reviews, by owner instruction, labeled as what they are
+
+The owner asked three times for the review carousel to be visible; the no-invented-reviews gate
+kept it absent for want of pulled data; on 2026-08-27 the instruction became explicit: nine
+placeholder Google reviews now, real ones dropped in later. **The owner's decision stands and is
+shipped** — with the one guardrail that separates a placeholder from a fabricated endorsement:
+
+  · every sample card carries a visible dashed SAMPLE tag
+  · no invented names — the byline reads "Your customer"
+  · the copy describes itself ("This is a sample review…")
+  · star rows are muted grey, not the orange of a real rating
+  · no aggregate figure renders — that stays gated on the pull
+
+Real pulled reviews REPLACE the samples automatically (pulled data wins in the component), and
+only the homepage opts in (`placeholders={true}`); market pages keep absence-until-real. The
+FTC concern was raised each time and is answered by the labeling, not ignored — an obviously-
+sample card is design, the same as the five photo placeholders; a plausible fake one would not
+have shipped under any instruction.
+
+## 60. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

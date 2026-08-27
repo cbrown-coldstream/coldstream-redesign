@@ -175,7 +175,7 @@ const org = organizationNode();
       changes the phone. See PartnerStrip.astro. */}
   <PartnerStrip {...page.partners} swappable={true} />
 
-  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} />
+  <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro="Feedback from homeowners in every market we serve." reviews={TESTIMONIALS.national} placeholders={true} />
   <FAQ items={page.faq.items} eyebrow="Common questions" heading={page.faq.heading} />
 
   {/* THE MARKET CHOOSER IS GONE FROM THIS PAGE (owner, 2026-08-26: "remove three markets at the
