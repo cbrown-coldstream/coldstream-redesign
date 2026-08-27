@@ -27,6 +27,18 @@ leaves every old URL returning 404 and throws away the rankings they earned. Sam
 6. Verify a handful of old URLs 301 to the right new pages (samples in the checklist).
 7. Submit `https://coldstreamexteriors.com/sitemap.xml` in Google Search Console.
 
+## Previewing the site
+
+**Don't double-click the HTML files** — they will open without styling, because the pages
+reference their stylesheets the way a web server serves them, not the way a local folder does.
+That is expected, and it disappears the moment the files are on the host. To see the site as it
+will look:
+
+- Easiest: the live preview at **https://coldstream-exteriors-staging.netlify.app** — the exact
+  same files as this zip.
+- Or serve the unzipped folder with any local web server (e.g. `python3 -m http.server` in the
+  folder, then open `http://localhost:8000`).
+
 ## What is in the site files
 
 61 indexable pages plus a small set that are intentionally `noindex` (they are waiting on real
