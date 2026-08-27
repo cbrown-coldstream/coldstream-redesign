@@ -17,6 +17,8 @@
 // copy lives inside the overlay in the DOM at all times, so crawlers read it regardless of
 // hover state.
 import { WHAT_WE_DO } from "../data/whatwedo.js";
+import { MARKET_VARIANTS } from "../data/markets.js";
+import MarketVariantLinks from "./MarketVariantLinks.astro";
 
 const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
 ---
@@ -56,16 +58,17 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
             <p class="wwd-body">{s.body}</p>
             {s.subs.length > 0 && (
               <ul class="wwd-subs">
-                {s.subs.map((x) => <li><a href={x.href}>{x.label}</a></li>)}
+                {s.subs.map((x) => <li><a href={x.href} data-mhref={MARKET_VARIANTS[x.href]}>{x.label}</a></li>)}
               </ul>
             )}
-            <a class="wwd-cta" href={s.href}>{s.label}&nbsp;<span aria-hidden="true">→</span></a>
+            <a class="wwd-cta" href={s.href} data-mhref={MARKET_VARIANTS[s.href]}>{s.label}&nbsp;<span aria-hidden="true">→</span></a>
           </div>
         </article>
       ))}
     </div>
   </div>
 </section>
+<MarketVariantLinks />
 
 <style>
   .wwd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; }

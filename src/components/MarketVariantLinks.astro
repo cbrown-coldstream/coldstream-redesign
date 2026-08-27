@@ -1,0 +1,28 @@
+---
+// MARKET VARIANT LINKS — the third member of the in-place market swap.
+//
+// The utility-bar selector already swaps the phone (UtilityBar) and the manufacturer logos
+// (PartnerStrip) without navigating. This joins the links to them: any anchor rendered with
+// data-mhref (see MARKET_VARIANTS in data/markets.js) points at its market's variant page the
+// moment a market is chosen, and back at the national page when the choice is cleared.
+//
+// One script per page no matter how many sections include this component — the window flag
+// guards the double-include. On market pages the selector navigates instead of swapping, this
+// script finds no data-mhref anchors there, and does nothing — by design, not by accident.
+---
+<script is:inline>
+  (function () {
+    if (window.__csMhref) return; window.__csMhref = 1;
+    var sel = document.getElementById("mkt");
+    if (!sel) return;
+    var links = document.querySelectorAll("a[data-mhref]");
+    if (!links.length) return;
+    sel.addEventListener("change", function () {
+      var slug = sel.value;
+      Array.prototype.forEach.call(links, function (a) {
+        if (!a.dataset.nat) a.dataset.nat = a.getAttribute("href");
+        a.setAttribute("href", slug ? "/" + slug + "/" + a.dataset.mhref : a.dataset.nat);
+      });
+    });
+  })();
+</script>

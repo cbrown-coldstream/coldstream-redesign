@@ -303,6 +303,34 @@ export const homeownerServicesFor = (market) =>
  * on the page you were already on — which made Roofing, Siding, Windows and Gutters four nav items
  * pointing at one destination and no page. The national service pages exist now, so it returns one.
  */
+/**
+ * NATIONAL PATH → MARKET-RELATIVE VARIANT, for the in-place market swap on national pages.
+ *
+ * The utility-bar selector swaps the phone and the partner logos without navigating (see
+ * UtilityBar's two-behaviours note). The owner pointed out (2026-08-29) that the What We Do
+ * links did not join that swap — pick Cincinnati and the cards still sent you to the national
+ * pages. Links annotated with data-mhref={MARKET_VARIANTS[href]} get rewritten client-side to
+ * /{slug}/{variant} when a market is chosen, and restored when "Other / not sure" is.
+ *
+ * ONLY paths with a REAL page in ALL THREE markets belong here — that is why stone-veneer and
+ * commercial-roofing are absent (national-only and Cincinnati-only respectively). The slugs
+ * differ between the national and market trees for two entries; this map is where that
+ * difference is recorded once.
+ */
+export const MARKET_VARIANTS = {
+  "/roofing/": "roofing/",
+  "/roofing/replacement/": "roofing/roof-replacement/",
+  "/roofing/repair/": "roofing/roof-repair/",
+  "/storm-damage/": "roofing/insurance-storm-damage/",
+  "/siding/": "siding/",
+  "/siding/james-hardie-siding/": "siding/james-hardie-siding/",
+  "/siding/vinyl-siding/": "siding/vinyl-siding/",
+  "/siding/siding-replacement/": "siding/siding-replacement/",
+  "/windows/": "windows/",
+  "/gutters/": "gutters/",
+  "/free-estimate/": "free-estimate/",
+};
+
 export const serviceHref = (market, service) => {
   // SINGLE-RUNNER RULE (2026-08-27): when exactly one market runs a service, every context that
   // is not that market links into that market's page — there is no national hub to link, because

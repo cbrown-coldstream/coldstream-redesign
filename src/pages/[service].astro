@@ -38,7 +38,8 @@ import PartnerStrip from "../components/PartnerStrip.astro";
 import FAQ from "../components/FAQ.astro";
 import CTABand from "../components/CTABand.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { NATIONAL, MARKET_LIST, MARKETS, servicesFor, offers } from "../data/markets.js";
+import { NATIONAL, MARKET_LIST, MARKETS, MARKET_VARIANTS, servicesFor, offers } from "../data/markets.js";
+import MarketVariantLinks from "../components/MarketVariantLinks.astro";
 import { SERVICE_CONTENT, NATIONAL_DEPTH } from "../data/services.js";
 import { PROCESS, PROCESS_INTRO } from "../data/process.js";
 import { orgRef } from "../data/seo.js";
@@ -203,7 +204,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
         </div>
         <div class="rsvc-grid" data-reveal="stagger">
           {ROOFING_SERVICES.map((c) => (
-            <a class="rsvc-card" href={c.href}>
+            <a class="rsvc-card" href={c.href} data-mhref={MARKET_VARIANTS[c.href]}>
               <span class="rsvc-ic" aria-hidden="true">{c.icon}</span>
               <h3>{c.t}</h3>
               <p>{c.d}</p>
@@ -275,6 +276,8 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
   <FAQ items={svc.faq.map((f) => ({ ...f, a: typeof f.a === "function" ? f.a(market) : f.a }))} />
 
   <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
+
+  <MarketVariantLinks />
 
   <Fragment slot="chrome-bottom">
     <SiteFooter market={market} />

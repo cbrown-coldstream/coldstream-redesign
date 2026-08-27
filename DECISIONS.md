@@ -3366,7 +3366,22 @@ ReviewsByMarket is untouched and keeps its placeholder mode; no page renders it 
 reviews land, the choice between one carousel and three office columns is worth re-asking with
 real data on screen — both are one line to enable.
 =======
-## 64. Checks
+## 64. Round 58 — the links join the in-place market swap
+
+Owner, 2026-08-29: choosing a city in the utility bar changed the phone and the logos but the
+What We Do cards still linked the national pages. Now any anchor with a true three-market variant
+carries data-mhref from MARKET_VARIANTS (data/markets.js) — the single map that also records the
+two places national and market slugs disagree (/roofing/replacement/ → roofing/roof-replacement/,
+/storm-damage/ → roofing/insurance-storm-damage/). One shared script (MarketVariantLinks.astro,
+double-include guarded) rewrites them on selection and restores them on "Other / not sure".
+Annotated: the What We Do card and sub links, and the roofing-services cards on the national hubs.
+
+Deliberately NOT annotated: stone-veneer (national-only page) and commercial roofing
+(Cincinnati-only — already points there from everywhere). Market pages are untouched: their
+selector navigates instead of swapping, which is the correct behaviour and predates this round.
+Functionally tested headless: select Cincinnati → six links verified rewritten, clear → restored.
+
+## 65. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
