@@ -15,6 +15,8 @@ import SiteHeader from "../../components/SiteHeader.astro";
 import Hero from "../../components/Hero.astro";
 import ServiceDetail from "../../components/ServiceDetail.astro";
 import ProcessScrub from "../../components/ProcessScrub.astro";
+import ProjectShowcase from "../../components/ProjectShowcase.astro";
+import { SIDING_SHOWCASE } from "../../data/projects.js";
 import WhyTrust from "../../components/WhyTrust.astro";
 import ServedAreas from "../../components/ServedAreas.astro";
 import FAQ from "../../components/FAQ.astro";
@@ -64,7 +66,8 @@ const lead = copyFor(svc.lead, market);
 // Here it is the subject of the page it sits on.
 const PROCESS_MEDIA = {
   roofing: { poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" },
-  siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
+  // SIDING'S CLIP CAME OUT 2026-08-27 (owner: "It isn't accurate"). ProjectShowcase — real
+  // completed homes, sourced in data/projects.js — stands in the scrub's slot. See [service].astro.
   // GUTTERS HAS NO CLIP (removed 2026-08-21, on instruction). ProcessScrub renders nothing
   // without a poster and a source, so the gutters pages simply carry no scrub section.
 };
@@ -134,6 +137,18 @@ const serviceSchema = {
     {...scrubIntro}
     steps={scrubSteps}
   />
+
+  {/* Siding's replacement for the scrub: the rotating completed-homes strip, same set as the
+      national siding page — one real project set beats per-market pretending. */}
+  {sKey === "siding" && (
+    <ProjectShowcase
+      id="siding-homes"
+      heading="Homes we've re-sided"
+      intro="Real Coldstream projects — James Hardie fiber cement and vinyl, photographed by our own crews."
+      items={SIDING_SHOWCASE}
+      pending={1}
+    />
+  )}
 
   {subs.length > 0 && (
     <section class="mist">

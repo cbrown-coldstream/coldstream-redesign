@@ -29,7 +29,9 @@ import OfferBand from "../../../components/OfferBand.astro";
 import SiteFooter from "../../../components/SiteFooter.astro";
 
 import { MARKETS, providerRef, serviceFor } from "../../../data/markets.js";
-import { TESTIMONIALS } from "../../../data/claims.js";
+import { TESTIMONIALS, ALWAYS_TRUE } from "../../../data/claims.js";
+import ProjectShowcase from "../../../components/ProjectShowcase.astro";
+import { HARDIE_SHOWCASE } from "../../../data/projects.js";
 import { SUBSERVICES, MARKET_CONTEXT, depthFor } from "../../../data/subservices.js";
 import { servedPlaces } from "../../../data/seo.js";
 
@@ -105,11 +107,34 @@ const schema = {
 
   <BadgeRow market={market} aboveTheFold={true} />
 
-  <section>
-    <div class="wrap" style="max-width:780px">
-      <p style="font-size:1.06rem;line-height:1.7;color:var(--cs-text-muted)">{intro}</p>
+  {/* THE LEAD — same treatment as the national sub-service template, same date, same reason:
+      the bare paragraph read as unfinished. See [hub]/[sub].astro. */}
+  <section class="sublead">
+    <div class="wrap">
+      <div class="sublead-copy">
+        <p>{intro}</p>
+      </div>
+      <aside class="sublead-aside" aria-label="True on every job">
+        <p class="sublead-t">On every job</p>
+        <ul>
+          {ALWAYS_TRUE.map((t) => <li>{t}</li>)}
+        </ul>
+      </aside>
     </div>
   </section>
+
+  {/* Hardie pages carry the completed-homes strip; sourcing is in data/projects.js. The photos
+      are the same three on all markets deliberately — one real completed set beats per-market
+      pretending. */}
+  {sub === "james-hardie-siding" && (
+    <ProjectShowcase
+      id="hardie-homes"
+      heading="James Hardie homes we've completed"
+      intro="Real projects by our crews — no stock photography. More are on the way."
+      items={HARDIE_SHOWCASE}
+      pending={2}
+    />
+  )}
 
   <ServiceDetail
     id={sub}

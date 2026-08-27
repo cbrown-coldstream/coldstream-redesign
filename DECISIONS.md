@@ -3265,7 +3265,52 @@ Written down as a reversal, because it is one: ReviewsByMarket's file comment sa
 review anywhere in this file, nothing for a fixture to inject." That was the design, three owner
 instructions later it is the design for market pages only. The comment now says so.
 
-## 61. Checks
+## 61. Round 55 — commercial goes Cincinnati-only, the siding video comes out, real Hardie homes go in
+
+Owner instructions, 2026-08-27, six in one message.
+
+- **Commercial roofing is Cincinnati-only now.** Reverses the 2026-08-25 brief that kept Columbus
+  (logged as a reversal). One data edit — Columbus's services list — retired both pages by
+  existing rules: [service].astro only builds a national hub when more than one market runs the
+  service, so /commercial-roofing/ stopped building, and /columbus/commercial-roofing/ stopped
+  with it. `serviceHref` gained the SINGLE-RUNNER RULE: when exactly one market runs a service,
+  every other context links into that market's page — which is the owner's ask ("when clicked
+  from national page… should be redirected to Cincinnati") made structural instead of hand-edited
+  per link. Nav, footer, What We Do card and the roofing-page card all route to
+  /cincinnati/commercial-roofing/. The retired national URL carries an EXACT redirect;
+  Columbus's commercial URLs fall back to /columbus/roofing/ by the same SLUG_MAP machinery
+  St. Louis has always used. One build caught two rules for one URL — the EXACT row for
+  /columbus/commercial-roofing/ duplicated the generator's fallback and was dropped. 73 pages.
+- **The roofing services h2, take four:** "Find the roofing service you need". Retitles
+  "If it's on your roof, we handle it" (owner: try something else).
+- **The bare sub-service intro got a design.** Both sub-service templates opened with one muted
+  paragraph alone in a section (owner: "alone and bare"). Now a two-column lead: the intro at
+  lead size under an orange accent rule, beside a navy ALWAYS_TRUE panel. The panel's title is a
+  styled <p>, not a heading — it sits before the first h2 and a heading would skip a level.
+- **The siding scrub video is gone** (owner: "It isn't accurate") from the national and market
+  siding pages. The placeholder footage never showed our work. Files stay in public/video/ until
+  real footage or a decision that there never will be any.
+- **ProjectShowcase stands in its slot** — a rotating strip of completed homes on the reviews-
+  marquee mechanics (dual runs, aria-hidden clone, hover/focus pause, reduced-motion → static
+  scrollable row). Photos live in data/projects.js WITH THEIR SOURCE PER ENTRY, because a photo
+  of "our work" is a claim.
+- **Real James Hardie photos, from Contractors Cloud, on owner instruction.** Job COL2641 — a
+  completed Hardie re-side in the Columbus market — supplied three finished-elevation shots
+  (crew-uploaded 2026-08-17). They run on the Hardie sub-service pages (all four) and in the
+  siding showcase, with two labeled "photo pending" cards holding space for the homes the owner
+  is providing later. Filenames and captions are anonymised to market only. The St. Louis Hardie
+  job's photos were damage close-ups, not showcase material, and were not used. **⚠ CONSENT ON
+  RECORD AS OPEN:** the pull provides photos, not the homeowner's sign-off to publish them.
+  Staging is noindex; before production cutover, confirm consent for COL2641 or swap the three
+  entries in projects.js. Material is claimed as Hardie because the job record names it; the two
+  live-site photos keep the round-49 rule (caption claims the work, not the product).
+
+Deliberately not done: the roofing scrub stays (nobody called it inaccurate); St. Louis's
+commercial redirect fallback was not repointed at Cincinnati — a legacy St. Louis commercial URL
+still lands on /st-louis/roofing/ per the original fold decision, and changing that would be its
+own call.
+
+## 62. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

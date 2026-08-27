@@ -1141,3 +1141,60 @@ a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
   .mdepth-blocks{grid-template-columns:1fr;gap:26px}
   .mdepth-block p{font-size:1.02rem;line-height:1.75}
 }
+
+/* ── PROJECT SHOWCASE — the rotating strip of completed homes (ProjectShowcase.astro) ─────────
+   Horizontal sibling of the reviews marquee: two runs translating X, the clone aria-hidden,
+   paused on hover/focus, and reduced-motion turns it into a plain scrollable row. */
+.pshow{background:var(--cs-web-hero-ground,linear-gradient(160deg,#12283f,#0E1B2A));padding:64px 0 58px}
+.pshow .shead .eyebrow{color:var(--cs-web-hero-accent,#8fc0ea)}
+.pshow .shead h2{color:#fff}
+.pshow .shead p,.pshow-intro{color:#d6e6f5;max-width:62ch;margin:10px auto 0}
+.pshow-track{display:flex;overflow:hidden;margin-top:36px;
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.pshow-run{list-style:none;margin:0;padding:0 14px;display:flex;gap:26px;flex:none;
+  animation:pshow-slide var(--pshow-speed,45s) linear infinite;will-change:transform}
+@keyframes pshow-slide{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.pshow-track:hover .pshow-run,.pshow-track:focus-within .pshow-run{animation-play-state:paused}
+.pshow-card{flex:none;width:min(470px,78vw);border-radius:14px;overflow:hidden;
+  background:var(--cs-paper);box-shadow:0 14px 34px rgba(4,12,22,.35)}
+.pshow-card picture,.pshow-card img{display:block;width:100%;height:300px;object-fit:cover}
+.pshow-cap{display:flex;flex-direction:column;gap:2px;padding:13px 16px 15px;border-top:3px solid var(--cs-accent)}
+.pshow-label{font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cs-primary-deep)}
+.pshow-note{font-size:.88rem;color:var(--cs-text-muted)}
+/* Pending cards: unmistakably not a photo. Dashed frame on the dark band, no fake image. */
+.pshow-pending{background:transparent;box-shadow:none;border:2px dashed rgba(143,192,234,.5);
+  display:grid;place-items:center;min-height:300px}
+.pshow-pendbox{text-align:center;padding:26px 30px;max-width:34ch}
+.pshow-pendtag{display:inline-block;font-family:var(--cs-web-display);font-weight:var(--cs-web-display-weight-strong);
+  font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cs-web-hero-accent,#8fc0ea);
+  border:1px dashed rgba(143,192,234,.6);border-radius:999px;padding:5px 13px;margin-bottom:10px}
+.pshow-pendbox p{margin:0;font-size:.88rem;line-height:1.55;color:#b9cee2}
+@media (prefers-reduced-motion:reduce){
+  .pshow-track{overflow-x:auto;mask-image:none;-webkit-mask-image:none}
+  .pshow-run{animation:none!important}
+  .pshow-run[aria-hidden="true"]{display:none}
+}
+
+/* ── SUB-SERVICE LEAD — the opening block on every sub-service page ───────────────────────────
+   Was one bare muted paragraph alone in a section (owner, 2026-08-27: "alone and bare"). Now a
+   two-column band: the intro reads at lead size beside a navy always-true panel, so the page
+   opens with substance instead of a floating sentence. The panel's title is a styled <p>, not a
+   heading — it sits before the page's first h2 and a heading would skip a level. */
+.sublead{padding:54px 0 10px}
+.sublead .wrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(250px,1fr);gap:34px;align-items:start;max-width:1080px}
+.sublead-copy{position:relative;padding-top:18px}
+.sublead-copy::before{content:"";position:absolute;top:0;left:0;width:64px;height:4px;
+  border-radius:2px;background:var(--cs-accent)}
+.sublead-copy p{margin:0;font-size:1.18rem;line-height:1.75;color:var(--cs-text)}
+.sublead-aside{background:var(--cs-web-hero-ground,linear-gradient(160deg,#12283f,#0E1B2A));
+  border-radius:14px;padding:22px 24px;color:#fff}
+.sublead-aside .sublead-t{margin:0 0 12px;font-family:var(--cs-web-display);
+  font-weight:var(--cs-web-display-weight-strong);font-size:.82rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--cs-web-hero-accent,#8fc0ea)}
+.sublead-aside ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.sublead-aside li{position:relative;padding-left:26px;font-size:.94rem;line-height:1.5;color:#e6eef7}
+.sublead-aside li::before{content:"✓";position:absolute;left:0;top:0;color:var(--cs-web-hero-accent,#8fc0ea);
+  font-weight:700}
+@media(max-width:820px){.sublead .wrap{grid-template-columns:1fr;gap:22px}.sublead{padding-top:44px}}

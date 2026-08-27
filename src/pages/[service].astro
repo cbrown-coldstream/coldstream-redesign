@@ -30,6 +30,8 @@ import BadgeRow from "../components/BadgeRow.astro";
 import ServiceDetail from "../components/ServiceDetail.astro";
 import MarketDepth from "../components/MarketDepth.astro";
 import ProcessScrub from "../components/ProcessScrub.astro";
+import ProjectShowcase from "../components/ProjectShowcase.astro";
+import { SIDING_SHOWCASE } from "../data/projects.js";
 import HowItWorks from "../components/HowItWorks.astro";
 import WhyTrust from "../components/WhyTrust.astro";
 import PartnerStrip from "../components/PartnerStrip.astro";
@@ -87,7 +89,8 @@ const description = {
   siding: "James Hardie fiber cement and vinyl siding, installed to the manufacturer's specification — with a free inspection first.",
   windows: "Energy-efficient replacement windows — insert and full-frame, measured opening by opening rather than averaged from a plan.",
   gutters: "Seamless gutters, gutter guards and downspouts, sized to the roof draining into them.",
-  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties in Cincinnati and Columbus. TPO, EPDM, coatings and scheduled maintenance.",
+  // Unused while commercial is single-market (no national page builds) — kept accurate anyway.
+  "commercial-roofing": "Flat and low-slope roofing for multi-family, HOA and commercial properties in Cincinnati. TPO, EPDM, coatings and scheduled maintenance.",
 }[service];
 
 // THE H1 CARRIES NO CITY NAME, for the same reason the title above stopped carrying one.
@@ -112,7 +115,9 @@ const ROOFING_SERVICES = [
   { icon: "❄", t: "Hail Damage", d: "Bruised shingles and cracked mats, documented before they are argued about.", href: "/storm-damage/" },
   { icon: "〰", t: "Wind Damage", d: "Lifted tabs and creased shingles caught before the next storm finds them.", href: "/storm-damage/" },
   { icon: "🗎", t: "Insurance Claim Assistance", d: "Photographed, measured and written up the way an adjuster needs it.", href: "/storm-damage/" },
-  { icon: "▦", t: "Commercial & Multi-Family", d: "TPO, EPDM and coatings for flat and low-slope buildings — Cincinnati and Columbus.", href: "/commercial-roofing/" },
+  // Cincinnati-only since 2026-08-27 (owner) — the card links straight into that market's page,
+  // because the national hub stops building the moment only one market runs the service.
+  { icon: "▦", t: "Commercial & Multi-Family", d: "TPO, EPDM and coatings for flat and low-slope buildings — a Cincinnati service line.", href: "/cincinnati/commercial-roofing/" },
 ];
 const h1 = {
   roofing: "Roofing contractors who inspect before they quote",
@@ -141,7 +146,10 @@ const schema = {
 // RoofBuild was worth doing rather than writing a national variant.
 const PROCESS_MEDIA = {
   roofing: { poster: "/video/roof-build-poster.jpg", mp4: "/video/roof-build-scrub.mp4" },
-  siding: { poster: "/video/siding-build-poster.jpg", mp4: "/video/siding-build-scrub.mp4" },
+  // SIDING'S CLIP CAME OUT 2026-08-27 (owner: "It isn't accurate") — the placeholder footage did
+  // not show our work. The siding pages carry ProjectShowcase instead: real completed homes,
+  // sourced per photo in data/projects.js. The files stay in public/video/ until a real siding
+  // clip replaces them or someone decides they never will.
   // GUTTERS HAS NO CLIP (removed 2026-08-21, on instruction). ProcessScrub renders nothing
   // without a poster and a source, so the gutters pages simply carry no scrub section.
 };
@@ -191,7 +199,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
           {/* Third title in a day, by request — plain and confident this time. The eyebrow keeps
               the SEO term; the heading talks to the homeowner. */}
           <span class="eyebrow">Our roofing services</span>
-          <h2>If it's on your roof, we handle it</h2>
+          <h2>Find the roofing service you need</h2>
         </div>
         <div class="rsvc-grid" data-reveal="stagger">
           {ROOFING_SERVICES.map((c) => (
@@ -222,6 +230,19 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     {...scrubIntro}
     steps={scrubSteps}
   />
+
+  {/* SIDING'S SLOT: the scrub video is gone (inaccurate footage — owner, 2026-08-27) and the
+      rotating strip of completed homes stands where it stood. Entries and their sourcing:
+      data/projects.js. */}
+  {service === "siding" && (
+    <ProjectShowcase
+      id="siding-homes"
+      heading="Homes we've re-sided"
+      intro="Real Coldstream projects — James Hardie fiber cement and vinyl, photographed by our own crews."
+      items={SIDING_SHOWCASE}
+      pending={1}
+    />
+  )}
 
   {/* THE METRO LISTING IS GONE FROM THIS PAGE (owner, 2026-08-26). The deep links these cards
       carried (national service → that market's page for THIS service) survive elsewhere: the

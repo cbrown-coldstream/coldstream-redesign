@@ -23,10 +23,11 @@
 //      listed in UNDECIDED below and DELIBERATELY EMIT NO RULE — they keep 200ing until someone
 //      decides. A missing redirect is recoverable; a wrong one costs the ranking twice.
 //
-//   3. RESOLVED (build order, round 6). Commercial roofing is a hub in ALL THREE markets now, so
-//      every commercial URL lands on /{market}/commercial-roofing/ as the Page System says. The
-//      per-market fallback machinery below is kept because it costs nothing and is what makes a
-//      future service-level difference between markets a data change rather than a rule change.
+//   3. RESOLVED, THEN RE-SCOPED TWICE. Round 6 made commercial a hub in all three markets; the
+//      2026-08-25 brief scoped St. Louis out; the owner scoped Columbus out on 2026-08-27 —
+//      commercial is CINCINNATI-ONLY now. The per-market fallback machinery below is why each of
+//      those was a data change and not a rule change: where the hub exists the slug resolves to
+//      itself, everywhere else it falls back per SLUG_MAP.
 
 /**
  * Live service-slug variants → the one canonical slug per service.
@@ -55,8 +56,8 @@ export const SLUG_MAP = {
   "wind-damage": "roofing/insurance-storm-damage",
   "insurance-claims": "roofing/insurance-storm-damage",
   // Commercial — see caveat 3. This entry is the FALLBACK for a market with no commercial hub
-  // (St. Louis today). Where the hub exists the generator resolves the slug to itself and this
-  // line does not apply, so the same map serves both without a special case.
+  // (St. Louis and, since 2026-08-27, Columbus). Where the hub exists the generator resolves the
+  // slug to itself and this line does not apply, so the same map serves both without a special case.
   "commercial-roofing": "roofing",
   // Siding. "Keep the hub, James Hardie and vinyl" — so three of these are pages, not folds.
   "siding-installation-replacement": "siding",
@@ -144,6 +145,13 @@ export const EXACT = {
   "/columbus/locations/west/": "/columbus/locations/",
   // Garage doors: the service is described on the St. Louis landing page.
   "/st-louis/garage-doors/": "/st-louis/",
+  // COMMERCIAL WENT CINCINNATI-ONLY 2026-08-27 (owner). The national hub stops building — only
+  // one market runs the line — so its URL gets a rule rather than a 404: commercial buyers go to
+  // the one commercial page. /columbus/commercial-roofing/ needs NO row here: the moment the page
+  // stopped being canonical, the generator's SLUG_MAP fallback took the URL to /columbus/roofing/,
+  // the same treatment St. Louis's commercial URLs have always had. (A row here too would emit two
+  // rules for one URL — caught on the first build.)
+  "/commercial-roofing/": "/cincinnati/commercial-roofing/",
 };
 
 /**

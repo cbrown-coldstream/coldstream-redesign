@@ -52,12 +52,14 @@ export const NAV = [
       { key: "roof-replacement", label: "Roof Replacement", national: "replacement" },
       { key: "roof-repair", label: "Roof Repair", national: "repair" },
       // Commercial joins the Roofing dropdown (owner brief 2026-08-25, "add it in a dropdown").
-      // Its page is a sibling hub, not a nested sub-service, so it carries its own href — the
-      // market's commercial page where the market runs the line (Cincinnati, Columbus), the
-      // national page everywhere else, St. Louis included since the same brief scoped it out.
+      // CINCINNATI-ONLY SINCE 2026-08-27 (owner) — Columbus was scoped out two days after the
+      // brief that kept it, and with one market running the line the national hub stops building.
+      // Every context that is not Cincinnati therefore links into Cincinnati's page, which is
+      // exactly what the owner asked: "when clicked from national page… should be redirected to
+      // Cincinnati". Same rule serviceHref applies in the footer.
       { key: "commercial-roofing", label: "Commercial Roofing",
         href: (m) => (m?.slug && (m.services ?? []).includes("commercial-roofing")
-          ? `/${m.slug}/commercial-roofing/` : "/commercial-roofing/") },
+          ? `/${m.slug}/commercial-roofing/` : "/cincinnati/commercial-roofing/") },
     ],
   },
   {

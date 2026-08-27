@@ -101,7 +101,7 @@ npm run llms         # regenerate public/llms.txt from markets/claims/sitemap
 
 ## What is done, and what is not
 
-**Done:** all 75 pages build and pass all 31 gates. **The technical SEO and AI-readability layer
+**Done:** all 73 pages build and pass all gates. **The technical SEO and AI-readability layer
 is finished** — rounds 41–46, DECISIONS §42–§52. What remains on that front is content and business
 inputs, not engineering. Copy consolidated from the live site. Design
 language matched to the prototype. Real partner logos on a rotating strip. National service pages

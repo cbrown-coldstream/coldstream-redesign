@@ -31,7 +31,7 @@ or wall, and no figure is given before that.
 - Address: 5825 Fieldcrest Dr, Galloway, OH 43119
 - Phone: (614) 812-0811
 - Region served: Central Ohio
-- Trades: Roofing, Siding, Windows, Gutters, Commercial Roofing
+- Trades: Roofing, Siding, Windows, Gutters
 - Towns served: Bexley, Blacklick Estates, Clintonville, Dublin, Eastmoor, Easton, Gahanna, Galena, Galloway, German Village, Grandview Heights, Grove City, Groveport, Hilliard, Lewis Center, Lockbourne, Marysville, New Albany, Obetz, Polaris, Short North Arts District, Upper Arlington, Valleyview, Westerville, Whitehall, Worthington
 - Page: https://coldstreamexteriors.com/columbus/
 
@@ -55,7 +55,6 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/siding/](https://coldstreamexteriors.com/siding/) — Siding: James Hardie fiber cement and vinyl.
 - [https://coldstreamexteriors.com/windows/](https://coldstreamexteriors.com/windows/) — Replacement windows: insert and full-frame.
 - [https://coldstreamexteriors.com/gutters/](https://coldstreamexteriors.com/gutters/) — Seamless gutters, guards and downspouts.
-- [https://coldstreamexteriors.com/commercial-roofing/](https://coldstreamexteriors.com/commercial-roofing/) — Flat and low-slope roofing for multi-family, HOA and commercial buildings.
 - [https://coldstreamexteriors.com/roofing/replacement/](https://coldstreamexteriors.com/roofing/replacement/) — replacement — company-wide page.
 - [https://coldstreamexteriors.com/roofing/repair/](https://coldstreamexteriors.com/roofing/repair/) — repair — company-wide page.
 - [https://coldstreamexteriors.com/siding/vinyl-siding/](https://coldstreamexteriors.com/siding/vinyl-siding/) — vinyl siding — company-wide page.
@@ -95,7 +94,6 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/columbus/siding/vinyl-siding/](https://coldstreamexteriors.com/columbus/siding/vinyl-siding/) — siding · vinyl siding in Columbus.
 - [https://coldstreamexteriors.com/columbus/windows/](https://coldstreamexteriors.com/columbus/windows/) — windows in Columbus.
 - [https://coldstreamexteriors.com/columbus/gutters/](https://coldstreamexteriors.com/columbus/gutters/) — gutters in Columbus.
-- [https://coldstreamexteriors.com/columbus/commercial-roofing/](https://coldstreamexteriors.com/columbus/commercial-roofing/) — commercial roofing in Columbus.
 - [https://coldstreamexteriors.com/columbus/locations/](https://coldstreamexteriors.com/columbus/locations/) — locations in Columbus.
 
 ### St. Louis
@@ -124,5 +122,5 @@ Company-wide number: (844) 426-8222
 - The gallery and review pages are intentionally empty pending verified photographs and
   reviews. An empty page here means no data, not a failed fetch.
 
-Last content change: 2026-08-27T10:32:51-04:00
+Last content change: 2026-08-27T10:55:21-04:00
 Sitemap: https://coldstreamexteriors.com/sitemap.xml

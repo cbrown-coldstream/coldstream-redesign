@@ -117,7 +117,11 @@ export const MARKETS = {
     // strip; St. Louis is the variant (2026-08-21). Written out per market rather than left to
     // fall through to the default, because "these two happen to match today" and "these two have
     // no list" are different facts, and only the first one survives someone editing the default.
-    partners: ["james-hardie", "gaf", "owens-corning", "certainteed", "provia", "royal", "norandex", "wincore"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
+    partners: ["james-hardie", "gaf", "owens-corning", "certainteed", "provia", "royal", "norandex", "wincore"],    // COMMERCIAL LEFT COLUMBUS 2026-08-27 (owner: "Commercial roofing is Cincinnati markets
+    // only"). Reverses the 2026-08-25 brief that kept it in both. The page retires, its
+    // redirect falls back to this market's roofing hub, and every link routes to Cincinnati
+    // via serviceHref's single-runner rule.
+    services: ["roofing", "siding", "windows", "gutters"],
     reviews: null,          // PENDING
     servedAreas: [
       "Bexley", "Blacklick Estates", "Clintonville", "Dublin", "Eastmoor", "Easton",
@@ -298,8 +302,16 @@ export const homeownerServicesFor = (market) =>
  * on the page you were already on — which made Roofing, Siding, Windows and Gutters four nav items
  * pointing at one destination and no page. The national service pages exist now, so it returns one.
  */
-export const serviceHref = (market, service) =>
-  market.slug ? `/${market.slug}/${service.href}` : `/${service.href}`;
+export const serviceHref = (market, service) => {
+  // SINGLE-RUNNER RULE (2026-08-27): when exactly one market runs a service, every context that
+  // is not that market links into that market's page — there is no national hub to link, because
+  // [service].astro only builds a national page when more than one market runs the service.
+  // Commercial roofing (Cincinnati-only, owner instruction) is the first case.
+  const runners = MARKET_LIST.filter((m) => offers(m, service.key));
+  if (runners.length === 1 && market.slug !== runners[0].slug)
+    return `/${runners[0].slug}/${service.href}`;
+  return market.slug ? `/${market.slug}/${service.href}` : `/${service.href}`;
+};
 
 /**
  * The "where do you work" link. One national page carries all three markets with a map and the

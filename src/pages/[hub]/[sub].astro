@@ -28,6 +28,9 @@ import ServiceDetail from "../../components/ServiceDetail.astro";
 import MarketDepth from "../../components/MarketDepth.astro";
 import HowItWorks from "../../components/HowItWorks.astro";
 import WhyTrust from "../../components/WhyTrust.astro";
+import ProjectShowcase from "../../components/ProjectShowcase.astro";
+import { ALWAYS_TRUE } from "../../data/claims.js";
+import { HARDIE_SHOWCASE } from "../../data/projects.js";
 import PartnerStrip from "../../components/PartnerStrip.astro";
 import FAQ from "../../components/FAQ.astro";
 import CTABand from "../../components/CTABand.astro";
@@ -92,11 +95,37 @@ const schema = {
 
   <BadgeRow market={market} aboveTheFold={true} />
 
-  <section>
-    <div class="wrap" style="max-width:780px">
-      <p style="font-size:1.06rem;line-height:1.7;color:var(--cs-text-muted)">{svc.intro}</p>
+  {/* THE LEAD. Was one bare muted paragraph alone in a section — owner, 2026-08-27: "alone and
+      bare. Bring more style to this." Now the intro reads at lead size beside the always-true
+      panel, so the page opens with substance. The panel repeats the three claims every surface
+      repeats, from the one array that keeps them phrased identically. */}
+  <section class="sublead">
+    <div class="wrap">
+      <div class="sublead-copy">
+        <p>{svc.intro}</p>
+      </div>
+      <aside class="sublead-aside" aria-label="True on every job">
+        <p class="sublead-t">On every job</p>
+        <ul>
+          {ALWAYS_TRUE.map((t) => <li>{t}</li>)}
+        </ul>
+      </aside>
     </div>
   </section>
+
+  {/* THE HARDIE SHOWCASE (owner, 2026-08-27): real completed homes in a rotating strip, directly
+      after the lead. Only this sub-service has verified photos of its material — the entries and
+      their sourcing live in data/projects.js. Two labeled pending cards hold space for the homes
+      the owner is providing later. */}
+  {sub === "james-hardie-siding" && (
+    <ProjectShowcase
+      id="hardie-homes"
+      heading="James Hardie homes we've completed"
+      intro="Real projects by our crews — no stock photography. More are on the way."
+      items={HARDIE_SHOWCASE}
+      pending={2}
+    />
+  )}
 
   <ServiceDetail
     id={sub}

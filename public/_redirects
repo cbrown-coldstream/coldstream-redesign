@@ -16,6 +16,7 @@
 /columbus/locations/east/  /columbus/locations/  301
 /columbus/locations/west/  /columbus/locations/  301
 /st-louis/garage-doors/  /st-louis/  301
+/commercial-roofing/  /cincinnati/commercial-roofing/  301
 /free-estimate-*  /free-estimate/  301
 /instant-roof-quote/  /free-estimate/  301
 /cincinnati/instant-roof-quote/  /free-estimate/  301
@@ -75,7 +76,6 @@
 /columbus/service-area/:hood/siding/  /columbus/siding/  301
 /columbus/service-area/:hood/windows/  /columbus/windows/  301
 /columbus/service-area/:hood/gutters/  /columbus/gutters/  301
-/columbus/service-area/:hood/commercial-roofing/  /columbus/commercial-roofing/  301
 /columbus/service-area/:hood/residential-roofing/  /columbus/roofing/  301
 /columbus/service-area/:hood/roofing-services/  /columbus/roofing/  301
 /columbus/service-area/:hood/roof-types/  /columbus/roofing/  301
@@ -89,6 +89,7 @@
 /columbus/service-area/:hood/hail-damage/  /columbus/roofing/insurance-storm-damage/  301
 /columbus/service-area/:hood/wind-damage/  /columbus/roofing/insurance-storm-damage/  301
 /columbus/service-area/:hood/insurance-claims/  /columbus/roofing/insurance-storm-damage/  301
+/columbus/service-area/:hood/commercial-roofing/  /columbus/roofing/  301
 /columbus/service-area/:hood/siding-installation-replacement/  /columbus/siding/  301
 /columbus/service-area/:hood/siding-replacement/  /columbus/siding/siding-replacement/  301
 /columbus/service-area/:hood/siding-installation/  /columbus/siding/siding-replacement/  301
@@ -261,7 +262,8 @@
 /columbus/insurance-claims/  /columbus/roofing/insurance-storm-damage/  301
 /columbus/insurance-claims/*  /columbus/roofing/insurance-storm-damage/  301
 /columbus/roofing/commercial-roofing/  /columbus/roofing/  301
-/columbus/commercial-roofing/:sub/  /columbus/commercial-roofing/  301
+/columbus/commercial-roofing/  /columbus/roofing/  301
+/columbus/commercial-roofing/*  /columbus/roofing/  301
 /columbus/siding/siding-installation-replacement/  /columbus/siding/  301
 /columbus/siding-installation-replacement/  /columbus/siding/  301
 /columbus/siding-installation-replacement/*  /columbus/siding/  301

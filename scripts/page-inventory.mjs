@@ -26,7 +26,8 @@ const SIXTEEN = [
 // Owner brief 2026-08-25: "Commercial and multi are Cincinnati and Columbus only." The second
 // reversal on this flag (round 6 restored it to St. Louis); the written instruction wins, so the
 // transcribed plan records the exception rather than the build quietly disagreeing with it.
-const NOT_IN_MARKET = { "st-louis": new Set(["commercial-roofing/"]) };
+// Columbus joined St. Louis outside the commercial line on 2026-08-27 (owner instruction).
+const NOT_IN_MARKET = { "st-louis": new Set(["commercial-roofing/"]), columbus: new Set(["commercial-roofing/"]) };
 
 /** Locations differ by market: two areas each in Cincinnati and St. Louis, one metro in Columbus. */
 const LOCATIONS = {
@@ -52,7 +53,9 @@ const KEPT_BEYOND_INVENTORY = {
   "/siding/": "National service page. Same reason as /roofing/.",
   "/windows/": "National service page. Same reason as /roofing/.",
   "/gutters/": "National service page. Same reason as /roofing/.",
-  "/commercial-roofing/": "National service page. Not in the header — different buyer — but linked from every footer, where it was a dead link.",
+  // /commercial-roofing/ LEFT THIS LIST 2026-08-27: with the line Cincinnati-only (owner), the
+  // template's more-than-one-market rule stops the national page from building, and every former
+  // link routes to /cincinnati/commercial-roofing/ via serviceHref's single-runner rule.
   "/service-areas/": "Answers 'do you cover my town' outside a market page, with a map and the full town list per metro. The new Service Areas tab in the header goes here.",
   "/privacy-policy/": "The estimate form collects a name, phone and ZIP. A site taking personal data needs a policy behind it, and the footer links it on every page.",
   "/terms/": "Warranty, payment and dispute terms. Linked site-wide from the footer alongside the privacy policy.",

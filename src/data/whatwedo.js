@@ -129,7 +129,8 @@ export const WHAT_WE_DO = [
     label: "Commercial Roofing",
     benefit: "Flat and low-slope systems for buildings that work for a living",
     body: "TPO, EPDM and coating systems for flat and low-slope buildings — multi-family, HOA and commercial. Restoration where the membrane has life left, replacement where it does not.",
-    href: "/commercial-roofing/",
+    // Straight into Cincinnati: the one market running commercial (owner, 2026-08-27).
+    href: "/cincinnati/commercial-roofing/",
     subs: [
       { label: "Free assessment", href: "/free-estimate/" },
     ],

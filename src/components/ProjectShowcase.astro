@@ -1,0 +1,56 @@
+---
+// PROJECT SHOWCASE — a rotating strip of homes we have actually done.
+//
+// Owner, 2026-08-27: the siding scrub video came out ("it isn't accurate") and this went in —
+// "a carousel of rotating homes we have done", real photos with the source recorded per entry in
+// data/projects.js. The marquee mechanics are the reviews strip's, because they are proven: two
+// runs, the second aria-hidden so a screen reader hears each home once; pauses on hover and on
+// focus-within; prefers-reduced-motion gets a static scrollable row instead of movement.
+//
+// PLACEHOLDERS ARE LABELED OR ABSENT (§59/§60 rule). `pending` appends that many "photo pending"
+// cards — unmistakable, dashed, no stock photo that could pass as our work. Real entries carry
+// their claims in data, not here.
+const { id, eyebrow = "Our work", heading, intro = null, items = [], pending = 0 } = Astro.props;
+const src = (p, ext) => `/photos/${p.dir}/${p.base}.${ext}`;
+const show = items.length > 0 && Boolean(id);
+const speed = Math.max(30, (items.length + pending) * 9);
+---
+{show && (
+  <section class="pshow" id={id} aria-labelledby={`${id}-h`}>
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">{eyebrow}</span>
+        <h2 id={`${id}-h`}>{heading}</h2>
+        {intro && <p class="pshow-intro">{intro}</p>}
+      </div>
+    </div>
+    <div class="pshow-track" style={`--pshow-speed:${speed}s`}>
+      {[false, true].map((clone) => (
+        <ul class="pshow-run" aria-hidden={clone ? "true" : undefined}>
+          {items.map((p) => (
+            <li class="pshow-card">
+              <picture>
+                <source type="image/avif" srcset={src(p, "avif")} />
+                <source type="image/webp" srcset={src(p, "webp")} />
+                <img src={src(p, "jpg")} alt={clone ? "" : p.alt}
+                     width={p.w} height={p.h} loading="lazy" decoding="async" />
+              </picture>
+              <div class="pshow-cap">
+                <span class="pshow-label">{p.label}</span>
+                <span class="pshow-note">{p.caption}</span>
+              </div>
+            </li>
+          ))}
+          {Array.from({ length: pending }).map(() => (
+            <li class="pshow-card pshow-pending">
+              <div class="pshow-pendbox">
+                <span class="pshow-pendtag">Project photo pending</span>
+                <p>More completed homes are being added — real projects only, never stock.</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </section>
+)}
