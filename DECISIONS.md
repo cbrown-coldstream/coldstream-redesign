@@ -3310,7 +3310,21 @@ commercial redirect fallback was not repointed at Cincinnati — a legacy St. Lo
 still lands on /st-louis/roofing/ per the original fold decision, and changing that would be its
 own call.
 
-## 62. Checks
+## 62. Round 56 (main) — the 9-review carousel returns to the homepage
+
+Owner, 2026-08-29: "the ask was for a 9 review carousel placeholder etc. i want the same one that
+was created earlier." Reverses the §60 homepage swap two days after it was made — the second
+reversal in this slot, so the history in one line: §59 built the 9-sample marquee ("so much
+better"), §60 swapped it for office-by-office on instruction, this round swaps back on
+instruction. The restored section is IDENTICAL to §59's — same component, same nine labeled
+samples, same automatic replacement by the real Google pull.
+
+ReviewsByMarket is untouched and keeps its placeholder mode; no page renders it today. When real
+reviews land, the choice between one carousel and three office columns is worth re-asking with
+real data on screen — both are one line to enable. (The `sitewide-local-seo` branch numbers its
+own round §62; whichever lands second renumbers on merge.)
+
+## 63. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
