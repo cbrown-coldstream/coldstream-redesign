@@ -45,6 +45,23 @@ if (existsSync(PULLED)) {
   } catch { pulled = []; }
 }
 const items = (pulled.length ? pulled : reviews).slice(0, 9);
+
+// The Mr. Roof-style aggregate header — Google mark, overall stars, total count — renders ONLY
+// from the pull's own per-market figures (rating and userRatingCount straight off each Google
+// listing). No pull, no header: an aggregate is a factual claim about real profiles, gated the
+// same as everything else in this section.
+let agg = null;
+if (existsSync(PULLED)) {
+  try {
+    const j = JSON.parse(readFileSync(PULLED, "utf8"));
+    const ms = Object.values(j.markets ?? {}).filter((m) => m.rating && m.count);
+    if (ms.length) {
+      const count = ms.reduce((n, m) => n + m.count, 0);
+      const rating = ms.reduce((n, m) => n + m.rating * m.count, 0) / count;
+      agg = { rating: Math.round(rating * 10) / 10, count };
+    }
+  } catch {}
+}
 const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math.round(n)) : null);
 ---
 {items.length > 0 && (
@@ -54,6 +71,13 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
       <span class="eyebrow">{eyebrow}</span>
       <h2>{heading}</h2>
       {intro && <p>{intro}</p>}
+      {agg && (
+        <p class="rev-agg">
+          <span class="rev-g" aria-hidden="true">G</span>
+          <span class="rev-agg-stars" aria-hidden="true">{"★".repeat(Math.round(agg.rating))}</span>
+          <strong>{agg.rating}</strong> on Google · {agg.count.toLocaleString("en-US")} reviews
+        </p>
+      )}
     </div>
 
     <div class="rev-marquee" tabindex="0" aria-label="Customer reviews — rotating; focus or hover to pause">
@@ -103,6 +127,20 @@ const stars = (n) => (Number.isFinite(n) && n >= 1 && n <= 5 ? "★".repeat(Math
 
   /* The marquee: two identical runs, second aria-hidden, sliding -100%. Same mechanism as the
      partner strip, so the site has one rotation idiom, not two. */
+  /* The aggregate line: the Google mark, the overall stars, the real count — Mr. Roof's own
+     pattern. Renders only from pulled figures. */
+  .rev-agg {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin: 14px 0 4px; color: #fff; font-size: 1.05rem;
+  }
+  .rev-agg strong { font-family: var(--cs-web-display); font-size: 1.2rem; }
+  .rev-agg-stars { color: var(--cs-accent); letter-spacing: 2px; font-size: 1.25rem; }
+  .rev-g {
+    width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #4285F4;
+    font-family: var(--cs-web-display); font-weight: 900; font-size: 1.1rem;
+    display: grid; place-items: center;
+  }
+
   .rev-marquee {
     display: flex; overflow: hidden;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
