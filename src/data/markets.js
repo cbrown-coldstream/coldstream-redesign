@@ -25,7 +25,8 @@ export const SERVICES = [
   // The blurb is market-dependent: "residential and commercial" is a service claim, and it is not
   // true in a market with no commercial roofing. See copyFor and the St. Louis ruling below.
   { key: "roofing",  label: "Roofing",  icon: "▲", href: "roofing/",
-    blurb: (m) => `Replacement and repair, ${offers(m, "commercial-roofing") ? "residential and commercial" : "residential"} — asphalt, metal, flat.` },
+    // Materials are market facts too: St. Louis is shingle and low-slope only (owner, 2026-08-27).
+    blurb: (m) => `Replacement and repair, ${offers(m, "commercial-roofing") ? "residential and commercial" : "residential"} — ${m?.slug === "st-louis" ? "shingle, low-slope" : "shingle, metal, low-slope"}.` },
   { key: "siding",   label: "Siding",   icon: "▤", blurb: "James Hardie and vinyl siding, installation and repair.",                     href: "siding/" },
   { key: "windows",  label: "Windows",  icon: "☐", blurb: "Energy-efficient replacement windows, professionally installed.",             href: "windows/" },
   { key: "gutters",  label: "Gutters",  icon: "〣", blurb: "Seamless gutters, guards and downspouts.",                                    href: "gutters/" },

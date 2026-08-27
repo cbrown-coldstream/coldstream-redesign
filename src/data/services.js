@@ -98,11 +98,16 @@ export const localFor = (key, marketSlug, market) => {
  * the region in them, because a hub page competes on "roofing in {region}" and the description is
  * the line a searcher actually reads under the title.
  */
+// The city belongs in the description (owner brief 2026-08-27: local SEO pass). St. Louis's
+// region string already contains the city, so it keeps the region-only phrasing — "in St. Louis
+// and across Greater St. Louis" would say the name twice in one clause.
+const where = (m) => (m.region.includes(m.name) ? `across ${m.region}` : `in ${m.name} and across ${m.region}`);
+
 export const SERVICE_META = {
-  roofing: (m) => `Roof replacement, repair and storm work across ${m.region}. Free inspection, a written quote first, and industry-leading warranties.`,
-  siding: (m) => `Fiber cement and vinyl siding across ${m.region}, installed to the manufacturer's specification. Free inspection and a written quote first.`,
-  windows: (m) => `Replacement windows across ${m.region}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
-  gutters: (m) => `Seamless gutters, guards and downspouts across ${m.region}, sized to the roof draining into them. Free inspection.`,
+  roofing: (m) => `Roof replacement, repair and storm work ${where(m)}. Free inspection, a written quote first, and industry-leading warranties.`,
+  siding: (m) => `Fiber cement and vinyl siding ${where(m)}, installed to the manufacturer's specification. Free inspection and a written quote first.`,
+  windows: (m) => `Replacement windows ${where(m)}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
+  gutters: (m) => `Seamless gutters, guards and downspouts ${where(m)}, sized to the roof draining into them. Free inspection.`,
   "commercial-roofing": (m) => `Flat and low-slope roofing for commercial, HOA and multi-family properties across ${m.region}. Surveyed and scoped in writing.`,
   "garage-doors": (m) => `Garage door installation and replacement across ${m.region}. Free, no-obligation quote and a written price.`,
 };
@@ -113,7 +118,10 @@ export const SERVICE_CONTENT = {
     h1: (m) => `Roofing in ${m.name}`,
     // Market-dependent for the same reason the SERVICES blurb is: "residential and commercial" is
     // a service claim, and St. Louis was ruled to have no commercial roofing.
-    lead: (m) => `Replacement, repair, and storm work — ${offers(m, "commercial-roofing") ? "residential and commercial" : "residential"}. Asphalt, metal and flat systems, quoted after a free inspection.`,
+    // MATERIALS ARE A MARKET FACT (owner brief 2026-08-27): St. Louis runs shingle and low-slope
+    // only — no metal roofing there, and no St. Louis page may say otherwise. Cincinnati and
+    // Columbus keep shingle, metal and low-slope.
+    lead: (m) => `Replacement, repair, and storm work — ${offers(m, "commercial-roofing") ? "residential and commercial" : "residential"}. ${m.slug === "st-louis" ? "Shingle and low-slope systems" : "Shingle, metal and low-slope systems"}, quoted after a free inspection.`,
     sections: [
       { title: "Roof Replacement", body: "Full tear-off and installation. We size and price the job after walking the roof, not from a satellite image." },
       { title: "Roof Repair", body: "Leaks, emergency call-outs, storm, hail and wind damage — all one repair conversation rather than five separate ones." },
@@ -136,7 +144,10 @@ export const SERVICE_CONTENT = {
       { q: "How long does a roof replacement take?", a: "Most homes are finished in a single day. We give you the timeline up front and leave the property clean." },
       { q: "Do you work with insurance companies on storm damage claims?", a: "Yes. We document the damage the way an adjuster needs it documented — photographs, measurements and a written scope — and we meet them on site. What gets approved is the carrier's decision, not ours, and we will not tell you otherwise before it happens." },
       { q: "How quickly can you get out after a storm?", a: "Same day or next day for anything actively letting water in. The first visit stops the damage getting worse; the assessment and the quote follow once the roof is safe to walk." },
-      { q: "What roofing materials do you install?", a: "Architectural asphalt on most homes, impact-resistant shingles where hail is the recurring problem, metal, and flat systems for low-slope sections. The specification follows the inspection rather than a default." },
+      // `a` may be a function of the market — the templates resolve it. St. Louis: no metal.
+      { q: "What roofing materials do you install?", a: (m) => m?.slug === "st-louis"
+          ? "Architectural asphalt shingle on most homes, impact-resistant shingles where hail is the recurring problem, and flat systems for low-slope sections. The specification follows the inspection rather than a default."
+          : "Architectural asphalt on most homes, impact-resistant shingles where hail is the recurring problem, metal, and flat systems for low-slope sections. The specification follows the inspection rather than a default." },
       { q: "What does a new roof cost?", a: "Size, pitch, how many layers come off, the state of the decking underneath and the material you choose. We put the number in writing after the free inspection, and it does not move unless the scope does." },
       { q: "What do I need to do before the crew arrives?", a: "Move vehicles off the drive and take anything fragile off the walls in the top rooms. We cover the landscaping, protect the gutters and run a magnet over the whole property before we leave." },
       { q: "Can you replace a roof in winter?", a: "Yes, with the right conditions and materials — shingle adhesives need temperatures the forecast has to cooperate on, and we schedule around cold snaps rather than pretending they are not happening. Emergency repairs do not wait for spring." },
@@ -147,7 +158,18 @@ export const SERVICE_CONTENT = {
   },
   siding: {
     label: "Siding",
-    h1: (m) => `Siding in ${m.name}`,
+    // HERO SET BY THE OWNER BRIEF (2026-08-27): "Fiber cement and vinyl siding throughout
+    // Greater {City}". The h1 no longer fits the derived title (h1 + cityState + brand runs past
+    // 60), so `titleTag` overrides it — the template prefers titleTag when a service carries one.
+    h1: (m) => `Fiber cement and vinyl siding throughout Greater ${m.name}`,
+    titleTag: (m) => `Siding Contractors in ${m.cityState} | Coldstream Exteriors`,
+    // THE DETAIL SECTION, ALSO FROM THE BRIEF — heading and both paragraphs verbatim. The intro
+    // is an array: ServiceDetail renders one <p> per entry.
+    detailHeading: (m) => `What a full siding replacement does for a ${m.name} home`,
+    detailIntro: () => [
+      "Nothing changes a home's appearance like new siding. Who installs it matters just as much as what goes on the wall.",
+      "We take the old siding off rather than cover it, inspect the carpentry underneath, and replace anything that needs it before new material goes on. House wrap, flashing, trim, soffit, and fascia all get done to spec.",
+    ],
     lead: "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
     sections: [
       { title: "James Hardie Fiber Cement", body: "The premium option: holds paint far longer than vinyl and stands up to impact. We are an Alliance Elite contractor." },
@@ -286,6 +308,74 @@ export const hasLocalCopy = (serviceKey, marketSlug) =>
  *
  * Shape matches MarketDepth: { eyebrow, heading, blocks: [{ h, p: [...] }] }.
  */
+/**
+ * MARKET ROOFING DEPTH — the inspection section, localized (owner brief 2026-08-27).
+ *
+ * Same headings as the national block ("What the inspection is looking for" / "What separates a
+ * roof that lasts from one that doesn't"), but the copy is each market's actual weather — hail,
+ * wind, freeze-thaw, storm season — because what an inspection looks FOR is set by what the sky
+ * does to that metro. Three rules held while writing these:
+ *   · Real climate, not invented detail: every claim is a general truth of the region (freeze-thaw
+ *     counts, spring storm season, straight-line wind exposure) — no fake storms, dates or streets.
+ *   · Neighborhoods over repetition: the towns named are the owner's list per market, used where
+ *     the city name would otherwise repeat (the brief's own instruction).
+ *   · St. Louis names no metal roofing — shingle and low-slope only there.
+ * The three blocks are deliberately different per market in structure and emphasis, so the
+ * similarity check has nothing to pair.
+ */
+export const MARKET_ROOFING_DEPTH = {
+  cincinnati: {
+    eyebrow: "What the inspection is looking for",
+    heading: "What separates a roof that lasts from one that doesn't",
+    blocks: [
+      { h: "Freeze-thaw is the quiet one", p: [
+        "An Ohio Valley winter crosses freezing dozens of times, and every crossing works water a little deeper into any gap it has found — a lifted shingle edge, a nail head, tired flashing. The damage shows up in spring, long after the ice that caused it is gone.",
+        "So the inspection reads the roof for what February did to it: sealant lines at penetrations, the eaves where ice dams stand, and the shaded northern slopes that stay wet longest — the same exposures that age roofs early from Anderson Township to Loveland.",
+      ]},
+      { h: "Spring hail and wind, documented before they are argued about", p: [
+        "The storm season that runs April through June drops hail somewhere in the metro most years. Bruised shingles do not leak on day one — they shed granules and fail early instead, which is why fresh damage gets photographed and measured while it is still legible.",
+        "Wind works differently: it creases and lifts tabs along ridges and rakes, and a crease is a break in the seal whether or not anything looks torn from the driveway. We have walked enough roofs in Mason, West Chester and Milford after the same storm to know two streets apart can be two different claims.",
+      ]},
+      { h: "Humid summers cook from underneath", p: [
+        "A shingle roof over a poorly vented attic runs hot in a humid summer, and heat from below ages a roof as surely as weather from above. Intake at the eaves and exhaust at the ridge get checked as a pair on every inspection — from older housing stock in Hyde Park to newer builds in Blue Ash, blocked soffit vents are the most common finding.",
+      ]},
+    ],
+  },
+  columbus: {
+    eyebrow: "What the inspection is looking for",
+    heading: "What separates a roof that lasts from one that doesn't",
+    blocks: [
+      { h: "Straight-line wind is the signature risk", p: [
+        "Central Ohio's flat, open terrain gives summer wind events a running start, and derecho-style straight-line winds have taken more roofs here than tornadoes have. The inspection starts where wind starts: ridge lines, rake edges and the field fasteners on the windward side.",
+        "A tab that lifted once and resealed leaves a crease you can read a year later. Finding those before the next front comes through is the difference between a repair now and a deck-soaking later — true in Hilliard and Gahanna exactly as it is downtown.",
+      ]},
+      { h: "Freeze-thaw and the ice-dam line", p: [
+        "Winter here hovers around freezing rather than sitting below it, which is the worst pattern a roof can get: melt by day, refreeze by night, and standing ice at the eaves prying at the first course. Ice-and-water membrane at the eaves is code minimum, not a finish line — the inspection checks how far up it actually runs.",
+        "Homes from Worthington to Upper Arlington with original decking get particular attention at the eaves, where forty winters of that cycle concentrate their work.",
+      ]},
+      { h: "Hail season sets the granule clock", p: [
+        "Spring hail through the northwest suburbs — Dublin and Westerville see their share — rarely punches holes. It bruises. A bruised shingle sheds its granules over the following seasons and exposes the mat to UV, so the inspection reads granule loss in gutters and downspouts as a record of what has already hit the roof.",
+      ]},
+    ],
+  },
+  "st-louis": {
+    eyebrow: "What the inspection is looking for",
+    heading: "What separates a roof that lasts from one that doesn't",
+    blocks: [
+      { h: "Hail is the headline here", p: [
+        "This metro sits closer to hail country than either of our Ohio markets, and it shows in the work: hail drives more replacement conversations here than age does. The inspection documents impact damage the way a carrier needs it — circle by circle, slope by slope — because a storm that hit Ballwin hard can have brushed Chesterfield and skipped Kirkwood entirely.",
+        "Impact-resistant shingles earn their premium in this pattern, and we say so when the roof and the budget make the case.",
+      ]},
+      { h: "Storm season is also insurance season", p: [
+        "Severe weather from spring into summer means the busiest inspection weeks follow the loudest nights. Fresh damage is easiest to attribute while it is fresh: the assessment separates what the storm did from what the years did, in writing, before an adjuster asks — a distinction that decides claims from Florissant to O'Fallon.",
+      ]},
+      { h: "Heat load and the freeze on either side of it", p: [
+        "Summer here puts real heat into a shingle roof and the winter that follows still crosses freezing — the spread works fasteners loose and opens laps year by year. Ventilation carries more of the lifespan here than most homeowners expect, and shaded, slow-drying slopes in the older tree streets of Webster Groves get read closely for moss and held moisture.",
+      ]},
+    ],
+  },
+};
+
 export const NATIONAL_DEPTH = {
   roofing: {
     eyebrow: "What the inspection is looking for",

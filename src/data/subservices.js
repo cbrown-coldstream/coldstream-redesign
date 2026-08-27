@@ -77,7 +77,12 @@ export const SUBSERVICES = {
       sections: [
         { title: "Tear-off, not an overlay", body: "Laying new shingles over old hides the decking and traps heat, which shortens the life of what you just paid for. We take it back to the boards so we can see what we are working with." },
         { title: "Decking and ventilation", body: "Soft decking gets replaced before anything goes over it. Intake and exhaust ventilation get sized while the roof is open — it is the easiest moment to fix airflow and the most expensive one to skip." },
-        { title: "Materials", body: "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and metal or a low-slope system where the roof calls for it. We quote what the roof needs." },
+        // Market fact (owner brief 2026-08-27): St. Louis is shingle and low-slope only — metal
+        // must not appear as an offering on any St. Louis page. A body may be a function of the
+        // market; the template resolves it.
+        { title: "Materials", body: (m) => m.slug === "st-louis"
+            ? "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and a low-slope system where the roof calls for it. We quote what the roof needs."
+            : "Architectural asphalt shingles for most homes, impact-resistant where hail is a recurring problem, and metal or a low-slope system where the roof calls for it. We quote what the roof needs." },
         { title: "The finish", body: "New underlayment, ice-and-water membrane at the eaves and valleys, new flashing at every penetration. Old flashing caulked back into place is the most common leak we get called out to." },
       ],
       faq: (m, c) => [
@@ -140,7 +145,7 @@ export const SUBSERVICES = {
               p: ["Where hail comes through most summers, an impact-rated shingle is worth weighing on its own terms: it resists the bruising that strips the granule layer and shortens a roof's life without ever making it leak.",
                   "It costs more up front and it is not armour — a large enough stone will still mark it. Some carriers reduce a premium for one, which is worth asking yours about before you choose rather than after."] },
             { h: "Brick changes where the roof ends",
-              p: ["The city and inner-ring stock is brick, and brick means chimneys, parapets and party walls rather than a simple gable end. Each is a junction handled in metal and cut into the mortar, and each is a place a roof leaks when it was sealed instead of flashed.",
+              p: ["The city and inner-ring stock is brick, and brick means chimneys, parapets and party walls rather than a simple gable end. Each is a junction properly flashed and cut into the mortar, and each is a place a roof leaks when it was sealed instead of flashed.",
                   "Where the tuckpointing is spent, new flashing into failing mortar buys less time than it should. We would rather tell you that before the roof goes on."] },
             { h: "The seasonal swing works fasteners and seams",
               p: ["The spread between a St. Louis summer and a St. Louis winter is wide enough to move a roof through a real range every year. Fasteners back out, laps work against each other, and details that were adequate on the day slowly stop being.",
@@ -231,7 +236,7 @@ export const SUBSERVICES = {
               p: ["A stone can take the granule layer off a shingle without cracking it. The roof sheds water afterwards exactly as before, so nothing announces itself — and the exposed mat then ages several times faster than the rest of the slope.",
                   "That is why a post-storm inspection is worth having even when the roof looks fine, and why the documentation matters more than the repair on the day."] },
             { h: "Brick makes junctions, and junctions leak",
-              p: ["A brick house has chimneys, parapets and shared walls where a frame house has a simple edge. Every one of those is metal cut into mortar, and every one is a place a previous repair may have reached for sealant instead.",
+              p: ["A brick house has chimneys, parapets and shared walls where a frame house has a simple edge. Every one of those is flashing cut into mortar, and every one is a place a previous repair may have reached for sealant instead.",
                   "When the mortar itself has gone, flashing into it will not hold. We would rather point at the tuckpointing than sell you a flashing repair that fails in two winters."] },
             { h: "Not every stain is a leak",
               p: ["Humid summers and an under-ventilated attic will condense moisture on the underside of the deck and drop it onto the insulation below. The staining looks like a roof leak, appears in weather that has nothing to do with rain, and no amount of work on the covering will change it.",
@@ -323,7 +328,7 @@ export const SUBSERVICES = {
               p: ["Most summers bring at least one system with enough sustained wind to lift covering, empty a gutter run off a fascia and bring limbs down. It is the damage people notice and the one they call about.",
                   "Photograph it before anything is cleared. A tidied-up yard is a harder claim than an untidy one, which is an awkward thing to have to say and a true one."] },
             { h: "Hail marks more than the roof",
-              p: ["The same stones that bruise shingles dent gutters, downspouts, soft metal, siding on the windward elevation and the fins on an air-conditioning condenser. Those are part of the same event and belong in the same scope.",
+              p: ["The same stones that bruise shingles dent gutters, downspouts, siding on the windward elevation and the fins on an air-conditioning condenser. Those are part of the same event and belong in the same scope.",
                   "A roof-only inspection after a hail event routinely under-reports the damage. We walk the elevations and the ground-level units as well, because they are evidence for the roof claim as much as claims in their own right."] },
             { h: "Brick changes the damage list",
               p: ["A brick house does not dent, but it has chimneys, parapets and copings that take wind directly, and mortar that has been weathering for decades. Storm damage here shows up as displaced coping, cracked mortar and failed counterflashing rather than as marked siding.",

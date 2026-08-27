@@ -141,7 +141,7 @@ const schema = {
     market={market}
     eyebrow="What the work involves"
     heading={`${svc.label} in ${market.name}`}
-    cards={svc.sections}
+    cards={svc.sections.map((c) => ({ ...c, body: typeof c.body === "function" ? c.body(market) : c.body }))}
   />
 
   {/* PRODUCT DEPTH. Sits straight after the product sections and before the shared trust cards —

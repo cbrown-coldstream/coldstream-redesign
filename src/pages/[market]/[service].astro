@@ -29,7 +29,8 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
-import { SERVICE_CONTENT, SERVICE_META, localFor } from "../../data/services.js";
+import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, localFor } from "../../data/services.js";
+import MarketDepth from "../../components/MarketDepth.astro";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
 import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
@@ -92,7 +93,7 @@ const serviceSchema = {
       because that is what a local search matches on — reached the sub-services and the landings
       and skipped this template: the title was derived from the H1, and the H1 has no state. The
       live site's own hub ("Residential Roofing Services in Cincinnati, OH") had this right. */}
-  title={`${h1.replace(market.name, market.cityState)} | Coldstream Exteriors`}
+  title={svc.titleTag?.(market) ?? `${h1.replace(market.name, market.cityState)} | Coldstream Exteriors`}
   {/* SERVICE_META, not lead + an office tail — that combination ran three hubs past 160. */}
   description={local?.description ?? SERVICE_META[sKey]?.(market) ?? lead}
   canonical={`/${market.slug}/${sKey}/`}
@@ -122,10 +123,15 @@ const serviceSchema = {
     id={sKey}
     market={market}
     eyebrow={`What we do`}
-    heading={`${svc.label} services in ${market.name}`}
-    intro={local?.intro}
+    heading={svc.detailHeading?.(market) ?? `${svc.label} services in ${market.name}`}
+    intro={svc.detailIntro?.(market) ?? local?.intro}
     cards={svc.sections}
   />
+
+  {/* THE INSPECTION SECTION, LOCALIZED (owner brief 2026-08-27) — same headings as the national
+      roofing page, but each market's copy is its own weather: freeze-thaw for the Ohio Valley,
+      straight-line wind for central Ohio, hail for St. Louis. See MARKET_ROOFING_DEPTH. */}
+  {sKey === "roofing" && <MarketDepth market={market} depth={MARKET_ROOFING_DEPTH[mSlug]} />}
 
   {/* After the detail cards and well below the fold. It says what the words above just described,
       which is why it follows them rather than opening the page — and it is never behind the hero,
@@ -204,7 +210,7 @@ const serviceSchema = {
   {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
   <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
   <OfferBand />
-  <FAQ items={[...(local?.faq ?? []), ...svc.faq]} />
+  <FAQ items={[...(local?.faq ?? []), ...svc.faq].map((f) => ({ ...f, a: typeof f.a === "function" ? f.a(market) : f.a }))} />
   <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
 
   <Fragment slot="chrome-bottom">

@@ -272,7 +272,7 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
     intro="We install products with real manufacturer warranties and training behind the installation, because a warranty is only as good as the crew that fits the material."
   />
 
-  <FAQ items={svc.faq} />
+  <FAQ items={svc.faq.map((f) => ({ ...f, a: typeof f.a === "function" ? f.a(market) : f.a }))} />
 
   <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
 
@@ -315,16 +315,16 @@ const scrubIntro = PROCESS_INTRO[service] ?? {};
   .rsvc-card p { margin: 0; font-size: .88rem; color: var(--cs-text-muted); line-height: 1.55; flex: 1; transition: color .16s; }
   .rsvc-card:hover h3, .rsvc-card:focus-visible h3 { color: #fff; }
   .rsvc-card:hover p, .rsvc-card:focus-visible p { color: #d6e6f5; }
+  /* VISIBLE BY DEFAULT (owner brief 2026-08-27): "Learn more" must not require hover to appear —
+     hover only recolors it into the flipped card. The slide-in reveal it replaced lasted two days. */
   .rsvc-more {
     font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
-    font-size: .86rem; color: var(--cs-primary-deep);
-    opacity: 0; transform: translateX(-6px); transition: opacity .16s, transform .16s, color .16s;
+    font-size: .86rem; color: var(--cs-primary-deep); transition: color .16s;
   }
   .rsvc-card:hover .rsvc-more, .rsvc-card:focus-visible .rsvc-more {
-    opacity: 1; transform: none; color: var(--cs-web-hero-accent, #8fc0ea);
+    color: var(--cs-web-hero-accent, #8fc0ea);
   }
   @media (hover: none) {
-    .rsvc-more { opacity: 1; transform: none; }
     .rsvc-card:hover { background: var(--cs-paper); }
   }
   @media (prefers-reduced-motion: reduce) {
