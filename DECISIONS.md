@@ -3406,7 +3406,23 @@ the market siding pages — never crossed his screen. Two fixes:
 One bug shipped and was caught in the same round: the header's script instance ran at parse time,
 before the page body existed, so its queries captured only the nav. Queries moved to change time.
 
-## 65. Checks
+## 65. Round 59 — the Rambow package: two zips, and the blog folder is not in them
+
+Owner, 2026-08-29: package the site for Rambow, zips, bare minimum, neatly organized, with a
+design-system README. `scripts/build-rambow-package.sh` builds it reproducibly (fresh build +
+verify first, always) into ~/Cold-Stream-Folder/rambow-handoff/:
+
+- `1-read-first.zip` — README (cutover order, the pages-and-redirects-same-deploy rule), the
+  cutover checklist with spot-check URLs, the DESIGN-SYSTEM doc (website tokens, with the
+  two-design-systems warning up top), PAGES.md, and the Apache 301 fragment.
+- `2-website-files.zip` — dist, minus six things the script names with reasons and then PROVES
+  absent before it exits: blog/ (§52 collision made impossible rather than documented),
+  handoff/, pagemap.html, review.html, _redirects (Netlify syntax), robots-staging.txt (the
+  Disallow-everything file — uploading it would be the worst possible mistake).
+
+The docs live in handoff-docs/ and are committed; the zips are build artifacts and are not.
+
+## 66. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops
