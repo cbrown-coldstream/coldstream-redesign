@@ -3422,7 +3422,35 @@ verify first, always) into ~/Cold-Stream-Folder/rambow-handoff/:
 
 The docs live in handoff-docs/ and are committed; the zips are build artifacts and are not.
 
-## 66. Checks
+## 66. Round 60 — the mobile pass: measured first, and the measuring tool was the first finding
+
+Owner, 2026-08-30: most visitors are on phones; make the site very mobile-friendly, same design
+system, nothing major.
+
+**Finding zero, before any change: there is NO mobile overflow.** First screenshots at
+--window-size=390 showed every section cut off at the right edge — round 35's bug apparently
+back. It was not: headless Chrome silently enforces a ~500px minimum window (a blank control
+page reports clientWidth=500 at a requested 390), so pages laid out at 485 and screenshots
+cropped at 390. The honest method is a 390px IFRAME inside a wider window; measured that way,
+all twelve representative pages report scrollWidth = clientWidth = 375 in a 390 viewport. Zero
+overflow, three markets, hubs, subs, forms. WRITE THIS DOWN because the artifact is convincing:
+any future "mobile is broken" screenshot taken with --window-size below 500 is fiction.
+
+What actually shipped:
+- **The mobile action bar** (MobileActionBar.astro) — call + free estimate pinned to the bottom
+  edge, ≤820px only. The call side carries data-cs-phone/-text, so the utility-bar selector
+  swaps it with every other number in one pass. The roofful right-edge tab hides at the same
+  breakpoint — same promise, thumb-reachable placement. Safe-area padded; body gets a matching
+  floor so the footer never hides under it. Suppressed on estimate pages like the tab it replaces.
+- **iOS zoom guard**: the market select is forced to 16px on phones (form inputs were already
+  1rem, which is why they never zoomed).
+- **Tighter band rhythm ≤640px** on the newest sections (.pshow/.sublead/.mkt-note).
+
+Deliberately not done: no separate mobile layouts, no hamburger redesign, no font shrinking —
+the layout system was already sound (round 35's fix held), and the owner asked for friendly, not
+different.
+
+## 67. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

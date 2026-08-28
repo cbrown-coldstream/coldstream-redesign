@@ -1,0 +1,24 @@
+---
+// MOBILE ACTION BAR — the two actions a phone visitor actually takes, fixed to the thumb.
+//
+// Owner, 2026-08-30: the mobile pass. Most visitors are on phones, and on a phone the winning
+// moves are "call now" and "book the inspection" — both of which lived at the top of a long
+// scroll. This bar pins them to the bottom edge on small screens only.
+//
+// · The call side carries data-cs-phone / data-cs-phone-text, so the utility-bar market selector
+//   swaps this number in the same pass as every other one — one swap script, one source of truth.
+// · The estimate side reuses estimateHref, same as the header CTA and the roofful tab.
+// · ≤820px only; at that width the roofful right-edge tab hides — same promise, better placement
+//   for a thumb. BaseLayout suppresses both on the estimate pages (a floating CTA pointing at the
+//   page you are on is noise — RooffulTab's rule, inherited).
+// · The bar is chrome, not content: plain links, no JS of its own, safe-area padded for iPhones.
+import { estimateHref } from "../data/markets.js";
+const { market } = Astro.props;
+---
+<nav class="mactions" aria-label="Call or book an estimate">
+  <a class="mact mact-call" href={market.telHref} data-cs-phone>
+    <span aria-hidden="true">✆</span>
+    <span data-cs-phone-text>{market.phone}</span>
+  </a>
+  <a class="mact mact-est" href={estimateHref(market)}>Free Estimate</a>
+</nav>
