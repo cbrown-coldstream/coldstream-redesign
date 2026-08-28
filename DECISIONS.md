@@ -3450,7 +3450,26 @@ Deliberately not done: no separate mobile layouts, no hamburger redesign, no fon
 the layout system was already sound (round 35's fix held), and the owner asked for friendly, not
 different.
 
-## 67. Checks
+## 67. Round 61 — phone card grids become swipe carousels
+
+Owner, 2026-08-30: the What We Do section was "too many photos" of scrolling on a phone — eight
+stacked cards, roughly eight screens. Every large card grid now becomes ONE horizontal
+snap-scrolling row on phones (≤820px): What We Do (8 photo cards), the roofing service cards
+(7), the why-trust cards (6), and the ServiceDetail card blocks on every hub and sub-service
+page. The next card peeks past the screen edge — the peek is the "swipe me" affordance, no dots
+and no arrows needed. Content, links and the market-swap attributes are untouched; it is the
+same DOM in a scroll-snap flex row.
+
+Measured on the homepage at a true 390px viewport: page height 10,112px → 7,757px, the What We
+Do section itself ~3,000px → 351px. Horizontal overflow still zero (scroll = client = 375).
+
+CSS-only, native scrolling — keyboards and screen readers get normal behaviour and
+reduced-motion needs no branch because nothing moves on its own. One bug caught in-round: the
+first build silently lost the specificity fight against Astro's scoped component styles
+((0,2,0) vs a global class), so the carousel rules carry [class][class] with a comment saying
+why. Desktop is completely unchanged.
+
+## 68. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

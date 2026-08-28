@@ -1235,3 +1235,24 @@ a.rbm-name:hover{color:var(--cs-primary-deep);text-decoration:underline}
   .sublead{padding:38px 0 6px}
   .mkt-note{font-size:.8rem;padding:6px 13px}
 }
+
+/* ── PHONE CARD GRIDS BECOME SWIPE CAROUSELS (owner, 2026-08-30) ──────────────────────────────
+   Eight stacked photo cards was eight screens of thumb-scrolling. On phones every big card grid
+   turns into one horizontal, snap-scrolling row: the next card peeks past the edge (that peek IS
+   the "swipe me" affordance), content and links are untouched, and the section costs one screen
+   instead of eight. CSS-only — native scrolling, so keyboards, screen readers and
+   reduced-motion need nothing special: nothing moves unless the visitor moves it. */
+@media(max-width:820px){
+  /* [class][class] is specificity, not decoration: .wwd-grid and .rsvc-grid are styled inside
+     their components, where Astro's scoping attribute gives every rule (0,2,0). A plain global
+     class here loses that fight silently — it did, on the first build. */
+  .wwd-grid[class][class],.rsvc-grid[class][class],.why[class][class],.detail[class][class]{
+    display:flex;grid-template-columns:none;overflow-x:auto;gap:14px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    margin-left:-22px;margin-right:-22px;padding:4px 22px 16px;
+    scrollbar-width:thin;scrollbar-color:var(--cs-primary) transparent}
+  .wwd-grid[class][class]>*,.rsvc-grid[class][class]>*,.why[class][class]>*,.detail[class][class]>*{
+    flex:0 0 80%;max-width:330px;min-width:0;scroll-snap-align:center}
+  /* text-only cards can sit a little narrower than photo cards */
+  .rsvc-grid[class][class]>*,.why[class][class]>*,.detail[class][class]>*{flex-basis:74%}
+}
