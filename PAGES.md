@@ -26,7 +26,7 @@ change to every page in it.
 | 3 | Market convert | `src/pages/[market]/free-estimate.astro` | 3 / 0 noindex | 0 | 733 |
 | 3 | Gallery | `src/pages/[market]/gallery.astro` | 0 / 3 noindex | 0 | 555 |
 | 3 | Reviews | `src/pages/[market]/reviews.astro` | 0 / 3 noindex | 0 | 518 |
-| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1916 |
+| 1 | National home | `src/pages/index.astro` | 1 / 0 noindex | 0 | 1917 |
 | 1 | Locations index | `src/pages/[market]/locations/index.astro` | 1 / 0 noindex | 4 | 667 |
 | 1 | Service areas | `src/pages/service-areas.astro` | 1 / 0 noindex | 0 | 705 |
 
@@ -36,7 +36,7 @@ change to every page in it.
 
 | URL | Lane | H1 | Words | 301s | Index |
 |---|---|---|---:|---:|---|
-| `/` | National home | Roofing, siding and gutter experts | 1916 | — | index |
+| `/` | National home | Roofing, siding, window, and gutter experts | 1917 | — | index |
 | `/about-us/` | Standalone | Three metros. Our own crew in each. | 1481 | — | index |
 | `/blog/` | Standalone | Straight Answers About Your Home's Exterior | 408 | — | noindex |
 | `/financing/` | Standalone | Paying for the work over time | 805 | — | noindex |

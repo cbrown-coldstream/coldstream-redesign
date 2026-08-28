@@ -42,13 +42,13 @@ export const national = {
     // "Experts" cleared against voice-spec: the ban is on vague superlative PHRASES ("expert
     // solutions", "world-class"), not the word. The trades and cities left the eyebrow with this
     // edit — they still live in the description, the schema and the sub line's "three metros".
-    // H1 per the owner brief of 2026-08-24: "Roofing, siding and gutter experts", sentence case.
+    // H1 per the owner brief of 2026-08-24, amended 2026-08-28 (owner): windows joins the list.
     // The storm line — Craig's own pick earlier the same day — moves back to the eyebrow rather
     // than being deleted; the brief specifies the H1 and is silent on the eyebrow, and the two
     // read correctly stacked. NO SUB HERE: the brief requires it composed from claims.js values
     // with formatting at the point of display, so index.astro builds it and passes it down.
     eyebrow: "Storm damage or an aging roof — either way, start here",
-    headline: "Roofing, siding and gutter experts",
+    headline: "Roofing, siding, window, and gutter experts",
   },
 
   // 2 — TRUST BAND. Live: "Locally Owned & Operated | BBB A+ Accredited | Fully Insured".
