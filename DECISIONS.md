@@ -3469,7 +3469,28 @@ first build silently lost the specificity fight against Astro's scoped component
 ((0,2,0) vs a global class), so the carousel rules carry [class][class] with a comment saying
 why. Desktop is completely unchanged.
 
-## 68. Checks
+## 68. Round 62 — the plan of record changes: Rambow rebuilds in Bricks, and gets a kit for it
+
+Rambow, via the owner (2026-08-30): they will not serve the static HTML — their developer
+rebuilds the site in WordPress with the Bricks builder. That reverses "The handoff" plan
+CLAUDE.md has carried since the start, so it goes on the record: BOTH paths now ship. Zip 2
+remains the serve-as-is option; the new `3-wordpress-bricks-kit.zip` is the rebuild option, and
+the README explains the choice.
+
+The kit is EXTRACTED from the built pages (scripts/build-bricks-kit.mjs), not written parallel
+to them, so it cannot drift: 71 per-page content sheets (SEO fields, full copy in page order,
+the page's JSON-LD), the token CSS + brand/voice JSON, an SEO pack (meta CSV, 380 redirect rules
+as a Redirection-plugin CSV, robots.txt, llms.txt), 16 template screenshots
+(scripts/build-kit-screens.sh — desktop + true-390 mobile), and BRICKS-BUILD-GUIDE, which
+compresses the repo's non-negotiables for a developer who will never read this file: 13
+templates not 71 pages, the market-selector behaviour, the claims and voice rules, titles ≤60 /
+descriptions ≤160, pages-and-redirects-same-deploy, /blog/ untouched, St. Louis without metal.
+
+Two extraction bugs caught by rendering the output before shipping it: `<p` swallowed
+`<picture>` (word-boundary fix), and the screenshot step silently produced nothing when the
+session shell lost PATH mid-loop — the committed script uses absolute binary paths and says why.
+
+## 69. Checks
 
 ```
 ✓ all 58 inventory pages built            ✓ no redirect loops

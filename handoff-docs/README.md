@@ -7,6 +7,16 @@ with a pre-built static site. Two zips:
 |---|---|
 | `1-read-first.zip` | This README, the cutover checklist, the design system, the page inventory, and the 301 redirect rules |
 | `2-website-files.zip` | The website itself — plain HTML/CSS/images, ready to upload. No PHP, no database, no build step |
+| `3-wordpress-bricks-kit.zip` | For a developer REBUILDING the site in WordPress + Bricks: per-page content sheets, design tokens, SEO pack (meta CSV, importable redirect rules, robots), template screenshots, and a build guide. Start at `BRICKS-BUILD-GUIDE.html` |
+
+## Two ways to use this package
+
+- **Serve the static files as-is** (zip 2) — fastest, zero rebuild, pixel-identical to the
+  preview. The rest of this README describes that path.
+- **Rebuild in WordPress + Bricks** (zip 3) — your developer recreates the pages in Bricks from
+  the content sheets and design tokens. The SEO requirements and the redirect rules are the same
+  on either path, and the finished build must match the preview at
+  https://coldstream-exteriors-staging.netlify.app.
 
 ## The one rule that matters most
 

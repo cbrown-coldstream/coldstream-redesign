@@ -62,6 +62,18 @@ for md in "$STAGE/read-first/README.md" "$STAGE/read-first/docs/"*.md; do
 done
 (cd "$STAGE/read-first" && zip -qr "$OUT/1-read-first.zip" .)
 
+# ── 1b: the WordPress/Bricks kit ─────────────────────────────────────────────
+# Rambow's developer is rebuilding in Bricks (their ask, 2026-08-30), so the kit extracts what
+# the HTML buries: per-page content sheets, design tokens, SEO pack, screenshots, build guide.
+# Screenshots are only refreshed when scripts/../rambow-handoff-kit/screens/ has content — the
+# shot run is slow, so it is a separate step (bash /tmp/kit-shots.sh or the mjs regenerates data).
+node scripts/build-bricks-kit.mjs
+mkdir -p "$STAGE/kit"
+rsync -a rambow-handoff-kit/ "$STAGE/kit/"
+cp handoff-docs/BRICKS-BUILD-GUIDE.md "$STAGE/kit/BRICKS-BUILD-GUIDE.md"
+{ html_wrap "Building Coldstream in Bricks"; npx --yes marked --gfm < handoff-docs/BRICKS-BUILD-GUIDE.md; } > "$STAGE/kit/BRICKS-BUILD-GUIDE.html"
+(cd "$STAGE/kit" && zip -qr "$OUT/3-wordpress-bricks-kit.zip" .)
+
 # ── 2: site files zip ────────────────────────────────────────────────────────
 mkdir -p "$STAGE/site"
 rsync -a dist/ "$STAGE/site/" \
