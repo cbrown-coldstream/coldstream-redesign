@@ -6,10 +6,20 @@
 // CONTRACTORS CLOUD — three accounts, ONE PER MARKET, never shared across markets (the brief is
 // explicit). Each value is that market's form-intake endpoint URL. While null, the form submits
 // to the static thank-you page exactly as before and the integration is inert.
+// ⚠ THE PER-MARKET MAPPING IS UNRESOLVED (Rambow review, 2026-08-31). The CC account holds
+// FIVE companies, not the three this file assumed:
+//   1043  Coldstream Exteriors
+//   1047  Coldstream Exteriors            (duplicate name, different settings)
+//   1098  Coldstream Exteriors - Columbus
+//   1435  Coldstream Solar
+//   1576  West & Davis Homes
+// No company is explicitly named St. Louis. Which of 1043/1047 is Cincinnati and which (if
+// either) is St. Louis is NOT guessable from names — DO NOT wire an endpoint here until the
+// owner confirms the mapping. Endpoints stay null and the forms stay on the static flow.
 export const CC_ENDPOINTS = {
-  cincinnati: null,   // ⚠ awaiting endpoint from Craig
-  columbus: null,     // ⚠ awaiting endpoint from Craig
-  "st-louis": null,   // ⚠ awaiting endpoint from Craig
+  cincinnati: null,   // ⚠ unresolved — see mapping note above
+  columbus: null,     // ⚠ likely company 1098, unconfirmed — do not wire without confirmation
+  "st-louis": null,   // ⚠ no named St. Louis company exists — mapping must come from the owner
 };
 
 // PRICING CALCULATOR — multipliers are supplied, never invented (brief: "I will supply them").

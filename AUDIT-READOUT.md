@@ -1,209 +1,136 @@
-# AUDIT READOUT — pre-launch fixes, branch `prelaunch-audit-fixes`
+# AUDIT READOUT v2 — corrections and full content rewrite
 
-Completed 2026-08-31 against the Rambow SEO audit of 2026-08-28. All work is on the branch
-(pushed, not merged). Every build in this pass finished green across all 34 automated checks
-(canonicals, schema, titles/descriptions, links, phones, banned terms, sitemap).
+Branch `prelaunch-audit-fixes`, completed 2026-08-31 and merged to main → staging. All builds
+green across all 34 automated checks. No redirect rules written or modified; roofing pages
+untouched; CC endpoints, pricing multipliers and Instagram embed still stubbed null.
 
 ## 1. Summary
 
-Phases 1, 3 and 4 are complete; Phase 2 delivered the Cincinnati siding page and **stopped for
-your review, as instructed** — the other 17 rewrites wait on your sign-off of that page. Phase 5
-components are all built and wired, but four of them idle in labeled, config-gated states because
-their inputs are yours to supply (CC endpoints, pricing multipliers, Instagram embed, optional
-Maps key). No redirect rule was written or modified anywhere. Decisions needed from you: approve
-the Cincinnati siding page; supply the four configs; and rule on the flags in §7–§8.
+All 17 remaining rewrites are done — six page sets now measure 9–19% cross-market overlap
+(target <25%, from 62–71%) with no shared prose sentence between market versions. Assumption 5
+is corrected: the city-swap siding heading is gone, and every repeated heading, subhead and FAQ
+across market versions is now distinct. High-impression meta descriptions were re-examined and
+ten more rewritten around concrete click reasons (led by "no payments until completion").
+Both disputed audit findings verified stale against the built output. Two decisions for you in
+§8/§9; the CC company mapping is flagged as unresolvable without you.
 
-## 2. Files changed
+## 2. Overlap and word count — every set, before → after
 
-50 files, +1,190 / −418 (`git diff main --stat` on the branch for the full list). The heart of it:
-
-| Path | Phase | What changed |
-|---|---|---|
-| `src/data/subservices.js` | 1 | Flat-roofing + wind-damage sub-services: per-market copy, depth blocks, FAQs (+~200 lines) |
-| `src/data/services.js` | 2, 3 | Cincinnati siding rewrite (intro, cards, FAQ, MARKET_SIDING_DEPTH); roofing/gutters title tags |
-| `src/pages/[market]/[service].astro` | 2, 5 | Per-market siding hooks; pricing calculator placement |
-| `src/data/locations.js`, `[area].astro` | 3 | Hand-written meta descriptions for the four area pages |
-| `src/pages/[market]/about.astro` | 3 | About descriptions gain differentiator + market phone |
-| `src/pages/[service].astro`, `national-subservices.js` | 3 | Thin national descriptions strengthened |
-| 25 source files | 4 | US spellings (82 instances) |
-| `src/data/markets.js` | 4 | Cincinnati servedAreas + Anderson Township, Hyde Park, Mt. Lookout, Oakley |
-| `src/data/nav.js`, `SiteHeader.astro` | 4 | Siding Replacement joins the Siding dropdown (market pages only) |
-| `_assets-source/video/` | 4 | Unused 4.2MB siding scrub video no longer ships |
-| `EstimateForm.astro` | 5 | Two-step form, email required, per-market CC endpoint stub |
-| `PricingCalculator/ZipCheck/MarketPrompt.astro`, `leads.js` | 5 | New components + the config they wait on |
-| `ServedAreas.astro`, `ServiceAreaMap.astro` | 5 | Per-market map embed in every served-areas section |
-| `src/pages/index.astro` | 5 | Instagram placeholder section |
-
-## 3. Content results
-
-| URL | Market | Words | Overlap after |
+| Page set | Overlap before | Overlap after (cin-col · cin-stl · col-stl) | Words (cin/col/stl) |
 |---|---|---|---|
-| `/cincinnati/siding/` | Cincinnati | **1,719** | **19.8%** vs Columbus · **19.4%** vs St. Louis ✓ |
-| `/columbus/siding/` | Columbus | ~1,282 | 69–74% vs St. Louis — **not rewritten yet (checkpoint)** |
-| `/st-louis/siding/` | St. Louis | ~1,282 | same — waiting |
+| /[city]/siding/ | 71% | **17% · 16% · 19%** | 1,793 / 1,543 / 1,538 |
+| …/vinyl-siding/ | 68% | **9% · 9% · 9%** | 1,490⚑ / 1,478⚑ / 1,532 |
+| …/james-hardie-siding/ | 64% | **13% · 13% · 13%** | 1,516 / 1,504 / 1,500 |
+| /[city]/gutters/ | 64% | **13% · 13% · 13%** | 1,524 / 1,508 / 1,514 |
+| /[city]/windows/ | 62% | **12% · 13% · 12%** | 1,517 / 1,533 / 1,520 |
+| /[city]/reviews/ | 69% | **16% · 16% · 16%** | 747⚑ / 707⚑ / 724⚑ |
+| /[city]/roofing/ (untouched, reference) | 30% | 30% — not touched | — |
 
-The other five page sets (reviews, vinyl, gutters, hardie, windows) are untouched pending your
-review of the Cincinnati page. **Longest remaining shared string** between Cincinnati and any
-other market: **230 words** — but it is the "Go deeper" link-card grid (template navigation to
-the sub-service pages, identical by design), not prose; the longest shared *prose* passage was
-the 250-word shared FAQ, which the rewrite eliminated. **British spellings: zero remain** in any
-built page (82 instances removed from source; verified by grep of the full build).
+⚑ **Under-1,500 flags, with reasons.** Vinyl Cincinnati/Columbus sit at 1,490/1,478 by the
+strictest possible counter (visible body text only, chrome stripped) — within 1.5% of the floor;
+I stopped adding rather than pad into filler, and any looser counter (incl. nav/alt text) puts
+them over. Reviews pages run ~720 by design: they are intentionally-noindex placeholders whose
+core content (the actual reviews) does not exist yet — writing 800 more words around an absent
+center would be exactly the thin-content padding the audit exists to kill. Each now carries
+unique per-market framing, a link to that market's real Google profile, and stays noindex.
 
-## 4. Title/meta table — all 65 indexable pages
+**Longest remaining shared strings, per set** — all are shared COMPONENTS, not prose:
+siding 180w & gutters 207w & windows 211w = the pending-calculator card (Phase-5 component,
+identical by design until rates arrive); hardie 170w = the always-true trust panel + section
+chrome; vinyl 86w = the "hub page" navigation card; reviews 98w = the trust panel. The longest
+shared *prose* passage across any pair is under 15 words.
 
-(The audit's 59 grew to 65: six new Phase-1 pages.) 6 titles and 17 descriptions
-changed; the rest were kept because they already meet every rule in the brief — under 60/160,
-keyword+city, unique, no boilerplate overrun — most were written in the SEO rounds of Aug 22–27.
-Judgment call, stated openly: I treated "rewrite all 59" as "make all 59 meet the rules," not
-"churn good metas for the sake of difference."
+## 3. Headings changed (assumption 5 correction) — per market
 
-| URL | Title (before → after) | Description (before → after) |
-|---|---|---|
-| `/` | Roofing, Siding, Windows & Gutters | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/about-us/` | About Coldstream Exteriors | Ohio & Missouri Roofers *(kept)* | *(kept)* |
-| `/cincinnati/` | Roofing & Exteriors in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/about/` | About Our Cincinnati Team | Coldstream Exteriors *(kept)* | **changed** — now: Meet the Coldstream Exteriors team serving Southwest Ohio from our Milford office — local crews, one project manager per job. Call (513) 258-0450. |
-| `/cincinnati/commercial-roofing/` | Commercial Roofing in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/free-estimate/` | Free Roof Estimate in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/gutters/` | **Gutters in Cincinnati, OH | Coldstream Exteriors → Gutter Installation in Cincinnati, OH | Coldstream Exteriors** | *(kept)* |
-| `/cincinnati/locations/east/` | Cincinnati East Roofing | Coldstream Exteriors *(kept)* | **changed** — now: Roofing, siding and gutters on Cincinnati's east side and Clermont County — Milford, Loveland, Batavia and the river towns. Free inspection: (513) 258-0450. |
-| `/cincinnati/locations/west/` | Cincinnati West Roofing | Coldstream Exteriors *(kept)* | **changed** — now: Roofing, siding and gutters on Cincinnati's west side and in Butler County — Colerain, Fairfield, Ross and Hamilton. Free inspection: (513) 258-0450. |
-| `/cincinnati/roofing/` | **Roofing in Cincinnati, OH | Coldstream Exteriors → Roofing Contractors in Cincinnati, OH | Coldstream Exteriors** | *(kept)* |
-| `/cincinnati/roofing/flat-roofing/` | Flat Roofing in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/roofing/insurance-storm-damage/` | Storm Damage Repair in Cincinnati, OH | Coldstream Exteriors *(kept)* | **changed** — now: Hail and wind damage across Southwest Ohio, documented the way an adjuster needs it and repaired start to finish. Free inspection. Call (513) 258-0450. |
-| `/cincinnati/roofing/roof-repair/` | Roof Repair in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/roofing/roof-replacement/` | Roof Replacement in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/roofing/wind-damage/` | Wind Damage Roof Repair in Cincinnati | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/siding/` | Siding Contractors in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/siding/james-hardie-siding/` | James Hardie Siding in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/siding/siding-replacement/` | Siding Replacement in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/siding/vinyl-siding/` | Vinyl Siding in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/cincinnati/windows/` | Replacement Windows in Cincinnati, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/` | Roofing & Exteriors in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/about/` | About Our Columbus Team | Coldstream Exteriors *(kept)* | **changed** — now: Meet the Coldstream Exteriors team serving Central Ohio from our Galloway office — local crews, one project manager per job. Call (614) 812-0811. |
-| `/columbus/free-estimate/` | Free Roof Estimate in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/gutters/` | **Gutters in Columbus, OH | Coldstream Exteriors → Gutter Installation in Columbus, OH | Coldstream Exteriors** | *(kept)* |
-| `/columbus/locations/` | Areas We Serve in Columbus | Coldstream Exteriors *(kept)* | **changed** — now: The towns and neighborhoods Coldstream Exteriors covers across Central Ohio, from our Galloway office. Free, no-obligation inspections. |
-| `/columbus/roofing/` | **Roofing in Columbus, OH | Coldstream Exteriors → Roofing Contractors in Columbus, OH | Coldstream Exteriors** | *(kept)* |
-| `/columbus/roofing/flat-roofing/` | Flat Roofing in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/roofing/insurance-storm-damage/` | Storm Damage Repair in Columbus, OH | Coldstream Exteriors *(kept)* | **changed** — now: Hail and wind damage across Central Ohio, documented the way an adjuster needs it and repaired start to finish. Free inspection. Call (614) 812-0811. |
-| `/columbus/roofing/roof-repair/` | Roof Repair in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/roofing/roof-replacement/` | Roof Replacement in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/roofing/wind-damage/` | Wind Damage Roof Repair in Columbus | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/siding/` | Siding Contractors in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/siding/james-hardie-siding/` | James Hardie Siding in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/siding/siding-replacement/` | Siding Replacement in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/siding/vinyl-siding/` | Vinyl Siding in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/columbus/windows/` | Replacement Windows in Columbus, OH | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/free-estimate/` | Free Roof & Exterior Estimate | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/gutters/` | Seamless Gutters, Guards & Downspouts | Coldstream Exteriors *(kept)* | **changed** — now: Seamless gutters, gutter guards and downspouts, sized to the roof actually draining into them — rolled on site and fitted the same day. Free inspection. |
-| `/roofing/` | Roofing Contractors | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/roofing/repair/` | Roof Repair & Leak Repair | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/roofing/replacement/` | Roof Replacement | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/service-areas/` | Roofing & Exterior Service Areas | Coldstream Exteriors *(kept)* | **changed** — now: The 81 communities we work in across greater Cincinnati, Columbus and St. Louis — with the office, the crew and the phone number for each. |
-| `/siding/` | Siding Installation & Replacement | Coldstream Exteriors *(kept)* | **changed** — now: James Hardie fiber cement and vinyl siding, installed to the manufacturer's own specification — old cladding off, wall inspected first. Free written quote. |
-| `/siding/james-hardie-siding/` | James Hardie Fiber Cement Siding | Coldstream Exteriors *(kept)* | **changed** — now: James Hardie fiber cement siding installed to the clearances the warranty depends on. Holds color, takes a knock, and does not soften in heat. |
-| `/siding/stone-veneer/` | Stone Veneer Installation | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/siding/vinyl-siding/` | Vinyl Siding Installation | Coldstream Exteriors *(kept)* | **changed** — now: Vinyl siding installed so it can move, over a water barrier we inspected first — installation is what most vinyl complaints trace back to. Free quote. |
-| `/st-louis/` | Roofing & Exteriors in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/about/` | About Our St. Louis Team | Coldstream Exteriors *(kept)* | **changed** — now: Meet the Coldstream Exteriors team serving Greater St. Louis from our St. Louis office — local crews, one project manager per job. Call (314) 380-8111. |
-| `/st-louis/free-estimate/` | Free Roof Estimate in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/gutters/` | **Gutters in St. Louis, MO | Coldstream Exteriors → Gutter Installation in St. Louis, MO | Coldstream Exteriors** | *(kept)* |
-| `/st-louis/locations/north/` | West County and North County Roofing | Coldstream Exteriors *(kept)* | **changed** — now: Roofing, siding and gutters across West County and the inner ring — Chesterfield, Creve Coeur, Clayton and Des Peres. Free inspection: (314) 380-8111. |
-| `/st-louis/locations/south/` | South County and South City Roofing | Coldstream Exteriors *(kept)* | **changed** — now: Roofing, siding and gutters across South County — Kirkwood, Webster Groves, Oakville, Mehlville and Affton. Free inspection: (314) 380-8111. |
-| `/st-louis/roofing/` | **Roofing in St. Louis, MO | Coldstream Exteriors → Roofing Contractors in St. Louis, MO | Coldstream Exteriors** | *(kept)* |
-| `/st-louis/roofing/flat-roofing/` | Flat Roofing in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/roofing/insurance-storm-damage/` | Storm Damage Repair in St. Louis, MO | Coldstream Exteriors *(kept)* | **changed** — now: Hail and wind damage across Greater St. Louis, documented the way an adjuster needs it and repaired start to finish. Free inspection. Call (314) 380-8111. |
-| `/st-louis/roofing/roof-repair/` | Roof Repair in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/roofing/roof-replacement/` | Roof Replacement in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/roofing/wind-damage/` | Wind Damage Roof Repair in St. Louis | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/siding/` | Siding Contractors in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/siding/james-hardie-siding/` | James Hardie Siding in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/siding/siding-replacement/` | Siding Replacement in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/siding/vinyl-siding/` | Vinyl Siding in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/st-louis/windows/` | Replacement Windows in St. Louis, MO | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/storm-damage/` | Storm Damage & Insurance Claims | Coldstream Exteriors *(kept)* | *(kept)* |
-| `/windows/` | Replacement Windows | Coldstream Exteriors *(kept)* | **changed** — now: Energy-efficient replacement windows, insert and full-frame — measured opening by opening rather than averaged from a plan. Free, no-obligation quote. |
+| Set | Cincinnati | Columbus | St. Louis |
+|---|---|---|---|
+| Siding section | What a full siding replacement does for a Cincinnati home | Re-siding a Columbus house, from tear-off to trim | New siding, done the way St. Louis housing demands |
+| Siding depth | What Cincinnati walls ask of their siding | The two Columbus walls, and what each one needs | Cladding a frame wall in a masonry town |
+| Windows section | Window replacement across a century of Cincinnati openings | When a whole subdivision's glass fogs at once | Windows that earn their keep in a St. Louis summer |
+| Windows depth | What a hundred years of openings taught us | The subdivision glass problem, up close | Glass against the gradient |
+| Gutters section | Moving water off a hillside house | Gutters that keep pace with a flat-lot downpour | Sized for oak drop and gully-washer rain |
+| Gutters depth | Water management on terrain that has opinions | Sizing against the April cell | Two seasons of load, one system |
+| Hardie depth | Why the older neighborhoods keep choosing it | One board, both Columbuses | The stability argument, in the swing capital |
+| Vinyl depth | Vinyl's case, made honestly | Second-generation vinyl, for the city that bought the first | Engineering for the eighty-degree year |
+| Reviews hero | Cincinnati Homeowners, in Their Own Words | The Reviews Our Columbus Work Earns | What St. Louis Neighbors Tell Each Other |
 
-## 5. New pages built (Phase 1)
+Every section-card title and every FAQ question inside these sets is likewise market-unique
+(zero repeated questions across markets on the rewritten sets). H1s and title tags keep their
+keyword+city formulas deliberately — the untouched roofing pages (the stated quality bar) use
+exactly that pattern.
 
-| Page | URLs (one per market) |
-|---|---|
-| Flat & Low-Slope Roofing | `/cincinnati/roofing/flat-roofing/` · `/columbus/roofing/flat-roofing/` · `/st-louis/roofing/flat-roofing/` |
-| Wind Damage Repair | `/cincinnati/roofing/wind-damage/` · `/columbus/roofing/wind-damage/` · `/st-louis/roofing/wind-damage/` |
+## 4. Meta descriptions re-examined (item 3)
 
-TPO/EPDM/modified bitumen covered per market with market-specific depth (freeze-thaw ponding for
-Cincinnati, hail-on-membrane and wind uplift for Columbus, parapet/masonry work for St. Louis —
-"central ohio flat roof installation" appears in Columbus body copy). No St. Louis metal
-mentions. Each page has 8+ inbound internal links via the hub and sibling grids.
+Rewritten this pass, beyond the six sets' own new descriptions (which all changed with their
+pages): the three market landing descriptions, the homepage, the three market roofing-hub
+descriptions — each now leads with a concrete reason to click ("no payments until completion",
+the market phone, storm documentation) instead of restating the category. `/cincinnati/siding/`
+(the 46,713-impression page) got a fully new description with its rewrite. **Blog (291,904
+impressions, 0.07% CTR): those URLs are WordPress's and stay untouched per the standing /blog/
+rule — flagging that the blog is the single largest CTR opportunity nobody can act on until the
+blog migration decision is made.**
 
-## 6. Components built (Phase 5)
+## 5. Verification results (item 4) — both findings are stale
 
-| Component | Where | Still needs from you |
-|---|---|---|
-| Two-step estimate form | Every hero + estimate pages | Nothing to work as before; **3 CC endpoints** to go direct (`src/data/leads.js`) |
-| Contractors Cloud wiring | In the form, per market | **Three endpoints, one per market, never shared** — stubbed null, falls back to /thank-you/ |
-| Pricing calculator | Roofing/siding/windows/gutters market hubs | **Multipliers** (`PRICING` in leads.js, shape documented) — shows a labeled "pending rates" card until then, no invented numbers; roofing hubs carry the instant-quote CTA alongside |
-| ZIP service-area check | `/service-areas/` | Nothing — live (metro ZIP prefixes; wording never promises coverage) |
-| Market prompt ("Where are you visiting from?") | National pages, after 45% scroll | Nothing — live; dismissible, never auto-redirects |
-| GBP map embed | Every market served-areas section + `/service-areas/` | Works keyless off the office address (same address as the GBP listing). Optional: `PUBLIC_GMAPS_KEY` for the Places-API embed |
-| Instagram feed | Homepage, labeled placeholder | **Embed config** (`INSTAGRAM` in leads.js) |
-| Photo components | Already existed (ProjectShowcase, hero media prop, alt/lazy/srcset-ready) | Team/truck photos and project shots — drop-in |
+- **Alt text**: 1,033 `<img>` tags across the entire built output; **zero lack an alt
+  attribute** (empty alt="" on decorative marquee clones is intentional and valid). The 144
+  figure was measured against the earlier delivered package; the Aug 22–27 accessibility rounds
+  fixed it.
+- **/sitemap/**: has exactly one H1 ("Page review board"); the 43-char description is
+  deliberate — the page is a **noindex internal review tool**, labeled "Not for publication."
+  Nothing missed; left alone per flag-don't-decide.
 
-## 7. Blocked or incomplete
+## 6. Deploy target and redirect formats (item 5, report only)
 
-- **Phase 2, 17 pages**: blocked on your review of `/cincinnati/siding/` — the brief's own stop.
-- **CC integration**: needs the three endpoint URLs.
-- **Calculator**: needs the pricing multipliers.
-- **Instagram**: needs the embed/config.
-- **GBP embeds as true place-ID pins**: needs `PUBLIC_GMAPS_KEY` (or confirmation the address
-  pin is acceptable — it renders today).
-- **Audit line-items that did not reproduce here** (likely measured on the live WordPress site):
-  144 missing alts — **this build has zero images without alt attributes** (verified
-  programmatically); "sitemap page no H1/43-char meta" — `/sitemap/` here is a **noindex internal
-  review page** that has an H1; left alone under "flag, don't decide."
+- **Hosting today**: GitHub → **Netlify** (staging at coldstream-exteriors-staging.netlify.app,
+  netlify.toml in repo). **There is no Vercel configuration anywhere in the repo** — the brief's
+  "GitHub → Vercel" does not match this codebase.
+- **Production plan of record** (repo docs): the built HTML served from the existing
+  WordPress/Apache host by Rambow — which is why the redirects generate in BOTH formats already:
+  `public/_redirects` (Netlify, 380 rules) and `redirects/htaccess.txt` (Apache RewriteRule
+  fragment, same rules). If production becomes Vercel, neither file works as-is — `vercel.json`
+  redirects are a third syntax, and the generator would need a third emitter (~an hour, not a
+  rewrite). **Decision needed: name the production host before the deferred redirect pass.**
 
-## 8. Assumptions made
+## 7. Contractors Cloud (item 5, report only + flag)
 
-1. **"Rewrite all 59" metas** interpreted as bring-all-to-standard, not force-change (see §4).
-2. **Wind-damage titles drop the state code** ("…in Cincinnati" not "…in Cincinnati, OH") — the
-   full keyword + state + brand exceeds 60 characters; keyword won.
-3. **New-page URLs chosen** as `/{market}/roofing/flat-roofing/` and `…/wind-damage/` — matching
-   the audit's referenced live path and the existing nested-sub-service pattern.
-4. **ZIP prefixes** for the checker are the metros' standard 3-digit prefixes (450–452/410–411,
-   430–432, 630/631/633) — verify 633 (St. Charles) and Northern Kentucky are wanted.
-5. **Cincinnati siding keeps the owner-mandated section heading** ("What a full siding
-   replacement does for a Cincinnati home", set by Craig 2026-08-27) even though the pattern
-   repeats across markets with the city swapped — owner instruction outranked the no-template rule.
-6. **The shared siding FAQ was replaced, not kept**, on Cincinnati — it was the single largest
-   overlap block (250 words identical on all three markets).
-7. **Siding Replacement in the nav is market-pages-only** — no national variant page exists and
-   building one was out of scope.
-8. **Instagram/calculator render labeled placeholders** rather than nothing — the owner's
-   standing preference (placeholders over absence) applied to Phase 5.
-9. **"144 missing alts" treated as already-fixed** after measuring zero in this build.
-10. **Deploy note**: the brief says "GitHub → Vercel"; this repo actually deploys GitHub →
-    Netlify (staging). Nothing in this pass depends on the host.
+`src/data/leads.js` now records the five-company reality (1043 & 1047 both "Coldstream
+Exteriors" with different settings, 1098 Columbus, 1435 Solar, 1576 West & Davis) and states
+that the per-market mapping is UNRESOLVED — no St. Louis-named company exists, and 1043 vs 1047
+is not guessable. Endpoints remain null; forms remain on the static flow. Nothing was wired.
 
-## 9. Redirects still owed (handoff list for the deferred work)
+## 8. Open questions answered (item 5 — answers, not actions)
 
-New URLs that will need rules pointed AT them once the spreadsheet arrives:
+- **ZIP 633 (St. Charles)**: recommend IN scope — St. Charles County towns (O'Fallon) are in the
+  St. Louis served-areas list the site already publishes, so the checker claiming 633 matches
+  existing claims. Awaiting your confirmation; it ships either way as "looks like our area,"
+  never a coverage promise.
+- **Northern Kentucky**: recommend IN scope — the audit's own /florence/ and /covington/
+  impression history plus the site's existing "Northern Kentucky river towns" copy both support
+  it. Prefixes 410/411 are already in the checker for that reason. Confirm, and NKY should also
+  be a named consideration in the deferred redirect pass (those historical URLs need targets).
+- **The "Go deeper" grid**: quantified above — after the rewrites it is no longer the top shared
+  string anywhere (per-market lead lines now vary it); the biggest shared blocks are the
+  pending-calculator card and trust panel, both of which become page-unique naturally when the
+  pricing config lands and are chrome in any case. **Verdict: not worth further hand-variation.**
 
-| New URL | Historical URLs that should point here (from the audit's own findings) |
-|---|---|
-| `/columbus/roofing/flat-roofing/` | the live `/columbus/roofing/flat-roofing/` rankings — same path, rule may be unnecessary; verify |
-| `/cincinnati/roofing/flat-roofing/`, `/st-louis/roofing/flat-roofing/` | any historical flat-roof URLs per market |
-| `/{market}/roofing/wind-damage/` ×3 | historical wind-damage URLs; note wind queries currently resolve to `…/insurance-storm-damage/` |
+## 9. New assumptions this pass
 
-Also for the spreadsheet pass: the existing redirect file was **not modified** (per the brief),
-so the 119 unmatched historical URLs remain exactly as the audit found them.
+1. Reviews pages stay noindex and under 1,500 words (reasoning in §2) — reversible on request.
+2. Reviews pages now link out to each market's Google profile (sourced URLs from the GBP data
+   you supplied on Aug 24) — treated as obviously safe, but it is a new outbound link.
+3. Vinyl/hardie H1 and title formulas kept (roofing-parity argument, §3).
+4. "No payments until completion" used as the lead differentiator in several descriptions — it
+   is your approved claim from Aug 25; flagging its heavier use.
+5. The pending-calculator card counts toward page words in my measurements (it renders); if the
+   auditor's counter excludes it, vinyl's two flagged pages drop further below the floor until
+   the pricing config lands.
 
-## 10. Next steps (ordered)
+## 10. Deploy confirmation
 
-1. **You**: review `/cincinnati/siding/` on the branch build → approve or redline.
-2. Then: the other 17 Phase-2 rewrites (Columbus/St. Louis siding first — they still share 69%).
-3. **You**: supply CC endpoints ×3, pricing multipliers, Instagram embed (all → `src/data/leads.js`).
-4. Wire arrives → flip each config, test one lead per market end-to-end.
-5. Agency spreadsheet arrives → the deferred redirect pass (feeds §9).
-6. Merge the branch; redirects and pages go live in the same change — the site stays unlaunched
-   until the redirect work exists, per the brief.
+Merged to main and pushed; Netlify rebuilds staging on push. Verified against the live staging
+host after deploy: `X-Robots-Tag: noindex, nofollow` on every response, `/robots.txt` serving
+`Disallow: /` to all crawlers, and all 13 intentionally-noindexed pages still carry their meta
+noindex (3 gallery + 3 reviews + blog + financing + instant-roof-quote + sitemap + privacy +
+terms + thank-you — the brief's "ten" plus the three utility pages that have always been
+noindex). Production robots.txt in the package remains the crawlable version.

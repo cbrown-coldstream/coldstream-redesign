@@ -5,7 +5,7 @@
 export const stLouis = {
   title: "Roofing & Exteriors in St. Louis, MO | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows, gutters and garage doors across Greater St. Louis. Free, no-obligation inspections and industry-leading warranties.",
+    "St. Louis roofing and exteriors from a real local office — storm documentation that holds up, free inspections, no payments until completion. (314) 380-8111.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.

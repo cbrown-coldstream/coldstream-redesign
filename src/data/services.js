@@ -104,7 +104,7 @@ export const localFor = (key, marketSlug, market) => {
 const where = (m) => (m.region.includes(m.name) ? `across ${m.region}` : `in ${m.name} and across ${m.region}`);
 
 export const SERVICE_META = {
-  roofing: (m) => `Roof replacement, repair and storm work ${where(m)}. Free inspection, a written quote first, and industry-leading warranties.`,
+  roofing: (m) => `Roof replacement, repair and storm work ${where(m)} — no payments until completion. Free inspection first: ${m.phone}.`,
   siding: (m) => `Fiber cement and vinyl siding ${where(m)}, installed to the manufacturer's specification. Free inspection and a written quote first.`,
   windows: (m) => `Replacement windows ${where(m)}, measured opening by opening and fitted by trained installers. Free, no-obligation quote.`,
   gutters: (m) => `Seamless gutters, guards and downspouts ${where(m)}, sized to the roof draining into them. Free inspection.`,

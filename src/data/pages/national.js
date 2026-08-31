@@ -27,7 +27,7 @@
 export const national = {
   title: "Roofing, Siding, Windows & Gutters | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Cincinnati, Columbus and St. Louis. Free inspections, one team for every exterior need, industry-leading warranties.",
+    "Roofing, siding, windows and gutters by local crews in three metros — free inspections, no payments until completion, industry-leading warranties.",
 
   // 1 — HERO. The situation line LEADS and the service list supports, swapped 2026-08-24.
   //

@@ -28,7 +28,7 @@
 export const cincinnati = {
   title: "Roofing & Exteriors in Cincinnati, OH | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across greater Cincinnati, from our Milford office. Free, no-obligation inspections and industry-leading warranties.",
+    "Cincinnati roofing and exteriors with no payments until completion. Local Milford crews, free inspections, industry-leading warranties. (513) 258-0450.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.

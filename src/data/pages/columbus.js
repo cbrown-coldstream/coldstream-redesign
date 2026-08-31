@@ -7,7 +7,7 @@
 export const columbus = {
   title: "Roofing & Exteriors in Columbus, OH | Coldstream Exteriors",
   description:
-    "Roofing, siding, windows and gutters across Central Ohio, from Dublin to Gahanna. Free, no-obligation inspections and industry-leading warranties.",
+    "Columbus roofing and exteriors, Dublin to Gahanna — no payments until completion, free inspections, local Galloway crews. Call (614) 812-0811.",
 
   // HERO SUB REWRITTEN ON THE TEAM CALL (2026-08-18). It used to end "backed by our own local
   // crews", which reads as though a crew is sourced per market — i.e. subcontracted. We do not sub.
