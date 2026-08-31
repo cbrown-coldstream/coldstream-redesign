@@ -17,7 +17,7 @@ change to every page in it.
 | Pages | Lane | Template | Index | 301s in | Avg words |
 |---:|---|---|---|---:|---:|
 | 24 | Sub-service | `src/pages/[market]/[hub]/[sub].astro` | 24 / 0 noindex | 192 | 1375 |
-| 13 | Service hub | `src/pages/[market]/[service].astro` | 13 / 0 noindex | 132 | 1374 |
+| 13 | Service hub | `src/pages/[market]/[service].astro` | 13 / 0 noindex | 132 | 1677 |
 | 10 | Standalone | `src/pages/about-us.astro` | 3 / 7 noindex | 20 | 1348 |
 | 9 | National service | `src/pages/[service].astro` | 9 / 0 noindex | 0 | 1367 |
 | 4 | Location area | `src/pages/[market]/locations/[area].astro` | 4 / 0 noindex | 0 | 542 |
@@ -67,7 +67,7 @@ change to every page in it.
 | `/cincinnati/commercial-roofing/` | Service hub | Commercial Roofing in Cincinnati | 1075 | 3 | index |
 | `/cincinnati/free-estimate/` | Market convert | Book a Free Inspection in Cincinnati | 767 | — | index |
 | `/cincinnati/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Cincinnati | 586 | — | noindex |
-| `/cincinnati/gutters/` | Service hub | Gutters in Cincinnati | 1088 | 21 | index |
+| `/cincinnati/gutters/` | Service hub | Gutters in Cincinnati | 1634 | 21 | index |
 | `/cincinnati/locations/east/` | Location area | Roofing and Exteriors in Cincinnati East | 530 | — | index |
 | `/cincinnati/locations/west/` | Location area | Roofing and Exteriors in Cincinnati West | 514 | — | index |
 | `/cincinnati/reviews/` | Reviews | What Cincinnati Homeowners Say | 541 | — | noindex |
@@ -81,7 +81,7 @@ change to every page in it.
 | `/cincinnati/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Cincinnati | 1517 | 8 | index |
 | `/cincinnati/siding/siding-replacement/` | Sub-service | Siding Replacement in Cincinnati | 1350 | 15 | index |
 | `/cincinnati/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Cincinnati | 1343 | 3 | index |
-| `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 1079 | 1 | index |
+| `/cincinnati/windows/` | Service hub | Replacement Windows in Cincinnati | 1627 | 1 | index |
 
 ### Columbus — 18 pages (16 indexable, 2 noindex)
 
@@ -91,7 +91,7 @@ change to every page in it.
 | `/columbus/about/` | Market about | The Coldstream Crew in Columbus | 1293 | — | index |
 | `/columbus/free-estimate/` | Market convert | Book a Free Inspection in Columbus | 746 | — | index |
 | `/columbus/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in Columbus | 571 | — | noindex |
-| `/columbus/gutters/` | Service hub | Gutters in Columbus | 1072 | 21 | index |
+| `/columbus/gutters/` | Service hub | Gutters in Columbus | 1615 | 21 | index |
 | `/columbus/locations/` | Locations index | Areas We Serve in Columbus | 691 | 4 | index |
 | `/columbus/reviews/` | Reviews | What Columbus Homeowners Say | 536 | — | noindex |
 | `/columbus/roofing/` | Service hub | Roofing in Columbus | 1871 | 17 | index |
@@ -100,11 +100,11 @@ change to every page in it.
 | `/columbus/roofing/roof-repair/` | Sub-service | Roof Repair in Columbus | 1394 | 15 | index |
 | `/columbus/roofing/roof-replacement/` | Sub-service | Roof Replacement in Columbus | 1405 | 3 | index |
 | `/columbus/roofing/wind-damage/` | Sub-service | Wind Damage Roof Repair in Columbus | 1231 | — | index |
-| `/columbus/siding/` | Service hub | Fiber cement and vinyl siding throughout Greater Columbus | 1277 | 5 | index |
+| `/columbus/siding/` | Service hub | Fiber cement and vinyl siding throughout Greater Columbus | 1662 | 5 | index |
 | `/columbus/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in Columbus | 1499 | 8 | index |
 | `/columbus/siding/siding-replacement/` | Sub-service | Siding Replacement in Columbus | 1308 | 15 | index |
 | `/columbus/siding/vinyl-siding/` | Sub-service | Vinyl Siding in Columbus | 1320 | 3 | index |
-| `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 1066 | 1 | index |
+| `/columbus/windows/` | Service hub | Replacement Windows in Columbus | 1640 | 1 | index |
 
 ### St. Louis — 19 pages (17 indexable, 2 noindex)
 
@@ -114,7 +114,7 @@ change to every page in it.
 | `/st-louis/about/` | Market about | The Coldstream Crew in St. Louis | 1052 | — | index |
 | `/st-louis/free-estimate/` | Market convert | Book a Free Inspection in St. Louis | 802 | — | index |
 | `/st-louis/gallery/` | Gallery | Roofs, Siding and Gutters We've Finished in St. Louis | 624 | — | noindex |
-| `/st-louis/gutters/` | Service hub | Gutters in St. Louis | 1122 | 21 | index |
+| `/st-louis/gutters/` | Service hub | Gutters in St. Louis | 1627 | 21 | index |
 | `/st-louis/locations/north/` | Location area | Roofing and Exteriors in West County and North County | 560 | — | index |
 | `/st-louis/locations/south/` | Location area | Roofing and Exteriors in South County and South City | 564 | — | index |
 | `/st-louis/reviews/` | Reviews | What St. Louis Homeowners Say | 548 | — | noindex |
@@ -124,11 +124,11 @@ change to every page in it.
 | `/st-louis/roofing/roof-repair/` | Sub-service | Roof Repair in St. Louis | 1442 | 15 | index |
 | `/st-louis/roofing/roof-replacement/` | Sub-service | Roof Replacement in St. Louis | 1464 | 3 | index |
 | `/st-louis/roofing/wind-damage/` | Sub-service | Wind Damage Roof Repair in St. Louis | 1305 | — | index |
-| `/st-louis/siding/` | Service hub | Fiber cement and vinyl siding throughout Greater St. Louis | 1331 | 5 | index |
+| `/st-louis/siding/` | Service hub | Fiber cement and vinyl siding throughout Greater St. Louis | 1652 | 5 | index |
 | `/st-louis/siding/james-hardie-siding/` | Sub-service | James Hardie Fiber Cement Siding in St. Louis | 1559 | 8 | index |
 | `/st-louis/siding/siding-replacement/` | Sub-service | Siding Replacement in St. Louis | 1378 | 15 | index |
 | `/st-louis/siding/vinyl-siding/` | Sub-service | Vinyl Siding in St. Louis | 1377 | 3 | index |
-| `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1121 | 1 | index |
+| `/st-louis/windows/` | Service hub | Replacement Windows in St. Louis | 1633 | 1 | index |
 
 ## Section order per lane
 

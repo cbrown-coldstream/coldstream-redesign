@@ -168,7 +168,15 @@ export const SERVICE_CONTENT = {
     titleTag: (m) => `Siding Contractors in ${m.cityState} | Coldstream Exteriors`,
     // THE DETAIL SECTION, ALSO FROM THE BRIEF — heading and both paragraphs verbatim. The intro
     // is an array: ServiceDetail renders one <p> per entry.
-    detailHeading: (m) => `What a full siding replacement does for a ${m.name} home`,
+    // DISTINCT HEADING PER MARKET (owner correction, 2026-08-31): the shared "What a full
+    // siding replacement does for a {City} home" pattern was the owner's 08-27 instruction,
+    // overruled by the same owner after seeing the overlap numbers — it was the exact
+    // city-swap template the rewrite exists to remove. Same purpose, three phrasings.
+    detailHeading: (m) => ({
+      cincinnati: "What a full siding replacement does for a Cincinnati home",
+      columbus: "Re-siding a Columbus house, from tear-off to trim",
+      "st-louis": "New siding, done the way St. Louis housing demands",
+    }[m.slug]),
     // CINCINNATI REWRITTEN 2026-08-31 (Rambow audit phase 2 — the hub pages measured 71%
     // cross-market overlap; Cincinnati first, stop for review). Columbus and St. Louis keep the
     // owner's 2026-08-27 paragraphs until their rewrites are approved.
@@ -176,15 +184,52 @@ export const SERVICE_CONTENT = {
       "Drive one loop from Hyde Park through Oakley to Anderson Township and you will pass every siding era Cincinnati has: 1920s foursquares still wearing original wood clapboard, post-war ranches through Blue Ash and Madeira sided in the aluminum of their day, and the vinyl-clad two-stories that filled Mason and West Chester from the nineties on. Each of those walls fails differently, and a siding quote that does not account for which one you own is a guess.",
       "A full replacement here starts with what the old cladding is hiding. Wood-sheathed older homes east of the Mill Creek often carry decades of patched moisture damage at the base course; newer builds hide their trouble at window heads where builder-grade flashing gave up early. The old siding comes off, the sheathing gets inspected board by board, and what needs replacing gets replaced before anything new goes on the wall.",
       "Then the assembly is built as a system — housewrap lapped and taped, flashing at every opening, trim, soffit and fascia detailed to spec — because siding is a water-management layer that happens to look good, not the other way around.",
+    ] : m.slug === "columbus" ? [
+      "Columbus siding work splits along a line you can drive in twenty minutes: on one side, the vinyl-clad subdivisions that filled Dublin, Hilliard and Westerville from the nineties on, where builder-grade panels and the sheathing behind them are aging out together; on the other, Clintonville, Bexley and German Village, where the cladding question comes with historic-district rules attached and the answer has to look like it belongs on the street.",
+      "We work both sides of that line. On newer homes, a replacement means stripping the original builder package, fixing the moisture problems it hid — window heads and bottom courses, almost every time — and rebuilding the wall as a system with wrap, flashing and a cladding gauge chosen for open-lot wind. On older streets it means profiles and trim that pass both the review board and the neighbors' eye test.",
     ] : [
-      "Nothing changes a home's appearance like new siding. Who installs it matters just as much as what goes on the wall.",
-      "We take the old siding off rather than cover it, inspect the carpentry underneath, and replace anything that needs it before new material goes on. House wrap, flashing, trim, soffit, and fascia all get done to spec.",
+      "St. Louis is a brick town, which makes siding here a more particular trade than it looks. What we clad is everything the brick is not: frame gables and dormers above the masonry, rear additions off city houses near Tower Grove and The Hill, and the long, low elevations of South County ranches in Affton, Mehlville and Oakville that were built frame from the start.",
+      "Those walls take a climate that swings from genuinely hot summers to freezing winters, and the swing is what kills cladding here — it works fasteners loose, opens joints, and finds every place an installer skipped a clearance. A replacement from us starts at the sheathing, fixes what the old siding was hiding, and goes back together with the movement room and flashing detail this weather insists on.",
     ],
     // Cincinnati's lead is its own (phase 2); the shared string serves the other two markets.
     lead: (m) => m?.slug === "cincinnati"
       ? "Siding installation and replacement across greater Cincinnati — James Hardie fiber cement and vinyl, fitted to the house you actually own."
       : "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
     local: {
+      columbus: {
+        replaceFaq: true,
+        description: "Columbus siding replacement for both sides of town — subdivision vinyl aging out and historic streets with rules. Written quote after a free inspection.",
+        sections: [
+          { title: "The nineties package, replaced properly", body: "Dublin, Hilliard and Westerville run on builder-grade vinyl now hitting the end of its life. Replacing it is the moment to fix the wrap and flashing that era skipped." },
+          { title: "Historic streets, matching profiles", body: "German Village, Bexley and Clintonville come with review standards. We spec lap widths and trim that pass the board and look right from the sidewalk." },
+          { title: "Wind is the local enemy", body: "Open central-Ohio lots give gusts a straight run at a wall. Fastening schedule and panel lock strength matter more here than in either of our other metros." },
+          { title: "One elevation or the whole house", body: "A failed west wall does not always mean re-siding everything. We quote the honest scope — and warn you when a partial match will show." },
+        ],
+        faq: [
+          { q: "Do you handle historic-district approval in Columbus?", a: "We prepare the material and profile documentation your submission needs and spec products that boards have accepted before. The application itself belongs to the homeowner, but you will not be doing it blind." },
+          { q: "Why is everyone's siding failing at once in my subdivision?", a: "Because it all went up the same season, from the same builder order, at the same gauge. Whole streets in the northwest suburbs are hitting the twenty-five-to-thirty-year wall together — which also means we can often quote several neighbors one mobilization." },
+          { q: "What does re-siding a Columbus two-story cost?", a: "The honest range depends on gauge, trim scope, and what the tear-off finds — sheathing repair is the variable nobody can price from the curb. We put a written number on it after a free inspection, and it holds unless the scope changes." },
+          { q: "Can new siding stand up to the wind out here?", a: "Specified and fastened correctly, yes. Panel wind ratings vary widely, and the fastening schedule matters as much as the rating — we set both for open-ground exposure, not the catalog default." },
+          { q: "How fast can it happen?", a: "Most single-family jobs run three to six working days once materials land. We stage so the house is never left open, and weather moves the schedule rather than the standard." },
+        ],
+      },
+      "st-louis": {
+        replaceFaq: true,
+        description: "St. Louis siding for frame gables, additions and full ranches — built for the summer-to-winter swing. Free inspection from our Geyer Road office.",
+        sections: [
+          { title: "Where brick ends, we start", body: "Gables, dormers and rear additions above and behind the masonry — small areas where detail matters, because every edge meets brick and every edge has to shed water." },
+          { title: "Ranch-scale walls, done in days", body: "South County's long single-story elevations are efficient to re-side and unforgiving of sloppy lines — a wavy course reads across forty feet." },
+          { title: "Built for the swing", body: "Hot summers, freezing winters, and everything a wall does moving between them. Movement room and fastening depth are the spec items this climate cares about." },
+          { title: "Storm damage on cladding", body: "Hail and wind mark siding as well as roofs. We document it slope-and-elevation style for the same reason — so a claim conversation starts with evidence." },
+        ],
+        faq: [
+          { q: "My house is mostly brick — is a siding job worth calling about?", a: "Yes. Gable-and-dormer packages are some of our most common St. Louis work: small square footage, high skill share, and the difference between a crisp roofline and a shabby one." },
+          { q: "What siding survives a St. Louis summer best?", a: "Fiber cement is the most dimensionally stable through our heat, and heavier-gauge vinyl behaves well when it is hung with proper movement room. Thin panels pinned tight are what buckle in August — that is installation, not material." },
+          { q: "Can you match the rest of the street?", a: "Usually close enough that nobody looks twice; exactly, not always — profiles get discontinued. We check availability before we promise, and show you the nearest match if the original is gone." },
+          { q: "Do you replace soffit and fascia with the siding?", a: "Almost always, and here more than anywhere: the oak canopy over South County keeps those boards wet and working. Doing them in the same pass costs a fraction of a return visit." },
+          { q: "What will it cost on a typical ranch?", a: "Long, simple walls make ranches some of the most efficient siding work we do per square foot — but the number still depends on what the tear-off exposes. Free inspection, written quote, no payments until completion." },
+        ],
+      },
       cincinnati: {
         // replaceFaq: the shared siding FAQ was a 250-word block identical on all three market
         // pages — the single biggest overlap contributor the audit measured. Cincinnati's FAQ
@@ -232,7 +277,30 @@ export const SERVICE_CONTENT = {
   windows: {
     label: "Windows",
     h1: (m) => `Replacement Windows in ${m.name}`,
-    lead: "Energy-efficient replacement windows, measured and installed by trained crews.",
+    // Rewritten per market 2026-08-31 (audit continuation): heading, intro, sections, FAQ and
+    // depth are each written from scratch per metro — no shared sentence between versions.
+    detailHeading: (m) => ({
+      cincinnati: "Window replacement across a century of Cincinnati openings",
+      columbus: "When a whole subdivision's glass fogs at once",
+      "st-louis": "Windows that earn their keep in a St. Louis summer",
+    }[m.slug]),
+    detailIntro: (m) => ({
+      cincinnati: [
+        "Cincinnati's openings span a hundred years of construction habits. The double-hungs in a Hyde Park foursquare sit in true-dimension frames with weight pockets; a Madeira ranch carries mid-century units in openings that have settled a half inch since; the newer stock in Mason and West Chester holds builder-grade windows whose seals are failing right on schedule. One spec does not fit those three houses, which is why we measure every opening individually and quote the window each one actually needs.",
+        "The valley's climate does the rest of the arguing: humid summers that find every leaky sash, and winters that turn single-pane and failed-seal units into condensation machines. Done right, replacement windows here pay you back twice — in comfort first, then on the bills.",
+        "Our window crews carry the same rules as every Coldstream trade: a free assessment before any number, a written per-opening quote that holds, and no payments until the work is complete. If a repair honestly beats a replacement on a given window — a reglaze, new balances, weatherstripping — that goes in the quote too, because selling you glass you did not need is a one-transaction business.",
+      ],
+      columbus: [
+        "There is a particular call we get from Dublin, Hilliard and Westerville almost weekly: the glass has gone cloudy, three windows at once, in a house built in the nineties. That is seal failure, it is arriving street by street across the era's subdivisions, and once the insulated unit has lost its gas fill the window has quietly stopped doing its job — no matter how clean it looks from the yard.",
+        "Our Columbus window work is largely that story, plus the opposite one: older Clintonville and Beechwold homes where original frames deserve keeping and an insert unit does the work without touching the trim. Full-frame where the frame has failed, insert where it has not, and a straight answer about which yours is.",
+        "Every Columbus window quote is built the same way: each opening measured and listed with its own line, the insert-versus-full-frame call explained per window rather than averaged, and the total written down before anything is ordered. Assessment is free, the number holds unless the scope changes, and nothing is due until the last window is installed and working.",
+      ],
+      "st-louis": [
+        "Ask what a window is for in St. Louis and the honest answer is: surviving August. Solar heat gain drives summer bills here harder than winter loss does, which flips the glass spec most national guides assume — low-E coatings tuned to reject heat, not just hold it. On a west-facing elevation in Ballwin or Florissant, the right glass package is the difference you can feel standing in the room.",
+        "The housing adds its own wrinkle: masonry openings on city and inner-ring brick homes need a different installation approach than the frame openings of South County ranches. We do both, measure every opening rather than averaging the house, and put the whole thing in writing after a free assessment.",
+        "What that assessment covers: every opening measured and probed, the frames checked for the rot our humidity quietly grows, glass packages recommended per elevation with the reasoning attached, and a written per-window quote with no payments due until completion. It is the same no-pressure process our roofing customers know, applied to glass.",
+      ],
+    }[m.slug]),
     sections: [
       { title: "Full-Frame Replacement", body: "When the frame itself has failed, replacing the insert alone just hides the problem." },
       { title: "Insert Replacement", body: "Where the existing frame is sound, an insert is faster, cheaper and less disruptive." },
@@ -244,6 +312,64 @@ export const SERVICE_CONTENT = {
       { title: "Careful removal", body: "Old units out, and the wall around each opening checked for the hidden moisture or rot that only shows up once it is open." },
       { title: "Precision installation", body: "Levelled, shimmed, flashed and sealed with low-expansion foam, then tested for operation before the crew moves to the next one." },
     ],
+    local: {
+      cincinnati: {
+        replaceFaq: true,
+        description: "Replacement windows measured to Cincinnati's century-old openings and its newest ones — insert or full-frame, quoted per window. Free assessment.",
+        sections: [
+          { title: "Old-house windows, kept honest", body: "Pre-war double-hungs can often take an insert that preserves original trim. When the frame has rot or racking, we say so — an insert in a failed frame just hides it." },
+          { title: "The settled-opening problem", body: "Hillside homes and older foundations mean out-of-square openings. Each one gets measured on its own; nothing is averaged from a floor plan." },
+          { title: "Glass for the valley", body: "Humidity, shade, freeze-thaw: we spec low-E and fills for actual exposure, wall by wall, not one package for the whole house." },
+          { title: "Rot repair before install", body: "Sills and jambs under Cincinnati tree cover stay wet. We open, repair and flash before the new unit goes in — the step skipped quotes skip." },
+        ],
+        faq: [
+          { q: "Can you replace windows in a hundred-year-old Cincinnati house without wrecking the trim?", a: "Usually, yes — that is what insert replacement is for. The original interior trim stays, the new unit works inside the old frame, and the street face keeps its character. The honest exception is a frame that has failed structurally; then full-frame is the only fix that is not cosmetic." },
+          { q: "Why do my windows sweat every winter?", a: "Condensation on the room side means the inside glass surface is cold — single panes or failed seals, almost always. New insulated units keep that surface warm enough that the moisture stays in the air where it belongs." },
+          { q: "How many windows make a job worth it?", a: "We take single-window jobs, though most homeowners batch at least a wall. Bundling helps the per-unit price mostly by sharing one setup and one trip — and on older houses it lets the crew keep one consistent sightline and trim approach across the elevation instead of matching someone else's earlier work." },
+          { q: "What is the timeline right now?", a: "Measurement to installation typically runs a few weeks, driven by the manufacturer's build time on made-to-measure units. Installation itself is one to two hours per window." },
+          { q: "Do you handle the disposal and cleanup?", a: "Completely — old units, packaging, and a vacuum pass room by room. Each opening is finished and closed the same day it is opened." },
+          { q: "Which Cincinnati neighborhoods do your window crews cover?", a: "The whole metro from our Milford office — Hyde Park and Oakley east through Anderson Township and Loveland, north through Blue Ash, Mason and West Chester, and across the river towns. If we side or roof there, we do windows there." },
+        ],
+      },
+      columbus: {
+        replaceFaq: true,
+        description: "Foggy glass in a 1990s Columbus subdivision? Seal failure is epidemic in that era's windows. We replace them properly — free, per-opening assessment.",
+        sections: [
+          { title: "Seal failure, the era's signature", body: "Cloudy glass means the insulated unit is done. It arrives in batches in Dublin, Hilliard and Westerville because whole streets share one build year." },
+          { title: "Insert or full-frame, honestly", body: "Sound frame: insert, faster and cheaper. Compromised frame: full-frame, because anything else buries the problem behind new vinyl." },
+          { title: "Wind-tight on open ground", body: "Air infiltration ratings matter more on central Ohio's open lots than the brochure implies. We spec and foam-seal for the exposure your wall actually has." },
+          { title: "Egress and code, checked", body: "Bedroom windows have opening-size requirements. Replacements are the moment those get quietly right — or quietly wrong. We check." },
+        ],
+        faq: [
+          { q: "Half my windows are foggy — do I replace all of them or just those?", a: "The clear ones from the same build year are usually a few seasons behind the foggy ones. We quote it both ways so you can weigh doing it once against doing it twice." },
+          { q: "Is fixing the glass alone an option?", a: "Sash or glass-unit replacement exists for some product lines, and where your frames are sound and the line is still made we will price it against full replacement rather than defaulting to the bigger job." },
+          { q: "What brands and lines do you install in Columbus?", a: "Lines with real warranties and a manufacturer we can get answers from — quoted per project, since availability shifts. What we will not install is the bottom-shelf builder-grade unit that created this problem the first time." },
+          { q: "Will replacements change how the house looks from the street?", a: "Matched frame colors and grid patterns keep the elevation consistent — worth care in a subdivision where every house shares the same window rhythm, and something we mock up with you before ordering." },
+          { q: "What does a whole-house window job cost here?", a: "It scales with count, sizes and the insert-versus-full-frame split, so honest numbers come from the free assessment. The quote is written, itemized per opening, and holds unless the scope changes." },
+          { q: "Do you cover my part of the Columbus metro?", a: "From Galloway we run the full ring — Dublin, Hilliard and Westerville where the seal-failure calls cluster, Worthington, Gahanna and Upper Arlington, and the older blocks of Clintonville and Bexley where the preservation questions live." },
+          { q: "Is winter a bad time to replace windows in Columbus?", a: "Less than people assume. One-opening-at-a-time installation means the house is exposed for minutes per window, not hours, and winter scheduling is often faster because demand dips. The sealants we use are rated for cold application — the calendar is a preference, not a constraint." },
+        ],
+      },
+      "st-louis": {
+        replaceFaq: true,
+        description: "Heat-rejecting glass for St. Louis summers, fitted to brick and frame openings alike. Free per-window assessment — no payments until completion.",
+        sections: [
+          { title: "Glass that fights August", body: "Low-E packages tuned to reject solar gain — the spec that matters most here — chosen per elevation, because a north wall and a west wall live different lives." },
+          { title: "Masonry openings, handled", body: "Brick surrounds need the right anchoring and sealing approach. City and inner-ring homes get an install detail suited to masonry, not a frame-wall shortcut." },
+          { title: "Ranch rows, done in a day", body: "South County's window walls — big openings, similar sizes — replace efficiently. Most single-story homes finish in a day or two." },
+          { title: "Storm-season toughness", body: "Impact-rated and laminated options exist for exposed elevations. We tell you where they earn their premium and where ordinary insulated glass is plenty." },
+        ],
+        faq: [
+          { q: "What actually lowers a St. Louis summer electric bill — new windows or more insulation?", a: "Both matter, but west- and south-facing glass is often the biggest single heat gate in the house. Heat-rejecting low-E on those elevations is one of the few upgrades you can feel the week it goes in." },
+          { q: "Can you replace windows set in brick?", a: "Yes — masonry openings are routine here and change the anchoring, flashing and sealing approach rather than the window itself. It is a detail we plan for, not a surprise we hit." },
+          { q: "Do new windows help with street and highway noise?", a: "Meaningfully, especially moving from single-pane or loose old units. Laminated glass options push the improvement further where noise is the actual complaint." },
+          { q: "What happens if a storm is coming mid-project?", a: "No opening is left unglazed, ever — each window is removed and installed the same day, and we sequence the work so the house is closed every night of the job." },
+          { q: "How do I get a real price?", a: "A free assessment where we measure each opening and check the frames. The quote is written, and there are no payments until the work is complete." },
+          { q: "Where in the St. Louis metro do you install?", a: "Metro-wide from Geyer Road: Kirkwood, Webster Groves and the inner ring, South County through Oakville and Mehlville, West County out to Chesterfield and Ballwin, and north through Florissant and O'Fallon." },
+          { q: "Can grids and styles match a mid-century ranch?", a: "Yes — picture-and-flanker combinations and horizontal sliders are the period vocabulary of South County's housing, and modern lines carry all of them. We match the era's proportions rather than forcing a colonial grid onto a ranch elevation." },
+        ],
+      },
+    },
     faq: [
       { q: "Will new windows actually cut my bills?", a: "They help, and how much depends on what you have now. Single-pane to modern double-pane is a real difference; a ten-year-old double-pane to a new one is not." },
       { q: "Can I get a window repaired instead of replaced?", a: "Sometimes. Worn weatherstripping and a broken latch are repairs. Fog between the panes, rot in the frame or daylight around the edges are not — at that point the unit has failed and a repair only buys a season." },
@@ -252,12 +378,94 @@ export const SERVICE_CONTENT = {
       { q: "Can I do just a few windows?", a: "Yes. We will match the new units to the existing ones as closely as the product line allows, and tell you where the match will be visible." },
       { q: "What is the difference between an insert and a full-frame replacement?", a: "An insert fits inside the existing frame — quicker, cheaper, and only right when that frame is sound. Full-frame takes it back to the opening and is what you need when the frame is the thing that failed." },
     ],
-    local: {},
+    // (per-market `local` sits above the shared faq; a trailing empty local here shadowed it —
+    // the same object-literal trap the siding entry hit. Do not re-add.)
   },
   gutters: {
     label: "Gutters",
     titleTag: (m) => `Gutter Installation in ${m.cityState} | Coldstream Exteriors`,
     h1: (m) => `Gutters in ${m.name}`,
+    detailHeading: (m) => ({
+      cincinnati: "Moving water off a hillside house",
+      columbus: "Gutters that keep pace with a flat-lot downpour",
+      "st-louis": "Sized for oak drop and gully-washer rain",
+    }[m.slug]),
+    detailIntro: (m) => ({
+      cincinnati: [
+        "Gutter work in Cincinnati is shaped by two things the flatland guides never mention: hills and trees. A hillside lot in Mt. Washington or Price Hill concentrates roof water exactly where the slope already wants to push it — at the foundation — and the canopy over Clermont County and the river townships keeps every open gutter fed with debris eight months a year. Sizing, guard choice and where the downspouts discharge all follow from those two facts.",
+        "We roll seamless runs on site, size them to the actual roof area draining into them, and treat the question nobody asks — where does the water go after the downspout — as half the job. On a slope, it is the whole job.",
+        "The visit itself is simple: we measure the roof planes feeding each run, walk the discharge path the water takes today, probe the fascia the new system will hang from, and write the whole scope down with one number. If guards make sense for your trees we will show the arithmetic; if they do not, we will say that instead of selling them.",
+      ],
+      columbus: [
+        "Central Ohio's spring storms drop serious water fast, and the flat lots most Columbus homes sit on give that water nowhere obvious to go. An undersized gutter here does not fail gradually; it sheets over the front edge in the first big cell of April and soaks the same foundation corner every time. Sizing to the real roof area — not the builder default — is the fix, and it is the first thing we calculate.",
+        "Tree cover splits the guard question neatly by neighborhood: heavy in Clintonville and Worthington, nearly absent across the newer rings. We recommend guards where they earn their cost and say so plainly where they will not.",
+        "A Columbus gutter quote from us reads like a drainage plan, because that is what it is: run lengths and sizes with the catchment math shown, downspout positions with where each one discharges, guard recommendations tied to your actual trees, and fascia condition noted before anything hangs on it. Free inspection first, written number after, no payments until the water is tested and moving.",
+      ],
+      "st-louis": [
+        "Two forces run gutter work in this metro: the mature oaks over South County and the inner ring, which load systems with a heavy autumn drop plus spring tassels, and the summer gully-washers that arrive faster than any residential gutter fashionably handles. A St. Louis system needs capacity for the cloudbursts and protection from the canopy — and on the long, low rooflines of Affton and Mehlville ranches, runs that hold their fall over forty feet.",
+        "Every quote starts at the roof: area, pitch and where the water lands today. Seamless runs rolled in the driveway, oversized where the math says so, tested with a hose before we call it finished.",
+        "St. Louis homeowners get the same terms as every Coldstream trade: the inspection costs nothing, the quote is written and itemized by run, guards are recommended by canopy rather than by commission, and payment waits until the system has been water-tested in front of you. If a repair genuinely solves it — one dropped hanger, one failed corner — that is what we will quote.",
+      ],
+    }[m.slug]),
+    local: {
+      cincinnati: {
+        replaceFaq: true,
+        description: "Seamless gutters for Cincinnati's hills and canopy — sized to the roof, guards where trees demand them, discharge planned for the slope. Free inspection.",
+        sections: [
+          { title: "Hillside discharge planning", body: "On a slope, a downspout that dumps at the corner sends water straight to the foundation below. We route and extend so it leaves the property's fall line safely." },
+          { title: "Guards that earn it", body: "Under Clermont County canopy, guards turn three cleanings a year into an occasional check. On the open lots of West Chester, we will tell you to skip them." },
+          { title: "Ice at the eaves", body: "Valley winters build ice at the gutter line. Hanger strength and spacing decide whether a system shrugs that off or peels away by February." },
+          { title: "Fascia condition, checked first", body: "Gutters anchor to fascia, and shaded fascia here is often soft. We check before hanging anything — new gutters on rotten boards is a return visit scheduled in advance." },
+        ],
+        faq: [
+          { q: "Why does my Cincinnati basement get water every spring?", a: "Walk outside during the next hard rain and watch the gutters. Overflow at the front edge or a downspout dumping beside the wall is the cause more often than the foundation itself — and rerouting water is a far cheaper fix than waterproofing." },
+          { q: "Are guards worth it on a treed lot here?", a: "Under real canopy, genuinely yes — the east side and the river townships are the strongest guard case we see anywhere. On open newer lots the honest answer is usually no, and we say it." },
+          { q: "Five-inch or six-inch for my roof?", a: "It follows the square footage and pitch draining into each run. Cincinnati's bigger older roofs and steep sections often justify six-inch with oversized outlets; we do the arithmetic per run rather than defaulting." },
+          { q: "Can you handle a hillside property?", a: "It is half our Cincinnati gutter work. Slopes change where water must be discharged, and extensions or drain tie-ins are quoted up front, not discovered later." },
+          { q: "Gutters with a new roof, or separately?", a: "With, when a roof is happening anyway — the drip edge and flashing line up correctly in that order. Separately is fine too; we check the roof edge condition either way." },
+          { q: "How often should Cincinnati gutters be cleaned if I skip guards?", a: "Under real canopy, plan on twice a year minimum — after the spring helicopters and after leaf drop — plus a check after any big storm. That schedule, priced out over a decade, is usually the argument that makes guards pay." },
+          { q: "What parts of greater Cincinnati do your gutter crews reach?", a: "Everywhere the trees are: the east side through Hyde Park, Anderson Township and Milford, north through Blue Ash, Loveland and Mason, the west side and Butler County, and the Northern Kentucky river towns. Hillside streets are a specialty, not a surcharge." },
+        ],
+      },
+      columbus: {
+        replaceFaq: true,
+        description: "Columbus gutter installation sized for spring downpours, not the builder default. Seamless runs rolled on site — free inspection and a written quote.",
+        sections: [
+          { title: "Capacity math, per run", body: "The builder five-inch on a big two-story roof is why the front walk floods every April. We compute each run against its real catchment and upsize where the number says to." },
+          { title: "Guard honesty, street by street", body: "Clintonville's canopy justifies guards; a treeless Lewis Center lot does not. The recommendation follows the trees, not the sales margin." },
+          { title: "Downspouts on flat lots", body: "Flat ground needs deliberate discharge — extensions, splash management or tie-ins that move water away instead of letting it pond by the slab." },
+          { title: "Wind-firm hanging", body: "Open-lot gusts work loose what was hung casually. Hanger spec and spacing here match the exposure, and every run is water-tested for fall." },
+        ],
+        faq: [
+          { q: "Why do my gutters overflow only in spring?", a: "Spring cells drop the year's highest rain rates. A system that keeps up all summer can still be undersized for April — capacity is set by the worst storm it will meet, not the average one." },
+          { q: "What do new gutters cost on a Columbus two-story?", a: "Linear footage, size, downspout count and guard choice set the number, and the honest version comes from measuring, not from a per-foot guess over the phone. The written quote is free and holds unless scope changes." },
+          { q: "Do I actually need guards?", a: "Look up: real overhanging canopy, probably yes; young subdivision landscaping, probably not for a decade. We give the street-specific answer instead of one pitch for everyone — and when the answer is yes, we spec the guard type to the debris your trees actually drop, because needle litter and broadleaf load defeat different designs." },
+          { q: "Can gutters be fixed rather than replaced?", a: "A dropped hanger or a single leaking corner, certainly. Multiple failing seams, rust lines or pull-away along a run mean the system is at end of life, and patching it buys months, not years." },
+          { q: "How long is the install?", a: "Most Columbus homes are one day: runs rolled on the driveway in the morning, hung and tested by the afternoon, old material hauled away." },
+          { q: "What color and profile options are there?", a: "K-style in the standard aluminum palette covers most Columbus homes; half-round and copper exist for the historic streets that want them. We bring samples to the inspection so the choice happens against your actual trim color, not a website swatch." },
+          { q: "Which Columbus neighborhoods do you install gutters in?", a: "All of them, from one Galloway dispatch: the subdivision rings of Dublin, Hilliard, Westerville and Grove City where sizing corrections are the usual job, the treed streets of Clintonville and Worthington where guards earn their keep, and the historic blocks where half-round is the right look. Same-week inspections most of the year, stretching slightly in the spring rush." },
+        ],
+      },
+      "st-louis": {
+        replaceFaq: true,
+        description: "St. Louis gutters built for oak drop and cloudburst rain — oversized where the math demands it, guards where the canopy does. Free on-site quote.",
+        sections: [
+          { title: "Cloudburst capacity", body: "Summer cells here outrun standard sizing. Where roof area and pitch demand it, we spec six-inch runs and bigger outlets — quoted from the math, not a truck default." },
+          { title: "The oak calendar", body: "Autumn drop, spring tassels: the inner ring's oaks load gutters twice a year. Guards are close to mandatory under that canopy, optional beyond it." },
+          { title: "Ranch-run fall", body: "A forty-foot South County run must hold its pitch across the whole length or water stands and works the seams. Long runs get set with a line, then proven with a hose." },
+          { title: "Expansion, planned for", body: "Our seasonal temperature swing works aluminum hard. Expansion behavior gets planned into run lengths and hanger choice instead of surprising the seams later." },
+        ],
+        faq: [
+          { q: "What happens to gutters in a St. Louis summer storm?", a: "The failure is speed: an inch-plus-per-hour cell fills an undersized system in minutes and the overflow looks like a waterfall at the corners. Capacity sizing is the cure — the roof's area and pitch tell us exactly what each run must carry." },
+          { q: "Are guards worth it under the oaks?", a: "Under the inner ring's canopy, more so than anywhere else we work — two heavy load seasons a year is the strongest possible case. On open lots further out, we will honestly steer you to spend the money elsewhere." },
+          { q: "My long ranch runs sag in the middle — why?", a: "Hangers spaced for a short wall, or seasons of expansion working them loose. Long single-story runs need closer hanger spacing and set fall — it is detail work, and it is exactly the kind of thing we water-test before leaving." },
+          { q: "Where should downspouts discharge?", a: "Away from the slab, always — with extensions or tie-ins where the yard's fall requires. Water sitting against a foundation is the most expensive place in the property to store it." },
+          { q: "Roof and gutters together?", a: "Ideal order when both are due: roof first, then gutters, so drip edge and flashing integrate. We quote the pairing as one scope with one number." },
+          { q: "Do you service the whole St. Louis metro?", a: "Yes — city neighborhoods with their box-gutter quirks, the inner ring under the oaks, South County's ranch country, and out through Ballwin, Chesterfield and Florissant. One office on Geyer Road, one crew standard everywhere." },
+          { q: "Can downspouts tie into buried drains?", a: "Where the yard's fall allows, yes — and on clay soil it is often the cleanest permanent answer. We quote the tie-in as its own line so you can weigh it against surface extensions, and we never bury a connection we have not water-tested first." },
+        ],
+      },
+    },
     lead: "Seamless gutters, guards and downspouts, sized to the roof they are draining.",
     sections: [
       { title: "Seamless Gutters", body: "Rolled on site to the length of the run, so the only joins are at corners and outlets." },
@@ -278,7 +486,7 @@ export const SERVICE_CONTENT = {
       { q: "What size do I need?", a: "It follows the roof draining into it. Five-inch handles most homes; steep or large roof areas want six-inch and oversized downspouts, and undersizing that is why a system overflows in the heaviest rain it will ever see." },
       { q: "Can you do the gutters with the roof?", a: "Yes, and it is the sensible order — new gutters go on after the roof so the drip edge and the flashing line up instead of being worked around." },
     ],
-    local: {},
+    // (per-market `local` sits above; the trailing empty local was the shadowing trap. Do not re-add.)
   },
   // site-plan keeps this as its own hub rather than a section: "commercial buyers do not search
   // by sub-service. One strong page." It is the target the 13 folding commercial URLs land on.
@@ -366,7 +574,191 @@ export const hasLocalCopy = (serviceKey, marketSlug) =>
  * render nothing here until their rewrites are approved. Every fact below is a general truth of
  * the metro's housing stock or climate — no invented jobs, addresses or testimonials.
  */
-export const MARKET_SIDING_DEPTH = {
+export const MARKET_HUB_DEPTH = {
+  gutters: {
+    cincinnati: {
+      eyebrow: "Gutters in this metro",
+      heading: "Water management on terrain that has opinions",
+      blocks: [
+        { h: "The hill decides where water wants to go", p: [
+          "A gutter system on flat ground has one job; on a Price Hill or Mt. Adams slope it has two, because the ground itself is already steering water toward somebody's foundation — yours or the neighbor's downhill. Discharge planning on these lots is engineering, not accessorizing: which corner, how far the extension runs, whether a buried drain is the only honest answer.",
+        ]},
+        { h: "Canopy economics", p: [
+          "The tree cover east of the Mill Creek and through the river townships is the deciding variable in most of our gutter conversations. It fills open systems relentlessly, it shades fascia into softness, and it makes guards — a hard sell on an open lot — simply good arithmetic. We price the guard against the cleanings it retires and let the math talk.",
+        ]},
+        { h: "Freeze-thaw at the roof edge", p: [
+          "Valley winters hover at the freezing line, which is the worst place for a gutter to live: meltwater by day, ice by night, weight cycling on every hanger. Systems here earn their lifespan through hanger quality and spacing more than through the metal itself — the run that survives February was specified in July.",
+        ]},
+        { h: "Fascia first, always", p: [
+          "Every gutter is only as good as the board it hangs from, and shaded Cincinnati fascia spends most of the year damp. Our inspections probe the fascia line before quoting anything — replacing soft sections while the gutters are down costs a fraction of doing it later, and hanging new metal on failing wood is how a one-day job becomes two jobs.",
+        ]},
+        { h: "What we find behind old systems", p: [
+          "Thirty-year-old gutters come down and tell the house's history: rot lines where a seam dripped for a decade, tiger-striping where overflow ran the siding, soil channels where a downspout discharged at the wall. We photograph what we find, fix what is ours to fix, and flag what belongs to another trade — some of our roofing and siding work starts as a gutter tear-off's discoveries.",
+          "That is also the argument for having one exterior company on the ladder: a gutter crew that recognizes early shingle-edge failure or a soft fascia line can flag it while the fix is small. Water problems on a house are one system wearing four trades' names, and we quote them that way when it saves you money.",
+        ]},
+      ],
+    },
+    columbus: {
+      eyebrow: "Gutters in this metro",
+      heading: "Sizing against the April cell",
+      blocks: [
+        { h: "Design for the worst hour of the year", p: [
+          "Columbus gutter systems live or die by a handful of spring storms that drop rain faster than any average suggests. A system that handles the year's other fifty-one weeks and fails in that hour has failed at its whole purpose — the foundation only needs soaking a few times. We size each run against peak rate for its actual catchment, which routinely means six-inch where a builder installed five.",
+        ]},
+        { h: "Flat lots hide their drainage sins", p: [
+          "On sloped ground, water leaves; on the flat lots of the newer rings, water goes exactly where the downspouts put it and stays. Ponding beside a slab is a settlement and moisture problem on a slow fuse. The unglamorous half of our installs is extensions and discharge routing — the part invisible in photos and decisive in basements.",
+        ]},
+        { h: "Exposure works on hardware too", p: [
+          "The same open-ground wind that stresses siding rattles gutter runs, and hangers that were adequate on day one loosen a season at a time. We hang for the exposure — tighter spacing, better hardware — because a gutter's real spec is not the metal profile, it is what fastens the metal to the house.",
+        ]},
+        { h: "The subdivision default, revisited", p: [
+          "Most Columbus gutter systems were installed by production math: one profile, one downspout count, whatever the framing schedule allowed. Twenty-five years later the houses have mature landscaping, finished basements and patios that change where water can acceptably go. A replacement is the low-cost moment to redesign discharge around how the property is actually used now — we treat it as a drainage rethink, not a like-for-like swap.",
+        ]},
+        { h: "Winter's short, sharp test", p: [
+          "Central Ohio winters are milder than the gutter belt's worst, but the January thaw-freeze whiplash loads runs with ice exactly when the metal is most brittle. Hidden hangers at proper spacing and a correctly pitched run shed that test; the spike-and-ferrule systems still on many older houses fail it a little more each year.",
+          "If your gutters still hang on visible spikes, that alone dates the system past twenty-five years — and re-driving the spikes each spring is maintenance on borrowed time. Modern hidden-hanger replacement costs less than most homeowners guess, and it is the difference between owning gutters and renting them season to season.",
+        ]},
+      ],
+    },
+    "st-louis": {
+      eyebrow: "Gutters in this metro",
+      heading: "Two seasons of load, one system",
+      blocks: [
+        { h: "What the oaks demand", p: [
+          "The inner ring's oak canopy delivers two full load seasons — leaf drop in autumn, tassels and seed in spring — and an open gutter under it spends half the year part-blocked. Blockage is not an inconvenience; it converts the system into a trough that overflows at the worst point on the run. Under this canopy, guards move from upsell to infrastructure.",
+        ]},
+        { h: "Cloudburst arithmetic", p: [
+          "St. Louis summer cells produce rainfall rates the standard residential spec never contemplated. The fix is unglamorous math: roof area times pitch factor times peak rate, per run, then hardware sized to the result. It is ten minutes of calculation that separates a system that works in July from one that decorates the fascia.",
+        ]},
+        { h: "Long runs, wide swings", p: [
+          "A ranch's forty-foot run amplifies everything: more thermal expansion across our seasonal swing, more chance for fall to wander, more water arriving at a single outlet. Long-run work is set with a string line, seamed only at corners, given room to move, and proven with a running hose before the trailer is packed.",
+        ]},
+        { h: "City parapets and box gutters", p: [
+          "Older city housing brings gutter forms most crews never touch: built-in box gutters behind cornices, internal drops through parapet walls, and the flat-roof drainage of rear additions. This is careful, slightly archaeological work — lining and relining rather than ripping out — and it is a real part of what gutter service means on the streets around Tower Grove.",
+        ]},
+        { h: "The foundation math nobody runs", p: [
+          "St. Louis clay swells wet and shrinks dry, and a downspout dumping at a corner cycles that clay through both states harder than weather alone ever would. Slab and basement movement traces back to roof water more often than owners suspect. Extending discharge ten feet costs almost nothing during an install; it is some of the highest-return money on the whole project.",
+          "It is also why our St. Louis gutter inspections finish at ground level, not at the eaves: we walk where each downspout discharges today, look for the soil channels and splash erosion that tell the truth about past storms, and write the discharge plan into the quote alongside the metal.",
+        ]},
+      ],
+    },
+  },
+  windows: {
+    cincinnati: {
+      eyebrow: "Windows in this metro",
+      heading: "What a hundred years of openings taught us",
+      blocks: [
+        { h: "Weight pockets, plaster returns and other pre-war realities", p: [
+          "East-side foursquares and Tudors carry window assemblies modern products never met: rope-and-weight pockets that leak air like chimneys, plaster returns instead of drywall jambs, sills poured deeper than any modern default. Working these openings without wrecking what makes the house good is a skill line item — and it is why our measurements happen from a ladder, not a spreadsheet.",
+        ]},
+        { h: "Shade is lovely and expensive", p: [
+          "The canopy that keeps Clifton and Wyoming beautiful also keeps sills damp. Wood rot at the bottom corners of window frames is the most common thing our assessments find on treed streets, and it decides insert-versus-full-frame more often than the glass does. We probe every sill because paint hides everything until it does not.",
+        ]},
+        { h: "Two seasons, two jobs for the glass", p: [
+          "A Cincinnati window earns its living twice a year: holding out humid ninety-degree air in July and holding in heat through January's freeze-thaw seesaw. Dual low-E coatings, warm-edge spacers and honest fills matter here in a way milder climates never test. We spec for both seasons, not the showroom.",
+        ]},
+        { h: "The quote is per opening, because the house is", p: [
+          "By the time a Cincinnati house is fifty years old, no two of its openings are quite the same size. Averaging a house from plans is how gaps get foamed instead of fitted. Every unit we order is measured against its own opening, which is slower on day one and right for the next thirty years.",
+        ]},
+        { h: "Storm season includes the glass", p: [
+          "The hail runs that bring us roofing calls crack glazing and dent aluminum cladding on windows facing the weather, and insurance scopes routinely miss both. When we document a storm-hit house, openings are part of the walk — a cracked pane and a bruised sash are the same storm, and they belong on the same claim.",
+        ]},
+        { h: "What replacement day actually looks like", p: [
+          "One opening at a time: the old unit out, the frame probed and repaired where it needs it, the new unit leveled, shimmed, foamed and flashed, trim closed, room vacuumed — then the next. A typical east-side house of twelve to fifteen openings runs two to three days, and no room stays torn up overnight.",
+          "The crew that measures is the crew that installs, which matters more in old housing than new: the person who noticed the racked opening in the northwest bedroom is the person shimming the unit into it. Notes do not survive handoffs; on hundred-year-old houses, we skip the handoff.",
+        ]},
+      ],
+    },
+    columbus: {
+      eyebrow: "Windows in this metro",
+      heading: "The subdivision glass problem, up close",
+      blocks: [
+        { h: "Why whole streets fog together", p: [
+          "An insulated glass unit is two panes, a spacer, a desiccant and a gas fill — and a finite seal holding it together. The units installed across Columbus's boom subdivisions came from the same era of manufacturing and have been aging in lockstep ever since. When the seal goes, moisture gets in, the fill gets out, and the fog you cannot wipe off is the visible symptom of an invisible efficiency loss that started years earlier.",
+        ]},
+        { h: "The builder-grade ceiling", p: [
+          "The original units in most of these houses were chosen by a spreadsheet, not a homeowner. Replacement is the one moment the ceiling lifts: better frames, better glass, better installation — for a house you already know you are keeping. Skipping that moment to install the same grade again is the only real mistake available.",
+        ]},
+        { h: "Air-tightness on open ground", p: [
+          "Central Ohio wind does not just push on walls; it finds every gap around every opening. Infiltration ratings — the spec nobody reads — matter more here than almost anywhere, and installation quality matters more than the rating. Level, shimmed, low-expansion foamed, and tested: the last hour of an install is where a window's winter performance is decided.",
+        ]},
+        { h: "Historic exceptions to everything above", p: [
+          "None of the subdivision logic applies in German Village or on Clintonville's older blocks, where the right answer is usually preserving profiles and sightlines while quietly upgrading the glass. Different problem, different products, same crew — and the review-board paperwork prepared with the quote.",
+        ]},
+        { h: "Reading a failed unit before it fogs", p: [
+          "Fog is the late symptom. Earlier ones: condensation between panes on cold mornings that clears by noon, a window noticeably colder to the hand than its neighbors, sashes that suddenly feel light because the gas fill is gone. Catching seal failure early does not save the unit — nothing does — but it lets you plan the replacement instead of discovering it in January.",
+        ]},
+        { h: "Batch pricing, because the problem arrives in batches", p: [
+          "Since seal failure sweeps a street at a time, we quote Columbus window work with clean per-opening arithmetic that scales — doing eight now and four next spring should not cost more than twelve at once by accident. The itemized quote shows the count math so you can split the job across seasons deliberately.",
+          "One practical note from a decade of these streets: replace the weather-side elevations first. West and south walls age fastest in central Ohio exposure, so if the budget forces an order, that is the order — and your quote will already be sequenced that way when it arrives.",
+        ]},
+      ],
+    },
+    "st-louis": {
+      eyebrow: "Windows in this metro",
+      heading: "Glass against the gradient",
+      blocks: [
+        { h: "The west wall pays the bills", p: [
+          "Take an infrared camera around a St. Louis house in July and the story writes itself: the west and south glass runs ten degrees hotter than the walls around it. Solar heat gain coefficient — SHGC, the number most window shopping ignores — is the working spec here. We tune it by elevation, because blocking heat on the west wall and welcoming light on the north one are both correct.",
+        ]},
+        { h: "Brick changes the install, not the goal", p: [
+          "A window in a masonry opening is anchored, flashed and sealed differently from one in a frame wall — and this metro has more masonry openings than any market we serve. Sloppy masonry installs hide behind caulk for a year or two; ours are detailed for the brick from the start, which is most of why they still work in year twenty.",
+        ]},
+        { h: "What the storm season asks", p: [
+          "Summer cells throw debris as well as rain. For exposed elevations we quote laminated or impact-rated glass as an option with its real price next to it — worth it on some houses, unnecessary on others, and your call once the difference is in writing.",
+        ]},
+        { h: "Sequenced so the house is never open", p: [
+          "St. Louis weather punishes an unglazed opening faster than anywhere we work, so our installs run one opening at a time, removed and finished the same day, sequenced around the forecast. A window job should never involve plywood.",
+        ]},
+        { h: "Humidity is the quiet second enemy", p: [
+          "August air here carries water the way January air carries cold, and single-pane or failed units sweat on the outside in summer the way they frost inside in winter. Beyond comfort, that condensation cycle feeds sill rot and paint failure around the opening — replacing the unit is often what stops a slow-motion carpentry problem, not just a glass one.",
+        ]},
+        { h: "The masonry-to-frame price question", p: [
+          "Homeowners with brick-set windows often expect a premium and are right to ask. The honest answer: the install detail differs more than the price does. Anchoring and sealing to masonry takes care rather than exotic materials, and our per-opening quotes show the difference explicitly instead of burying it in a lump sum.",
+          "The same transparency runs the whole quote: glass package by elevation with the reasoning, any frame repair called out per opening, and the storm-glass option priced separately so you can take it or leave it. A window quote you cannot read line by line is a window quote hiding something.",
+        ]},
+      ],
+    },
+  },
+  siding: {
+  columbus: {
+    eyebrow: "Siding in this metro",
+    heading: "The two Columbus walls, and what each one needs",
+    blocks: [
+      { h: "A subdivision problem arriving on schedule", p: [
+        "Most of the housing ringing Columbus went up in a twenty-year burst, and its original cladding is aging out on the same schedule it went up on. The panels themselves are usually the least of it: that construction era wrapped walls quickly, taped little, and flashed window heads with whatever the schedule allowed. The failures we open up in Dublin or Lewis Center are behind the vinyl far more often than in it.",
+        "So a replacement here is really a wall rebuild wearing a siding job's name — the cladding comes off, the original shortcuts get corrected, and the new panels go over a wall that finally has a working water barrier.",
+      ]},
+      { h: "Wind writes the spec", p: [
+        "Flat ground, young trees, long fetch: a front crossing central Ohio meets nothing that slows it before it meets your west elevation. Siding spec here starts from wind — panel lock strength, fastening schedule, and the discipline of leaving movement room without leaving slack. A panel that rattles in October is a panel that leaves in April.",
+      ]},
+      { h: "The historic streets play by different rules", p: [
+        "German Village's review standards are the strictest, but Bexley, Clintonville and Worthington's older blocks all carry expectations about lap width, shadow line and trim that a subdivision product does not meet. Fiber cement carries most of these projects: it takes the deeper profiles, holds paint, and reads as original from the street.",
+        "We spec what boards have approved before and prepare the documentation a submission needs — the fastest route through a review is showing up with the answer they have already said yes to.",
+      ]},
+      { h: "Hail happens to walls too", p: [
+        "The spring runs that bruise shingles crack aged vinyl, especially panels that have gone brittle in the sun. After a hail event we read walls the way we read roofs — elevation by elevation, photographed — because cladding damage is claimable on the same storm and homeowners routinely leave it off the scope.",
+      ]},
+    ],
+  },
+  "st-louis": {
+    eyebrow: "Siding in this metro",
+    heading: "Cladding a frame wall in a masonry town",
+    blocks: [
+      { h: "The gable trade", p: [
+        "Drive any street off Kingshighway and look up: brick to the eaves, then a frame gable wearing whatever was affordable the last time someone worked on it. Those gables, plus dormers and the rear additions that generations added to city houses, are the classic St. Louis siding job. They are small in square feet and dense in detail — every edge terminates against masonry, and the flashing at that line decides whether the wall works.",
+      ]},
+      { h: "What the swing does to a wall", p: [
+        "Between a July afternoon and a January night, this metro asks cladding to survive one of the widest working temperature ranges in the country. Vinyl grows and shrinks visibly across that span; fasteners back out of it a little more every cycle; caulk joints open. The spec answer is material chosen for stability, hung with engineered movement room — and honest advice about which products tolerate a western exposure here and which quietly do not.",
+      ]},
+      { h: "Ranches reward straight lines", p: [
+        "South County's mid-century stock — Affton, Mehlville, Oakville, out to Fenton — offers the opposite job: enormous, simple, single-story runs. Production efficiency makes these the best-value siding work in the metro, and the long sightlines punish any course that wanders. Our crews string and check these walls obsessively because on a ranch, straight IS the craftsmanship.",
+      ]},
+      { h: "After the storm, look at the walls", p: [
+        "The same summer cells that drive our roofing work strafe siding on the windward side — cracked panels, punched-through hail hits on brittle older vinyl, creased aluminum on homes that still carry it. We photograph and write up wall damage with the same slope-by-slope discipline as roof damage, because carriers treat documented elevations very differently from a homeowner's guess.",
+      ]},
+    ],
+  },
   cincinnati: {
     eyebrow: "Siding in this metro",
     heading: "What Cincinnati walls ask of their siding",
@@ -389,6 +781,7 @@ export const MARKET_SIDING_DEPTH = {
         "Tear-off to the sheathing, repair of what turns up, housewrap lapped and taped, flashing at every opening and transition, the cladding itself, and trim, soffit and fascia detailed in the same pass. One crew, one project manager from our Milford office, and a written scope before anyone touches the wall — across Hamilton, Clermont, Butler and Warren counties and the Northern Kentucky river towns.",
       ]},
     ],
+  },
   },
 };
 

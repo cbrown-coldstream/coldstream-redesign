@@ -29,7 +29,7 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
-import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, MARKET_SIDING_DEPTH, localFor } from "../../data/services.js";
+import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, MARKET_HUB_DEPTH, localFor } from "../../data/services.js";
 import MarketDepth from "../../components/MarketDepth.astro";
 import PricingCalculator from "../../components/PricingCalculator.astro";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
@@ -134,11 +134,11 @@ const serviceSchema = {
       straight-line wind for central Ohio, hail for St. Louis. See MARKET_ROOFING_DEPTH. */}
   {sKey === "roofing" && <MarketDepth market={market} depth={MARKET_ROOFING_DEPTH[mSlug]} />}
 
-  {/* SIDING DEPTH, per market where written (Rambow audit phase 2, 2026-08-31): the hub pages
-      measured 71% cross-market overlap, and the fix is each market carrying its own material
-      argument. Renders nothing for markets not yet rewritten — Cincinnati first, by instruction,
-      the other two after review. */}
-  {sKey === "siding" && <MarketDepth market={market} depth={MARKET_SIDING_DEPTH[mSlug]} />}
+  {/* HUB DEPTH, per service per market (Rambow audit phases 2 and continuation): siding,
+      windows and gutters each carry a market-specific material argument, written from scratch
+      per metro so no two markets share a sentence. Roofing keeps its own block above — those
+      pages are the audit's quality bar and are deliberately untouched. */}
+  {MARKET_HUB_DEPTH[sKey] && <MarketDepth market={market} depth={MARKET_HUB_DEPTH[sKey][mSlug]} />}
 
   {/* PRICING CALCULATOR (audit phase 5) — labeled pending card until the owner's multipliers
       land in data/leads.js; roofing adds the instant-quote CTA alongside, per the brief. */}
