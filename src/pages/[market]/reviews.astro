@@ -30,7 +30,7 @@ import OfferBand from "../../components/OfferBand.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, businessId } from "../../data/markets.js";
-import { TESTIMONIALS } from "../../data/claims.js";
+import { TESTIMONIALS, gbpFor } from "../../data/claims.js";
 
 export async function getStaticPaths() {
   const { marketsWithReviews } = await import("../../data/claims.js");
@@ -58,10 +58,91 @@ const schema = reviews
   }));
 
 const servedFrom = `Served from our ${office.city} office.`;
+
+// PER-MARKET COPY (audit continuation, 2026-08-31): these three pages measured 69% overlap
+// because everything was one template with the city swapped. Every block below is written per
+// metro. THE LINE THAT DOES NOT MOVE: no invented testimonials, no names, no quotes — the pages
+// stay noindex until the real Google pull lands, and the only "reviews" language describes
+// where the real ones live. gbpFor() links each market's actual Google profile (sourced).
+const gbp = gbpFor(mSlug);
+const L = {
+  cincinnati: {
+    title: "Cincinnati Reviews | Coldstream Exteriors",
+    description: "Where Cincinnati homeowners review our roofing, siding and gutter work — and how to check any contractor's reviews before hiring. Milford office: (513) 258-0450.",
+    headline: "Cincinnati Homeowners, in Their Own Words",
+    sub: "The reviews of our Cincinnati crews live where we cannot edit them — on Google. This page is the honest route to them.",
+    emptyH: "Read us on Google before you call us",
+    empty1: "We do not write testimonials and sign customers' names to them, and we never will. Every review of our Cincinnati team sits on our public Google Business Profile, written by the homeowner who lived through the project, where nothing can be trimmed or polished by us.",
+    empty2: "We are building the plumbing that republishes those reviews here with each one linked to its original. Until it ships, go straight to the source — or call (513) 258-0450 and we will connect you with a recent east-side or West Chester customer who has agreed to take the call.",
+    aboutH: "What Cincinnati reviews tend to describe",
+    about: [
+      "Most of our Cincinnati work is roofing and siding on the housing the metro is actually made of: hail and wind claims after spring storms, tear-off replacements on Anderson Township and Loveland ranches, Hardie re-sides on the older streets of Hyde Park and Pleasant Ridge, gutter systems under Clermont County's canopy. When homeowners here write about us, that is the work they are describing.",
+      "The pattern we work hardest to keep in those reviews: the person who quoted the job ran the job, the number did not move after signing, and the crew's magnet sweep found the nails before anyone's tires did. Read a handful and judge whether we manage it.",
+    ],
+    vetH: "How to read any roofer's reviews — ours included",
+    vet: [
+      "Read the threes, not just the fives and ones — mid-range reviews carry the honest detail. Check dates cluster around storm seasons, which is when contractors are actually tested. Look for named neighborhoods and specific work; vague praise is cheap. And weigh how a company answers its worst review more than how it celebrates its best.",
+    ],
+    faq: [
+      { q: "Where do I find your Cincinnati reviews right now?", a: "On our Google Business Profile for the Cincinnati office — linked on this page. They are unedited and public, which is exactly why we point there instead of publishing our own selection." },
+      { q: "Can I talk to a past customer directly?", a: "Yes — we keep a short list of Cincinnati customers who have agreed to be references. Ask when you call and we will make the introduction; we never hand out details without permission." },
+      { q: "Do you ask customers for reviews?", a: "We ask once, at the final walkthrough, when the work is in front of both of us. No incentives, no follow-up campaigns, no review gating — the profile is what honest asking produces." },
+      { q: "Why is this page so sparse?", a: "Because the real reviews are not on it yet, and we will not pad it with invented ones. When the republishing work ships, every entry here will link back to its Google original." },
+    ],
+  },
+  columbus: {
+    title: "Columbus Reviews | Coldstream Exteriors",
+    description: "Our Columbus crews' reviews live unedited on Google — here is the direct route, plus how we earn them. Galloway office: (614) 812-0811.",
+    headline: "The Reviews Our Columbus Work Earns",
+    sub: "Nothing on this page is polished by us. The real record lives on Google, and the fastest way to judge our Galloway crews is to go read it.",
+    emptyH: "The record lives on Google, unedited",
+    empty1: "A contractor's own website is the one place review-reading should make you suspicious — which is why we keep this simple. Our Columbus team's reviews are on our public Google Business Profile, in the reviewers' words, dated, and beyond our editing reach.",
+    empty2: "Republishing them here, each linked to its original, is on our build list. In the meantime the profile is one tap away — or ring (614) 812-0811 and ask for a reference from your part of the metro; Dublin to Gahanna, someone has agreed to talk.",
+    aboutH: "The jobs behind the Columbus reviews",
+    about: [
+      "Read through our Columbus profile and you will find the metro's exterior life in miniature: wind-damage calls after the fronts that cross the flat ground, whole-street vinyl replacements as the nineties subdivisions age out together, seal-failed window batches in Hilliard and Westerville, and the careful Hardie work the historic districts require. That mix — storm response plus planned replacement — is what our Galloway office does all day.",
+      "What we want every one of those reviews to be able to say: the assessment was straight, the crew showed when promised, and the street was cleaner at the end than the start. Hold us to it.",
+    ],
+    vetH: "A Columbus homeowner's review checklist",
+    vet: [
+      "After a big storm, sort reviews by date — the crush weeks reveal which companies keep their standards under load. Cross-check that reviewers name real places and real work. Watch for the company's replies: defensiveness in public is a preview of the claims process. And treat a profile with only perfect scores as a question, not an answer.",
+    ],
+    faq: [
+      { q: "Where are your Columbus reviews?", a: "On the Google Business Profile for our Galloway office — linked here. Public, dated, unedited by us." },
+      { q: "How do you collect reviews?", a: "One ask, at the walkthrough, with the finished work in view. No gating software deciding who gets asked, no rewards — which is why the profile reads like real customers, because it is only that." },
+      { q: "Can I get a reference in my neighborhood?", a: "Usually — the Columbus list of customers willing to talk covers most of the metro's rings. Ask when you call and we will match you to the nearest one." },
+      { q: "When will reviews appear on this page?", a: "When the republishing pipeline ships — each entry will carry a link to its Google original so it can be checked. Nothing appears here that cannot be verified there." },
+    ],
+  },
+  "st-louis": {
+    title: "St. Louis Reviews | Coldstream Exteriors",
+    description: "St. Louis homeowners review our storm work, roofs and siding on Google — unedited. Direct link here, references on request: (314) 380-8111.",
+    headline: "What St. Louis Neighbors Tell Each Other",
+    sub: "In a storm-tested metro, reputation is the whole game. Ours is on Google, in customers' own words — this page points you straight at it.",
+    emptyH: "Judge us by the public record",
+    empty1: "St. Louis has seen every flavor of storm-chasing contractor, which is exactly why we will not publish hand-picked praise here. The reviews of our Geyer Road team live on our public Google Business Profile — written by the homeowners, dated, and untouchable by us.",
+    empty2: "We are building the machinery to mirror them onto this page with links back to each original. Until then, the profile is the source of truth — or call (314) 380-8111 and ask to speak with a recent customer in Kirkwood, South County or wherever is nearest you.",
+    aboutH: "What the St. Louis reviews are about",
+    about: [
+      "Storm response dominates: hail documentation that held up to adjusters, tarps that went on the same day, roofs in Ballwin and Florissant replaced on the storm's schedule rather than ours. Between storms the reviews shift to the planned work — ranch re-sides across South County, gable and addition siding on the city's brick streets, gutters engineered for the oak canopy.",
+      "The through-line we aim for in every one: documentation before persuasion, a written number that held, and no payment until the walkthrough. If the profile stops saying that, we have earned the correction.",
+    ],
+    vetH: "Reading reviews in a storm-chaser market",
+    vet: [
+      "In this metro, check where a company was reviewed BEFORE the last big hail line — storm chasers have no history and no future. Confirm the office address is real and local. Look for reviews that mention the insurance process going smoothly; that is where a St. Louis roofer proves out. And be wary of any profile whose reviews all landed in one month.",
+    ],
+    faq: [
+      { q: "Where can I read your St. Louis reviews today?", a: "On the Google profile for our Geyer Road office — linked on this page, public and unedited." },
+      { q: "How is Coldstream different from the trucks that show up after hail?", a: "We were here before the storm and we will be here after: a staffed local office, local crews, and a review history that predates any single weather event. That is checkable, which is the point." },
+      { q: "Will you connect me with a past customer?", a: "Gladly, from the list of St. Louis customers who have agreed to it — tell us your area and we will find the nearest. Nobody's contact information moves without their say-so." },
+      { q: "Why not just paste your best reviews here?", a: "Because unverifiable praise on our own site is worth nothing to a careful homeowner. When reviews appear here, each will link to its Google original — verifiable or absent, no third option." },
+    ],
+  },
+}[mSlug];
 ---
 <BaseLayout
-  title={`Customer Reviews in ${market.name} | Coldstream Exteriors`}
-  description={`What ${market.name} homeowners say about their roofing, siding, window and gutter projects with Coldstream Exteriors. ${servedFrom}`}
+  title={L.title}
+  description={L.description}
   canonical={`/${mSlug}/reviews/`}
   market={market}
   noindex={empty}
@@ -80,8 +161,8 @@ const servedFrom = `Served from our ${office.city} office.`;
   <Hero
     market={market}
     eyebrow={`${market.name} · Reviews`}
-    headline={`What ${market.name} Homeowners Say`}
-    sub={`Reviews from customers across ${market.region}, in their own words. ${servedFrom}`}
+    headline={L.headline}
+    sub={L.sub}
     bullets={["Free, no-obligation inspection", "Licensed and insured", "Industry-leading warranties"]}
   />
 
@@ -90,18 +171,13 @@ const servedFrom = `Served from our ${office.city} office.`;
   {empty && (
     <section>
       <div class="wrap" style="max-width:720px">
-        <div class="shead"><span class="eyebrow">Reviews</span><h2>Our {market.name} reviews live on Google</h2></div>
-        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
-          We are not going to write testimonials and put customers' names under them. The reviews
-          for our {market.name} team sit on our Google Business Profile in the reviewers' own
-          words, and we are in the middle of pulling them across so that every one published here
-          links back to the original and can be checked.
-        </p>
-        <p style="color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7">
-          Until that is done, this page has nothing on it worth reading — which is the honest state
-          of it. Call {market.phone} and we will happily put you in touch with a recent customer
-          who has agreed to talk.
-        </p>
+        <div class="shead"><span class="eyebrow">Reviews</span><h2>{L.emptyH}</h2></div>
+        <p class="rv-p">{L.empty1}</p>
+        <p class="rv-p">{L.empty2}</p>
+        {gbp && (
+          <p class="rv-cta"><a class="btn" href={gbp} target="_blank" rel="noopener nofollow">
+            Read our {market.name} reviews on Google →</a></p>
+        )}
       </div>
     </section>
   )}
@@ -113,14 +189,25 @@ const servedFrom = `Served from our ${office.city} office.`;
     reviews={reviews}
   />
 
+  <section class="mist">
+    <div class="wrap" style="max-width:760px">
+      <div class="shead"><span class="eyebrow">Behind the stars</span><h2>{L.aboutH}</h2></div>
+      {L.about.map((p) => <p class="rv-p">{p}</p>)}
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" style="max-width:760px">
+      <div class="shead"><span class="eyebrow">Worth knowing</span><h2>{L.vetH}</h2></div>
+      {L.vet.map((p) => <p class="rv-p">{p}</p>)}
+    </div>
+  </section>
+
   <ServicesGrid market={market} heading="What we do here" intro="The same crews and the same warranty across every service." />
 
   <OfferBand />
 
-  <FAQ items={[
-    { q: "Where do these reviews come from?", a: "Our Google Business Profile for this market. They are the reviewers' own words, published as written." },
-    { q: "Can I speak to a recent customer?", a: "Ask, and where a customer has agreed to it we will put you in touch. We do not hand out anyone's details without their say-so." },
-  ]} />
+  <FAQ items={L.faq} />
 
   <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
 
@@ -128,3 +215,8 @@ const servedFrom = `Served from our ${office.city} office.`;
     <SiteFooter market={market} />
   </Fragment>
 </BaseLayout>
+
+<style>
+  .rv-p{color:var(--cs-text-muted);font-size:1.04rem;line-height:1.7;margin:0 0 14px}
+  .rv-cta{margin:20px 0 0}
+</style>
