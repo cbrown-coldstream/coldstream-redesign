@@ -26,7 +26,7 @@
 
 export const HARDIE_SHOWCASE = [
   { base: "hardie-columbus-front-1400x1050", dir: "projects", w: 1400, h: 1050,
-    alt: "Two-storey home in the Columbus area with new James Hardie fiber cement siding in slate blue",
+    alt: "Two-story home in the Columbus area with new James Hardie fiber cement siding in slate blue",
     label: "James Hardie fiber cement", caption: "Full re-side, Columbus area — completed 2026" },
   { base: "hardie-columbus-angle-1400x1050", dir: "projects", w: 1400, h: 1050,
     alt: "Corner view of the same Columbus-area home showing James Hardie lap siding and white trim",
@@ -42,6 +42,6 @@ export const SIDING_SHOWCASE = [
     alt: "Completed Coldstream siding project on a Cincinnati home",
     label: "Siding", caption: "Completed siding project, Cincinnati" },
   { base: "415775438-848354917293152-631252259915544195-n-1", dir: "live", w: 900, h: 675,
-    alt: "Blue two-storey home with siding installed by Coldstream Exteriors",
+    alt: "Blue two-story home with siding installed by Coldstream Exteriors",
     label: "Siding", caption: "Whole-home siding by our crew" },
 ];

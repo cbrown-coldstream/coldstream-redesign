@@ -264,7 +264,7 @@ const totalSections = all.reduce((n, u) => n + (REVIEW_SECTIONS[laneFor(u.path, 
     //
     // Supabase's JS client would be a CDN script on a page that currently loads none, for calls
     // that are four headers and a fetch. The repo's rule is no client framework; this honours it
-    // and keeps the board's behaviour readable in one file.
+    // and keeps the board's behavior readable in one file.
     //
     // WHAT IS STORED WHERE. The session token goes in localStorage — that is the browser's own
     // login, not the team's data. Every tick, note and edit request lives in Postgres, so two

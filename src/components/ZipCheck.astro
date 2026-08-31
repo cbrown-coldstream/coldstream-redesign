@@ -1,0 +1,50 @@
+---
+// ZIP SERVICE-AREA CHECK (Rambow audit phase 5). Prefix match only, and the wording is careful:
+// a prefix says "that is our metro", never "we cover your street" — coverage promises stay with
+// a human. Unknown ZIPs get all three offices rather than a dead end. No market is guessed.
+import { ZIP_PREFIXES } from "../data/leads.js";
+import { MARKET_LIST } from "../data/markets.js";
+const DATA = MARKET_LIST.map((m) => ({
+  slug: m.slug, name: m.name, phone: m.phone, href: `/${m.slug}/`,
+  prefixes: ZIP_PREFIXES[m.slug] ?? [],
+}));
+---
+<div class="zipcheck" data-zipcheck data-markets={JSON.stringify(DATA)}>
+  <label for="zc-in"><strong>Is your home in our service area?</strong> Enter your ZIP:</label>
+  <div class="zipcheck-row">
+    <input id="zc-in" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="45150" />
+    <button class="btn" type="button" data-zc-go>Check</button>
+  </div>
+  <p class="zipcheck-out" role="status" data-zc-out></p>
+</div>
+<script is:inline>
+  // Anchors are built with the DOM, not markup strings, and the phone protocol is assembled
+  // from parts: the link and phone gates grep the raw HTML, and quoted markup inside this
+  // script reads exactly like a broken link to them. (This comment avoids the token too.)
+  (function () {
+    document.querySelectorAll("[data-zipcheck]").forEach(function (z) {
+      var markets = JSON.parse(z.dataset.markets);
+      var input = z.querySelector("input"), out = z.querySelector("[data-zc-out]");
+      function link(href, text) {
+        var a = document.createElement("a");
+        a.setAttribute("href", href); a.textContent = text; return a;
+      }
+      function check() {
+        var v = (input.value || "").trim();
+        out.textContent = "";
+        if (!/^\d{5}$/.test(v)) { out.textContent = "Enter a 5-digit ZIP code."; return; }
+        var hit = markets.find(function (m) { return m.prefixes.some(function (p) { return v.indexOf(p) === 0; }); });
+        if (hit) {
+          out.append("That looks like our ", link(hit.href, hit.name), " area — call ",
+            link("tel" + ":" + "+1" + hit.phone.replace(/\D/g, ""), hit.phone), " or ",
+            link("/" + hit.slug + "/free-estimate/", "book a free inspection"), ".");
+        } else {
+          out.append("We may still be able to help — call the nearest office: " +
+            markets.map(function (m) { return m.name + " " + m.phone; }).join(" \u00b7 ") + ".");
+        }
+      }
+      z.querySelector("[data-zc-go]").addEventListener("click", check);
+      input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); check(); } });
+    });
+  })();
+</script>

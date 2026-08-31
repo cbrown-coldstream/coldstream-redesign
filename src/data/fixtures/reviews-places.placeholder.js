@@ -47,7 +47,7 @@ export const SAMPLE_PLACES_PLACEHOLDERS = {
     columbus: {
       reviews: [
         { name: "Sample — Columbus One", rating: 5,
-          quote: "SAMPLE TEXT, NOT A REAL REVIEW. Siding on a two-storey, written at the length people actually write at when they are pleased and not trying.",
+          quote: "SAMPLE TEXT, NOT A REAL REVIEW. Siding on a two-story, written at the length people actually write at when they are pleased and not trying.",
           author_url: null, profile_photo_url: null, relative_time_description: "5 days ago" },
         { name: "Sample — Columbus Two", rating: 5,
           quote: "SAMPLE TEXT. Storm damage and an insurance adjuster.",

@@ -70,7 +70,7 @@ const chosen = Boolean(market.slug);
           {MARKET_LIST.map((m) => (
             <option value={m.slug} selected={market.slug === m.slug}>{m.cityState}</option>
           ))}
-          {/* The empty value doubles as the placeholder, Mr. Roof style. Behaviour is unchanged:
+          {/* The empty value doubles as the placeholder, Mr. Roof style. Behavior is unchanged:
               choosing it is still the national default the router already handles. */}
           <option value="" selected={!market.slug}>Select Your Location</option>
         </select>

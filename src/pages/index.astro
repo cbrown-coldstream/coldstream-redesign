@@ -60,6 +60,7 @@ const heroTrust = [
   "Fully Insured",
 ];
 import { organizationNode } from "../data/seo.js";
+import { INSTAGRAM } from "../data/leads.js";
 import { national as page } from "../data/pages/national.js";
 
 const market = NATIONAL;
@@ -181,6 +182,24 @@ const org = organizationNode();
       bottom") — one round after §4 moved it here, two after an earlier round argued it belonged
       under the badge row. Logged as the third move, this time off the page. The routes the market
       rule allows remain: the utility-bar selector, the footer's Markets column, /service-areas/. */}
+  {/* INSTAGRAM (audit phase 5): a labeled placeholder until the embed config lands in
+      data/leads.js — placeholders over absence, never a fake feed. */}
+  {INSTAGRAM ? (
+    <section class="igfeed" aria-labelledby="ig-h">
+      <div class="wrap"><h2 id="ig-h">Follow the work</h2><Fragment set:html={INSTAGRAM.embed} /></div>
+    </section>
+  ) : (
+    <section class="igfeed" aria-labelledby="ig-h">
+      <div class="wrap">
+        <h2 id="ig-h">Follow the work</h2>
+        <div class="igfeed-pending">
+          <p><strong>Instagram feed pending</strong> — the live feed connects here once the
+          account embed is supplied. Nothing fake in the meantime, on purpose.</p>
+        </div>
+      </div>
+    </section>
+  )}
+
   <CTABand market={market} heading={page.cta.heading} body={page.cta.body} />
 
   <GeoRedirect markets={GEO} />

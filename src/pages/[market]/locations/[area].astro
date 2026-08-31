@@ -65,7 +65,10 @@ const servedFrom = `Served from our ${office.city} office.`;
   {/* "& Exteriors" dropped: loc.name can be long ("West County and North County") and the
       pair pushed past 70 characters, where Google stops showing the end of the title. */}
   title={`${loc.name} Roofing | Coldstream Exteriors`}
-  description={loc.blurb}
+  {/* Phase 3 (Rambow audit): the blurb is on-page copy, not a search snippet — 81–91 chars
+      with no reason to click. The meta description gets its own line with the towns AND the
+      offer, and the blurb stays what the page shows. */}
+  description={loc.description ?? loc.blurb}
   canonical={`/${mSlug}/locations/${area}/`}
   market={market}
   breadcrumbs={[

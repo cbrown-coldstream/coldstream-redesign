@@ -226,7 +226,7 @@ export const national = {
       { q: "Do I have to pay anything upfront?",
         a: "There is no deposit to book an inspection and no charge for the quote. Payment terms for the work itself are set out in your written quote before anything starts, so there is nothing to discover later." },
       { q: "How long does a typical roof replacement take?",
-        a: "A straightforward ranch is usually a single day. A larger two-storey with a complex roofline runs two to three. Weather moves the schedule and we tell you when it does. Emergency repairs we can often get to the same day or the next." },
+        a: "A straightforward ranch is usually a single day. A larger two-story with a complex roofline runs two to three. Weather moves the schedule and we tell you when it does. Emergency repairs we can often get to the same day or the next." },
       { q: "Do you work with insurance companies on storm damage claims?",
         a: "Yes, and we handle the paperwork. We inspect, photograph and document the damage the way an adjuster needs it documented, meet them on site where we can, and deal with them directly afterwards so you are not in the middle of it." },
       { q: "What roofing and siding materials do you install?",

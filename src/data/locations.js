@@ -59,6 +59,7 @@ export const LOCATIONS = {
       east: {
         name: "Cincinnati East",
         blurb: "The east side and Clermont County — Milford, Loveland, Batavia, Amelia and the river towns.",
+        description: "Roofing, siding and gutters on Cincinnati's east side and Clermont County — Milford, Loveland, Batavia and the river towns. Free inspection: (513) 258-0450.",
         towns: [
           "Amberley Village", "Amelia", "Batavia", "Bethel", "Blue Ash", "Goshen", "Indian Hill",
           "Kenwood", "Landen", "Loveland", "Madeira", "Maineville", "Mason", "Milford",
@@ -69,6 +70,7 @@ export const LOCATIONS = {
       west: {
         name: "Cincinnati West",
         blurb: "The west side and Butler County — Colerain, Cleves, Ross, Fairfield and Hamilton.",
+        description: "Roofing, siding and gutters on Cincinnati's west side and in Butler County — Colerain, Fairfield, Ross and Hamilton. Free inspection: (513) 258-0450.",
         towns: ["Cleves", "Colerain", "Fairfield", "Hamilton", "Ross", "West Chester"],
         jobs: [],
       },
@@ -122,6 +124,7 @@ export const LOCATIONS = {
       south: {
         name: "South County and South City",
         blurb: "South County and the southern city — Kirkwood, Webster Groves, Sunset Hills, Oakville, Mehlville, Affton and down through Fenton to Arnold.",
+        description: "Roofing, siding and gutters across South County — Kirkwood, Webster Groves, Oakville, Mehlville and Affton. Free inspection: (314) 380-8111.",
         towns: [
           "Affton", "Arnold", "Concord", "Crestwood", "Fenton", "Green Park", "House Springs",
           "Kirkwood", "Lemay", "Mehlville", "Murphy", "Oakville", "Sunset Hills", "The Hill",
@@ -132,6 +135,7 @@ export const LOCATIONS = {
       north: {
         name: "West County and North County",
         blurb: "West County and the inner ring — Chesterfield, Town and Country, Creve Coeur, Clayton, Des Peres and Maryland Heights — plus Berkeley in North County.",
+        description: "Roofing, siding and gutters across West County and the inner ring — Chesterfield, Creve Coeur, Clayton and Des Peres. Free inspection: (314) 380-8111.",
         towns: [
           "Berkeley", "Chesterfield", "Clayton", "Creve Coeur", "Des Peres", "Ellisville",
           "Maplewood", "Maryland Heights", "Richmond Heights", "Town and Country",

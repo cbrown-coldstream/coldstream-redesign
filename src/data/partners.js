@@ -23,7 +23,7 @@
 // without asserting the tier. Ask GAF's brand-assets page for a plain mark, drop it in
 // /public/partners/, set `file`/`w`/`h` below, and it switches with no other change.
 //
-// `tint` colours the wordmark fallback. It is not applied to real logos — a logo row is a
+// `tint` colors the wordmark fallback. It is not applied to real logos — a logo row is a
 // statement of fact and the marks are shown as their owners drew them.
 
 export const PARTNERS = [
@@ -85,7 +85,7 @@ export const PARTNERS = [
   { key: "malarkey", name: "Malarkey Roofing Products", tag: "Roofing", marketOnly: true,
     alt: "Malarkey Roofing Products", tint: "#00A651",
     file: "/partners/malarkey.svg", w: 209, h: 44,
-    source: "https://www.malarkeyroofing.com/app/themes/malarkey-roofing/src/images/logo-horizontal-full-color.svg — the manufacturer's own horizontal full-colour mark" },
+    source: "https://www.malarkeyroofing.com/app/themes/malarkey-roofing/src/images/logo-horizontal-full-color.svg — the manufacturer's own horizontal full-color mark" },
 
   { key: "norandex", name: "Norandex", tag: "Siding",
     alt: "Norandex", tint: "#0B5D3B",

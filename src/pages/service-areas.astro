@@ -23,6 +23,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import UtilityBar from "../components/UtilityBar.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import ServiceAreaMap from "../components/ServiceAreaMap.astro";
+import ZipCheck from "../components/ZipCheck.astro";
 import BadgeRow from "../components/BadgeRow.astro";
 import HowItWorks from "../components/HowItWorks.astro";
 import FAQ from "../components/FAQ.astro";
@@ -88,6 +89,7 @@ const schema = {
         address with its own number — the people who quote your job are based in your metro, not
         routed to it.
       </p>
+      <ZipCheck />
       <ul class="sa-jump">
         {MARKET_LIST.map((m) => (
           <li><a href={`#${m.slug}`}>{m.name}<span>{m.servedAreas.length} communities</span></a></li>
@@ -157,7 +159,7 @@ const schema = {
     eyebrow="What happens next"
     heading="Booking one is four steps, and the first two are free"
     steps={[
-      { title: "Tell us where you are", body: "The ZIP on the form routes you to the crew that covers it. No call centre in between." },
+      { title: "Tell us where you are", body: "The ZIP on the form routes you to the crew that covers it. No call center in between." },
       { title: "We come and look", body: "A real inspection of what is actually there — roof walked, not measured off a satellite image." },
       { title: "A number in writing", body: "Scope, materials and price before anything is ordered, with no obligation attached to it." },
       { title: "Our own crew does the work", body: "The people who quoted it. Site cleared at the end of the job, and nothing due until you are satisfied." },

@@ -1,0 +1,37 @@
+---
+// "WHERE ARE YOU VISITING FROM?" — the scroll-triggered market prompt (Rambow audit phase 5).
+//
+// The rules from the review call, kept exactly: PROMINENT, not automatic — this never redirects
+// anyone (the audit and the site's own SEO rules both forbid geo-redirects); it asks once,
+// routes on a tap, and stays dismissed once dismissed (localStorage). National pages only —
+// a market page IS an answer to the question. Appears after real scroll intent (45%), sits
+// above the mobile action bar, and reduced-motion gets no slide animation.
+import { MARKET_LIST } from "../data/markets.js";
+---
+<div class="mprompt" data-mprompt hidden>
+  <p class="mprompt-q">Where are you visiting from?</p>
+  <div class="mprompt-btns">
+    {MARKET_LIST.map((m) => <a href={`/${m.slug}/`}>{m.name}</a>)}
+  </div>
+  <button class="mprompt-x" type="button" aria-label="Dismiss" data-mprompt-x>✕</button>
+</div>
+<script is:inline>
+  (function () {
+    var el = document.querySelector("[data-mprompt]");
+    if (!el || localStorage.getItem("cs-mprompt-dismissed")) return;
+    var shown = false;
+    function onScroll() {
+      if (shown) return;
+      var d = document.documentElement;
+      if (d.scrollTop / (d.scrollHeight - d.clientHeight) > 0.45) {
+        shown = true; el.hidden = false;
+        window.removeEventListener("scroll", onScroll);
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    el.querySelector("[data-mprompt-x]").addEventListener("click", function () {
+      el.hidden = true;
+      localStorage.setItem("cs-mprompt-dismissed", "1");
+    });
+  })();
+</script>

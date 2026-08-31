@@ -83,14 +83,18 @@ export const MARKETS = {
     // no list" are different facts, and only the first one survives someone editing the default.
     partners: ["james-hardie", "gaf", "owens-corning", "certainteed", "provia", "royal", "norandex", "wincore"],    services: ["roofing", "siding", "windows", "gutters", "commercial-roofing"],
     reviews: null,          // PENDING — see REVIEWS note above
-    // Replaces ~117 thin neighbourhood pages. These link to the surviving location pages, which
+    // Replaces ~117 thin neighborhood pages. These link to the surviving location pages, which
     // is the internal linking site-plan calls "the piece doing the job those 250 pages were
     // built to do" — without it the location pages are orphans.
+    // Anderson Township, Hyde Park, Mt. Lookout and Oakley joined 2026-08-31 (Rambow audit,
+    // phase 4): Cincinnati named the fewest of its own neighborhoods of the three markets, and
+    // it is the largest market. All four are real, core service-area communities.
     servedAreas: [
-      "Amberley Village", "Amelia", "Batavia", "Bethel", "Blue Ash", "Cleves", "Cold Spring",
-      "Colerain", "Fairfield", "Goshen", "Pleasant Ridge", "Silverton", "Hamilton",
+      "Amberley Village", "Amelia", "Anderson Township", "Batavia", "Bethel", "Blue Ash",
+      "Cleves", "Cold Spring", "Colerain", "Fairfield", "Goshen", "Hyde Park", "Hamilton",
       "Indian Hill", "Kenwood", "Landen", "Loveland", "Madeira", "Maineville", "Mason",
-      "Milford", "Montgomery", "Ross", "West Chester",
+      "Milford", "Montgomery", "Mt. Lookout", "Oakley", "Pleasant Ridge", "Ross",
+      "Silverton", "West Chester",
     ],
   },
 
@@ -307,7 +311,7 @@ export const homeownerServicesFor = (market) =>
  * NATIONAL PATH → MARKET-RELATIVE VARIANT, for the in-place market swap on national pages.
  *
  * The utility-bar selector swaps the phone and the partner logos without navigating (see
- * UtilityBar's two-behaviours note). The owner pointed out (2026-08-29) that the What We Do
+ * UtilityBar's two-behaviors note). The owner pointed out (2026-08-29) that the What We Do
  * links did not join that swap — pick Cincinnati and the cards still sent you to the national
  * pages. Links annotated with data-mhref={MARKET_VARIANTS[href]} get rewritten client-side to
  * /{slug}/{variant} when a market is chosen, and restored when "Other / not sure" is.

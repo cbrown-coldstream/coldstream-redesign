@@ -3,7 +3,7 @@
 // The plan's uniqueness bar applies: a unique H1 not reused across markets, local proof, unique
 // FAQ answers, the local phone and address. Copy below is written for Central Ohio — it is not
 // the Cincinnati file with the city swapped, which is exactly the pattern the consolidation is
-// removing (the audit found 100+ neighbourhood pages that differed only by synonyms).
+// removing (the audit found 100+ neighborhood pages that differed only by synonyms).
 export const columbus = {
   title: "Roofing & Exteriors in Columbus, OH | Coldstream Exteriors",
   description:

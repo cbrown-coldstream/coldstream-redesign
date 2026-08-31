@@ -1,5 +1,6 @@
 ---
-// The served-areas block. site-plan calls this "the piece doing the job those 250 neighbourhood
+import ServiceAreaMap from "./ServiceAreaMap.astro";
+// The served-areas block. site-plan calls this "the piece doing the job those 250 neighborhood
 // pages were built to do" — one list naming every town, linking to the location pages that
 // survive. Google finds pages by following links, so this is what keeps local coverage visible
 // after the consolidation; without it the location pages are orphans.
@@ -113,6 +114,14 @@ const chipFor = (town) => {
       <p style="text-align:center;color:var(--cs-text-muted)">Service-area list pending for this market.</p>
     )}
   </div>
+  {/* THE MARKET'S MAP (audit phase 5): the same embed the service-areas page uses, one per
+      market, lazy-loaded. Keyless fallback pins the office address — identical to the GBP
+      listing address; with PUBLIC_GMAPS_KEY set the Places embed is used instead. */}
+  {market?.slug && (
+    <div class="wrap sa-map">
+      <ServiceAreaMap market={market} height={300} />
+    </div>
+  )}
 </section>
 <style>
   /* Unlinked towns match the chips visually but are not interactive — no pointer, no hover,

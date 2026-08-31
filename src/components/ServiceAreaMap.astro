@@ -1,5 +1,5 @@
 ---
-// THE MAP. One per market, centred on that market's office.
+// THE MAP. One per market, centered on that market's office.
 //
 // NO API KEY IS REQUIRED FOR WHAT THIS DOES, and that is deliberate. Google's Maps Embed API and
 // the Maps JavaScript API both want a key, a billing account and a referrer allowlist; a keyless
@@ -30,7 +30,7 @@ const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeU
 <figure class="samap">
   <iframe
     src={src}
-    title={`Map of the ${market.name} service area, centred on our ${market.office.city} office`}
+    title={`Map of the ${market.name} service area, centered on our ${market.office.city} office`}
     height={height}
     loading="lazy"
     referrerpolicy="no-referrer-when-downgrade"

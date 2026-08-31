@@ -31,6 +31,7 @@ import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.j
 import { TESTIMONIALS } from "../../data/claims.js";
 import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, MARKET_SIDING_DEPTH, localFor } from "../../data/services.js";
 import MarketDepth from "../../components/MarketDepth.astro";
+import PricingCalculator from "../../components/PricingCalculator.astro";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
 import { PROCESS, PROCESS_INTRO } from "../../data/process.js";
@@ -138,6 +139,12 @@ const serviceSchema = {
       argument. Renders nothing for markets not yet rewritten — Cincinnati first, by instruction,
       the other two after review. */}
   {sKey === "siding" && <MarketDepth market={market} depth={MARKET_SIDING_DEPTH[mSlug]} />}
+
+  {/* PRICING CALCULATOR (audit phase 5) — labeled pending card until the owner's multipliers
+      land in data/leads.js; roofing adds the instant-quote CTA alongside, per the brief. */}
+  {["roofing", "siding", "windows", "gutters"].includes(sKey) && (
+    <PricingCalculator service={sKey} market={market} showRoofleCta={sKey === "roofing"} />
+  )}
 
   {/* After the detail cards and well below the fold. It says what the words above just described,
       which is why it follows them rather than opening the page — and it is never behind the hero,

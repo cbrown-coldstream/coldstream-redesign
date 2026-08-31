@@ -14,6 +14,7 @@ import "../styles/fonts.css";
 import "../styles/base.css";
 import RooffulTab from "../components/RooffulTab.astro";
 import MobileActionBar from "../components/MobileActionBar.astro";
+import MarketPrompt from "../components/MarketPrompt.astro";
 import { OG, SITE_NAME, ROBOTS_INDEXABLE, ORG_ID, LOGO, SITE, webSiteNode, webPageNode } from "../data/seo.js";
 
 const {
@@ -145,6 +146,9 @@ const graph = {
       are already reading. */}
   {market && !String(canonical ?? "").includes("free-estimate") && <RooffulTab market={market} />}
   {market && !String(canonical ?? "").includes("free-estimate") && <MobileActionBar market={market} />}
+  {/* The scroll-triggered market prompt (audit phase 5): national pages only — a market page IS
+      the answer — and never a redirect, only an offer. */}
+  {market && !market.slug && <MarketPrompt />}
 
   <slot name="chrome-bottom" />
   {/* REVEAL ON VIEW — the script ARMS the hidden state; it does not undo it.

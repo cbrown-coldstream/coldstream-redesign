@@ -28,7 +28,7 @@
  */
 export const MARKET_CONTEXT = {
   cincinnati: {
-    stock: "The east side runs to post-war ranches and split-levels through Blue Ash, Kenwood and Madeira, with a lot of 1920s and 1930s brick further in around Pleasant Ridge and Silverton. Mason, Landen and West Chester are mostly newer two-storeys on bigger footprints.",
+    stock: "The east side runs to post-war ranches and split-levels through Blue Ash, Kenwood and Madeira, with a lot of 1920s and 1930s brick further in around Pleasant Ridge and Silverton. Mason, Landen and West Chester are mostly newer two-stories on bigger footprints.",
     weather: "Hail and straight-line wind come through in spring and early summer. The bigger long-term problem is freeze-thaw: north-facing slopes hold snow and ice for weeks, and ice dams at the eaves back water up under the shingles.",
     trees: "Clermont County and the river townships carry heavy tree cover, which decides more gutter and moss questions here than anywhere else we work.",
     permits: "Permits vary by municipality across Hamilton, Clermont, Butler and Warren counties, and Northern Kentucky is a separate process again. We pull them.",
@@ -42,7 +42,7 @@ export const MARKET_CONTEXT = {
     stormLine: "spring hail runs and open-ground wind across the newer subdivisions",
   },
   "st-louis": {
-    stock: "South County is mid-century ranches through Affton, Mehlville and Oakville — simple pitches, long runs. The city neighbourhoods around Tower Grove and The Hill are brick with parapet walls and low-slope rear additions, which is a different roof entirely. West County runs to larger, newer homes with complex rooflines.",
+    stock: "South County is mid-century ranches through Affton, Mehlville and Oakville — simple pitches, long runs. The city neighborhoods around Tower Grove and The Hill are brick with parapet walls and low-slope rear additions, which is a different roof entirely. West County runs to larger, newer homes with complex rooflines.",
     weather: "Straight-line wind and hail come through most summers, and the temperature swing between seasons is wide enough to work materials hard — expansion and contraction opens seams and fasteners over time.",
     trees: "Mature oaks across South County and the inner ring drop enough through autumn to decide the gutter-guard conversation for most of these houses.",
     permits: "St. Louis County and the municipalities permit separately, and Jefferson County is different again. We pull them.",
@@ -86,7 +86,7 @@ export const SUBSERVICES = {
         { title: "The finish", body: "New underlayment, ice-and-water membrane at the eaves and valleys, new flashing at every penetration. Old flashing caulked back into place is the most common leak we get called out to." },
       ],
       faq: (m, c) => [
-        { q: "How long does a replacement take?", a: "A simple ranch is usually a single day. A larger two-storey with a complex roofline runs two to three. Weather moves the schedule and we tell you when it does." },
+        { q: "How long does a replacement take?", a: "A simple ranch is usually a single day. A larger two-story with a complex roofline runs two to three. Weather moves the schedule and we tell you when it does." },
         { q: "Do I need a full replacement or a repair?", a: "The free inspection answers it. Age, the state of the decking and how widespread the damage is decide it, and we will say when a repair is the honest answer." },
         { q: `What does the ${m.name} weather do to a roof?`, a: c.weather },
         ...commonFaq(m),
@@ -110,7 +110,7 @@ export const SUBSERVICES = {
               p: ["Split-levels and cross-gables on the hillsides throw long valleys that carry the runoff of two planes into one channel. That is where the volume is, and it is where a woven valley on a steep run eventually gives way.",
                   "We line those in metal rather than weaving them, and we look at where the water actually lands — a valley discharging onto a lower roof or past the end of a gutter is a drainage problem the covering cannot fix on its own."] },
             { h: "Pre-war chimneys need cut flashing, not sealant",
-              p: ["The older brick stock through the city neighbourhoods carries chimneys that were flashed once and sealed repeatedly since. Sealant on brick is a maintenance material with a life measured in a few years, and for every one of those years it looked fine from the ground.",
+              p: ["The older brick stock through the city neighborhoods carries chimneys that were flashed once and sealed repeatedly since. Sealant on brick is a maintenance material with a life measured in a few years, and for every one of those years it looked fine from the ground.",
                   "A replacement is the moment to cut fresh counterflashing into the mortar joint and step the base flashing properly. If the mortar itself is spent, we say so before the roof goes on rather than after."] },
             { h: "What the east-side ranches have under the shingles",
               p: ["The post-war ranches and split-levels through Blue Ash, Kenwood and Madeira often carry plank decking rather than plywood — boards with gaps between them, which hold a nail differently and are not always sound at the eaves after decades of freeze-thaw.",
@@ -124,7 +124,7 @@ export const SUBSERVICES = {
           blocks: [
             { h: "Wind resistance is a nailing pattern, not a product",
               p: ["A shingle's wind rating assumes it was fastened the way the manufacturer specifies: the right number of nails, placed in the nailing strip, driven flush. High nails and four-nail patterns are quicker, and they are why shingles lift on the first serious gust across open ground.",
-                  "We fasten to the specification the rating depends on, and take it up a step on exposed elevations. It costs a little labour and nothing in material."] },
+                  "We fasten to the specification the rating depends on, and take it up a step on exposed elevations. It costs a little labor and nothing in material."] },
             { h: "A whole subdivision reaches the end at once",
               p: ["Dublin, Hilliard, New Albany and Lewis Center went up in runs, so the builder-grade covering on a whole street is the same age within a season or two. When one roof starts failing, the neighbours usually are as well.",
                   "That is worth knowing for scheduling rather than as pressure: it is a reason to book before the first hail run of the spring, when every crew in the county is already committed."] },
@@ -259,7 +259,7 @@ export const SUBSERVICES = {
       // what a local search actually matches on.
       seo: {
         title: (m) => `Storm Damage Repair in ${m.cityState}`,
-        description: (m, c) => `Hail and wind damage across ${m.region}, documented the way an adjuster needs it and repaired start to finish. Free inspection.`,
+        description: (m) => `Hail and wind damage across ${m.region}, documented the way an adjuster needs it and repaired start to finish. Free inspection. Call ${m.phone}.`,
       },
       h1: (m) => `Storm Damage and Insurance Claims in ${m.name}`,
       lead: (m) => `Hail and wind damage documented the way an adjuster needs it documented, then handled with them directly.`,
@@ -575,7 +575,7 @@ export const SUBSERVICES = {
                   "That damage concentrates on one or two elevations rather than the whole house, which is worth knowing — sometimes the honest answer is two elevations rather than four."] },
             { h: "The water barrier is the part that was rushed",
               p: ["On a fast build, house wrap goes on quickly and gets lapped the wrong way or left untaped around openings. It is invisible for twenty years and then it is the reason a wall is soft under a window.",
-                  "Every re-side we do is a chance to put that right, and it is the part of the job we would rather you asked about than the colour."] },
+                  "Every re-side we do is a chance to put that right, and it is the part of the job we would rather you asked about than the color."] },
             { h: "Steeper pitches mean more gable to cover",
               p: ["The newer stock here runs to steeper roofs and larger gable ends than the older housing in our other markets, which puts more siding high up where nobody inspects it.",
                   "Those elevations weather hardest and get looked at least. We photograph them at the inspection so you can see the wall you have never actually seen."] },
@@ -616,17 +616,17 @@ export const SUBSERVICES = {
         description: (m, c) => `James Hardie fiber cement siding across ${m.region}, installed to the clearances the warranty depends on. Free inspection — call ${m.phone}.`,
       },
       h1: (m) => `James Hardie Fiber Cement Siding in ${m.name}`,
-      lead: (m) => `Fiber cement siding installed by an Alliance Elite contractor — the option that holds its colour and takes a knock.`,
+      lead: (m) => `Fiber cement siding installed by an Alliance Elite contractor — the option that holds its color and takes a knock.`,
       intro: (m, c) =>
         `Fiber cement is the material we recommend most often, and the reason is straightforward: it holds paint far longer than vinyl and it does not crack when something hits it. ${c.weather} That temperature range is hard on a material that expands and contracts, and fiber cement moves less than most of the alternatives. We are a James Hardie Alliance Elite contractor, which means the crews are trained on the installation specifics the warranty depends on.`,
       sections: [
-        { title: "Why fiber cement", body: "It holds colour, it stands up to impact, and it does not soften in heat. It costs more up front than vinyl and lasts longer." },
-        { title: "ColorPlus and site-painted", body: "Factory-applied ColorPlus finishes hold longer than site painting and arrive consistent. Site painting gives you any colour you like. We quote both." },
+        { title: "Why fiber cement", body: "It holds color, it stands up to impact, and it does not soften in heat. It costs more up front than vinyl and lasts longer." },
+        { title: "ColorPlus and site-painted", body: "Factory-applied ColorPlus finishes hold longer than site painting and arrive consistent. Site painting gives you any color you like. We quote both." },
         { title: "Installation is the whole thing", body: "Fastener spacing, clearance at the ground and the roofline, and the gap detail at butt joints are what the warranty rests on. Done wrong, the material is not the problem." },
         { title: "Trim and detailing", body: "Hardie trim at corners and openings so the whole elevation moves together and the joins stay tight." },
       ],
       faq: (m, c) => [
-        { q: "Hardie or vinyl?", a: "Hardie costs more up front, lasts longer, holds colour better and takes an impact without cracking. Vinyl is less expensive and perfectly good when it is installed well. We quote both and let you decide." },
+        { q: "Hardie or vinyl?", a: "Hardie costs more up front, lasts longer, holds color better and takes an impact without cracking. Vinyl is less expensive and perfectly good when it is installed well. We quote both and let you decide." },
         { q: "Does it need painting?", a: "Eventually, but far less often than wood and much less often than most people expect. A factory ColorPlus finish goes longest." },
         { q: `Is it a good fit for houses in ${m.name}?`, a: `It suits the stock here well. ${c.stock}` },
         ...commonFaq(m),
@@ -637,7 +637,7 @@ export const SUBSERVICES = {
       // written to be read next to the vinyl page by someone deciding between the two.
       depth: {
         eyebrow: "About the material",
-        heading: "Fiber cement is a different job, not a different colour",
+        heading: "Fiber cement is a different job, not a different color",
         intro: "James Hardie is cement, sand and cellulose. That makes it behave nothing like vinyl on the wall or in the hands of the crew fitting it.",
         blocks: [
           { h: "It is heavy, and that changes the crew",
@@ -647,8 +647,8 @@ export const SUBSERVICES = {
             p: ["Fiber cement has specified gaps: above the roof line, above decking and horizontal surfaces, and at grade. Those clearances exist because the board will wick water if it sits in it, and wicked water in a freeze-thaw climate splits the board from the inside.",
                 "It is the single most common thing we find wrong on fiber cement that somebody else fitted. The board is fine; it was installed tight to a roof and has been drinking for three winters."] },
           { h: "ColorPlus or site-painted",
-            p: ["ColorPlus is finished in the factory — baked on, consistent, and it arrives that colour. Site-painted means primed board finished on the wall, which costs less and lets you choose any colour, but the finish is only as good as the day it was applied.",
-                "Neither is wrong. Factory finish for longevity and consistency; site paint for colour freedom and for matching something existing. We will quote either and say which we would put on our own house."] },
+            p: ["ColorPlus is finished in the factory — baked on, consistent, and it arrives that color. Site-painted means primed board finished on the wall, which costs less and lets you choose any color, but the finish is only as good as the day it was applied.",
+                "Neither is wrong. Factory finish for longevity and consistency; site paint for color freedom and for matching something existing. We will quote either and say which we would put on our own house."] },
           { h: "Why it suits this climate",
             p: ["Fiber cement does not soften in heat or grow brittle in cold, and it does not give insects anything to eat. In a market that crosses freezing repeatedly through the winter, dimensional stability is worth more than it sounds.",
                 "The trade-off is honest: it costs more than vinyl, it is heavier to work with, and a bad installation is more expensive to put right. It is the better material and it is the less forgiving one."] },
@@ -680,8 +680,8 @@ export const SUBSERVICES = {
       ],
       faq: (m, c) => [
         { q: "How long does vinyl last?", a: "Decades, when it is installed with room to move and there is a sound water barrier behind it. The installation matters more than the brand." },
-        { q: "Will it fade?", a: "Modern vinyl holds colour far better than it used to, and darker colours hold least well. We will tell you which of your choices is most likely to shift." },
-        { q: "Can you match my existing siding?", a: "Sometimes. Profiles and colours get discontinued, so an exact match on an older house is not always possible — we will check before promising it." },
+        { q: "Will it fade?", a: "Modern vinyl holds color far better than it used to, and darker colors hold least well. We will tell you which of your choices is most likely to shift." },
+        { q: "Can you match my existing siding?", a: "Sometimes. Profiles and colors get discontinued, so an exact match on an older house is not always possible — we will check before promising it." },
         ...commonFaq(m),
       ],
       // ── PRODUCT DEPTH (team call follow-up, 2026-08-18) ────────────────────────────────────
@@ -703,9 +703,9 @@ export const SUBSERVICES = {
           { h: "Insulated vinyl, and when it is worth it",
             p: ["Insulated panels have foam bonded to the back. They are stiffer, so they look flatter on the wall and sound less hollow, and they add a modest amount of R-value.",
                 "The honest version: buy it for the flatness and the rigidity, not for the energy saving. If someone is selling insulated vinyl mainly on heating bills, ask them for the number in writing."] },
-          { h: "Colour, and the repair problem",
-            p: ["Darker colours hold heat and fade faster, and a south or west elevation ages ahead of the rest of the house. Modern formulations are far better than they were, but the sunny wall is still the one that shows age first.",
-                "Matching matters later. Profiles and colours get discontinued, so a partial repair on a ten-year-old wall often cannot be matched exactly. We will tell you when a patch is going to be visible rather than doing it and letting you find out."] },
+          { h: "Color, and the repair problem",
+            p: ["Darker colors hold heat and fade faster, and a south or west elevation ages ahead of the rest of the house. Modern formulations are far better than they were, but the sunny wall is still the one that shows age first.",
+                "Matching matters later. Profiles and colors get discontinued, so a partial repair on a ten-year-old wall often cannot be matched exactly. We will tell you when a patch is going to be visible rather than doing it and letting you find out."] },
         ],
       },
     },

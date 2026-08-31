@@ -77,7 +77,7 @@ const { market } = Astro.props;
       setTimeout(function () { sel.classList.remove("mkt-flash"); }, 1400);
     });
 
-    // THE SELECT'S OWN BEHAVIOUR MOVED TO UtilityBar.astro, which is the component that renders it.
+    // THE SELECT'S OWN BEHAVIOR MOVED TO UtilityBar.astro, which is the component that renders it.
     // It was here, and this script begins `if (!SLUG) return` — so on the national pages, where
     // market.slug is null, the select had no change handler at all and choosing a city did nothing
     // whatsoever. That is the one place a market picker matters most.

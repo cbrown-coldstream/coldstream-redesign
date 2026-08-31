@@ -1,0 +1,69 @@
+---
+// PRICING CALCULATOR — built ahead of its rates (Rambow audit phase 5, 2026-08-31).
+//
+// THE RULE IS THE SAME AS EVERY CLAIM ON THIS SITE: no number renders that nobody signed off.
+// PRICING in data/leads.js is null until the owner supplies the multipliers; until then this
+// renders a labeled pending card (placeholders over absence — the owner reviews staging
+// visually), and the moment the config lands the same component becomes the working calculator.
+// Output is ALWAYS a range, never a fixed number — the brief is explicit.
+import { PRICING } from "../data/leads.js";
+const { service, market, showRoofleCta = false } = Astro.props;
+const cfg = PRICING?.services?.[service] ?? null;
+const quoteHref = `/instant-roof-quote/${market?.slug ? `?market=${market.slug}` : ""}`;
+---
+<section class="pcalc" aria-labelledby="pcalc-h">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Ballpark it</span>
+      <h2 id="pcalc-h">What does this usually cost?</h2>
+    </div>
+    {cfg ? (
+      <form class="pcalc-form" data-pcalc data-low={cfg.perSqftLow} data-high={cfg.perSqftHigh}
+            data-tiers={JSON.stringify(cfg.tiers)}>
+        <label>Home square footage
+          <input type="number" name="sqft" min={PRICING.sqftMin} max={PRICING.sqftMax} step="50" value="1800" />
+        </label>
+        <label>Material tier
+          <select name="tier">
+            {Object.keys(cfg.tiers).map((t) => <option value={t}>{t}</option>)}
+          </select>
+        </label>
+        <p class="pcalc-out" role="status" data-pcalc-out>
+          Move the numbers to see a typical range.
+        </p>
+        <p class="pcalc-fine">A range, not a quote — the real number comes from a free inspection
+          of the actual roof, walls and openings.</p>
+      </form>
+    ) : (
+      <div class="pcalc-pending">
+        <span class="pcalc-tag">Calculator pending rates</span>
+        <p>The project calculator lives here — it switches on the moment the rate configuration
+          is supplied. No estimated numbers are shown until then, on purpose.</p>
+      </div>
+    )}
+    {showRoofleCta && (
+      <p class="pcalc-cta">
+        Want a real number faster? <a class="btn" href={quoteHref}>Get an instant roof quote →</a>
+      </p>
+    )}
+  </div>
+</section>
+{cfg && (
+  <script is:inline>
+    (function () {
+      document.querySelectorAll("[data-pcalc]").forEach(function (f) {
+        var out = f.querySelector("[data-pcalc-out]");
+        var tiers = JSON.parse(f.dataset.tiers);
+        function calc() {
+          var sq = parseInt(f.sqft.value, 10);
+          if (!sq || sq < 100) { out.textContent = "Enter your home's square footage."; return; }
+          var m = tiers[f.tier.value] ?? 1;
+          var lo = Math.round(sq * parseFloat(f.dataset.low) * m / 100) * 100;
+          var hi = Math.round(sq * parseFloat(f.dataset.high) * m / 100) * 100;
+          out.textContent = "Typically $" + lo.toLocaleString() + " – $" + hi.toLocaleString() + " for a home this size.";
+        }
+        f.addEventListener("input", calc); calc();
+      });
+    })();
+  </script>
+)}

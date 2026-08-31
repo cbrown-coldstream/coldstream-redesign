@@ -1,7 +1,7 @@
 // WHY THERE ARE 68 PAGES AND NOT 443 — computed, not asserted.
 //
 // The consolidation is the whole point of this rebuild, and until now the reasoning for it lived in
-// prose: CLAUDE.md says "100+ neighbourhood pages that were one skeleton with synonyms swapped",
+// prose: CLAUDE.md says "100+ neighborhood pages that were one skeleton with synonyms swapped",
 // DECISIONS.md says why each fold was chosen. None of that told you which old URLs actually fold
 // into the page you are looking at, which is the question the team asks when reviewing a page —
 // "what was here before, and did we keep what it was for?"
@@ -25,8 +25,8 @@ const FILE = resolve(process.cwd(), "public/_redirects");
  * corresponds to a rule block in redirects.js.
  */
 export const REASONS = {
-  neighbourhood: {
-    label: "Neighbourhood page",
+  neighborhood: {
+    label: "Neighborhood page",
     blurb:
       "One skeleton page per town per service, with the town name swapped in. They competed with " +
       "each other and with the market page for the same query, so none of them won. The towns " +
@@ -56,7 +56,7 @@ export const REASONS = {
 };
 
 const classify = (from) => {
-  if (/\/service-area\//.test(from)) return "neighbourhood";
+  if (/\/service-area\//.test(from)) return "neighborhood";
   if (/free-estimate|thank-you|get-a-quote|contact/.test(from)) return "conversion";
   if (/^\/blog|\/category\/|\/tag\/|\/author\//.test(from)) return "blog";
   if (/\/feed\/?$|^\/wp-|\/page\/\d|\/\?|sitemap/.test(from)) return "utility";

@@ -1,8 +1,19 @@
 ---
-// The lead form. Not wired to a backend yet — action is a placeholder for CallRail + the CRM.
-// Both form AND phone leads must post into the CRM; today the calls die.
-const { offer } = Astro.props;
+// The lead form — TWO STEPS since 2026-08-31 (Rambow audit phase 5): step one is the project
+// (service + details), step two is the person (name, EMAIL REQUIRED, phone, address). Committing
+// to the easy answer first is what lifts completion; the harder personal fields come second.
+//
+// PROGRESSIVE, NOT DEPENDENT: with JavaScript off both steps render stacked and the form submits
+// exactly as before. With JS, step two hides until "Next".
+//
+// CONTRACTORS CLOUD: three accounts, ONE PER MARKET, endpoints in data/leads.js — null today, so
+// submission falls through to the static /thank-you/ flow unchanged. When the endpoints land,
+// the inline script posts to THIS market's endpoint only; endpoints are never shared across
+// markets (the brief is explicit). The hidden market field travels either way.
+import { CC_ENDPOINTS } from "../data/leads.js";
+const { offer, market = null } = Astro.props;
 const id = "f" + Math.random().toString(36).slice(2, 7);
+const endpoint = market?.slug ? CC_ENDPOINTS[market.slug] ?? null : null;
 ---
 <div class="lead">
   {offer && <div class="ohead">{offer}</div>}
@@ -10,30 +21,70 @@ const id = "f" + Math.random().toString(36).slice(2, 7);
     <h2>Get Your Free Estimate</h2>
     <p>60 seconds · no obligation · same-day callback</p>
   </div>
-  <form method="post" action="/thank-you/">
-    <div>
-      <label for={`nm-${id}`}>Name</label>
-      <input id={`nm-${id}`} name="name" type="text" autocomplete="name" placeholder="Your name" required />
-    </div>
-    <div class="row2">
+  <form method="post" action="/thank-you/" data-lead2 data-endpoint={endpoint}>
+    <input type="hidden" name="market" value={market?.slug ?? ""} />
+    <fieldset class="lstep" data-step="1">
+      <legend class="lstep-t">1 · Your project</legend>
       <div>
-        <label for={`ph-${id}`}>Phone</label>
-        <input id={`ph-${id}`} name="phone" type="tel" autocomplete="tel" placeholder="(___) ___-____" required />
+        <label for={`sv-${id}`}>What do you need?</label>
+        <select id={`sv-${id}`} name="service">
+          <option>Roof replacement</option><option>Roof repair</option>
+          <option>Siding</option><option>Windows</option><option>Gutters</option>
+          <option>Storm / insurance claim</option>
+        </select>
       </div>
       <div>
-        <label for={`zp-${id}`}>ZIP</label>
-        <input id={`zp-${id}`} name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="ZIP" required />
+        <label for={`dt-${id}`}>Anything we should know? <span class="opt">(optional)</span></label>
+        <textarea id={`dt-${id}`} name="details" rows="2" placeholder="Leak over the kitchen, hail last week…"></textarea>
       </div>
-    </div>
-    <div>
-      <label for={`sv-${id}`}>What do you need?</label>
-      <select id={`sv-${id}`} name="service">
-        <option>Roof replacement</option><option>Roof repair</option>
-        <option>Siding</option><option>Windows</option><option>Gutters</option>
-        <option>Storm / insurance claim</option>
-      </select>
-    </div>
-    <button class="btn" type="submit">Get My Free Estimate →</button>
+      <button class="btn lnext" type="button" data-lead-next hidden>Next →</button>
+    </fieldset>
+    <fieldset class="lstep" data-step="2">
+      <legend class="lstep-t">2 · Where to send the quote</legend>
+      <div>
+        <label for={`nm-${id}`}>Name</label>
+        <input id={`nm-${id}`} name="name" type="text" autocomplete="name" placeholder="Your name" required />
+      </div>
+      <div>
+        <label for={`em-${id}`}>Email</label>
+        <input id={`em-${id}`} name="email" type="email" autocomplete="email" placeholder="you@email.com" required />
+      </div>
+      <div class="row2">
+        <div>
+          <label for={`ph-${id}`}>Phone</label>
+          <input id={`ph-${id}`} name="phone" type="tel" autocomplete="tel" placeholder="(___) ___-____" required />
+        </div>
+        <div>
+          <label for={`zp-${id}`}>ZIP</label>
+          <input id={`zp-${id}`} name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="ZIP" required />
+        </div>
+      </div>
+      <div>
+        <label for={`ad-${id}`}>Street address <span class="opt">(optional)</span></label>
+        <input id={`ad-${id}`} name="address" type="text" autocomplete="street-address" placeholder="123 Main St" />
+      </div>
+      <button class="btn" type="submit">Get My Free Estimate →</button>
+    </fieldset>
     <div class="fine"><b aria-hidden="true">✓</b> Your info is safe. We never sell your data.</div>
   </form>
 </div>
+<script is:inline>
+  (function () {
+    document.querySelectorAll("[data-lead2]").forEach(function (f) {
+      var s1 = f.querySelector('[data-step="1"]'), s2 = f.querySelector('[data-step="2"]');
+      var next = f.querySelector("[data-lead-next]");
+      if (!s1 || !s2 || !next) return;
+      next.hidden = false; s2.hidden = true;
+      next.addEventListener("click", function () { s2.hidden = false; next.hidden = true; s2.querySelector("input").focus(); });
+      // Contractors Cloud: only when this market's endpoint is configured. Errors fall back to
+      // the normal form navigation so a lead is never dropped on a failed fetch.
+      var ep = f.dataset.endpoint;
+      if (ep) f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        fetch(ep, { method: "POST", body: new FormData(f) })
+          .then(function (r) { if (!r.ok) throw 0; window.location = "/thank-you/"; })
+          .catch(function () { f.removeAttribute("data-endpoint"); f.submit(); });
+      });
+    });
+  })();
+</script>

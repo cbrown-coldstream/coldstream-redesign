@@ -31,7 +31,7 @@ export const SAMPLE_JOBS = [
     publishable: true,
     consent: { by: "homeowner, at final walkthrough", on: "2026-04-19" },
     photos: [
-      { src: "/video/hero-poster.jpg", alt: "Finished charcoal asphalt roof on a two-storey split-level, ridge vent visible along the peak", w: 1280, h: 720, altSource: "crew lead, on site" },
+      { src: "/video/hero-poster.jpg", alt: "Finished charcoal asphalt roof on a two-story split-level, ridge vent visible along the peak", w: 1280, h: 720, altSource: "crew lead, on site" },
     ],
   },
   {
@@ -70,7 +70,7 @@ export const SAMPLE_JOBS = [
     completedOn: "2026-06-11",
     materials: ["GAF Timberline HDZ, Barkwood"],
     scope: "Tear-off and replacement, 26 squares, new step flashing at the chimney.",
-    detail: "Replacement on a 1990s two-storey. The old step flashing at the chimney had been caulked over rather than replaced, which is where the leak was.",
+    detail: "Replacement on a 1990s two-story. The old step flashing at the chimney had been caulked over rather than replaced, which is where the leak was.",
     publishable: true,
     consent: { by: "homeowner, at final walkthrough", on: "2026-06-12" },
     photos: [

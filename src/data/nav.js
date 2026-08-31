@@ -66,6 +66,12 @@ export const NAV = [
     key: "siding",
     label: "Siding",
     children: [
+      // Siding Replacement joined 2026-08-31 (Rambow audit phase 4): the siding-replacement
+      // pages carried 4 inbound links against 16–21 for their dropdown-listed siblings — being
+      // out of this menu WAS the deficit. Market-aware like every other child.
+      // marketOnly: there is no national siding-replacement page (the audit round did not add
+      // one), so this child renders on market pages only — the reverse of stone-veneer below.
+      { key: "siding-replacement", label: "Siding Replacement", marketOnly: true },
       { key: "vinyl-siding", label: "Vinyl Siding" },
       { key: "james-hardie-siding", label: "James Hardie Siding" },
       // National-only: there is no market variant of this page. See the file header.

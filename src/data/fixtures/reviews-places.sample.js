@@ -68,7 +68,7 @@ export const SAMPLE_PLACES_REVIEWS = {
       profileUrl: "https://maps.google.com/fixture/place/columbus",
       reviews: [
         { market: "columbus", name: "FIXTURE — Columbus One", rating: 5,
-          quote: "FIXTURE TEXT, NOT A REAL REVIEW. Siding on a two-storey, written at the length people actually write at when they are pleased and not trying.",
+          quote: "FIXTURE TEXT, NOT A REAL REVIEW. Siding on a two-story, written at the length people actually write at when they are pleased and not trying.",
           date: "2026-08-12", permalink: r("o1"), author_url: g("o1"),
           profile_photo_url: null, relative_time_description: "5 days ago", time: "2026-08-12T00:00:00Z" },
         { market: "columbus", name: "FIXTURE — Columbus Two", rating: 5,

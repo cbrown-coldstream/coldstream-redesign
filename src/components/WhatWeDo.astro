@@ -13,7 +13,7 @@
 // perform. Reduced motion: the transition is dropped, the states still switch.
 //
 // The scrim reuses --cs-web-hero-scrim's direction (105deg) rather than inventing a gradient,
-// and the emphasis colour is --cs-web-hero-accent — NOT accent orange, per the brief. The body
+// and the emphasis color is --cs-web-hero-accent — NOT accent orange, per the brief. The body
 // copy lives inside the overlay in the DOM at all times, so crawlers read it regardless of
 // hover state.
 import { WHAT_WE_DO } from "../data/whatwedo.js";
@@ -92,7 +92,7 @@ const src = (p, ext) => `/photos/live/${p.base}.${ext}`;
     font-family: var(--cs-web-display); font-weight: var(--cs-web-display-weight-strong);
     font-size: 1.18rem; letter-spacing: var(--cs-web-display-ls); margin: 0 0 3px;
     color: #fff;   /* base.css's element rule paints headings ink-navy; on this scrim that is
-                      near-invisible, so the colour is stated rather than inherited */
+                      near-invisible, so the color is stated rather than inherited */
   }
   .wwd-face p { margin: 0; font-size: .87rem; color: var(--cs-web-hero-sub, #c8d8e7); line-height: 1.45; }
 

@@ -28,7 +28,7 @@
 //
 // ── THE MOBILE NAV IS THE REAL NAV ───────────────────────────────────────────────────────────
 //
-// 85% of traffic is mobile. The old behaviour below 1040px was `display:none` — the entire nav
+// 85% of traffic is mobile. The old behavior below 1040px was `display:none` — the entire nav
 // vanished, leaving a logo and one button. That was replaced earlier by this disclosure panel and
 // the rule is long gone; what this round adds is the four things it was still missing: a real
 // FOCUS TRAP, the PHONE inside the panel (it lives in the utility bar, which is off-screen the
@@ -93,7 +93,7 @@ const activeKey = (() => {
                 </svg>
               </a>
               <ul class="subnav">
-                {item.children.map((c) => (
+                {item.children.filter((c) => !(c.marketOnly && !market.slug)).map((c) => (
                   <li><a href={childHref(item, c, market)} data-mhref={MARKET_VARIANTS[childHref(item, c, market)]}>{c.label}</a></li>
                 ))}
               </ul>

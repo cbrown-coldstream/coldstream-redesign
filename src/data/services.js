@@ -7,7 +7,7 @@
 // FAQ answers · the local phone number and address · 300+ words written for that market. A page
 // that cannot clear it should not be a page — it should be a section on one that can."
 //
-// The audit found 100+ neighbourhood pages that were the same skeleton with synonyms swapped.
+// The audit found 100+ neighborhood pages that were the same skeleton with synonyms swapped.
 // Shipping 12 service pages that differ only by city name would rebuild that problem in a new
 // framework. So `local` below is keyed by market and starts EMPTY: a service page with no local
 // copy is reported by the build and should not go live until it has some.
@@ -23,14 +23,14 @@
 // clearable from real inputs, and the real inputs exist:
 //
 //   · Contractors Cloud — completed jobs per market per service: service, materials, scope,
-//     neighbourhood. This is the primary source.
+//     neighborhood. This is the primary source.
 //   · The content portal's intake — crew notes and job photos, already routed by market lane.
 //
 // The sequence, in order:
 //
 //   1. Pull the last 12–24 months of completed jobs, per market, per service.
 //   2. For each of the 13 pages assemble the real inputs: representative jobs, materials
-//      actually specified, neighbourhoods actually worked, the local specifics — building stock,
+//      actually specified, neighborhoods actually worked, the local specifics — building stock,
 //      what storm season does there, what the permit process looks like.
 //   3. Draft from those inputs. EVERY SPECIFIC MUST TRACE TO A RECORD.
 //   4. Apply the copy compliance rules from design-systems/exteriors/voice-spec.json — the same
@@ -63,7 +63,7 @@ const LOCAL_INTRO = {
   roofing: (m, c) =>
     `Roofs here fail in ways that are specific to this place. ${c.weather} ${c.stock} We quote after walking the roof, because the same age of shingle on two houses a street apart can be in very different condition once you are standing on it. ${c.permits}`,
   siding: (m, c) =>
-    `${c.stock} Siding on that mix of houses is rarely a single conversation — a mid-century elevation and a 2000s two-storey want different materials and different detailing. ${c.weather} That movement is what opens joints and lifts butt ends, so how a wall is installed matters more here than which brand goes on it.`,
+    `${c.stock} Siding on that mix of houses is rarely a single conversation — a mid-century elevation and a 2000s two-story want different materials and different detailing. ${c.weather} That movement is what opens joints and lifts butt ends, so how a wall is installed matters more here than which brand goes on it.`,
   windows: (m, c) =>
     `Most of the windows we replace across ${m.region} are original to the house or a first replacement that has failed at the seals. ${c.stock} ${c.weather} A window that has lost its seal shows it first as condensation between the panes, and no amount of caulk brings that back.`,
   gutters: (m, c) =>
@@ -115,6 +115,9 @@ export const SERVICE_META = {
 export const SERVICE_CONTENT = {
   roofing: {
     label: "Roofing",
+    // Phase 3 (Rambow audit): "roofing contractors {city}" is the primary query; the bare
+    // "Roofing in {city}" title undersold it. H1 unchanged — the page reads fine as it is.
+    titleTag: (m) => `Roofing Contractors in ${m.cityState} | Coldstream Exteriors`,
     h1: (m) => `Roofing in ${m.name}`,
     // Market-dependent for the same reason the SERVICES blurb is: "residential and commercial" is
     // a service claim, and St. Louis was ruled to have no commercial roofing.
@@ -170,7 +173,7 @@ export const SERVICE_CONTENT = {
     // cross-market overlap; Cincinnati first, stop for review). Columbus and St. Louis keep the
     // owner's 2026-08-27 paragraphs until their rewrites are approved.
     detailIntro: (m) => m.slug === "cincinnati" ? [
-      "Drive one loop from Hyde Park through Oakley to Anderson Township and you will pass every siding era Cincinnati has: 1920s foursquares still wearing original wood clapboard, post-war ranches through Blue Ash and Madeira sided in the aluminum of their day, and the vinyl-clad two-storeys that filled Mason and West Chester from the nineties on. Each of those walls fails differently, and a siding quote that does not account for which one you own is a guess.",
+      "Drive one loop from Hyde Park through Oakley to Anderson Township and you will pass every siding era Cincinnati has: 1920s foursquares still wearing original wood clapboard, post-war ranches through Blue Ash and Madeira sided in the aluminum of their day, and the vinyl-clad two-stories that filled Mason and West Chester from the nineties on. Each of those walls fails differently, and a siding quote that does not account for which one you own is a guess.",
       "A full replacement here starts with what the old cladding is hiding. Wood-sheathed older homes east of the Mill Creek often carry decades of patched moisture damage at the base course; newer builds hide their trouble at window heads where builder-grade flashing gave up early. The old siding comes off, the sheathing gets inspected board by board, and what needs replacing gets replaced before anything new goes on the wall.",
       "Then the assembly is built as a system — housewrap lapped and taped, flashing at every opening, trim, soffit and fascia detailed to spec — because siding is a water-management layer that happens to look good, not the other way around.",
     ] : [
@@ -211,15 +214,15 @@ export const SERVICE_CONTENT = {
     ],
     process: [
       { title: "Free inspection", body: "We check the wall for rot and moisture, and how the existing course was fitted — which is usually where the trouble started." },
-      { title: "Product and colour", body: "Hardie or vinyl, with samples held against your roof and trim in daylight rather than picked off a chart." },
+      { title: "Product and color", body: "Hardie or vinyl, with samples held against your roof and trim in daylight rather than picked off a chart." },
       { title: "Removal and repair", body: "The old siding comes off and the sheathing gets inspected. Anything soft is replaced before the new course goes on." },
       { title: "Installation and finish", body: "Course, trim, soffit and fascia, with the site cleared at the end of every day rather than at the end of the job." },
     ],
     faq: [
-      { q: "Hardie or vinyl?", a: "Hardie costs more up front and lasts longer, holds colour better and takes a knock without cracking. Vinyl is a lower price and fine when installed well. We quote both and let you decide." },
+      { q: "Hardie or vinyl?", a: "Hardie costs more up front and lasts longer, holds color better and takes a knock without cracking. Vinyl is a lower price and fine when installed well. We quote both and let you decide." },
       { q: "Can you do siding and gutters together?", a: "Yes, and it is usually faster and cheaper than two visits — the same crew is already set up." },
       { q: "Can you install new siding over what is already there?", a: "Code sometimes allows it and we rarely recommend it. Taking the old course off is what lets us see the sheathing, replace anything rotten and flash the openings properly. Covering it up hides the problem you are paying to solve." },
-      { q: "How long does a siding job take?", a: "Five to ten days on most homes. A single-storey ranch is at the short end, a complex two-storey with a lot of trim detail at the long end." },
+      { q: "How long does a siding job take?", a: "Five to ten days on most homes. A single-story ranch is at the short end, a complex two-story with a lot of trim detail at the long end." },
       { q: "Do you work on new construction?", a: "Yes — with homeowners, builders and general contractors, scheduled around the rest of the trades rather than dropped into the middle of them." },
       { q: "What about the soffit, fascia and trim?", a: "Done in the same visit. It is where water actually gets in when it is neglected, and it is the part that makes a siding job look finished rather than wrapped." },
     ],
@@ -253,6 +256,7 @@ export const SERVICE_CONTENT = {
   },
   gutters: {
     label: "Gutters",
+    titleTag: (m) => `Gutter Installation in ${m.cityState} | Coldstream Exteriors`,
     h1: (m) => `Gutters in ${m.name}`,
     lead: "Seamless gutters, guards and downspouts, sized to the roof they are draining.",
     sections: [
