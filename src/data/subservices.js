@@ -605,108 +605,290 @@ export const SUBSERVICES = {
 
     "james-hardie-siding": {
       label: "James Hardie Siding",
-      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
-      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
-      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
-      // all three markets shipped the SAME meta description — the one signal that most directly
-      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
-      // what a local search actually matches on.
+      // REWRITTEN PER MARKET 2026-08-31 (audit continuation): the three market versions shared
+      // one intro, one section set, one FAQ and one depth block — 64% overlap. Now every element
+      // is written per metro; no sentence appears on two markets.
       seo: {
         title: (m) => `James Hardie Siding in ${m.cityState}`,
-        description: (m, c) => `James Hardie fiber cement siding across ${m.region}, installed to the clearances the warranty depends on. Free inspection — call ${m.phone}.`,
+        description: (m) => ({
+          cincinnati: "Hardie fiber cement for Cincinnati's older streets — Alliance Elite installation, profiles that suit pre-war facades. Free inspection: (513) 258-0450.",
+          columbus: "James Hardie siding installed to spec in Columbus — ColorPlus for open-sun subdivisions, board-approved profiles for historic blocks. Free quote.",
+          "st-louis": "Fiber cement built for St. Louis heat swings — James Hardie installed with the clearances the warranty demands. Free inspection: (314) 380-8111.",
+        }[m.slug]),
       },
       h1: (m) => `James Hardie Fiber Cement Siding in ${m.name}`,
-      lead: (m) => `Fiber cement siding installed by an Alliance Elite contractor — the option that holds its color and takes a knock.`,
-      intro: (m, c) =>
-        `Fiber cement is the material we recommend most often, and the reason is straightforward: it holds paint far longer than vinyl and it does not crack when something hits it. ${c.weather} That temperature range is hard on a material that expands and contracts, and fiber cement moves less than most of the alternatives. We are a James Hardie Alliance Elite contractor, which means the crews are trained on the installation specifics the warranty depends on.`,
-      sections: [
-        { title: "Why fiber cement", body: "It holds color, it stands up to impact, and it does not soften in heat. It costs more up front than vinyl and lasts longer." },
-        { title: "ColorPlus and site-painted", body: "Factory-applied ColorPlus finishes hold longer than site painting and arrive consistent. Site painting gives you any color you like. We quote both." },
-        { title: "Installation is the whole thing", body: "Fastener spacing, clearance at the ground and the roofline, and the gap detail at butt joints are what the warranty rests on. Done wrong, the material is not the problem." },
-        { title: "Trim and detailing", body: "Hardie trim at corners and openings so the whole elevation moves together and the joins stay tight." },
-      ],
-      faq: (m, c) => [
-        { q: "Hardie or vinyl?", a: "Hardie costs more up front, lasts longer, holds color better and takes an impact without cracking. Vinyl is less expensive and perfectly good when it is installed well. We quote both and let you decide." },
-        { q: "Does it need painting?", a: "Eventually, but far less often than wood and much less often than most people expect. A factory ColorPlus finish goes longest." },
-        { q: `Is it a good fit for houses in ${m.name}?`, a: `It suits the stock here well. ${c.stock}` },
-        ...commonFaq(m),
-      ],
-      // ── PRODUCT DEPTH (team call follow-up, 2026-08-18) ────────────────────────────────────
-      // Same problem as the vinyl page: strong product sections, ~19% of sentences on the product.
-      // This is fiber cement specifically — weight, cutting, clearances and finish — and it is
-      // written to be read next to the vinyl page by someone deciding between the two.
-      depth: {
-        eyebrow: "About the material",
-        heading: "Fiber cement is a different job, not a different color",
-        intro: "James Hardie is cement, sand and cellulose. That makes it behave nothing like vinyl on the wall or in the hands of the crew fitting it.",
-        blocks: [
-          { h: "It is heavy, and that changes the crew",
-            p: ["A fiber cement plank weighs several times what a vinyl panel does. It needs more hands, different fastening and a substrate that can carry it, and it does not forgive being hung on a wall nobody checked first.",
-                "It is also cut rather than snapped. Cutting it releases silica dust, so it is cut with the right blade and the right control — which is a working practice, not a preference."] },
-          { h: "Clearances are where installations fail",
-            p: ["Fiber cement has specified gaps: above the roof line, above decking and horizontal surfaces, and at grade. Those clearances exist because the board will wick water if it sits in it, and wicked water in a freeze-thaw climate splits the board from the inside.",
-                "It is the single most common thing we find wrong on fiber cement that somebody else fitted. The board is fine; it was installed tight to a roof and has been drinking for three winters."] },
-          { h: "ColorPlus or site-painted",
-            p: ["ColorPlus is finished in the factory — baked on, consistent, and it arrives that color. Site-painted means primed board finished on the wall, which costs less and lets you choose any color, but the finish is only as good as the day it was applied.",
-                "Neither is wrong. Factory finish for longevity and consistency; site paint for color freedom and for matching something existing. We will quote either and say which we would put on our own house."] },
-          { h: "Why it suits this climate",
-            p: ["Fiber cement does not soften in heat or grow brittle in cold, and it does not give insects anything to eat. In a market that crosses freezing repeatedly through the winter, dimensional stability is worth more than it sounds.",
-                "The trade-off is honest: it costs more than vinyl, it is heavier to work with, and a bad installation is more expensive to put right. It is the better material and it is the less forgiving one."] },
+      lead: (m) => ({
+        cincinnati: "The cladding that suits Cincinnati's older housing best, fitted by an Alliance Elite crew.",
+        columbus: "Factory-finished fiber cement, installed to Hardie's own specification across central Ohio.",
+        "st-louis": "The most dimensionally stable siding you can put on a house that lives through St. Louis summers.",
+      }[m.slug]),
+      intro: (m, c) => ({
+        cincinnati:
+          "Fiber cement earned its place in Cincinnati the honest way: on the older east-side streets where wood clapboard finally gave out and vinyl never looked right. Hardie board carries the deeper profiles and crisp shadow lines a Hyde Park or Wyoming facade wants, holds paint through the valley's freeze-thaw winters, and shrugs off the hail that comes through most springs. We install it as a James Hardie Alliance Elite contractor — the training tier built around the installation details the warranty actually depends on.",
+        columbus:
+          "Two very different Columbus houses keep choosing the same siding. In the newer subdivisions, homeowners replacing failed builder vinyl step up to Hardie for the ColorPlus finish that holds in full open-lot sun. On the historic blocks, review boards approve fiber cement because its profiles read as original from the sidewalk. Both are right, for different reasons — and both depend entirely on installation done to Hardie's specification, which is where our Alliance Elite training earns its keep.",
+        "st-louis":
+          "Ask what breaks siding in St. Louis and the answer is movement: the swing from August heat to January freeze works every panel, joint and fastener on a wall, year after year. Fiber cement moves less than anything else we hang, which is why it is our first recommendation here more often than in either Ohio market. James Hardie board, installed with the clearances and gaps the manufacturer specifies, is the closest thing to a set-and-forget wall this climate allows.",
+      }[m.slug]),
+      sections: (m) => ({
+        cincinnati: [
+          { title: "Profiles for pre-war facades", body: "Deeper laps, wider trim, real shadow lines — the vocabulary a 1920s elevation expects, in a board that will not rot at the base course." },
+          { title: "Paint that survives the valley", body: "ColorPlus factory finish holds through humid summers and freeze-thaw winters far longer than site paint on wood ever did here." },
+          { title: "Hail takes the test", body: "Spring hail that cracks aged vinyl bounces off fiber cement. On the east side's exposed hilltops, that difference shows up within a few seasons." },
+          { title: "Alliance Elite installation", body: "Fastening, clearances and joint detail per Hardie's spec — the difference between the 30-year wall and the warranty claim." },
         ],
+        columbus: [
+          { title: "ColorPlus against open sun", body: "Subdivision lots with no shade fade site-applied finishes fast. Factory-baked ColorPlus is the answer built for exactly that exposure." },
+          { title: "Board-approved for historic streets", body: "German Village and Bexley reviewers have approved Hardie profiles repeatedly — we submit spec sheets they have already said yes to." },
+          { title: "Stable in the wind", body: "A heavy board hung on a proper schedule does not rattle, lift or work loose the way lightweight cladding does on open central Ohio ground." },
+          { title: "Spec-first installation", body: "Every warranty condition — gaps, clearances, fastener depth — is a line item on our checklist, not an assumption about the crew." },
+        ],
+        "st-louis": [
+          { title: "Built for the swing", body: "Cement, sand and cellulose barely move between July and January — the property that matters most on a St. Louis wall." },
+          { title: "Gables and additions in brick country", body: "Hardie's trim system finishes cleanly against masonry, which is exactly what the city's gable-and-addition siding jobs demand." },
+          { title: "Fire and pest, settled", body: "Non-combustible board with nothing organic for insects — two line items St. Louis homeowners ask about that fiber cement simply closes." },
+          { title: "Clearances, obsessively", body: "Roofline, grade and deck gaps per the spec — because a board that wicks water splits in our freeze cycles, and the spec is what prevents it." },
+        ],
+      }[m.slug]),
+      faq: (m, c) => ({
+        cincinnati: [
+          { q: "Is Hardie worth the premium over vinyl on an older Cincinnati house?", a: "On the pre-war stock, usually yes — the profiles suit the architecture, the board takes the canopy's falling limbs and the spring hail, and repainting cycles run decades apart. On a simple newer elevation the calculus tightens, and we will say so." },
+          { q: "Can you match the original wood look on my street?", a: "Closely. Hardie's smooth and cedarmill laps come in widths that sit correctly on older facades, and the trim system reproduces most period details in a board that will not rot. Bring a photo; we will point at the matching profile." },
+          { q: "How does fiber cement handle Cincinnati winters?", a: "It is the winter that makes the case: the board does not become brittle in cold, and with correct clearances it cannot wick meltwater — which is what splits badly installed fiber cement. Installation quality is the whole story, which is why the Alliance Elite training exists." },
+          { q: "ColorPlus or painted on site?", a: "ColorPlus for longevity and consistency; site paint when you need a color the factory palette lacks or an exact match to something existing. We quote both with the honest maintenance difference attached." },
+          { q: "What does a Hardie re-side cost here?", a: "More than vinyl up front, less over the decades — the crossover math depends on the house. The written quote after a free inspection itemizes board, trim, and any sheathing repair the tear-off reveals." },
+          { q: "Who actually installs it?", a: "Our own trained crews under one project manager from the Milford office — the person who quotes the wall runs the wall." },
+          { q: "Can Hardie go on just the street-facing elevation?", a: "It can, and on tight budgets it sometimes should — the facade carries the architecture while simpler cladding serves the sides. We will design the transition so it reads as intentional, because done casually that mix looks like what it is." },
+          { q: "How long does a Cincinnati Hardie job run?", a: "Four to eight working days on most houses — the board rewards patience and punishes rushing. The quote carries the schedule, and the hillside streets get an honest staging day where the access needs one." },
+        ],
+        columbus: [
+          { q: "Will a review board accept Hardie in a Columbus historic district?", a: "They have, repeatedly — the smooth profiles in appropriate lap widths read as original material from the street, which is the test that matters. We prepare the product documentation your submission needs." },
+          { q: "Why did my neighbor's site-painted siding fade while ColorPlus held?", a: "Factory finish is baked onto the board under controlled conditions; site paint is only as good as its application day. On the open-sun lots of Dublin or Lewis Center, that difference compounds every summer." },
+          { q: "Is fiber cement overkill for a subdivision two-story?", a: "It is an upgrade, not overkill: the step from failed builder vinyl to Hardie is the one most Columbus re-siding customers are actually shopping, and the wind stability alone is noticeable on open ground. We will quote vinyl beside it so the premium is a choice, not a default." },
+          { q: "How long does a Hardie installation take?", a: "A typical two-story runs four to seven working days — the board is heavier and the detail standard higher than vinyl, and rushing either is how warranties get voided. The schedule is in the quote." },
+          { q: "What maintenance does it actually need?", a: "A rinse when you think of it and caulk-joint checks every few years. Repainting, when it eventually comes, accepts paint better than wood and holds it longer." },
+          { q: "Does hail damage fiber cement?", a: "Central Ohio's typical hail does not faze it — impacts that crack aged vinyl leave Hardie unmarked. Catastrophic stones can chip any material; we document and repair those cases like any storm claim." },
+          { q: "Where do your Hardie crews work around Columbus?", a: "Metro-wide from Galloway — the review-board streets of German Village and Bexley, the upgrade market across Dublin, Hilliard and Westerville, and everywhere between. Historic and subdivision jobs run on the same spec checklist." },
+          { q: "Can you install over my existing sheathing?", a: "Only after we have seen it. Hardie's weight needs sound substrate and correct fastener bite; the tear-off inspection confirms both, and any repair is priced in the quote rather than discovered on install day." },
+          { q: "What does the free assessment involve?", a: "A walk of every elevation, moisture readings where the wall hints at trouble, photographs, and a written itemized quote with the spec attached — usually in your inbox within two business days." },
+        ],
+        "st-louis": [
+          { q: "Why do you push fiber cement harder in St. Louis than anywhere?", a: "Because our climate's defining stress — the huge summer-to-winter swing — is precisely the stress fiber cement resists best. The material barely moves, so the joints, caulk lines and fasteners it depends on stay where the installer put them." },
+          { q: "Can Hardie be used on just a gable or addition?", a: "Yes, and it is some of our most common city work — the trim system closes neatly against brick, and a small area of premium board costs less than people assume. Partial jobs get the same spec discipline as whole houses." },
+          { q: "How does it do against summer heat specifically?", a: "It does not soften, sag or oil-can in August the way thin cladding can, and dark ColorPlus shades stay usable here where dark vinyl becomes a liability on west walls." },
+          { q: "What is the real cost difference from vinyl?", a: "Typically a meaningful premium on materials and labor — the board is heavier and slower to hang correctly. The written quote shows both systems side by side; on long-hold houses the lifetime math usually closes the gap." },
+          { q: "Is the dust from cutting a concern?", a: "Silica dust is real, which is why the board is cut with scoring shears and dust-controlled saws per the working spec. That is our crews' problem to manage, and they manage it properly — it never becomes your household's." },
+          { q: "What warranty comes with it?", a: "Hardie's substrate warranty runs decades, ColorPlus carries its own finish warranty, and our workmanship warranty covers the installation — with the spec-compliance documentation that keeps all three enforceable." },
+          { q: "Do you install Hardie across the whole St. Louis metro?", a: "Yes — city gable jobs near Tower Grove, inner-ring homes in Kirkwood and Webster Groves, and full re-sides out through Ballwin and Chesterfield, all run from Geyer Road with the same spec discipline." },
+        ],
+      }[m.slug]),
+      depth: {
+        cincinnati: {
+          eyebrow: "About the material",
+          heading: "Why the older neighborhoods keep choosing it",
+          blocks: [
+            { h: "The architecture argument", p: [
+              "Cincinnati's pre-war streets were built with cladding proportions modern vinyl never quite reproduces — deeper reveals, heavier trim, corners that cast a real shadow. Fiber cement is the one modern material that carries those proportions convincingly, which is why an east-side re-side in Hardie disappears into its street while vinyl on the same house reads as a renovation.",
+              "It is also why our Cincinnati Hardie quotes spend real time on trim: the boards are half the look, and the corner and opening details are the other half. A quote that prices planks and hand-waves the trim is describing a different, lesser project.",
+            ]},
+            { h: "Weight is a feature and a demand", p: [
+              "A Hardie plank weighs several times its vinyl equivalent. On the wall that mass is why the material sits flat and quiet; on the job it demands more hands, engineered fastening and a substrate someone verified. Older Cincinnati sheathing varies house to house, and checking it is part of our tear-off, not a surprise afterward.",
+            ]},
+            { h: "The clearance rules exist for our winters", p: [
+              "Hardie specifies gaps above rooflines, decks and grade because standing water wicks into cut board edges — and wicked water meeting an Ohio Valley freeze splits board from the inside. The most common defect we find in other crews' fiber cement work is board run tight to a roof, drinking meltwater for years. Ours is installed to the gap, photographed, and warrantied.",
+              "The photography is not decoration. Every clearance on every elevation goes into the job file at closing, which is what turns a warranty from a promise into a claim that succeeds.",
+            ]},
+            { h: "Where we say no", p: [
+              "Fiber cement is not automatic. On a simple, large, newer elevation where budget matters more than profile depth, a heavy-gauge vinyl can be the smarter spend, and our quotes say so out loud. Recommending the expensive board everywhere is salesmanship; recommending it where Cincinnati's housing genuinely rewards it is judgment.",
+            ]},
+          ],
+        },
+        columbus: {
+          eyebrow: "About the material",
+          heading: "One board, both Columbuses",
+          blocks: [
+            { h: "The subdivision case", p: [
+              "The homeowner replacing 1990s builder vinyl in Hilliard is usually deciding between doing vinyl again or stepping up once. The step-up case rests on three central Ohio facts: open-sun lots that punish site-applied finishes (ColorPlus answers this), unbroken wind that works lightweight panels loose (mass answers this), and spring hail that cracks aging vinyl (cement answers this). It costs more. It also ends the cycle.",
+            ]},
+            { h: "The historic case", p: [
+              "On the review-board streets the question inverts — nobody doubts the durability; the question is whether it looks right. Approved projects across the older districts have settled it: correct lap widths in smooth finish, real trim at openings, and the elevation reads as it always did. We arrive at reviews with spec sheets from products boards have already accepted, which shortens the conversation considerably.",
+            ]},
+            { h: "Spec is a checklist, not a vibe", p: [
+              "Hardie's warranty conditions are concrete: fastener type and depth, gap detail at butt joints, clearances at every horizontal. Our crews run them as a literal checklist per elevation, and the job file keeps the photographic proof. When a warranty claim matters years from now, that file is what makes it succeed.",
+            ]},
+            { h: "Wind, quantified", p: [
+              "Fastened to specification, fiber cement carries wind ratings far past anything a central Ohio front delivers. The material's mass does what lightweight cladding cannot on open ground: it stays put, quietly, in the October gusts that leave vinyl streets ticking and rattling.",
+              "That stillness is audible from inside the house, which surprises people: a Hardie wall in a windstorm simply does not participate. For homeowners replacing a vinyl wall that has spent twenty autumns announcing the weather, it is the upgrade they mention most afterward.",
+            ]},
+          ],
+        },
+        "st-louis": {
+          eyebrow: "About the material",
+          heading: "The stability argument, in the swing capital",
+          blocks: [
+            { h: "Movement is the local tax", p: [
+              "Every cladding on a St. Louis wall pays a movement tax between July and January. Vinyl pays it in visible growth and shrink; caulk pays it in opened joints; fasteners pay it a little each cycle. Fiber cement's near-zero movement is not a brochure abstraction here — it is why ten-year-old Hardie walls in Kirkwood still have tight joints while the same-age vinyl next door has begun to wander.",
+            ]},
+            { h: "Against the masonry", p: [
+              "Most St. Louis Hardie work terminates against brick somewhere — a gable over a masonry first story, an addition tied to a city house. The board's rigid trim system makes a clean, flashed, permanent line at that junction, where flexible cladding needs a caulk bead that our climate then chews through. The brick interface is where this material most outclasses its alternatives locally.",
+            ]},
+            { h: "Heat, taken seriously", p: [
+              "August here disqualifies materials quietly: dark vinyl oil-cans on west walls, foam-backed products outgas their adhesives, site paint on wood blisters. Fiber cement with factory finish is the combination that ignores a 100-degree afternoon — which is why our west-elevation recommendations here are nearly always the same board.",
+              "The full ColorPlus palette stays available here too, including the deep shades our heat takes off the table for vinyl — a small freedom that matters to homeowners who wanted the dark house and kept being talked out of it.",
+            ]},
+            { h: "The honest ledger", p: [
+              "The premium is real: heavier board, slower installation, silica-controlled cutting, trim system priced like the durable good it is. The return is a wall whose maintenance calendar has almost nothing on it. On a house you intend to keep, that ledger usually closes; on a flip, it rarely does — and we will tell you which quote you are holding.",
+              "The terms around the premium stay the same as every Coldstream job: free inspection, a written itemized quote, and no payments until the wall is finished and walked with you.",
+            ]},
+          ],
+        },
       },
     },
 
     "vinyl-siding": {
       label: "Vinyl Siding",
-      // ── SEO TITLE AND DESCRIPTION, WRITTEN RATHER THAN DERIVED ──────────────────────────────
-      // Derived from `h1` and `lead` before, which broke two ways at once: h1 is a sentence and
-      // ran the title past 60 characters where Google truncates it, and `lead` carries no city, so
-      // all three markets shipped the SAME meta description — the one signal that most directly
-      // tells a crawler two pages are the same page. `cityState` puts the state code in, which is
-      // what a local search actually matches on.
+      // REWRITTEN PER MARKET 2026-08-31 (audit continuation) — was 68% cross-market overlap.
       seo: {
         title: (m) => `Vinyl Siding in ${m.cityState}`,
-        description: (m, c) => `Vinyl siding across ${m.region}, hung so it can move over a wall we actually inspected. Free inspection and a written quote.`,
+        description: (m) => ({
+          cincinnati: "Vinyl siding hung right on Cincinnati homes — movement room, taped wrap, honest gauge advice. The install decides everything. Free quote: (513) 258-0450.",
+          columbus: "Replacing tired builder vinyl across Columbus subdivisions — heavier gauge, wind-rated fastening, a wall fixed before the panels. Free inspection.",
+          "st-louis": "Vinyl siding that survives St. Louis summers: hung loose to move, gauge chosen for heat, wrap inspected first. Free quote from Geyer Road: (314) 380-8111.",
+        }[m.slug]),
       },
       h1: (m) => `Vinyl Siding in ${m.name}`,
-      lead: (m) => `Vinyl siding installed so it can move, over a wall somebody actually looked at.`,
-      intro: (m, c) =>
-        `Vinyl gets a poor reputation it mostly does not deserve. Almost every vinyl complaint we are called to look at is an installation problem, not a material one: nailed too tight so it cannot move, no room left at the ends, or a water barrier behind it that was never taped. ${c.weather} Vinyl needs room to expand and contract, and a crew that leaves it that room gets decades out of it.`,
-      sections: [
-        { title: "Installed so it can move", body: "Nailed to allow movement, not pinned tight. Room left at the ends of every run. This is the difference between vinyl that lasts and vinyl that buckles." },
-        { title: "What goes behind it", body: "House wrap lapped and taped, and flashing at every opening. The siding is the rain screen; the barrier behind it is what actually keeps the wall dry." },
-        { title: "Insulated options", body: "Insulated backing adds a little R-value and a lot of rigidity, which makes the wall look flatter and quieter. Worth it on some elevations, not all." },
-        { title: "Repairs and partial replacement", body: "Storm damage and cracked panels can often be swapped rather than re-siding a whole elevation, if the profile is still available." },
-      ],
-      faq: (m, c) => [
-        { q: "How long does vinyl last?", a: "Decades, when it is installed with room to move and there is a sound water barrier behind it. The installation matters more than the brand." },
-        { q: "Will it fade?", a: "Modern vinyl holds color far better than it used to, and darker colors hold least well. We will tell you which of your choices is most likely to shift." },
-        { q: "Can you match my existing siding?", a: "Sometimes. Profiles and colors get discontinued, so an exact match on an older house is not always possible — we will check before promising it." },
-        ...commonFaq(m),
-      ],
-      // ── PRODUCT DEPTH (team call follow-up, 2026-08-18) ────────────────────────────────────
-      // The page was 741 words with only about a fifth of its sentences mentioning vinyl at all —
-      // four good product sections wrapped in shared boilerplate. This is the part that is about
-      // the material: how it is fastened, what sits behind it, and what actually goes wrong.
-      // Written for a homeowner choosing between vinyl and fiber cement, not for a crawler.
-      depth: {
-        eyebrow: "About the material",
-        heading: "What decides whether vinyl looks right in ten years",
-        intro: "Vinyl is the value option and it earns that honestly — but it is less forgiving of a bad installation than almost anything else on a house.",
-        blocks: [
-          { h: "It has to be hung loose, not nailed tight",
-            p: ["A vinyl panel expands and contracts with temperature — noticeably, along its length, every day. It is designed to hang on the nail rather than be pinned by it, which means the nail head sits slightly proud and the panel slides behind it.",
-                "Nail it tight and the panel has nowhere to go, so it buckles in the first hot week and stays buckled. Wavy vinyl on a wall is almost never a bad product. It is a crew that drove the nails home."] },
-          { h: "The wall behind it does the work",
-            p: ["Vinyl is a rain screen, not a seal. Water gets behind it by design and has to drain out, which makes the weather-resistant barrier, the flashing and the condition of the sheathing more important than the panel you chose.",
-                "That is why we take the old siding off rather than going over it. Going over hides whatever is rotting underneath and adds a second layer for water to sit between."] },
-          { h: "Insulated vinyl, and when it is worth it",
-            p: ["Insulated panels have foam bonded to the back. They are stiffer, so they look flatter on the wall and sound less hollow, and they add a modest amount of R-value.",
-                "The honest version: buy it for the flatness and the rigidity, not for the energy saving. If someone is selling insulated vinyl mainly on heating bills, ask them for the number in writing."] },
-          { h: "Color, and the repair problem",
-            p: ["Darker colors hold heat and fade faster, and a south or west elevation ages ahead of the rest of the house. Modern formulations are far better than they were, but the sunny wall is still the one that shows age first.",
-                "Matching matters later. Profiles and colors get discontinued, so a partial repair on a ten-year-old wall often cannot be matched exactly. We will tell you when a patch is going to be visible rather than doing it and letting you find out."] },
+      lead: (m) => ({
+        cincinnati: "The value option done properly — which around Cincinnati means gauge, movement room and a wall checked first.",
+        columbus: "The upgrade path from the builder-grade panels your subdivision came with.",
+        "st-louis": "Vinyl that keeps its shape through a St. Louis August, because it was hung to move.",
+      }[m.slug]),
+      intro: (m, c) => ({
+        cincinnati:
+          "Most vinyl complaints that reach our Milford office are installation stories wearing a material's name: panels pinned tight that buckled the first hot week, ends butted with no room that bowed, wrap behind them never taped so the sheathing stayed damp under Cincinnati's canopy shade. Hung correctly — loose, gapped, over a barrier somebody actually inspected — modern vinyl is a genuinely good value on much of this metro's housing, and we install it that way or not at all. Every vinyl quote we write here starts with a walk of the wall: what the current cladding is hiding, which elevations take the weather, and whether the profile you would be matching still exists. The number is written, itemized, and carries the same terms as all our work — free inspection first, no payments until completion.",
+        columbus:
+          "Columbus is where American builder-grade vinyl went up by the square mile, and it is now where that vinyl is wearing out by the street. Replacing it with the same thin panel repeats the cycle; replacing it with heavier gauge, wind-appropriate fastening and a corrected wall underneath ends it. That second version is the vinyl work we do across the metro's subdivisions — same affordable material class, entirely different outcome. The pattern is familiar enough by now that we can usually predict the tear-off findings from the build year: which window-head details were skipped, where the wrap was left untaped, which elevations the wind has already worked loose. The inspection is free, the findings go in writing, and the quote covers the wall corrections alongside the panels rather than springing them mid-job.",
+        "st-louis":
+          "Vinyl expands and contracts more than any other cladding we hang, and no market tests that property like St. Louis — the July-to-January swing here moves a twelve-foot panel visibly. The whole trade secret is respecting that: nails set to let panels float, expansion room at every terminal, gauge heavy enough not to oil-can on a west wall in August. Done so, vinyl serves this metro's frame walls and gables well at a price fiber cement cannot touch. Our Geyer Road crews hang it across the whole metro — ranch re-sides in South County, gable packages over city brick, storm repairs wherever the last hail line ran — and every job carries the same written quote and no-payment-until-completion terms as the rest of our work.",
+      }[m.slug]),
+      sections: (m) => ({
+        cincinnati: [
+          { title: "Hung to float", body: "Nail heads proud, panels moving freely, ends gapped — the checklist that separates a straight wall in year ten from a buckled one." },
+          { title: "The wall underneath", body: "Old siding off, sheathing probed, wrap taped and lapped. Shade-side walls here hide damp; we look before we cover." },
+          { title: "Gauge, honestly", body: "Thicker panel costs a little more and reads flatter on the long walls of post-war ranches. We show samples of both and price both." },
+          { title: "Partial repairs", body: "Storm-cracked panels can often be swapped if the profile survives in the catalog — we check before promising a match." },
         ],
+        columbus: [
+          { title: "Beyond builder grade", body: "The original panels were a spreadsheet decision. The replacement is yours: heavier gauge, better lock design, a finish rated for open sun." },
+          { title: "Wind-spec fastening", body: "Panel locks and nailing schedules chosen for open-lot gusts — the detail that keeps a subdivision wall quiet in October." },
+          { title: "Fixing the era's shortcuts", body: "Untaped wrap and bare window heads are standard finds behind 1990s vinyl. They get corrected while the wall is open." },
+          { title: "Whole street, one mobilization", body: "When neighbors' siding fails together, quoting together saves everyone setup costs. Ask — we do it often." },
+        ],
+        "st-louis": [
+          { title: "Movement room, engineered", body: "Expansion gaps sized to our temperature swing, not a national default — the spec that keeps August from writing waves into the wall." },
+          { title: "Heat-side gauge advice", body: "West and south elevations here punish thin panel. We steer gauge and color by exposure and say why in the quote." },
+          { title: "Gables above brick", body: "Vinyl remains the budget-right answer for many frame gables over masonry — detailed at the brick line so the junction sheds water." },
+          { title: "Hail and the brittle years", body: "Old vinyl grows brittle and spring hail finds it. We document cracked walls for claims the same way we document roofs." },
+        ],
+      }[m.slug]),
+      faq: (m, c) => ({
+        cincinnati: [
+          { q: "Is vinyl a mistake on an older Cincinnati house?", a: "On a pre-war facade with real trim depth it usually reads wrong, and we will say so. On post-war ranches and colonials through Blue Ash, Fairfield or Loveland, quality vinyl looks right and spends the budget where it matters." },
+          { q: "Why did my last vinyl buckle?", a: "Almost certainly nailed tight. Vinyl must hang and slide on its nails; pin it and the first hot spell has nowhere to send the expansion but outward. It is the most common installation failure in the metro and the easiest to avoid." },
+          { q: "What is behind my current siding?", a: "Under Cincinnati shade, often a story: damp sheathing, an untaped barrier, sometimes older wood siding used as the nailing base. The tear-off tells us; the quote covers what we find rather than discovering it mid-job." },
+          { q: "Does insulated vinyl make sense here?", a: "For flatness and rigidity on long visible walls, sometimes. As an energy upgrade, the honest numbers are modest — we quote it as an appearance option and let the R-value be a bonus." },
+          { q: "How long will a proper install last?", a: "Decades — installation quality and gauge decide it far more than brand. The panels we hang loose today will still be sliding freely on their nails when the trees have grown another canopy." },
+          { q: "What does vinyl cost versus Hardie in Cincinnati?", a: "Vinyl typically runs meaningfully less installed. The written quote can show both systems on your actual house, which beats any rule of thumb." },
+          { q: "Do you re-side around Cincinnati's river towns?", a: "Milford outward through Loveland, Batavia and the Clermont County towns is home turf for our siding crews — the office is on that side of the metro, which usually means faster scheduling east than homeowners expect." },
+          { q: "What happens to the old siding?", a: "Hauled and disposed of by us, with anything reusable separated out. Aluminum tear-offs still have scrap value, and on those jobs the haul-away line in your quote reflects it." },
+          { q: "How disruptive is the work for the household?", a: "Exterior-only, but loud in stretches — panel cutting and nailing travel through a frame wall. Most Cincinnati homes are wrapped up inside a week, we confirm each day's working zone in the morning, and pets and home-office schedules get planned around rather than surprised." },
+        ],
+        columbus: [
+          { q: "My whole subdivision's siding looks tired — replace or paint it?", a: "Aged vinyl takes paint poorly and briefly; it is a delay purchase, not a repair. Panel replacement with a modern gauge resets the wall for decades and fixes the underlying wrap while it is open." },
+          { q: "What gauge should replacement panels be?", a: "A step or two heavier than the builder original, at minimum — .044 and up reads flatter, locks stiffer and takes central Ohio wind without chatter. We bring gauge samples so the difference is in your hands, not a spec sheet." },
+          { q: "Can new vinyl handle the wind out here?", a: "Rated and fastened properly, comfortably. The failures you have seen are lock design and nailing schedule problems from the build era, not a verdict on the material." },
+          { q: "Will it match the neighborhood's look?", a: "Modern lines carry the standard subdivision profiles plus better ones. Staying harmonious while stepping up quality is exactly the brief we hear most in Dublin and Westerville — it is very doable." },
+          { q: "How fast is a typical replacement?", a: "Two to four working days for most two-stories: tear-off and wall correction first, then panels. Weather moves the schedule, never the standard." },
+          { q: "Is now a bad time of year?", a: "Vinyl installs run year-round; cold-weather work simply respects the material's contraction with slightly different gapping. The calendar affects scheduling backlog more than quality." },
+          { q: "Do you handle just one damaged elevation?", a: "Yes — a west wall that took the worst of a storm can be re-sided alone. We are candid about match visibility on the older profiles, and when several neighbors have the same single-wall damage we can often run them as one mobilization." },
+          { q: "What areas around Columbus do your siding crews cover?", a: "The full metro from Galloway: Dublin, Hilliard, Westerville and Grove City most weeks, Worthington and Gahanna, and out through Pickerington and Reynoldsburg. If your subdivision is inside the outerbelt ring, we have almost certainly worked it." },
+          { q: "Does new vinyl help resale?", a: "Fresh, straight siding is one of the highest-visibility exterior updates a listing can carry, and in subdivisions where every third house shows tired original panels, the contrast does real work. We will not invent a return percentage — but ask any local agent which houses photograph better." },
+        ],
+        "st-louis": [
+          { q: "Why does vinyl wave and ripple on some St. Louis walls?", a: "Heat plus tight nailing. Our swing gives vinyl the largest movement range it sees anywhere we work, and a panel that cannot slide converts that movement into waves. Correct hanging prevents it entirely — the wavy wall next door was preventable." },
+          { q: "Is dark vinyl a bad idea here?", a: "On west and south exposures, often yes — dark panel runs hot in August and ages ahead of the house. Modern formulations help; physics still gets a vote. We flag the risky combinations before you order them." },
+          { q: "Vinyl or fiber cement for my gable?", a: "Small areas narrow the price gap, so gables are where Hardie tempts. But a well-hung vinyl gable over brick remains a perfectly good budget answer, and we quote the pair side by side rather than upselling by default." },
+          { q: "Can hail-damaged vinyl go on an insurance claim?", a: "Cracked and holed panels from a documented storm frequently qualify. We photograph wall damage elevation by elevation — the same discipline as our roof documentation — so the conversation with your carrier starts from evidence." },
+          { q: "How do repairs work if a panel breaks later?", a: "Panels unzip and swap individually when the profile is still made — we note your profile and color in the job file to make that future repair findable. Discontinued profiles are the honest risk; we tell you the match odds up front." },
+          { q: "What does a ranch re-side run?", a: "South County's long simple walls are vinyl's best value case in the metro — high square footage per setup day. The free inspection turns that into a written number that holds." },
+          { q: "How soon after hail should walls be looked at?", a: "Within a few weeks, while the damage dates cleanly to the storm. Vinyl cracks are unambiguous evidence when fresh; a year later the attribution conversation with a carrier gets harder than it needed to be." },
+          { q: "Which parts of the metro do you side from Geyer Road?", a: "All of it: the city's gable work, the inner ring under the oaks, South County ranch country through Mehlville and Oakville, and west through Ballwin and Chesterfield. One crew standard, one written-quote process, everywhere." },
+          { q: "Can soffit and fascia be done in the same visit?", a: "Almost always, and under the metro's oak canopy it is usually overdue — those boards live wet here. Same crew, same scaffold time, a fraction of the standalone price, and the whole roofline edge ends up matching instead of half-new." },
+        ],
+      }[m.slug]),
+      depth: {
+        cincinnati: {
+          eyebrow: "About the material",
+          heading: "Vinyl's case, made honestly",
+          blocks: [
+            { h: "Where it belongs here", p: [
+              "Cincinnati's post-war rings — the ranches and split-levels of Blue Ash, Madeira, Fairfield, Landen — were built with simple elevations that quality vinyl suits perfectly. The material's case collapses only where architecture demands depth it cannot fake, and we draw that line with you house by house rather than pretending one answer covers a metro this varied.",
+            ]},
+            { h: "The canopy complication", p: [
+              "Heavy shade keeps walls damp, and damp is vinyl's quiet enemy — not the panel, which shrugs it off, but the wall behind, which must be dry and sealed before panels close it in. Our tree-street installs treat the moisture barrier as the job and the vinyl as its cover. That order of priorities is most of what a decade of east-side tear-offs has taught us.",
+            ]},
+            { h: "Hail's sorting function", p: [
+              "Spring hail sorts vinyl by age: new panels flex and shed it, brittle fifteen-year-old ones crack. If your walls took last spring's storm, the sorting already happened — we read walls after hail the way we read roofs, and cracked vinyl belongs on the same claim as bruised shingles.",
+            ]},
+            { h: "What a Cincinnati vinyl quote contains", p: [
+              "Panel spec with gauge named, the wall-preparation scope from the inspection, trim and accessory lines priced individually, haul-away, and the schedule. Nothing labeled miscellaneous, nothing to be determined later — if the tear-off changes the picture, the change order is written and signed before it is worked. That paperwork discipline is not bureaucracy; it is why our jobs end at the number they started at.",
+            ]},
+            { h: "A note on hillside houses", p: [
+              "Cincinnati's slopes complicate siding logistics more than siding physics: staging on a grade, protecting the downhill landscaping, sequencing tear-off so debris never travels. Our crews work the hill streets constantly, and the quote reflects real access rather than a flat-lot assumption that falls apart on arrival day.",
+            ]},
+          ],
+        },
+        columbus: {
+          eyebrow: "About the material",
+          heading: "Second-generation vinyl, for the city that bought the first",
+          blocks: [
+            { h: "What the nineties bought", p: [
+              "Columbus's boom subdivisions received the thinnest panel that met code, hung at production speed over minimally detailed walls. It lasted about as designed — twenty-five to thirty years — and its synchronized retirement across the metro is why re-siding quotes cluster by street here. The material was never wrong; the specification was minimal. Replacement is the chance to fix the spec.",
+            ]},
+            { h: "What second-generation means", p: [
+              "Heavier gauge that locks stiffer and lies flatter. Finishes engineered for open-lot sun. Fastening schedules chosen for a wind fetch with no mature trees in it. And underneath, the wrap taped and the openings flashed the way the schedule skipped the first time. Same material class, roughly the same relative affordability — a categorically different wall.",
+            ]},
+            { h: "The lock is the spec", p: [
+              "In central Ohio wind, a vinyl wall is only as good as its panel-to-panel lock. Modern lock designs grip through gusts that unzip the originals — it is the least visible upgrade in the catalog and, on open ground, the one that matters most. Ask to feel the difference on samples; it is immediately obvious in the hand.",
+            ]},
+            { h: "Reading your wall's build year", p: [
+              "A practiced eye dates a Columbus vinyl wall within a few years from the profile, the lock style and the accessory details — and the date predicts the failure list. Pre-1995 walls hide the thinnest panel and the barest sheathing paper; the 2000s brought marginally better wrap and the same tight nailing. When we quote your street, that archaeology is already priced in, which is why our change-order rate on these jobs is nearly zero.",
+            ]},
+            { h: "Timing a street-wide problem", p: [
+              "Because whole Columbus streets age together, the replacement market moves in waves — and the spring after a visible hail season is always the crowded one. Homeowners who book assessments in the quieter months get faster scheduling and the same pricing; the panels do not know what quarter it is. Worth knowing if your wall is close.",
+            ]},
+          ],
+        },
+        "st-louis": {
+          eyebrow: "About the material",
+          heading: "Engineering for the eighty-degree year",
+          blocks: [
+            { h: "The swing, quantified", p: [
+              "A St. Louis wall cycles through roughly an eighty-degree working range every year, and vinyl responds to every degree — a long panel grows and shrinks by fractions of an inch across the seasons. None of that is a problem for a floating installation and all of it is fatal to a pinned one. Movement math is the first page of our vinyl spec here, not a footnote.",
+            ]},
+            { h: "August is the exam", p: [
+              "Heat exposes every shortcut at once: tight nails become waves, thin panel oil-cans, dark colors on west walls go soft by afternoon. Our August-proofing is unglamorous — gauge, color counsel, hanging discipline — and it is why our summer callbacks are for new work, not repairs of our own.",
+            ]},
+            { h: "The brick-line detail", p: [
+              "So much St. Louis vinyl terminates against masonry that the junction deserves its own paragraph: J-channel alone is not a water plan. Our brick-line details flash behind the channel so the joint sheds rather than collects — the difference shows up in the sheathing five years later, which is exactly why nobody skimps on it twice.",
+            ]},
+            { h: "Color strategy for the gradient", p: [
+              "St. Louis rewards a specific color logic: lighter shades on the punished west and south walls, freedom everywhere else. Modern vinyl's fade resistance is genuinely improved, but physics still charges dark panels a premium here — more heat, more movement, more visible aging. We bring the exposure map to the color conversation so the pretty choice and the durable choice can be negotiated openly.",
+            ]},
+            { h: "Ranch economics, spelled out", p: [
+              "A single-story ranch re-side is the best price-per-square vinyl work in the metro: long runs, minimal ladder time, few penetrations. It is also where sloppy lines show most, which keeps the discipline honest. If you own an Affton or Oakville ranch and have been assuming siding is out of budget, the free quote frequently comes as a pleasant surprise.",
+            ]},
+          ],
+        },
       },
     },
   },
