@@ -340,7 +340,174 @@ export const SUBSERVICES = {
         },
       },
     },
+    // ── FLAT ROOFING (Rambow audit, 2026-08-28 / built 2026-08-31) ──────────────────────────
+    // The audit found /columbus/roofing/flat-roofing/ holding page-one-adjacent positions for
+    // "flat roofing companies" and "central ohio flat roof installation" on the LIVE site while
+    // the phrase "flat roof" appeared nowhere on the new one — a service we actually sell (TPO
+    // and low-slope are live lines) with no page to catch its own demand. Redirects for the old
+    // URLs are DEFERRED per the same brief; these pages only build the destination.
+    "flat-roofing": {
+      label: "Flat & Low-Slope Roofing",
+      seo: {
+        title: (m) => `Flat Roofing in ${m.cityState}`,
+        description: (m) => `Flat roof installation and repair across ${m.region} — TPO, EPDM and modified bitumen, quoted after a free on-roof inspection. Call ${m.phone}.`,
+      },
+      h1: (m) => `Flat Roofing in ${m.name}`,
+      lead: (m) => `TPO, EPDM and modified bitumen for flat and low-slope roofs across ${m.region} — installed, repaired and replaced.`,
+      intro: (m, c) => ({
+        cincinnati:
+          "A flat roof is not a shingle roof laid flat — it is a membrane system, and it succeeds or fails on seams, drainage and edge details rather than on the field. Around Cincinnati that mostly means the low-slope sections older homes accumulate: rear additions in Pleasant Ridge and Norwood, porch roofs in Hyde Park, garage roofs from Oakley out to Milford. We install and repair flat roofs as their own trade, with the right membrane for how the roof is used, not shingles pretending the pitch is steeper than it is.",
+        columbus:
+          "Central Ohio flat roof installation is a different job from the steep-slope work most roofing companies quote, and treating it the same is why so many flat roofs here leak young. Columbus carries more low-slope roofing than people expect — porch roofs and rear additions in Clintonville and German Village, garage and bump-out roofs through Hilliard and Gahanna, and the low-pitch sections that 1990s subdivision designs tucked behind dormers. We run flat roofing as a dedicated line: membrane systems, engineered drainage, and details that hold through a freeze.",
+        "st-louis":
+          "St. Louis is a flat-roof town in a way the other metros we serve are not. The brick housing stock around Tower Grove, The Hill and the inner ring carries parapet walls and low-slope rear sections as a matter of course, and South County ranches add long, shallow porch and carport roofs on top of that. A flat roofing contractor here has to know membranes and masonry both — where the membrane turns up the parapet is where most of these roofs actually fail, and it is the first place we look.",
+      }[m.slug]),
+      sections: [
+        { title: "TPO", body: "The workhorse single-ply: heat-welded seams, reflective surface, strong price-to-life ratio. Our default recommendation for most residential low-slope sections." },
+        { title: "EPDM rubber", body: "Proven over decades, tolerant of movement, and often the right call over occupied space where dark membrane and simple detailing win." },
+        { title: "Modified bitumen", body: "Layered asphalt sheets for roofs that take foot traffic or abuse — and the natural repair match for many existing older flat roofs." },
+        { title: "Drainage and edges", body: "Ponding water is the flat-roof killer. Tapered insulation, working drains and scuppers, and clean edge terminations are quoted as part of the job, not extras." },
+      ],
+      depth: {
+        cincinnati: {
+          eyebrow: "Flat roofs in this metro",
+          heading: "What a Cincinnati flat roof is up against",
+          blocks: [
+            { h: "Freeze-thaw finds every seam", p: [
+              "An Ohio Valley winter crosses freezing dozens of times, and standing water on a flat section turns each crossing into a pry bar. A membrane with even shallow ponding ages several winters for every calendar one here.",
+              "That is why our flat-roof quotes talk about tapered insulation and drainage before they talk about membrane brand — moving the water off the roof buys more life than any upgrade in the material itself.",
+            ]},
+            { h: "Additions meet old houses", p: [
+              "Most of the flat roofing we do in Hamilton County is where a newer low-slope section meets an older steep roof or a brick wall — the back of a Pleasant Ridge four-square, a Milford garage tied into the house. Those transitions are flashing problems first and membrane problems second, and quoting them from the ground misses what matters.",
+            ]},
+            { h: "Repair or re-cover, honestly", p: [
+              "A flat roof with a tired surface but sound insulation can often take a re-cover for well under replacement cost. One with wet insulation cannot — trapping moisture under new membrane buys a worse failure later. A moisture check settles it before we quote, and we will say plainly which side of the line your roof is on.",
+            ]},
+          ],
+        },
+        columbus: {
+          eyebrow: "Flat roofs in this metro",
+          heading: "What central Ohio asks of a flat roof",
+          blocks: [
+            { h: "Hail hits membranes differently", p: [
+              "The spring hail that bruises shingles punctures aged single-ply. Fresh TPO shrugs off most central Ohio hail; fifteen-year-old membrane that has lost its plasticizers cracks instead. Age, not brand, is usually the deciding variable — which is why our inspection reads the membrane's condition before anything else.",
+            ]},
+            { h: "Open ground means wind uplift", p: [
+              "Flat roofs fail at the perimeter in wind, and the flat terrain that gives Columbus subdivisions their long wind fetch makes edge securement the detail that matters most. Fastening schedules and edge details on our installs follow the wind rating the location actually needs, not a one-size default.",
+            ]},
+            { h: "From porch roofs to whole systems", p: [
+              "Central Ohio flat roof installation spans a wide range — a Clintonville porch, a German Village rear addition under historic-district rules, a Gahanna garage. The membrane choice follows the use: EPDM over living space for quiet and movement tolerance, TPO where sun exposure dominates, modified bitumen where the roof gets walked.",
+            ]},
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Flat roofs in this metro",
+          heading: "Flat roofing in a brick city",
+          blocks: [
+            { h: "The parapet is the roof", p: [
+              "On the brick stock around Tower Grove, The Hill and the near South Side, the membrane field rarely fails first — the turn-up at the parapet wall does. Coping stones shift, mortar joints open, and water enters above the membrane line entirely. Our flat-roof inspections here spend as much time on the masonry interface as on the membrane.",
+            ]},
+            { h: "A wide thermal swing works the seams", p: [
+              "St. Louis summers put serious heat into a dark flat roof and the winters still freeze — a seasonal swing wide enough to open seams and back out fasteners over the years. Heat-welded TPO seams and generous expansion detailing are how a flat roof rides that swing instead of fighting it.",
+            ]},
+            { h: "Shingle and low-slope, one quote", p: [
+              "Many South County homes pair a shingled main roof with a low-slope porch, carport or rear addition. We quote both parts as one job with the right system on each — asphalt shingle above, membrane below — rather than stretching either material past what it is for.",
+            ]},
+          ],
+        },
+      },
+      faq: (m, c) => [
+        { q: "Which flat roof membrane is best?", a: `The one matched to how the roof is used. TPO is our default for sun-exposed sections, EPDM tolerates movement and suits roofs over living space, and modified bitumen takes foot traffic. On an inspection in ${m.name} we will tell you which fits and why — and quote more than one when the case is close.` },
+        { q: "Can you repair a flat roof, or does it have to be replaced?", a: "Repair is often the honest answer: seam failures, flashing details and isolated punctures are all fixable if the insulation underneath is dry. A moisture check tells us whether repair money is well spent, and we share that reading before you commit to anything." },
+        { q: "How long does a flat roof last?", a: `Installed and drained properly, TPO and EPDM both run 20 to 30 years; modified bitumen similar with maintenance. Ponding water shortens all of them — which is why drainage is part of every quote we write. ${c.weather}` },
+        { q: "Do you handle the low-slope section along with a shingle roof?", a: "Yes, as one job. Homes with a shingled main roof and a flat porch or addition get the right system on each section and one crew responsible for the transition between them — which is where mixed roofs usually leak." },
+      ],
+    },
+
+    // ── WIND DAMAGE REPAIR (same audit, same date) ──────────────────────────────────────────
+    // Live site ranks for "wind damage roof repair" and "roofing maintenance for high-wind
+    // areas" on a page this build folded into insurance-storm-damage. Wind gets its own page
+    // per market; the storm page keeps insurance and hail. Redirects deferred, as above.
+    "wind-damage": {
+      label: "Wind Damage Repair",
+      seo: {
+        // m.name, not cityState: with the brand suffix the state code pushed all three past 60.
+        title: (m) => `Wind Damage Roof Repair in ${m.name}`,
+        description: (m) => `Wind damage roof repair across ${m.region}: lifted shingles, creased tabs and blow-offs fixed fast. Free inspection and documentation. ${m.phone}.`,
+      },
+      h1: (m) => `Wind Damage Roof Repair in ${m.name}`,
+      lead: (m) => `Lifted, creased and missing shingles across ${m.region} — found, documented and repaired before the next front arrives.`,
+      intro: (m, c) => ({
+        cincinnati:
+          "Wind damage rarely announces itself. A gust that clears the Ohio Valley hills lifts a run of tabs, the shingles settle back down, and from the driveway the roof looks untouched — but every lifted tab is a broken seal, and the next storm finds it. We repair wind damage across greater Cincinnati, from river-adjacent streets in Anderson Township that funnel gusts uphill to the open newer builds around Mason, and we start by finding the damage that does not show from the ground.",
+        columbus:
+          "Wind is central Ohio's signature roof threat. The flat, open ground gives straight-line winds a running start across Dublin, Hilliard and the newer rings, where young trees break nothing, and a single June front can crease shingles across an entire subdivision without tearing one of them off. Wind damage roof repair is its own discipline here: reading creases and broken seals that hide in plain sight, fixing them fast, and documenting everything in case the damage crosses into an insurance conversation.",
+        "st-louis":
+          "The storm cells that cross the St. Louis metro in summer push outflow winds ahead of them, and those gusts do their work in seconds — lifted ridge caps in Ballwin, creased field shingles in Florissant, a strip of tabs gone from a Mehlville ranch. We handle wind damage roof repair across the metro: emergency cover first when weather is still coming, then a slope-by-slope inspection, then a repair scoped to what the wind actually did rather than a replacement pitch you did not ask for.",
+      }[m.slug]),
+      sections: [
+        { title: "Lifted and creased shingles", body: "A crease is a break in the shingle's spine and a lifted tab is a broken seal — both leak later if not resealed or replaced now. These are the finds that decide whether a roof rides out the next front." },
+        { title: "Blow-offs and emergency cover", body: "Missing shingles and exposed underlayment get covered the day you call when weather is incoming. Stopping the water buys time to do the repair right." },
+        { title: "Ridge, rake and edge work", body: "Wind works the perimeter hardest. Ridge caps, rake edges and the first courses at the eaves get checked and re-secured — the places damage starts, and the places a quick look misses." },
+        { title: "Documentation as we go", body: "Every find is photographed and written up slope by slope. If the damage turns out to be widespread enough for an insurance claim, the record is already in the shape an adjuster needs." },
+      ],
+      depth: {
+        cincinnati: {
+          eyebrow: "Wind in this metro",
+          heading: "How Ohio Valley wind takes roofs apart",
+          blocks: [
+            { h: "The hills make their own gusts", p: [
+              "Cincinnati's terrain channels wind — river corridors and hillsides accelerate gusts that flat ground would spread out, which is why one street in Mt. Washington shows damage while the next one over shows none. We inspect the roof in front of us rather than assuming the neighborhood's weather was uniform.",
+            ]},
+            { h: "Trees do half the damage", p: [
+              "The heavy canopy through Clermont County and the river townships means wind events here drop limbs as often as they lift shingles. Impact scuffs and punctures hide among leaves and shade lines; part of a wind inspection here is simply looking under what the trees dropped.",
+            ]},
+            { h: "Maintenance for exposed roofs", p: [
+              "For homes on ridgelines and open hilltops we offer a simple standing check: seals, ridge caps and edge courses gone over ahead of storm season. Roofing maintenance for high-wind exposure costs little and is the difference between riding out a front and calling us after it.",
+            ]},
+          ],
+        },
+        columbus: {
+          eyebrow: "Wind in this metro",
+          heading: "Straight-line wind, and what it leaves behind",
+          blocks: [
+            { h: "Damage in plain sight", p: [
+              "After a derecho-style front, the roofs that lost shingles get attention and the roofs that merely creased get forgotten — until they leak. A creased shingle keeps its place and loses its strength, and finding them takes someone on the roof, not binoculars from the lawn.",
+            ]},
+            { h: "New subdivisions, no windbreaks", p: [
+              "Dublin, Lewis Center and the newer rings sit on open former farmland where young landscaping breaks no wind at all. The same front that rattles an old Clintonville street tears at these roofs directly — which is why we check field fastening and not just the obvious ridge line on newer builds.",
+            ]},
+            { h: "A pre-season check beats a claim", p: [
+              "For high-wind exposure we run a maintenance visit ahead of spring: reseal what has lifted, re-nail what has backed out, and note what is aging toward vulnerable. It is the least expensive roofing work a wind-exposed home buys all year.",
+            ]},
+          ],
+        },
+        "st-louis": {
+          eyebrow: "Wind in this metro",
+          heading: "Outflow winds and the metro roof",
+          blocks: [
+            { h: "Seconds of wind, seasons of leaks", p: [
+              "The gust front ahead of a summer storm cell hits hard and moves on. What it leaves — broken seals, shifted ridge caps, a crease across a south-facing slope — leaks slowly over the seasons that follow, long after the storm that caused it is forgotten. Dating the damage matters, and our slope-by-slope documentation does exactly that.",
+            ]},
+            { h: "Long simple roofs, long exposed runs", p: [
+              "South County's mid-century ranches carry long unbroken slopes with edge runs to match. Wind that gets under a first course peels along the whole run, so eave and rake securement is where our inspections start on these houses.",
+            ]},
+            { h: "When wind damage becomes a claim", p: [
+              "One slope of creases is a repair; damage across multiple slopes is often an insurance conversation. We tell you plainly which you have, hand you the photographed record either way, and repair what makes sense to repair regardless of how the claim question resolves.",
+            ]},
+          ],
+        },
+      },
+      faq: (m, c) => [
+        { q: "What does wind damage on a roof look like?", a: "Missing shingles are the obvious sign. The common ones are subtler: horizontal creases across tabs, shingles that lift by hand because the seal strip broke, and ridge caps sitting slightly proud. None of them show reliably from the ground — which is why the inspection is free and happens on the roof." },
+        { q: "How fast can you get out after high winds?", a: `Same day or next day for anything open to the weather across ${m.region} — emergency cover first, then the full inspection once the roof is safe to walk.` },
+        { q: "Is wind damage covered by insurance?", a: "Often, when it is widespread and documented. We photograph and write up everything we find slope by slope. Whether to claim is your call and the carrier's decision — we will tell you honestly when the damage is minor enough that a straight repair beats involving them." },
+        { q: "Do you offer maintenance for high-wind areas?", a: `Yes — a pre-season check that reseals lifted tabs, re-secures ridge and edge courses, and flags aging shingles before ${c.stormLine} arrive. It is inexpensive and it is the single best predictor of a roof getting through storm season quietly.` },
+      ],
+    },
+
   },
+
 
   siding: {
     "siding-replacement": {

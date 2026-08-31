@@ -29,7 +29,7 @@ import SiteFooter from "../../components/SiteFooter.astro";
 
 import { MARKETS, servicesFor, providerRef, copyFor } from "../../data/markets.js";
 import { TESTIMONIALS } from "../../data/claims.js";
-import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, localFor } from "../../data/services.js";
+import { SERVICE_CONTENT, SERVICE_META, MARKET_ROOFING_DEPTH, MARKET_SIDING_DEPTH, localFor } from "../../data/services.js";
 import MarketDepth from "../../components/MarketDepth.astro";
 import { MARKET_CONTEXT } from "../../data/subservices.js";
 import { SUBSERVICES } from "../../data/subservices.js";
@@ -125,13 +125,19 @@ const serviceSchema = {
     eyebrow={`What we do`}
     heading={svc.detailHeading?.(market) ?? `${svc.label} services in ${market.name}`}
     intro={svc.detailIntro?.(market) ?? local?.intro}
-    cards={svc.sections}
+    cards={local?.sections ?? svc.sections}
   />
 
   {/* THE INSPECTION SECTION, LOCALIZED (owner brief 2026-08-27) — same headings as the national
       roofing page, but each market's copy is its own weather: freeze-thaw for the Ohio Valley,
       straight-line wind for central Ohio, hail for St. Louis. See MARKET_ROOFING_DEPTH. */}
   {sKey === "roofing" && <MarketDepth market={market} depth={MARKET_ROOFING_DEPTH[mSlug]} />}
+
+  {/* SIDING DEPTH, per market where written (Rambow audit phase 2, 2026-08-31): the hub pages
+      measured 71% cross-market overlap, and the fix is each market carrying its own material
+      argument. Renders nothing for markets not yet rewritten — Cincinnati first, by instruction,
+      the other two after review. */}
+  {sKey === "siding" && <MarketDepth market={market} depth={MARKET_SIDING_DEPTH[mSlug]} />}
 
   {/* After the detail cards and well below the fold. It says what the words above just described,
       which is why it follows them rather than opening the page — and it is never behind the hero,
@@ -210,7 +216,7 @@ const serviceSchema = {
   {/* Same rhythm as the market landing: proof, then the offer band, then the questions. */}
   <Reviews heading="Proven. Trusted. Backed by Your Neighbors." intro={`Feedback from homeowners across ${market.region}.`} reviews={TESTIMONIALS[mSlug] ?? []} />
   <OfferBand />
-  <FAQ items={[...(local?.faq ?? []), ...svc.faq].map((f) => ({ ...f, a: typeof f.a === "function" ? f.a(market) : f.a }))} />
+  <FAQ items={(local?.replaceFaq ? local.faq : [...(local?.faq ?? []), ...svc.faq]).map((f) => ({ ...f, a: typeof f.a === "function" ? f.a(market) : f.a }))} />
   <CTABand market={market} heading="Ready for a free, no-pressure estimate?" body="Tell us what you need — we'll take a look and give you an honest number." />
 
   <Fragment slot="chrome-bottom">

@@ -16,10 +16,12 @@ if (!existsSync(dist)) { console.error("  ✗ no dist/ — run npm run build fir
 // ── the inventory, transcribed ───────────────────────────────────────────────────────────────
 const SITEWIDE = ["/", "/about-us/", "/free-estimate/", "/thank-you/", "/blog/"];
 
-/** The sixteen every market carries — minus commercial where the owner scoped it out. */
+/** The market page set — sixteen plus the two the Rambow audit added (flat roofing and wind
+ * damage, 2026-08-31), minus commercial where the owner scoped it out. */
 const SIXTEEN = [
   "", "roofing/", "roofing/roof-replacement/", "roofing/roof-repair/",
-  "roofing/insurance-storm-damage/", "commercial-roofing/", "siding/",
+  "roofing/insurance-storm-damage/", "roofing/flat-roofing/", "roofing/wind-damage/",
+  "commercial-roofing/", "siding/",
   "siding/siding-replacement/", "siding/james-hardie-siding/", "siding/vinyl-siding/",
   "windows/", "gutters/", "reviews/", "gallery/", "about/", "free-estimate/",
 ];

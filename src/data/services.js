@@ -166,11 +166,43 @@ export const SERVICE_CONTENT = {
     // THE DETAIL SECTION, ALSO FROM THE BRIEF — heading and both paragraphs verbatim. The intro
     // is an array: ServiceDetail renders one <p> per entry.
     detailHeading: (m) => `What a full siding replacement does for a ${m.name} home`,
-    detailIntro: () => [
+    // CINCINNATI REWRITTEN 2026-08-31 (Rambow audit phase 2 — the hub pages measured 71%
+    // cross-market overlap; Cincinnati first, stop for review). Columbus and St. Louis keep the
+    // owner's 2026-08-27 paragraphs until their rewrites are approved.
+    detailIntro: (m) => m.slug === "cincinnati" ? [
+      "Drive one loop from Hyde Park through Oakley to Anderson Township and you will pass every siding era Cincinnati has: 1920s foursquares still wearing original wood clapboard, post-war ranches through Blue Ash and Madeira sided in the aluminum of their day, and the vinyl-clad two-storeys that filled Mason and West Chester from the nineties on. Each of those walls fails differently, and a siding quote that does not account for which one you own is a guess.",
+      "A full replacement here starts with what the old cladding is hiding. Wood-sheathed older homes east of the Mill Creek often carry decades of patched moisture damage at the base course; newer builds hide their trouble at window heads where builder-grade flashing gave up early. The old siding comes off, the sheathing gets inspected board by board, and what needs replacing gets replaced before anything new goes on the wall.",
+      "Then the assembly is built as a system — housewrap lapped and taped, flashing at every opening, trim, soffit and fascia detailed to spec — because siding is a water-management layer that happens to look good, not the other way around.",
+    ] : [
       "Nothing changes a home's appearance like new siding. Who installs it matters just as much as what goes on the wall.",
       "We take the old siding off rather than cover it, inspect the carpentry underneath, and replace anything that needs it before new material goes on. House wrap, flashing, trim, soffit, and fascia all get done to spec.",
     ],
-    lead: "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
+    // Cincinnati's lead is its own (phase 2); the shared string serves the other two markets.
+    lead: (m) => m?.slug === "cincinnati"
+      ? "Siding installation and replacement across greater Cincinnati — James Hardie fiber cement and vinyl, fitted to the house you actually own."
+      : "James Hardie fiber cement and vinyl siding, installed and repaired for the whole exterior.",
+    local: {
+      cincinnati: {
+        // replaceFaq: the shared siding FAQ was a 250-word block identical on all three market
+        // pages — the single biggest overlap contributor the audit measured. Cincinnati's FAQ
+        // stands alone; the other markets keep the shared set until their rewrites.
+        replaceFaq: true,
+        description: "Cincinnati siding contractors for James Hardie and vinyl — tear-off, sheathing repair and spec installation from our Milford office. Free inspection.",
+        sections: [
+          { title: "Fiber cement for the four-seasons test", body: "Hardie board holds paint through Ohio Valley freeze-thaw and shrugs off spring hail — the reason it has been winning the older east-side streets where wood finally gave out." },
+          { title: "Vinyl, specified honestly", body: "The right call for much of Mason, Loveland and West Chester: modern heavier-gauge panels on a properly prepared wall, not the thin builder-grade sheet that earned vinyl its reputation." },
+          { title: "The repair-or-replace line", body: "One failed elevation on a sound wall is a repair. Waviness, chronic paint failure or soft sheathing underneath is the wall telling you the assembly is done — we will say which, plainly." },
+          { title: "Trim, soffit and fascia in the same pass", body: "Cincinnati's tree cover keeps gutters and fascia wet longer than open suburbs; rotted trim goes with the siding job while the wall is open, at a fraction of the standalone cost." },
+        ],
+        faq: [
+          { q: "What does new siding cost in Cincinnati?", a: "It depends on the wall more than the material: how much sheathing repair is hiding under the old cladding, how many stories and openings, and whether trim and fascia go in the same pass. We put a written number on it after a free inspection — and the quote holds unless the scope itself changes." },
+          { q: "Hardie or vinyl for a Cincinnati home?", a: "Fiber cement wins on impact, fire rating and paint life, and suits the older housing stock from Hyde Park to Pleasant Ridge. Quality vinyl wins on budget and maintenance and fits much of the newer stock north of the loop. Where both fit we quote both and say which we would put on our own house." },
+          { q: "Can you match historic siding profiles on older homes?", a: "Usually, yes. Hardie's smooth and cedar-textured lap lines come in widths that sit correctly on 1920s facades, and trim details can be reproduced in composite that outlasts the wood it replaces. Bring us a photo of the street face and we will tell you what is matchable." },
+          { q: "How long does a full siding replacement take?", a: "Most single-family homes run three to five working days: tear-off and sheathing repair first, then wrap and flashing, then cladding and trim. Weather moves the schedule rather than the standard, and we tell you when it does." },
+          { q: "Do you handle the permits?", a: "Yes. Hamilton, Clermont, Butler and Warren counties each run their own process and several municipalities add their own layer — we pull whatever the address needs before the crew arrives." },
+        ],
+      },
+    },
     sections: [
       { title: "James Hardie Fiber Cement", body: "The premium option: holds paint far longer than vinyl and stands up to impact. We are an Alliance Elite contractor." },
       { title: "Vinyl Siding", body: "The value option, and a good one when it is installed properly. Most siding complaints trace back to installation, not material." },
@@ -191,7 +223,8 @@ export const SERVICE_CONTENT = {
       { q: "Do you work on new construction?", a: "Yes — with homeowners, builders and general contractors, scheduled around the rest of the trades rather than dropped into the middle of them." },
       { q: "What about the soffit, fascia and trim?", a: "Done in the same visit. It is where water actually gets in when it is neglected, and it is the part that makes a siding job look finished rather than wrapped." },
     ],
-    local: {},
+    // (the per-market `local` block sits above, after `lead` — a second empty one here shadowed
+    // it in the object literal and silently threw away the Cincinnati rewrite. Caught in-round.)
   },
   windows: {
     label: "Windows",
@@ -323,6 +356,38 @@ export const hasLocalCopy = (serviceKey, marketSlug) =>
  * The three blocks are deliberately different per market in structure and emphasis, so the
  * similarity check has nothing to pair.
  */
+/**
+ * MARKET SIDING DEPTH — phase 2 of the Rambow audit (2026-08-31). Cincinnati only, by
+ * instruction ("produce the Cincinnati siding page first and stop"); Columbus and St. Louis
+ * render nothing here until their rewrites are approved. Every fact below is a general truth of
+ * the metro's housing stock or climate — no invented jobs, addresses or testimonials.
+ */
+export const MARKET_SIDING_DEPTH = {
+  cincinnati: {
+    eyebrow: "Siding in this metro",
+    heading: "What Cincinnati walls ask of their siding",
+    blocks: [
+      { h: "Three housing eras, three different walls", p: [
+        "The east-side streets through Hyde Park, Mt. Lookout and Oakley carry pre-war homes with true wood sheathing and, often, several generations of cladding layered over it. The first ring out — Blue Ash, Madeira, Wyoming, Anderson Township — is largely post-war construction where aluminum and early vinyl went over plank or early panel sheathing. Mason, Loveland and West Chester filled in from the eighties onward with OSB-sheathed frames built for vinyl from day one.",
+        "Why it matters: the tear-off findings, the fastening schedule and even the right starter course differ across those three walls. A crew that sides every house the same way is siding two of the three wrong.",
+      ]},
+      { h: "The Ohio Valley is hard on cladding", p: [
+        "Cincinnati summers are humid enough to keep shaded walls damp for days, winters cross freezing dozens of times, and spring brings hail often enough that we meet its dents every year. Paint on wood fails fast here; thin vinyl reads every temperature swing; and any siding over a wall that cannot dry is a rot problem on a timer.",
+        "That is why our installs are detailed for drying as much as for looks — rain-screen gaps where the assembly calls for them, wrapped and taped sheathing, and flashing that sheds water out of the wall instead of trapping it behind the cladding.",
+      ]},
+      { h: "Trees, hillsides and the moisture line", p: [
+        "The canopy through Clermont County and the river townships is beautiful and merciless: shaded north walls in Milford or Terrace Park can stay wet weeks longer than an open Mason lot two towns over. On heavily treed streets we pay particular attention to the base course and to clearances at grade, because splash-back and held moisture is where those walls fail first.",
+      ]},
+      { h: "Hardie country, honestly qualified", p: [
+        "Fiber cement has earned its run through Cincinnati's older neighborhoods — it takes an impact, holds paint through the freeze-thaw cycles, and carries the deeper profiles older facades want. We install it to James Hardie's own specification, which is most of what separates a Hardie wall that lasts from one that curls at the butts. But it is not automatic: on a large, simple newer elevation, a heavier-gauge vinyl can be the smarter spend, and we will say so.",
+      ]},
+      { h: "What the quote actually covers", p: [
+        "Tear-off to the sheathing, repair of what turns up, housewrap lapped and taped, flashing at every opening and transition, the cladding itself, and trim, soffit and fascia detailed in the same pass. One crew, one project manager from our Milford office, and a written scope before anyone touches the wall — across Hamilton, Clermont, Butler and Warren counties and the Northern Kentucky river towns.",
+      ]},
+    ],
+  },
+};
+
 export const MARKET_ROOFING_DEPTH = {
   cincinnati: {
     eyebrow: "What the inspection is looking for",

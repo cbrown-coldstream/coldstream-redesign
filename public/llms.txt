@@ -70,6 +70,8 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/cincinnati/roofing/roof-replacement/](https://coldstreamexteriors.com/cincinnati/roofing/roof-replacement/) — roofing · roof replacement in Cincinnati.
 - [https://coldstreamexteriors.com/cincinnati/roofing/roof-repair/](https://coldstreamexteriors.com/cincinnati/roofing/roof-repair/) — roofing · roof repair in Cincinnati.
 - [https://coldstreamexteriors.com/cincinnati/roofing/insurance-storm-damage/](https://coldstreamexteriors.com/cincinnati/roofing/insurance-storm-damage/) — roofing · insurance storm damage in Cincinnati.
+- [https://coldstreamexteriors.com/cincinnati/roofing/flat-roofing/](https://coldstreamexteriors.com/cincinnati/roofing/flat-roofing/) — roofing · flat roofing in Cincinnati.
+- [https://coldstreamexteriors.com/cincinnati/roofing/wind-damage/](https://coldstreamexteriors.com/cincinnati/roofing/wind-damage/) — roofing · wind damage in Cincinnati.
 - [https://coldstreamexteriors.com/cincinnati/siding/](https://coldstreamexteriors.com/cincinnati/siding/) — siding in Cincinnati.
 - [https://coldstreamexteriors.com/cincinnati/siding/siding-replacement/](https://coldstreamexteriors.com/cincinnati/siding/siding-replacement/) — siding · siding replacement in Cincinnati.
 - [https://coldstreamexteriors.com/cincinnati/siding/james-hardie-siding/](https://coldstreamexteriors.com/cincinnati/siding/james-hardie-siding/) — siding · james hardie siding in Cincinnati.
@@ -88,6 +90,8 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/columbus/roofing/roof-replacement/](https://coldstreamexteriors.com/columbus/roofing/roof-replacement/) — roofing · roof replacement in Columbus.
 - [https://coldstreamexteriors.com/columbus/roofing/roof-repair/](https://coldstreamexteriors.com/columbus/roofing/roof-repair/) — roofing · roof repair in Columbus.
 - [https://coldstreamexteriors.com/columbus/roofing/insurance-storm-damage/](https://coldstreamexteriors.com/columbus/roofing/insurance-storm-damage/) — roofing · insurance storm damage in Columbus.
+- [https://coldstreamexteriors.com/columbus/roofing/flat-roofing/](https://coldstreamexteriors.com/columbus/roofing/flat-roofing/) — roofing · flat roofing in Columbus.
+- [https://coldstreamexteriors.com/columbus/roofing/wind-damage/](https://coldstreamexteriors.com/columbus/roofing/wind-damage/) — roofing · wind damage in Columbus.
 - [https://coldstreamexteriors.com/columbus/siding/](https://coldstreamexteriors.com/columbus/siding/) — siding in Columbus.
 - [https://coldstreamexteriors.com/columbus/siding/siding-replacement/](https://coldstreamexteriors.com/columbus/siding/siding-replacement/) — siding · siding replacement in Columbus.
 - [https://coldstreamexteriors.com/columbus/siding/james-hardie-siding/](https://coldstreamexteriors.com/columbus/siding/james-hardie-siding/) — siding · james hardie siding in Columbus.
@@ -104,6 +108,8 @@ Company-wide number: (844) 426-8222
 - [https://coldstreamexteriors.com/st-louis/roofing/roof-replacement/](https://coldstreamexteriors.com/st-louis/roofing/roof-replacement/) — roofing · roof replacement in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/roofing/roof-repair/](https://coldstreamexteriors.com/st-louis/roofing/roof-repair/) — roofing · roof repair in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/roofing/insurance-storm-damage/](https://coldstreamexteriors.com/st-louis/roofing/insurance-storm-damage/) — roofing · insurance storm damage in St. Louis.
+- [https://coldstreamexteriors.com/st-louis/roofing/flat-roofing/](https://coldstreamexteriors.com/st-louis/roofing/flat-roofing/) — roofing · flat roofing in St. Louis.
+- [https://coldstreamexteriors.com/st-louis/roofing/wind-damage/](https://coldstreamexteriors.com/st-louis/roofing/wind-damage/) — roofing · wind damage in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/siding/](https://coldstreamexteriors.com/st-louis/siding/) — siding in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/siding/siding-replacement/](https://coldstreamexteriors.com/st-louis/siding/siding-replacement/) — siding · siding replacement in St. Louis.
 - [https://coldstreamexteriors.com/st-louis/siding/james-hardie-siding/](https://coldstreamexteriors.com/st-louis/siding/james-hardie-siding/) — siding · james hardie siding in St. Louis.
@@ -122,5 +128,5 @@ Company-wide number: (844) 426-8222
 - The gallery and review pages are intentionally empty pending verified photographs and
   reviews. An empty page here means no data, not a failed fetch.
 
-Last content change: 2026-08-27T17:09:30-04:00
+Last content change: 2026-08-28T08:51:42-04:00
 Sitemap: https://coldstreamexteriors.com/sitemap.xml
