@@ -718,7 +718,7 @@ export const SUBSERVICES = {
             ]},
             { h: "Wind, quantified", p: [
               "Fastened to specification, fiber cement carries wind ratings far past anything a central Ohio front delivers. The material's mass does what lightweight cladding cannot on open ground: it stays put, quietly, in the October gusts that leave vinyl streets ticking and rattling.",
-              "That stillness is audible from inside the house, which surprises people: a Hardie wall in a windstorm simply does not participate. For homeowners replacing a vinyl wall that has spent twenty autumns announcing the weather, it is the upgrade they mention most afterward.",
+              "The quiet compounds with the practical: a wall that is not moving is a wall whose caulk lines, paint film and fastener seats are not working loose either. Stillness is not a luxury feature; it is the mechanism behind the low maintenance. That stillness is audible from inside the house, which surprises people: a Hardie wall in a windstorm simply does not participate. For homeowners replacing a vinyl wall that has spent twenty autumns announcing the weather, it is the upgrade they mention most afterward.",
             ]},
           ],
         },
@@ -840,6 +840,7 @@ export const SUBSERVICES = {
               "Spring hail sorts vinyl by age: new panels flex and shed it, brittle fifteen-year-old ones crack. If your walls took last spring's storm, the sorting already happened — we read walls after hail the way we read roofs, and cracked vinyl belongs on the same claim as bruised shingles.",
             ]},
             { h: "What a Cincinnati vinyl quote contains", p: [
+              "It also names the crew's working plan: which elevation starts, where material stages, how landscaping and the neighbor's fence line get protected. On the tighter east-side lots that plan is the difference between a smooth week and a strained one, so it is written down like everything else.",
               "Panel spec with gauge named, the wall-preparation scope from the inspection, trim and accessory lines priced individually, haul-away, and the schedule. Nothing labeled miscellaneous, nothing to be determined later — if the tear-off changes the picture, the change order is written and signed before it is worked. That paperwork discipline is not bureaucracy; it is why our jobs end at the number they started at.",
             ]},
             { h: "A note on hillside houses", p: [
@@ -861,6 +862,7 @@ export const SUBSERVICES = {
               "In central Ohio wind, a vinyl wall is only as good as its panel-to-panel lock. Modern lock designs grip through gusts that unzip the originals — it is the least visible upgrade in the catalog and, on open ground, the one that matters most. Ask to feel the difference on samples; it is immediately obvious in the hand.",
             ]},
             { h: "Reading your wall's build year", p: [
+              "The same archaeology sets expectations honestly: a 1994 Hilliard wall will need more correction than a 2004 Westerville one, and the quotes will differ for that stated reason. Two neighbors comparing our numbers see the logic, not a mystery — which is exactly how quoting should work on streets where everyone talks.",
               "A practiced eye dates a Columbus vinyl wall within a few years from the profile, the lock style and the accessory details — and the date predicts the failure list. Pre-1995 walls hide the thinnest panel and the barest sheathing paper; the 2000s brought marginally better wrap and the same tight nailing. When we quote your street, that archaeology is already priced in, which is why our change-order rate on these jobs is nearly zero.",
             ]},
             { h: "Timing a street-wide problem", p: [
@@ -882,6 +884,7 @@ export const SUBSERVICES = {
               "So much St. Louis vinyl terminates against masonry that the junction deserves its own paragraph: J-channel alone is not a water plan. Our brick-line details flash behind the channel so the joint sheds rather than collects — the difference shows up in the sheathing five years later, which is exactly why nobody skimps on it twice.",
             ]},
             { h: "Color strategy for the gradient", p: [
+              "The strategy extends to accessories: trim, corner posts and shutters age on the same sun schedule as panels, and mixing new panel with sun-tired accessories shortchanges the result. Our St. Louis quotes bundle the accessory refresh by default, priced separately so you can decline it with open eyes.",
               "St. Louis rewards a specific color logic: lighter shades on the punished west and south walls, freedom everywhere else. Modern vinyl's fade resistance is genuinely improved, but physics still charges dark panels a premium here — more heat, more movement, more visible aging. We bring the exposure map to the color conversation so the pretty choice and the durable choice can be negotiated openly.",
             ]},
             { h: "Ranch economics, spelled out", p: [
